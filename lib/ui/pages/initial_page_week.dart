@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/ui/controllers/initial_page_week_controller.dart';
 import 'package:todoapp/ui/widgets/task_card_widget.dart';
+import 'package:intl/intl.dart';
 
 class InitialPageWeek extends StatefulWidget {
   const InitialPageWeek({Key? key}) : super(key: key);
@@ -71,10 +72,15 @@ class _InitialPageWeekState extends State<InitialPageWeek> {
                 List list = controller.dataList;
                 int idx = list.indexOf(e);
 
-                if (e is String) {
+                if (e == list.last) {
+                  return SizedBox(
+                    key: UniqueKey(),
+                  );
+                }
+                if (e is DateTime) {
                   return Text(
                     key: UniqueKey(),
-                    '--------  $e  --------',
+                    DateFormat('EEEE MM-dd').format(e),
                   );
                 }
                 if (e is Task) {

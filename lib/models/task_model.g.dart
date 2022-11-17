@@ -19,7 +19,7 @@ class TaskAdapter extends TypeAdapter<Task> {
     return Task(
       title: fields[1] as String,
       description: fields[2] as String,
-      dateTime: fields[3] as String,
+      dateTime: fields[3] as DateTime,
       status: fields[4] as String,
       subTasks: (fields[5] as List).cast<SubTask>(),
     );

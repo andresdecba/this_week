@@ -4,7 +4,6 @@ import 'package:isoweek/isoweek.dart';
 import 'package:todoapp/core/routes/routes.dart';
 import 'package:todoapp/data_source/db_data_source.dart';
 import 'package:todoapp/models/task_model.dart';
-import 'package:intl/intl.dart' as dateFormat;
 
 class InitialPageWeekController extends GetxController {
   // box de tasks
@@ -22,6 +21,8 @@ class InitialPageWeekController extends GetxController {
 
   int moveToWeek = 0;
 
+  List<DateTime> weekDays = [];
+
   // cambiar de lugar una tarea
   void reorderWhenDragAndDrop(int oldPosition, int newPosition) {
     var item = dataList.removeAt(oldPosition); // 'removeAt' returns the item
@@ -35,42 +36,32 @@ class InitialPageWeekController extends GetxController {
     // crear una lista con los índices de los dias en la [_widgetsList]
     List<int> fechasIdx = [];
     for (var element in dataList) {
-      if (element is String) {
+      if (element is DateTime) {
         var idx = dataList.indexOf(element);
         fechasIdx.add(idx);
       }
     }
-
-    // si se mueve a los días intermedios
-    if (newPosition < fechasIdx.length) {
-      // cuando una tarea cambia de lugar, vemos entre qué
-      // fechas se posciciona y así poder modificarle la fecha en hive
-      for (var i = 0; i < fechasIdx.length; i++) {
-        var indexA = 0;
-        var indexB = 0;
-        // asignar dia anterior y posterior (i+1 por que si no da error)
-        if (i + 1 != fechasIdx.length) {
-          // para la ultima position
-          indexA = fechasIdx[i];
-          indexB = fechasIdx[i + 1];
-        } else {
-          // para las demas
-          indexA = fechasIdx[i - 1];
-          indexB = fechasIdx[i];
-        }
-        // calcular el rango donde cae y cambiar la fecha de la tarea
-        if (newPosition > indexA && newPosition < indexB) {
-          Task item = dataList[newPosition];
-          item.dateTime = dataList[indexA];
-          item.save();
-        }
-      }      
-    }
-    // si se mueve al ultimo dia
-    if (newPosition >= fechasIdx.length) {
-      Task item = dataList[newPosition];
-      item.dateTime = dataList[fechasIdx.last];
-      item.save();
+    // cuando una tarea cambia de lugar, vemos entre qué
+    // fechas se posciciona y así poder modificarle la fecha en hive
+    for (var i = 0; i < fechasIdx.length; i++) {
+      var indexA = 0;
+      var indexB = 0;
+      // asignar dia anterior y posterior (i+1 por que si no da error)
+      if (i + 1 != fechasIdx.length) {
+        // para la ultima position
+        indexA = fechasIdx[i];
+        indexB = fechasIdx[i + 1];
+      } else {
+        // para las demas
+        indexA = fechasIdx[i - 1];
+        indexB = fechasIdx[i];
+      }
+      // calcular el rango donde cae y cambiar la fecha de la tarea
+      if (newPosition > indexA && newPosition < indexB) {
+        Task item = dataList[newPosition];
+        item.dateTime = dataList[indexA];
+        item.save();
+      }
     }
   }
 
@@ -79,31 +70,25 @@ class InitialPageWeekController extends GetxController {
     // limpiar lista para evitar duplicados
     dataList.clear();
     // crear los dias
-    List<DateTime> weekDays = [];
     Week currentWeek = Week.current();
-
-    print('sumar $moveToWeek');
-    print('sumar $currentWeek');
 
     if (addWeeks == null) {
       weekDays = currentWeek.days;
+      weekDays.add(weekDays.last.add(const Duration(days: 1)));
     }
     if (addWeeks != null) {
       weekDays = currentWeek.addWeeks(addWeeks).days;
+      weekDays.add(weekDays.last.add(const Duration(days: 1)));
     }
 
     // ordenar las tareas segun los dias
     for (var day in weekDays) {
-
-      
-
       /// agregar el dia
-      String parsedDate = dateFormat.DateFormat('yyyy-MM-dd').format(day);
-      dataList.add(parsedDate);
+      dataList.add(day);
 
       /// agregar la tarea
       for (var task in tasksBox.values) {
-        if (task.dateTime == parsedDate) {
+        if (task.dateTime == day) {
           dataList.add(task);
         }
       }

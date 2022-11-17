@@ -8,7 +8,7 @@ class Task extends HiveObject {
   @HiveField(2)
   String description;
   @HiveField(3)
-  String dateTime;
+  DateTime dateTime;
   @HiveField(4)
   String status;
   @HiveField(5)

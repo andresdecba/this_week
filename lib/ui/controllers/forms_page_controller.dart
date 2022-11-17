@@ -4,8 +4,6 @@ import 'package:get/get.dart';
 import 'package:todoapp/core/routes/routes.dart';
 import 'package:todoapp/data_source/db_data_source.dart';
 import 'package:todoapp/models/task_model.dart';
-import 'package:intl/intl.dart';
-import 'package:todoapp/ui/controllers/initial_page_controller.dart';
 
 class FormsPageController extends GetxController {
   // load if update
@@ -38,10 +36,10 @@ class FormsPageController extends GetxController {
   Rx<List<SubTask>> get getSubTaskList => _subTasksTmp;
 
   // time
-  String _time = DateFormat('yyyy-MM-dd').format(DateTime.now());
-  String get getTime => _time;
+  DateTime _time = DateTime.now();
+  DateTime get getTime => _time;
   set setTime(DateTime value) {
-    _time = DateFormat('yyyy-MM-dd').format(value);
+    _time = value;
   }
 
   // status
@@ -66,7 +64,7 @@ class FormsPageController extends GetxController {
   final _task = Task(
     title: '',
     description: '',
-    dateTime: '',
+    dateTime: DateTime.now(),
     status: 'PENDING',
     subTasks: [],
   ).obs;
@@ -188,164 +186,3 @@ class FormsPageController extends GetxController {
     );
   }
 }
-
-
-/*
-import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
-import 'package:get/get.dart';
-import 'package:todoapp/core/routes/routes.dart';
-import 'package:todoapp/data_source/db_data_source.dart';
-import 'package:todoapp/models/task_model.dart';
-
-class FormulariosController extends GetxController {
-  // form key
-  final taskFormKey = GlobalKey<FormBuilderState>();
-  final subTaskFormKey = GlobalKey<FormBuilderState>();
-  // form ctrl
-  final taskTitleCtrlr = TextEditingController();
-  final taskDescriptionCtrlr = TextEditingController();
-  final subTaskTitleCtrlr = TextEditingController();
-  final subTaskDescriptionCtrlr = TextEditingController();
-  // get boxes
-  final tasksBox = Boxes.getTasksBox();
-  // other properties
-  bool _isUpdate = false;
-  bool _isSubtaskUpdate = false;
-  int _subTaskIndex = 0;
-
-  List<SubTask> subTaskTmp = [];
-
-  @override
-  void onInit() {
-    setInit();
-    super.onInit();
-  }
-
-  /// CREATE OR UPDATE TASK ///
-  Rx<Task> get getTask => _task;
-  final _task = Task(
-    title: '',
-    description: '',
-    dateTime: DateTime.now(),
-    status: '',
-    subTasks: [],
-  ).obs;
-
-  void setInit() {
-    if (Get.parameters['taskId'] != null) {
-
-      _task.value = tasksBox.get(int.parse(Get.parameters['taskId']!))!;
-      taskTitleCtrlr.text = _task.value.title;
-      taskDescriptionCtrlr.text = _task.value.description;
-      _isUpdate = true;
-      
-    }
-  }
-
-  /// SUBTASKS ///
-  void fillSubTaskTFWhenUpdate(int index) {
-    subTaskTitleCtrlr.text = _task.value.subTasks[index].title;
-    subTaskDescriptionCtrlr.text = _task.value.subTasks[index].description;
-    _subTaskIndex = index;
-    _isSubtaskUpdate = true;
-  }
-
-  void createOrUpdateSubTask() {
-    //
-    if (!_isSubtaskUpdate) {
-      _task.update((item) {
-        _task.value.subTasks.add(SubTask(
-          title: subTaskTitleCtrlr.text,
-          description: subTaskDescriptionCtrlr.text,
-          isDone: false,
-          index: 1,
-        ));
-      });
-    }
-    if (_isSubtaskUpdate) {
-      _task.update((val) {
-        _task.value.subTasks[_subTaskIndex].title = subTaskTitleCtrlr.text;
-        _task.value.subTasks[_subTaskIndex].description = subTaskDescriptionCtrlr.text;
-        _task.value.subTasks[_subTaskIndex].isDone = true;
-      });
-      _isSubtaskUpdate = false;
-    }
-    subTaskTitleCtrlr.clear();
-    subTaskDescriptionCtrlr.clear();
-  }
-
-  void deleteSubtask(int index) {
-    _task.update((val) {
-      val!.subTasks.removeAt(index);
-    });
-  }
-
-  /// SAVE ///
-  void createOrUpdateTask() {
-    if (!_isUpdate) {
-      _task.value.title = taskTitleCtrlr.text;
-      _task.value.description = taskDescriptionCtrlr.text;
-
-      /// agregar lista tmb de subtask
-
-      tasksBox.add(_task.value);
-    }
-    if (_isUpdate) {
-      _task.value.title = taskTitleCtrlr.text;
-      _task.value.description = taskDescriptionCtrlr.text;
-      _task.value.save();
-    }
-  }
-
-  void saveAndNavigate() {
-    createOrUpdateTask();
-    Get.offAllNamed(Routes.BORRAR_PAGE);
-  }
-
-  /// CANCEL ///
-  void cancelAndNavigate(BuildContext context) {
-    tasksBox.flush();
-    Get.offAllNamed(Routes.BORRAR_PAGE);
-    Phoenix.rebirth(context);
-  }
-
-  // alert dialog
-  Future<bool> onWillPop(BuildContext context) async {
-    showAlertDialog(context);
-    return false;
-  }
-
-  void showAlertDialog(BuildContext context) {
-    // set up the buttons
-    Widget cancelButton = TextButton(
-      child: const Text("No guardar"),
-      onPressed: () => cancelAndNavigate(context),
-    );
-    Widget continueButton = TextButton(
-      child: const Text("Guardar cambios"),
-      onPressed: () => saveAndNavigate(),
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: const Text("Salir sin guardar ?"),
-      content: const Text("Si sale ahora sin guardar perderá los cambios"),
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
-}
-
-*/

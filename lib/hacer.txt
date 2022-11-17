@@ -26,3 +26,8 @@ EVOLUTIVOS:
     -Que cuando se agregue una nueva tarea, al volver al homepage
     se visualice una animación de la tarea nueva entrando a la lista total.
 
+
+
+BUGS:
+-Cuando haces una tarea en el dia de hoy a las 17hs., no se renderiza. Puede ser por el horario.
+-Agregar un ultimo dia invisible a la lista de dias para que se pueda cambiar bien la fecha.
