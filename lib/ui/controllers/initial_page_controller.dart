@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:isoweek/isoweek.dart';
 import 'package:todoapp/core/routes/routes.dart';
 import 'package:todoapp/data_source/db_data_source.dart';
 import 'package:todoapp/models/task_model.dart';
-import 'package:intl/intl.dart' as dateFormat;
 
 class InitialPageController extends GetxController {
   // box de tasks
@@ -13,43 +13,31 @@ class InitialPageController extends GetxController {
   // check for initial data
   RxBool hasData = false.obs;
 
-  // box de la lista de datos para mostrar en la ui
-  Box<List> dataListBox = Boxes.getDataListBox();
+  // lista con los datos para generar los widgets en la UI
+  final RxList dataList = [].obs;
 
-  @override
-  void onInit() {
-    // create or assign [dataList]
-    if (dataListBox.get('listaDatos') == null) {
-      dataListBox.put('listaDatos', []);
-    }
-    // validate if exists previous data
-    if (dataListBox.get('listaDatos')!.isNotEmpty) {
-      hasData.value = true;
-    }
-    super.onInit();
-  }
+  int moveToWeek = 0;
 
-  /////// AL CAMBIAR DE LUGAR UNA TAREA ordenar y reasignar ///////
+  List<DateTime> weekDays = [];
+
+  // cambiar de lugar una tarea
   void reorderWhenDragAndDrop(int oldPosition, int newPosition) {
-    var item = dataListBox.get('listaDatos')!.removeAt(oldPosition); // 'removeAt' returns the item
-    dataListBox.get('listaDatos')!.insert(newPosition, item); // we insert it in a new position
+    var item = dataList.removeAt(oldPosition); // 'removeAt' returns the item
+    dataList.insert(newPosition, item); // we insert it in a new position
 
     changeTaskDate(newPosition);
-    //updateTasksList();
   }
 
-  // flutter pub run change_app_package_name:main com.weekly-tasks
-
+  // cambiar y persistir la fecha de una tarea cuando se mueve
   void changeTaskDate(int newPosition) {
     // crear una lista con los índices de los dias en la [_widgetsList]
     List<int> fechasIdx = [];
-    for (var element in dataListBox.get('listaDatos')!) {
-      if (element is String) {
-        var idx = dataListBox.get('listaDatos')!.indexOf(element);
+    for (var element in dataList) {
+      if (element is DateTime) {
+        var idx = dataList.indexOf(element);
         fechasIdx.add(idx);
       }
     }
-
     // cuando una tarea cambia de lugar, vemos entre qué
     // fechas se posciciona y así poder modificarle la fecha en hive
     for (var i = 0; i < fechasIdx.length; i++) {
@@ -67,46 +55,45 @@ class InitialPageController extends GetxController {
       }
       // calcular el rango donde cae y cambiar la fecha de la tarea
       if (newPosition > indexA && newPosition < indexB) {
-        Task item = dataListBox.get('listaDatos')![newPosition];
-        item.dateTime = dataListBox.get('listaDatos')![indexA];
+        Task item = dataList[newPosition];
+        item.dateTime = dataList[indexA];
         item.save();
       }
     }
   }
 
-  List dias = [];
-  List dataList = [];
-
-  /////// editar la lista de datos ya existente ///////
-  void updateTasksList() {
-    // separar todos los dias
-    dias.clear();
-    for (var element in tasksBox.values) {
-      if (!dias.contains(element.dateTime)) {
-        dias.add(element.dateTime);
-      }
-    }
-    // sort days
-    dias.sort((a, b) => a.compareTo(b));
-    // add a last day
-    DateTime lastDay = DateTime.parse(dias.last).add(const Duration(days: 1));
-    String parsedDate = dateFormat.DateFormat('yyyy-MM-dd').format(lastDay);
-    dias.add(parsedDate);
-
-    // odernar las tareas por fecha
+  // crear los daos para los widgets
+  void generateWeekDaysList({int? addWeeks}) {
+    // limpiar lista para evitar duplicados
     dataList.clear();
-    for (var day in dias) {
+    // crear los dias
+    Week currentWeek = Week.current();
+
+    if (addWeeks == null) {
+      weekDays = currentWeek.days;
+      weekDays.add(weekDays.last.add(const Duration(days: 1)));
+    }
+    if (addWeeks != null) {
+      weekDays = currentWeek.addWeeks(addWeeks).days;
+      weekDays.add(weekDays.last.add(const Duration(days: 1)));
+    }
+
+    // ordenar las tareas segun los dias
+    for (var day in weekDays) {
+      /// agregar el dia
       dataList.add(day);
-      for (var task in getTasks) {
+
+      /// agregar la tarea
+      for (var task in tasksBox.values) {
         if (task.dateTime == day) {
           dataList.add(task);
         }
       }
     }
-    // persist data list
-    dataListBox.put('listaDatos', dataList);
-    print(dataListBox.get('listaDatos'));
-    print(getTasks);
+  }
+
+  void removeTask(int index) {
+    dataList.removeAt(index);
   }
 
   /// navegar para crear o editar

@@ -140,14 +140,14 @@ class FormsPageController extends GetxController {
     createOrUpdateTask();
     //int idFromFirstController = Get.find<InitialPageController>().updateDataList()
     //Get.offAllNamed(Routes.INITIAL_PAGE);
-    Get.offAllNamed(Routes.INITIAL_PAGE_WEEK);
+    Get.offAllNamed(Routes.INITIAL_PAGE);
   }
 
   /// CANCEL ///
   void cancelAndNavigate(BuildContext context) {
     tasksBox.flush();
     //Get.offAllNamed(Routes.INITIAL_PAGE);
-    Get.offAllNamed(Routes.INITIAL_PAGE_WEEK);
+    Get.offAllNamed(Routes.INITIAL_PAGE);
   }
 
   // alert dialog

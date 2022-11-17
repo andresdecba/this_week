@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/ui/controllers/initial_page_controller.dart';
-import 'package:todoapp/ui/controllers/initial_page_week_controller.dart';
 
-class TaskCard extends GetView<InitialPageWeekController> {
+class TaskCard extends GetView<InitialPageController> {
   const TaskCard({required this.tarea, required this.index, Key? key}) : super(key: key);
 
   final Task tarea;
