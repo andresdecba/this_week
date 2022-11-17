@@ -1,0 +1,28 @@
+
+1- enum para los estados de cada task -> notYet
+2- agregar una hora a la tarea, servirá para disparar la notificación al usuario
+*3- hacer reordableList con drag and drop para cambiar de día a la tarea -> OOOOOKKKK !
+*4- parsear las fechas -> OKKKKKKK
+*5- hacer función para gener dinamicamente la lista de días del listview -> OOOOKKKKK
+
+7- agregar borrar una tarea y borrar todas las tareas
+
+8- agregar estilos y diseño lindo
+
+9- agregar notificaciones locales
+10- agregar publicidad
+
+11- hacer la app multilenguage
+
+12- subir a la playstore
+
+
+EVOLUTIVOS:
+1- Personalizar el calendario:
+    1A- que corra de a 7 días
+
+2- listas animadas para la lista de subtask y la lista de tasks:
+    -Que cuando se gregue una subtask se mueste una animación de la nueva st.
+    -Que cuando se agregue una nueva tarea, al volver al homepage
+    se visualice una animación de la tarea nueva entrando a la lista total.
+
