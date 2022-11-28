@@ -26,6 +26,7 @@ class InitialPageController extends GetxController {
     dataList.insert(newPosition, item); // we insert it in a new position
 
     changeTaskDate(newPosition);
+    generateWeekDaysList();
   }
 
   // cambiar y persistir la fecha de una tarea cuando se mueve
@@ -82,14 +83,18 @@ class InitialPageController extends GetxController {
     for (var day in weekDays) {
       /// agregar el dia
       dataList.add(day);
+      dataList.add('no-tasks-${day.toString()}');
 
       /// agregar la tarea
       for (var task in tasksBox.values) {
         if (task.dateTime == day) {
           dataList.add(task);
+          dataList.remove('no-tasks-$day');
         }
       }
     }
+    print('hola $dataList');
+    print('hola ${tasksBox.values}');
   }
 
   void removeTask(int index) {

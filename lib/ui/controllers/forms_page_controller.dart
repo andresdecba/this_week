@@ -30,6 +30,7 @@ class FormsPageController extends GetxController {
   bool _isUpdate = false;
   bool _isSubtaskUpdate = false;
   int _subTaskIndex = 0;
+  String taskStatus = TaskStatus.PENDING.toValue;
 
   // observable list of subtasks
   final _subTasksTmp = Rx<List<SubTask>>([]);
@@ -42,30 +43,12 @@ class FormsPageController extends GetxController {
     _time = value;
   }
 
-  // status
-  String _status = '';
-  set setStatus(int value) {
-    switch (value) {
-      case 0:
-        _status = 'PENDING';
-        break;
-      case 1:
-        _status = 'IN PROGRESS';
-        break;
-      case 2:
-        _status = 'DONE';
-        break;
-      default:
-        _status = 'PENDING';
-    }
-  }
-
   /// CREATE OR UPDATE TASK ///
   final _task = Task(
     title: '',
     description: '',
     dateTime: DateTime.now(),
-    status: 'PENDING',
+    status: TaskStatus.PENDING.toValue,
     subTasks: [],
   ).obs;
 
@@ -122,8 +105,8 @@ class FormsPageController extends GetxController {
   void createOrUpdateTask() {
     _task.value.title = taskTitleCtrlr.text;
     _task.value.description = taskDescriptionCtrlr.text;
-    _task.value.dateTime = _time;
-    _task.value.status = _status;
+    _task.value.dateTime = DateTime(_time.year, _time.month, _time.day); //get date only, w/o hh:mm:ss;
+    _task.value.status = taskStatus;
 
     if (!_isUpdate) {
       _task.value.subTasks.addAll(_subTasksTmp.value);

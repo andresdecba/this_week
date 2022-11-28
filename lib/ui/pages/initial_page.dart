@@ -12,12 +12,12 @@ class InitialPage extends StatefulWidget {
 }
 
 class _InitialPageState extends State<InitialPage> {
-  var controller = Get.put(InitialPageController());
+  final InitialPageController _controller = Get.put(InitialPageController());
 
   @override
   void initState() {
     setState(() {
-      controller.generateWeekDaysList();
+      _controller.generateWeekDaysList();
     });
     super.initState();
   }
@@ -28,24 +28,24 @@ class _InitialPageState extends State<InitialPage> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            controller.generateWeekDaysList();
-            controller.moveToWeek = 1;
+            _controller.generateWeekDaysList();
+            _controller.moveToWeek = 1;
           },
           icon: const Icon(Icons.today),
         ),
         actions: [
           IconButton(
-            onPressed: () => controller.generateWeekDaysList(addWeeks: controller.moveToWeek--),
+            onPressed: () => _controller.generateWeekDaysList(addWeeks: _controller.moveToWeek--),
             icon: const Icon(Icons.arrow_back_ios),
           ),
           IconButton(
-            onPressed: () => controller.generateWeekDaysList(addWeeks: controller.moveToWeek++),
+            onPressed: () => _controller.generateWeekDaysList(addWeeks: _controller.moveToWeek++),
             icon: const Icon(Icons.arrow_forward_ios),
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => controller.navigate(),
+        onPressed: () => _controller.navigate(),
       ),
       body:
           //!controller.hasData.value //controller.dataList.isEmpty
@@ -54,43 +54,84 @@ class _InitialPageState extends State<InitialPage> {
           // crear widgets
           Obx(
         () {
+          //return reorde
           return ReorderableListView(
-            padding: const EdgeInsets.all(50),
+            padding: const EdgeInsets.all(20),
             buildDefaultDragHandles: true,
             shrinkWrap: true,
-            //onReorderEnd: (index) { },
+            // proxyDecorator: (child, index, animation) {
+            //   return child; ///////////// aca se puede poner un efecto para cuando esta flotante
+            // },
+            // onReorderEnd: (index) { },
             // onReorderStart: (index) { },
             // proxyDecorator: (child, index, animation) { },
             onReorder: (int oldIndex, int newIndex) {
               if (oldIndex < newIndex) newIndex -= 1;
               setState(() {
-                controller.reorderWhenDragAndDrop(oldIndex, newIndex);
+                _controller.reorderWhenDragAndDrop(oldIndex, newIndex);
               });
             },
             children: <Widget>[
-              ...controller.dataList.map((e) {
-                List list = controller.dataList;
+              ..._controller.dataList.map((e) {
+                List list = _controller.dataList;
                 int idx = list.indexOf(e);
 
+                // hide last day
                 if (e == list.last) {
                   return SizedBox(
                     key: UniqueKey(),
                   );
                 }
+                // show dates
                 if (e is DateTime) {
-                  return Text(
+                  return Padding(
                     key: UniqueKey(),
-                    DateFormat('EEEE MM-dd').format(e),
+                    padding: const EdgeInsets.fromLTRB(0, 30, 0, 8),
+                    // child: Text(
+                    //   DateFormat('EEEE MM-dd').format(e),
+                    //   style: const TextStyle(fontSize: 18),
+                    // ),
+                    child: RichText(
+                      text: TextSpan(
+                        text: DateFormat('EEEE').format(e),
+                        style: const TextStyle(fontSize: 18, color: Colors.black),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: '   ${DateFormat('MM-dd-yy').format(e)}',
+                            style: const TextStyle(fontSize: 12, color: Colors.grey, fontStyle: FontStyle.italic),
+                          ),
+                        ],
+                      ),
+                    ),
                   );
                 }
+                // show no tasks
+                if (e is String) {
+                  return Container(
+                    key: UniqueKey(),
+                    height: 50,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.4),
+                      borderRadius: const BorderRadius.all(Radius.circular(5)),
+                    ),
+                    alignment: Alignment.centerLeft,
+                    padding: const EdgeInsets.all(16),
+                    child: const Text(
+                      'No hay tareas',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  );
+                }
+                // show tasks
                 if (e is Task) {
-                  return TaskCard(
+                  return TaskCardWidget(
                     key: UniqueKey(),
                     tarea: e,
                     index: idx,
                   );
                 }
-
+                // return default
                 return Container(
                   key: UniqueKey(),
                 );

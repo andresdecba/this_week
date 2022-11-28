@@ -1,6 +1,22 @@
 import 'package:hive/hive.dart';
 part 'task_model.g.dart';
 
+
+enum TaskStatus { PENDING, IN_PROGRESS, DONE }
+
+extension TaskStatusExtension on TaskStatus {
+  String get toValue {
+    switch (this) {
+      case TaskStatus.PENDING:
+        return 'Pending';
+      case TaskStatus.IN_PROGRESS:
+        return 'In progress';
+      case TaskStatus.DONE:
+        return 'Done';
+    }
+  }
+}
+
 @HiveType(typeId: 0)
 class Task extends HiveObject {
   @HiveField(1)

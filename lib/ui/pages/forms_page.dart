@@ -51,7 +51,9 @@ class FormsPage extends GetView<FormsPageController> {
                   const SizedBox(height: 30),
                   const Divider(),
 
-                  ToggleButton(controller: controller,),
+                  ToggleButton(
+                    controller: controller,
+                  ),
                   const Divider(),
 
                   Row(
@@ -101,9 +103,20 @@ class _ToggleButtonState extends State<ToggleButton> {
       },
       groupValue: groupValue,
       onValueChanged: (value) {
-        widget.controller.setStatus = value!;
-        groupValue = value;
+        
         setState(() {});
+        groupValue = value!;
+        switch (value) {
+          case 0:
+            widget.controller.taskStatus = TaskStatus.PENDING.toValue;
+            break;
+          case 1:
+            widget.controller.taskStatus = TaskStatus.IN_PROGRESS.toValue;
+            break;
+          case 2:
+            widget.controller.taskStatus = TaskStatus.DONE.toValue;
+            break;
+        }
       },
     );
   }
@@ -114,15 +127,13 @@ class SubTasksListView extends GetView<FormsPageController> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => 
-      controller.getSubTaskList.value.isEmpty
+    return Obx(() => controller.getSubTaskList.value.isEmpty
         ? const Text('No hay subtasks')
         : ReorderableListView.builder(
             shrinkWrap: true,
             itemCount: controller.getSubTaskList.value.length,
             itemBuilder: (BuildContext context, int index) {
-              
-              return ReorderableDragStartListener( 
+              return ReorderableDragStartListener(
                 key: Key('$index'),
                 index: index,
                 child: Container(

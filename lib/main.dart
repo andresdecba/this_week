@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:todoapp/core/bindings/initial_page_week_binding.dart';
 import 'package:todoapp/core/routes/routes.dart';
@@ -31,6 +32,12 @@ class MyApp extends StatelessWidget {
       initialBinding: InitialPageBinding(),
       getPages: AppPages.getPages,
       home: const InitialPage(),
+      theme: ThemeData(
+        textTheme: GoogleFonts.ubuntuTextTheme(
+          Theme.of(context).textTheme,
+        ),
+        scaffoldBackgroundColor: Colors.grey[200],
+      ),
     );
   }
 }
