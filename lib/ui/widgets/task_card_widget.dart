@@ -3,22 +3,29 @@ import 'package:get/get.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/ui/controllers/initial_page_controller.dart';
 import 'package:intl/intl.dart';
+import 'package:todoapp/ui/widgets/toggle_status_btn.dart';
 
 // drag handle
 // ReorderableDragStartListener(
 //   index: index,
-//   child: const Icon(Icons.drag_handle),
+//   child: const Icon(Icons.drag_handle), or reorder
 // )
 
 class TaskCardWidget extends StatefulWidget {
   const TaskCardWidget({
     required this.tarea,
     required this.index,
+    required this.onRemove,
+    this.isExpanded,
+    this.onStatusChange,
     Key? key,
   }) : super(key: key);
 
   final Task tarea;
   final int index;
+  final VoidCallback onRemove;
+  final VoidCallback? onStatusChange;
+  final bool? isExpanded;
 
   @override
   State<TaskCardWidget> createState() => _TaskCardWidgetState();
@@ -52,114 +59,134 @@ class _TaskCardWidgetState extends State<TaskCardWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
-      child: ClipRRect(
-        borderRadius: const BorderRadius.all(Radius.circular(8)),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border(
-              left: BorderSide(
-                color: statusColor,
-                width: 3,
+    return ClipRRect(
+      borderRadius: const BorderRadius.all(Radius.circular(8)),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border(
+            left: BorderSide(
+              color: statusColor,
+              width: 3,
+            ),
+          ),
+        ),
+        child: ExpansionTile(
+          initiallyExpanded: widget.isExpanded ?? false,
+          maintainState: true,
+          backgroundColor: Colors.transparent,
+          collapsedBackgroundColor: Colors.transparent,
+          textColor: Colors.black,
+          childrenPadding: const EdgeInsets.symmetric(horizontal: 26),
+          expandedCrossAxisAlignment: CrossAxisAlignment.start,
+          tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Icon(
+              //   Icons.task_alt,
+              //   size: 16,
+              //   color: statusColor,
+              // ),
+              Expanded(
+                child: Text(
+                  widget.tarea.title,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(),
+                ),
+              ),
+            ],
+          ),
+          subtitle: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+            child: Text(
+              '10:00 - 13:00 hs.  ${DateFormat('MM-dd-yy').format(widget.tarea.dateTime)}',
+              style: TextStyle(
+                color: Colors.grey[300],
+                fontSize: 12,
               ),
             ),
           ),
-          child: ExpansionTile(
-            maintainState: true,
-            backgroundColor: Colors.transparent,
-            collapsedBackgroundColor: Colors.transparent,
-            textColor: Colors.black,
-            childrenPadding: const EdgeInsets.symmetric(horizontal: 26),
-            expandedCrossAxisAlignment: CrossAxisAlignment.start,
-            title: Row(
-              children: [
-                ReorderableDelayedDragStartListener(
-                  index: widget.index,
-                  child: Icon(
-                    Icons.reorder,
-                    size: 16,
-                    color: Colors.grey[400],
-                  ),
-                ),
-                Text(
-                  '  ${widget.tarea.title}',
-                  style: const TextStyle(),
-                ),
-              ],
-            ),
-            subtitle: Text(
-              '10:00 - 13:00 hs.  ${DateFormat('MM-dd-yy').format(widget.tarea.dateTime)}',
-              style: TextStyle(color: Colors.grey[300], fontSize: 12),
-            ),
-            children: [
-              /// descripcion de la tarea
-              widget.tarea.description == ''
-                  ? const SizedBox()
-                  : Wrap(children: [
+          children: [
+            /// descripcion de la tarea
+            widget.tarea.description == ''
+                ? const SizedBox()
+                : Wrap(
+                    children: [
                       Text(
                         widget.tarea.description,
                         textAlign: TextAlign.left,
                         style: const TextStyle(color: Colors.grey),
+                        maxLines: 4,
+                        overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 8),
-                    ]),
-
-              /// subtareas
-              const Divider(height: 8),
-              ...widget.tarea.subTasks.map(
-                (element) => Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _SubTaskWidget(
-                      subtask: element,
-                      task: widget.tarea,
-                    ),
-                    //const Divider(height: 0),
-                  ],
-                ),
-              ),
-              const Divider(height: 8),
-
-              /// task status button
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(
-                    height: 30,
-                    child: LayoutBuilder(builder: (context, constraints) {
-                      return ToggleButton(
-                        task: widget.tarea,
-                        onTap: () => setStatusColor(),
-                      );
-                    }),
-                  ),
-                  Wrap(
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          widget.tarea.delete();
-                          _controller.dataList.removeAt(widget.index);
-                        },
-                        icon: const Icon(Icons.delete),
-                        iconSize: 16,
-                        visualDensity: VisualDensity.compact,
-                      ),
-                      IconButton(
-                        onPressed: () => _controller.navigate(taskKey: widget.tarea.key),
-                        icon: const Icon(Icons.edit),
-                        iconSize: 16,
-                        visualDensity: VisualDensity.compact,
-                      ),
                     ],
-                  )
+                  ),
+
+            /// subtareas
+            const Divider(height: 8),
+            ...widget.tarea.subTasks.map(
+              (element) => Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _SubTaskWidget(
+                    subtask: element,
+                    task: widget.tarea,
+                  ),
+                  //const Divider(height: 0),
                 ],
               ),
-              const SizedBox(height: 12),
-            ],
-          ),
+            ),
+            const Divider(height: 8),
+
+            /// task status button
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  height: 30,
+                  child: LayoutBuilder(builder: (context, constraints) {
+                    return ToggleStatusButton(
+                      task: widget.tarea,
+                      onChanged: () {
+                        setStatusColor();
+                        widget.tarea.save();
+                        if (widget.onStatusChange != null) {
+                          widget.onStatusChange!();
+                        }
+                      },
+                    );
+                  }),
+                ),
+                Wrap(
+                  children: [
+                    IconButton(
+                      // onPressed: () {
+                      //   widget.tarea.delete();
+                      //   _controller.dataList.removeAt(widget.index);
+                      //   _controller.removeItem(index, child)
+                      // },
+                      onPressed: widget.onRemove,
+                      icon: const Icon(Icons.delete),
+                      iconSize: 16,
+                      visualDensity: VisualDensity.compact,
+                    ),
+                    IconButton(
+                      onPressed: () => _controller.navigate(taskKey: widget.tarea.key),
+                      icon: const Icon(Icons.edit),
+                      iconSize: 16,
+                      visualDensity: VisualDensity.compact,
+                    ),
+                  ],
+                )
+              ],
+            ),
+            const SizedBox(height: 12),
+          ],
         ),
       ),
     );
@@ -208,101 +235,6 @@ class _SubTaskWidgetState extends State<_SubTaskWidget> {
             color: Colors.grey,
           ),
           overflow: TextOverflow.ellipsis,
-        ),
-      ],
-    );
-  }
-}
-
-/// status buttons
-class ToggleButton extends StatefulWidget {
-  const ToggleButton({
-    required this.task,
-    required this.onTap,
-    Key? key,
-  }) : super(key: key);
-
-  final Task task;
-  final VoidCallback onTap;
-
-  @override
-  State<ToggleButton> createState() => _ToggleButtonState();
-}
-
-class _ToggleButtonState extends State<ToggleButton> {
-  List<bool> isSelected = <bool>[];
-  int _index = 0;
-
-  @override
-  void initState() {
-    if (widget.task.status == TaskStatus.PENDING.toValue) {
-      isSelected = [true, false, false];
-    }
-    if (widget.task.status == TaskStatus.IN_PROGRESS.toValue) {
-      isSelected = [false, true, false];
-    }
-    if (widget.task.status == TaskStatus.DONE.toValue) {
-      isSelected = [false, false, true];
-    }
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ToggleButtons(
-      onPressed: (int index) {
-        setState(() {});
-        for (int i = 0; i < isSelected.length; i++) {
-          isSelected[i] = i == index;
-        }
-        switch (index) {
-          case 0:
-            widget.task.status = TaskStatus.PENDING.toValue;
-            _index = index;
-            break;
-          case 1:
-            widget.task.status = TaskStatus.IN_PROGRESS.toValue;
-            _index = index;
-            break;
-          case 2:
-            widget.task.status = TaskStatus.DONE.toValue;
-            _index = index;
-            break;
-        }
-        widget.task.save();
-        widget.onTap();
-
-        /// set status color
-      },
-      isSelected: isSelected,
-      borderColor: Colors.white,
-      borderWidth: 0,
-      constraints: const BoxConstraints.tightForFinite(height: double.infinity, width: double.infinity),
-      renderBorder: false,
-      fillColor: Colors.white,
-      selectedColor: Colors.green,
-      //color: Colors.grey,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(right: 16),
-          child: Text(
-            'Pending',
-            style: TextStyle(fontSize: 11, color: widget.task.status == TaskStatus.PENDING.toValue ? Colors.black : Colors.grey[400]),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(right: 16),
-          child: Text(
-            'In progress',
-            style: TextStyle(fontSize: 11, color: widget.task.status == TaskStatus.IN_PROGRESS.toValue ? Colors.green : Colors.grey[400]),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(right: 16),
-          child: Text(
-            'Done',
-            style: TextStyle(fontSize: 11, color: widget.task.status == TaskStatus.DONE.toValue ? Colors.orange : Colors.grey[400]),
-          ),
         ),
       ],
     );

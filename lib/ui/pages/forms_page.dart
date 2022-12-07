@@ -1,10 +1,13 @@
-import 'package:calendar_timeline/calendar_timeline.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 import 'package:todoapp/models/task_model.dart';
+import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/controllers/forms_page_controller.dart';
+import 'package:todoapp/ui/widgets/alert_dialog.dart';
+import 'package:todoapp/ui/widgets/background_widget.dart';
+import 'package:todoapp/ui/widgets/subtask_item.dart';
+import 'package:todoapp/ui/widgets/toggle_status_btn.dart';
+import 'package:todoapp/utils/parse_date_utils.dart';
 
 class FormsPage extends GetView<FormsPageController> {
   const FormsPage({super.key});
@@ -14,66 +17,163 @@ class FormsPage extends GetView<FormsPageController> {
     return WillPopScope(
       onWillPop: () => controller.onWillPop(context),
       child: Scaffold(
+        //backgroundColor: Colors.white,
         appBar: AppBar(
+          leading: IconButton(
+            onPressed: () => controller.onWillPop(context),
+            icon: const Icon(Icons.arrow_back),
+          ),
           title: const Text('Agregar nueva tarea'),
         ),
-        floatingActionButton: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            minimumSize: const Size.fromHeight(40),
+
+        bottomNavigationBar: Obx(
+          () => Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size.fromHeight(40),
+              ),
+              onPressed: controller.enableAddTaskButton.value == true ? () => controller.saveAndNavigate() : null,
+              child: const Text(
+                'Add task',
+              ),
+            ),
           ),
-          child: const Text('Add task'),
-          onPressed: () => controller.saveAndNavigate(),
         ),
+
         body: SafeArea(
-          child: Padding(
+          child: SingleChildScrollView(
             padding: const EdgeInsets.all(16.0),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  CalendarTimeline(
-                    firstDate: DateTime.now().subtract(const Duration(days: 365)),
-                    initialDate: DateTime.now(),
-                    lastDate: DateTime.now().add(const Duration(days: 365)),
-                    onDateSelected: (date) => controller.setTime = date,
-                    leftMargin: 20,
-                    monthColor: Colors.blueGrey,
-                    dayColor: Colors.teal[200],
-                    activeDayColor: Colors.white,
-                    activeBackgroundDayColor: Colors.redAccent[100],
-                    dotsColor: Color(0xFF333A47),
-                    selectableDayPredicate: (date) => date.day != 23,
-                    locale: 'en_ISO',
-                    //showYears: true,
-                  ),
-                  const SizedBox(height: 30),
-                  const TaskForms(),
-                  const SizedBox(height: 30),
-                  const Divider(),
+            physics: const BouncingScrollPhysics(),
+            child: Column(
+              children: [
+                // PASO 1: SELECCIONAR DIA
+                BackgroundWidget(
+                  child: Obx(() {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          '1 - Crear tarea para el día:',
+                          style: titleTextStyle,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(ParseDateUtils.dateToString(controller.getTime)),
+                            IconButton(
+                              icon: const Icon(Icons.edit_calendar),
+                              visualDensity: VisualDensity.compact,
+                              color: iconsColor,
+                              onPressed: () async {
+                                // show the dialog
+                                var tmpData = controller.getTime;
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext ctx) {
+                                    return CustomDialog(
+                                      title: 'Cambiar fecha',
+                                      content: SizedBox(
+                                        height: 300,
+                                        width: 200,
+                                        child: CalendarDatePicker(
+                                          initialDate: controller.getTime,
+                                          firstDate: DateTime.now(),
+                                          lastDate: DateTime.now().add(const Duration(days: 365)),
+                                          onDateChanged: (date) {
+                                            tmpData = date;
+                                            controller.hasUserInteraction.value = true;
+                                          },
+                                        ),
+                                      ),
+                                      //content: Text('data'),
+                                      okCallBack: () => controller.setTime = tmpData,
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    );
+                  }),
+                ),
 
-                  ToggleButton(
-                    controller: controller,
-                  ),
-                  const Divider(),
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                // PASO 2: PONER TITLE + DESCRIPTION
+                BackgroundWidget(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Agrega una subtarea',
-                        style: TextStyle(fontSize: 15),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            '2 - Ingresa un título y una descripción',
+                            style: titleTextStyle,
+                          ),
+                          IconButton(
+                            onPressed: () => controller.isTextFieldEnabled.value = true,
+                            icon: const Icon(Icons.edit),
+                          )
+                        ],
                       ),
-                      IconButton(
-                        icon: const Icon(Icons.add),
-                        onPressed: () => buildSubtaskBottomSheet(context),
-                      )
+                      const SizedBox(height: 20),
+                      const TitleAndDescriptionForms(),
                     ],
                   ),
-                  const SizedBox(height: 30),
-                  const SubTasksListView(),
-                  //const SizedBox(height: 30),
-                ],
-              ),
+                ),
+
+                // PASO 3: AGREGAR UN STATUS
+                BackgroundWidget(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        '3 - Opcional: definir un status inical',
+                        style: titleTextStyle,
+                      ),
+                      Center(
+                        child: ToggleStatusButton(
+                          task: controller.getTask,
+                          onChanged: () => controller.hasUserInteraction.value = true,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // PASO 4: AGREGAR SUBTAREAS
+                BackgroundWidget(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            '4 - Opcional: agregar subtareas',
+                            style: titleTextStyle,
+                          ),
+                          customAddIcon(
+                            onPressed: () => showSubtaskDialog(
+                              context,
+                              () => controller.createOrUpdateSubTask(),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      const SubTasksListView(),
+                      //const SizedBox(height: 30),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -82,186 +182,120 @@ class FormsPage extends GetView<FormsPageController> {
   }
 }
 
-class ToggleButton extends StatefulWidget {
-  const ToggleButton({required this.controller, Key? key}) : super(key: key);
-  final FormsPageController controller;
-  @override
-  State<ToggleButton> createState() => _ToggleButtonState();
-}
-
-class _ToggleButtonState extends State<ToggleButton> {
-  int groupValue = 0;
-  @override
-  Widget build(BuildContext context) {
-    return CupertinoSlidingSegmentedControl(
-      //backgroundColor:  CupertinoColors.white,
-      thumbColor: CupertinoColors.activeGreen,
-      children: const {
-        0: Text('PENDING'),
-        1: Text('IN PROGRESS'),
-        2: Text('DONE'),
-      },
-      groupValue: groupValue,
-      onValueChanged: (value) {
-        
-        setState(() {});
-        groupValue = value!;
-        switch (value) {
-          case 0:
-            widget.controller.taskStatus = TaskStatus.PENDING.toValue;
-            break;
-          case 1:
-            widget.controller.taskStatus = TaskStatus.IN_PROGRESS.toValue;
-            break;
-          case 2:
-            widget.controller.taskStatus = TaskStatus.DONE.toValue;
-            break;
-        }
-      },
-    );
-  }
-}
-
-class SubTasksListView extends GetView<FormsPageController> {
-  const SubTasksListView({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Obx(() => controller.getSubTaskList.value.isEmpty
-        ? const Text('No hay subtasks')
-        : ReorderableListView.builder(
-            shrinkWrap: true,
-            itemCount: controller.getSubTaskList.value.length,
-            itemBuilder: (BuildContext context, int index) {
-              return ReorderableDragStartListener(
-                key: Key('$index'),
-                index: index,
-                child: Container(
-                  key: Key('$index'),
-                  constraints: const BoxConstraints(minWidth: 100, maxWidth: 100),
-                  alignment: Alignment.centerLeft,
-                  padding: const EdgeInsets.all(8),
-                  color: Colors.grey[350],
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(controller.getSubTaskList.value[index].title),
-                      Row(
-                        children: [
-                          IconButton(
-                            onPressed: () {
-                              controller.fillSubTaskTFWhenUpdate(index);
-                              buildSubtaskBottomSheet(context);
-                            },
-                            icon: const Icon(Icons.edit),
-                          ),
-                          IconButton(
-                            onPressed: () => controller.deleteSubtask(index),
-                            icon: const Icon(Icons.close),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              );
-            },
-            onReorder: (int oldIndex, int newIndex) {
-              if (oldIndex < newIndex) {
-                newIndex -= 1;
-              }
-              final SubTask item = controller.getSubTaskList.value.removeAt(oldIndex);
-              controller.getSubTaskList.value.insert(newIndex, item);
-            },
-          ));
-  }
-}
-
-void buildSubtaskBottomSheet(BuildContext context) {
-  showModalBottomSheet<void>(
-    context: context,
-    isScrollControlled: true,
-    enableDrag: true,
-    backgroundColor: Colors.amber,
-    builder: (BuildContext context) {
-      return Padding(
-        padding: EdgeInsets.only(
-          right: 16,
-          left: 16,
-          top: 16,
-          bottom: MediaQuery.of(context).viewInsets.bottom + 16,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: const <Widget>[
-            Text('Agregar una subtarea'),
-            SizedBox(height: 30),
-            SubTaskForms(),
-          ],
-        ),
-      );
-    },
-  );
-}
-
-class TaskForms extends GetView<FormsPageController> {
-  const TaskForms({
+// textfields de titulo y descripcion
+class TitleAndDescriptionForms extends GetView<FormsPageController> {
+  const TitleAndDescriptionForms({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        FormBuilder(
-          key: controller.taskFormKey,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          //onWillPop: () => controller.onWillPop(),
-          skipDisabled: true,
-          initialValue: const {
-            //'titleField': 'Este es un titulo' //el name del field + el valor inicial que queremos
-          },
+    return Obx(
+      () {
+        return Form(
           child: Column(
             children: [
-              // title form
-              FormBuilderTextField(
+              // titulo
+              TextFormField(
+                enabled: controller.isTextFieldEnabled.value,
                 controller: controller.taskTitleCtrlr,
-                name: 'taskTitleTf',
-                enabled: true,
-                //initialValue: controller.getNewTask.title,
-                decoration: const InputDecoration(
-                  isDense: true,
-                  //border: OutlineInputBorder(),
-                  suffixIcon: Icon(Icons.error),
+                decoration: customInputDecoration(
+                  hasBorder: controller.isTextFieldEnabled.value,
+                  label: 'Título*',
+                  hintText: 'Ingrese un título para la tarea',
+                  borderColor: Colors.orange,
+                  clearText: () => controller.taskTitleCtrlr.clear(),
                 ),
+                maxLines: 4,
+                maxLength: 140,
+                keyboardType: TextInputType.text,
+                textInputAction: TextInputAction.next,
+                onFieldSubmitted: (v) => FocusScope.of(context).nextFocus(),
+                onChanged: (value) => controller.hasUserInteraction.value = true,
               ),
-
+              // descripcion
               const SizedBox(height: 10),
-
-              // title form
-              FormBuilderTextField(
+              TextFormField(
+                enabled: controller.isTextFieldEnabled.value,
                 controller: controller.taskDescriptionCtrlr,
-                name: 'taskDescriptionTf',
-                enabled: true,
-                //initialValue: controller.getNewTask.description,
-                maxLines: 6,
-                decoration: const InputDecoration(
-                  isDense: true,
-                  //border: OutlineInputBorder(),
-                  suffixIcon: Icon(Icons.error),
+                decoration: customInputDecoration(
+                  hasBorder: controller.isTextFieldEnabled.value,
+                  label: 'Descripción',
+                  hintText: 'Opcional: Ingrese un descripción',
+                  clearText: () => controller.taskDescriptionCtrlr.clear(),
                 ),
+                maxLines: 4,
+                maxLength: 200,
+                keyboardType: TextInputType.multiline,
+                textInputAction: TextInputAction.done,
+                onChanged: (value) => controller.hasUserInteraction.value = true,
               ),
-
-              const SizedBox(height: 10),
             ],
           ),
-        ),
-      ],
+        );
+      },
     );
   }
 }
 
+/// lista de subtareas agregadas
+class SubTasksListView extends GetView<FormsPageController> {
+  const SubTasksListView({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(
+      () => controller.getSubTaskList.value.isEmpty
+          ? const Center(child: Text('No hay subtasks'))
+          : ReorderableListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: controller.getSubTaskList.value.length,
+              itemBuilder: (BuildContext context, int index) {
+                return SubTaskItem(
+                  controller: controller,
+                  index: index,
+                  key: Key('$index'),
+                );
+              },
+              onReorder: (int oldIndex, int newIndex) {
+                if (oldIndex < newIndex) {
+                  newIndex -= 1;
+                }
+                final SubTask item = controller.getSubTaskList.value.removeAt(oldIndex);
+                controller.getSubTaskList.value.insert(newIndex, item);
+              },
+            ),
+    );
+  }
+}
+
+// crear subtarea modal
+Future<dynamic> showSubtaskDialog(BuildContext context, VoidCallback callBack) {
+  return showDialog(
+    context: context,
+    builder: (_) {
+      return CustomDialog(
+        content: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: const <Widget>[
+              Text('Agregar una subtarea'),
+              SizedBox(height: 30),
+              SubTaskForms(),
+            ],
+          ),
+        ),
+        okCallBack: callBack,
+      );
+    },
+  );
+}
+
+// textfield de la subtarea
 class SubTaskForms extends GetView<FormsPageController> {
   const SubTaskForms({
     Key? key,
@@ -269,63 +303,25 @@ class SubTaskForms extends GetView<FormsPageController> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        FormBuilder(
-          key: controller.subTaskFormKey,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          skipDisabled: true,
-          //onWillPop: () => controller.onWillPop(),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // title form
-              FormBuilderTextField(
-                controller: controller.subTaskTitleCtrlr,
-                name: 'subTaskTitleTf',
-                enabled: true,
-                //initialValue: updateSubTask?.title ?? '',
-                decoration: const InputDecoration(
-                  isDense: true,
-                  border: OutlineInputBorder(),
-                  suffixIcon: Icon(Icons.error),
-                ),
-              ),
-
-              const SizedBox(height: 10),
-
-              // title form
-              FormBuilderTextField(
-                controller: controller.subTaskDescriptionCtrlr,
-                name: 'subTaskDescriptionTf',
-                enabled: true,
-                //initialValue: 'controller.getNewTask.title',
-                maxLines: 6,
-                decoration: const InputDecoration(
-                  isDense: true,
-                  border: OutlineInputBorder(),
-                  suffixIcon: Icon(Icons.error),
-                ),
-              ),
-
-              const SizedBox(height: 10),
-
-              // get text
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size.fromHeight(50),
-                ),
-                child: const Text('Add or update subtask'),
-                onPressed: () {
-                  controller.createOrUpdateSubTask();
-                  Navigator.pop(context);
-                },
-              ),
-            ],
+    return Form(
+      child: Column(
+        children: [
+          TextFormField(
+            controller: controller.subTaskTitleCtrlr,
+            enabled: true,
+            maxLines: 4,
+            decoration: customInputDecoration(
+              label: 'Subtarea',
+              hintText: 'Ingresar descripcion de la subtarea',
+              clearText: () => controller.subTaskTitleCtrlr.clear(),
+            ),
+            maxLength: 100,
+            keyboardType: TextInputType.text,
+            textInputAction: TextInputAction.done,
+            autofocus: true,
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

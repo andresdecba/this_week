@@ -64,24 +64,18 @@ class SubTaskAdapter extends TypeAdapter<SubTask> {
     };
     return SubTask(
       title: fields[0] as String,
-      description: fields[1] as String,
-      isDone: fields[2] as bool,
-      index: fields[3] as int,
+      isDone: fields[1] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, SubTask obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(2)
       ..writeByte(0)
       ..write(obj.title)
       ..writeByte(1)
-      ..write(obj.description)
-      ..writeByte(2)
-      ..write(obj.isDone)
-      ..writeByte(3)
-      ..write(obj.index);
+      ..write(obj.isDone);
   }
 
   @override

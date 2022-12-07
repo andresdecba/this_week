@@ -1,27 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 import 'package:todoapp/core/routes/routes.dart';
 import 'package:todoapp/data_source/db_data_source.dart';
 import 'package:todoapp/models/task_model.dart';
+import 'package:todoapp/ui/widgets/alert_dialog.dart';
 
 class FormsPageController extends GetxController {
-  // load if update
-  @override
-  void onInit() {
-    setInit();
-    super.onInit();
-  }
-
-  // form key
-  final taskFormKey = GlobalKey<FormBuilderState>();
-  final subTaskFormKey = GlobalKey<FormBuilderState>();
-
   // form ctrl
   final taskTitleCtrlr = TextEditingController();
   final taskDescriptionCtrlr = TextEditingController();
   final subTaskTitleCtrlr = TextEditingController();
-  final subTaskDescriptionCtrlr = TextEditingController();
 
   // get boxes
   final tasksBox = Boxes.getTasksBox();
@@ -30,17 +18,30 @@ class FormsPageController extends GetxController {
   bool _isUpdate = false;
   bool _isSubtaskUpdate = false;
   int _subTaskIndex = 0;
-  String taskStatus = TaskStatus.PENDING.toValue;
+  RxBool enableAddTaskButton = false.obs;
+  RxBool hasUserInteraction = false.obs;
+  RxBool isTextFieldEnabled = false.obs;
+  //String taskStatus = TaskStatus.PENDING.toValue;
 
   // observable list of subtasks
   final _subTasksTmp = Rx<List<SubTask>>([]);
   Rx<List<SubTask>> get getSubTaskList => _subTasksTmp;
 
-  // time
-  DateTime _time = DateTime.now();
-  DateTime get getTime => _time;
+  // load if update
+  @override
+  void onInit() {
+    setInit();
+    taskTitleCtrlr.addListener(() {
+      enableAddTaskButton.value = taskTitleCtrlr.text.isNotEmpty;
+      print('a ver $enableAddTaskButton');
+    });
+    super.onInit();
+  }
+
+  final Rx<DateTime> _time = DateTime.now().obs;
+  DateTime get getTime => _time.value;
   set setTime(DateTime value) {
-    _time = value;
+    _time.value = value;
   }
 
   /// CREATE OR UPDATE TASK ///
@@ -52,7 +53,10 @@ class FormsPageController extends GetxController {
     subTasks: [],
   ).obs;
 
+  Task get getTask => _task.value;
+
   void setInit() {
+    // update an existing task
     if (Get.parameters['taskId'] != null) {
       _task.value = tasksBox.get(int.parse(Get.parameters['taskId']!))!;
       taskTitleCtrlr.text = _task.value.title;
@@ -62,12 +66,17 @@ class FormsPageController extends GetxController {
         _subTasksTmp.value.add(SubTask.copyWith(element));
       });
     }
+    // create task on a specific date
+    if (Get.parameters['date'] != null) {
+      _time.value = DateTime.parse(Get.parameters['date']!);
+      isTextFieldEnabled.value = true;
+      //_task.value.dateTime = DateTime.parse(Get.parameters['date']!);
+    }
   }
 
   /// SUBTASKS ///
   void fillSubTaskTFWhenUpdate(int index) {
     subTaskTitleCtrlr.text = _subTasksTmp.value[index].title;
-    subTaskDescriptionCtrlr.text = _subTasksTmp.value[index].description;
     _subTaskIndex = index;
     _isSubtaskUpdate = true;
   }
@@ -77,22 +86,19 @@ class FormsPageController extends GetxController {
       _subTasksTmp.update((val) {
         _subTasksTmp.value.add(SubTask(
           title: subTaskTitleCtrlr.text,
-          description: subTaskDescriptionCtrlr.text,
           isDone: false,
-          index: 1,
         ));
       });
     }
     if (_isSubtaskUpdate) {
       _subTasksTmp.update((val) {
         _subTasksTmp.value[_subTaskIndex].title = subTaskTitleCtrlr.text;
-        _subTasksTmp.value[_subTaskIndex].description = subTaskDescriptionCtrlr.text;
         _subTasksTmp.value[_subTaskIndex].isDone = true;
       });
       _isSubtaskUpdate = false;
     }
     subTaskTitleCtrlr.clear();
-    subTaskDescriptionCtrlr.clear();
+    hasUserInteraction.value = true;
   }
 
   void deleteSubtask(int index) {
@@ -105,8 +111,7 @@ class FormsPageController extends GetxController {
   void createOrUpdateTask() {
     _task.value.title = taskTitleCtrlr.text;
     _task.value.description = taskDescriptionCtrlr.text;
-    _task.value.dateTime = DateTime(_time.year, _time.month, _time.day); //get date only, w/o hh:mm:ss;
-    _task.value.status = taskStatus;
+    _task.value.dateTime = DateTime(_time.value.year, _time.value.month, _time.value.day); //get date only, w/o hh:mm:ss;
 
     if (!_isUpdate) {
       _task.value.subTasks.addAll(_subTasksTmp.value);
@@ -122,50 +127,37 @@ class FormsPageController extends GetxController {
   void saveAndNavigate() {
     createOrUpdateTask();
     //int idFromFirstController = Get.find<InitialPageController>().updateDataList()
-    //Get.offAllNamed(Routes.INITIAL_PAGE);
     Get.offAllNamed(Routes.INITIAL_PAGE);
   }
 
   /// CANCEL ///
   void cancelAndNavigate(BuildContext context) {
     tasksBox.flush();
-    //Get.offAllNamed(Routes.INITIAL_PAGE);
     Get.offAllNamed(Routes.INITIAL_PAGE);
   }
 
   // alert dialog
   Future<bool> onWillPop(BuildContext context) async {
-    showAlertDialog(context);
+    hasUserInteraction.value == true
+        ? showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return CustomDialog(
+                title: "Salir sin guardar ?",
+                content: const Text("Si sale ahora sin guardar perderá los cambios"),
+                okCallBack: () => cancelAndNavigate(context), //() => saveAndNavigate(),
+                isNavigable: true,
+              );
+            })
+        : cancelAndNavigate(context);
     return false;
   }
 
-  void showAlertDialog(BuildContext context) {
-    // set up the buttons
-    Widget cancelButton = TextButton(
-      child: const Text("No guardar"),
-      onPressed: () => cancelAndNavigate(context),
-    );
-    Widget continueButton = TextButton(
-      child: const Text("Guardar cambios"),
-      onPressed: () => saveAndNavigate(),
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: const Text("Salir sin guardar ?"),
-      content: const Text("Si sale ahora sin guardar perderá los cambios"),
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
+  @override
+  void onClose() {
+    taskTitleCtrlr.dispose();
+    taskDescriptionCtrlr.dispose();
+    subTaskTitleCtrlr.dispose();
+    super.onClose();
   }
 }

@@ -49,41 +49,20 @@ class SubTask {
   @HiveField(0)
   String title;
   @HiveField(1)
-  String description;
-  @HiveField(2)
   bool isDone;
-  @HiveField(3)
-  int index;
+
 
   SubTask({
     required this.title,
-    required this.description,
     required this.isDone,
-    required this.index,
   });
 
   @override
   String toString() {
-    return '{$title, $description}';
+    return '{$title, $isDone}';
   }
 
   static SubTask copyWith(SubTask value) {
-    return SubTask(title: value.title, description: value.description, isDone: value.isDone, index: value.index);
-  }
-}
-
-/// VER !
-enum Status { PENDING, IN_PROGRESS, DONE }
-
-extension StatusString on Status {
-  String get status {
-    switch (this) {
-      case Status.PENDING:
-        return 'PENDING';
-      case Status.IN_PROGRESS:
-        return 'IN PROGRESS';
-      case Status.DONE:
-        return 'DONE';
-    }
+    return SubTask(title: value.title, isDone: value.isDone);
   }
 }

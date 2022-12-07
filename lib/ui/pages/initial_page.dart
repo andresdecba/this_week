@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todoapp/models/task_model.dart';
+import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/controllers/initial_page_controller.dart';
+import 'package:todoapp/ui/widgets/alert_dialog.dart';
 import 'package:todoapp/ui/widgets/task_card_widget.dart';
 import 'package:intl/intl.dart';
+import 'package:todoapp/utils/parse_date_utils.dart';
 
 class InitialPage extends StatefulWidget {
   const InitialPage({Key? key}) : super(key: key);
@@ -17,7 +20,7 @@ class _InitialPageState extends State<InitialPage> {
   @override
   void initState() {
     setState(() {
-      _controller.generateWeekDaysList();
+      _controller.buildInfo(addWeeks: _controller.addWeeks);
     });
     super.initState();
   }
@@ -28,18 +31,33 @@ class _InitialPageState extends State<InitialPage> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            _controller.generateWeekDaysList();
-            _controller.moveToWeek = 1;
+            setState(() {
+              _controller.buildInfo();
+              _controller.addWeeks = 0;
+            });
           },
           icon: const Icon(Icons.today),
         ),
         actions: [
           IconButton(
-            onPressed: () => _controller.generateWeekDaysList(addWeeks: _controller.moveToWeek--),
-            icon: const Icon(Icons.arrow_back_ios),
+            onPressed: _controller.addWeeks == 0
+                ? () {}
+                : () {
+                    setState(() {});
+                    _controller.addWeeks--;
+                    _controller.buildInfo(addWeeks: _controller.addWeeks);
+                  },
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: _controller.addWeeks == 0 ? Colors.white30 : Colors.white,
+            ),
           ),
           IconButton(
-            onPressed: () => _controller.generateWeekDaysList(addWeeks: _controller.moveToWeek++),
+            onPressed: () {
+              setState(() {});
+              _controller.addWeeks++;
+              _controller.buildInfo(addWeeks: _controller.addWeeks);
+            },
             icon: const Icon(Icons.arrow_forward_ios),
           ),
         ],
@@ -47,99 +65,196 @@ class _InitialPageState extends State<InitialPage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () => _controller.navigate(),
       ),
-      body:
-          //!controller.hasData.value //controller.dataList.isEmpty
-          // no hay
-          //? const Center(child: Text('NO HAY NI BOSTA')) :
-          // crear widgets
-          Obx(
-        () {
-          //return reorde
-          return ReorderableListView(
-            padding: const EdgeInsets.all(20),
-            buildDefaultDragHandles: true,
-            shrinkWrap: true,
-            // proxyDecorator: (child, index, animation) {
-            //   return child; ///////////// aca se puede poner un efecto para cuando esta flotante
-            // },
-            // onReorderEnd: (index) { },
-            // onReorderStart: (index) { },
-            // proxyDecorator: (child, index, animation) { },
-            onReorder: (int oldIndex, int newIndex) {
-              if (oldIndex < newIndex) newIndex -= 1;
-              setState(() {
-                _controller.reorderWhenDragAndDrop(oldIndex, newIndex);
-              });
-            },
-            children: <Widget>[
-              ..._controller.dataList.map((e) {
-                List list = _controller.dataList;
-                int idx = list.indexOf(e);
 
-                // hide last day
-                if (e == list.last) {
-                  return SizedBox(
-                    key: UniqueKey(),
-                  );
-                }
-                // show dates
-                if (e is DateTime) {
-                  return Padding(
-                    key: UniqueKey(),
-                    padding: const EdgeInsets.fromLTRB(0, 30, 0, 8),
-                    // child: Text(
-                    //   DateFormat('EEEE MM-dd').format(e),
-                    //   style: const TextStyle(fontSize: 18),
-                    // ),
-                    child: RichText(
-                      text: TextSpan(
-                        text: DateFormat('EEEE').format(e),
-                        style: const TextStyle(fontSize: 18, color: Colors.black),
-                        children: <TextSpan>[
-                          TextSpan(
-                            text: '   ${DateFormat('MM-dd-yy').format(e)}',
-                            style: const TextStyle(fontSize: 12, color: Colors.grey, fontStyle: FontStyle.italic),
+      // dias + tareas
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            /// TITULO
+            const HeadWidget(),
+            const Divider(height: 40),
+
+            /// DIAS + TAREAS
+            ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              key: _controller.key,
+              shrinkWrap: true,
+              itemCount: _controller.buildWeek.length,
+              itemBuilder: (BuildContext context, int index) {
+                ////////
+                DateTime currentKey = _controller.buildWeek.keys.toList()[index];
+                List<Task> currentValue = [];
+                currentValue.addAll(_controller.buildWeek[currentKey]!);
+                GlobalKey<AnimatedListState> key = GlobalKey();
+
+                bool enableBtn = currentKey.isBefore(DateTime.now().subtract(const Duration(days: 1))) ? false : true;
+
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    /// SHOW DATE
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          RichText(
+                            text: TextSpan(
+                              text: '> ${DateFormat('EEEE').format(currentKey)}',
+                              style: const TextStyle(fontSize: 18, color: Colors.black),
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: '   ${DateFormat('MM-dd-yy').format(currentKey)}',
+                                  style: const TextStyle(fontSize: 12, color: Colors.grey, fontStyle: FontStyle.italic),
+                                ),
+                              ],
+                            ),
                           ),
+                          enableBtn
+                              ? customAddIcon(onPressed: () => _controller.navigate(date: currentKey))
+                              : Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Icon(
+                                    Icons.add,
+                                    color: Colors.grey[300],
+                                  ),
+                                ),
                         ],
                       ),
                     ),
-                  );
-                }
-                // show no tasks
-                if (e is String) {
-                  return Container(
-                    key: UniqueKey(),
-                    height: 50,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.4),
-                      borderRadius: const BorderRadius.all(Radius.circular(5)),
+
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 6),
+                      child: Stack(
+                        alignment: Alignment.topCenter,
+                        children: [
+                          /// SHOW NO TASKS
+                          Container(
+                            key: UniqueKey(),
+                            height: 50,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.4),
+                              borderRadius: const BorderRadius.all(Radius.circular(5)),
+                            ),
+                            alignment: Alignment.centerLeft,
+                            padding: const EdgeInsets.all(16),
+                            child: const Text(
+                              'No hay tareas',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          ),
+
+                          /// SHOW TASKS IF EXISTS
+                          currentValue.isNotEmpty
+                              ? AnimatedList(
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  initialItemCount: currentValue.length,
+                                  shrinkWrap: true,
+                                  key: key,
+                                  itemBuilder: (context, index2, animation) {
+                                    /// CREATE ITEMS
+                                    Task task = currentValue[index2];
+                                    int idx = _controller.getTasks.indexOf(task);
+
+                                    return TaskCardWidget(
+                                      key: UniqueKey(),
+                                      tarea: task,
+                                      index: idx,
+                                      onStatusChange: () => _controller.createCompletedTasksPercentage(),
+                                      onRemove: () {
+                                        showCustomDialog(
+                                          context: context,
+                                          description: 'Se eliminará la tarea para el día ${ParseDateUtils.dateToString(task.dateTime)}',
+                                          title: 'Eliminar tarea ?',
+                                          callBack: () {
+                                            task.delete();
+                                            _controller.buildInfo();
+                                            key.currentState?.removeItem(
+                                              index2,
+                                              duration: const Duration(milliseconds: 300),
+                                              (BuildContext context, animation) {
+                                                return ClipRRect(
+                                                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                                                  child: SizeTransition(
+                                                    sizeFactor: animation,
+                                                    axisAlignment: -1,
+                                                    child: ColorFiltered(
+                                                      colorFilter: ColorFilter.mode(Colors.red.withOpacity(0.5), BlendMode.modulate),
+                                                      // duplicate TaskCardWidget as a children for animation purpose
+                                                      child: TaskCardWidget(
+                                                        tarea: task,
+                                                        index: idx,
+                                                        isExpanded: true,
+                                                        onRemove: () {},
+                                                      ),
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                          },
+                                        );
+                                      },
+                                    );
+                                  },
+                                )
+                              : const SizedBox(),
+                        ],
+                      ),
                     ),
-                    alignment: Alignment.centerLeft,
-                    padding: const EdgeInsets.all(16),
-                    child: const Text(
-                      'No hay tareas',
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  );
-                }
-                // show tasks
-                if (e is Task) {
-                  return TaskCardWidget(
-                    key: UniqueKey(),
-                    tarea: e,
-                    index: idx,
-                  );
-                }
-                // return default
-                return Container(
-                  key: UniqueKey(),
+                    const SizedBox(height: 16),
+                  ],
                 );
-              }),
-            ],
-          );
-        },
+              },
+            ),
+          ],
+        ),
       ),
+    );
+  }
+}
+
+// eliminar tarea modal
+Future<dynamic> showCustomDialog({
+  required BuildContext context,
+  required VoidCallback callBack,
+  required String description,
+  required String title,
+}) {
+  return showDialog(
+    context: context,
+    builder: (_) {
+      return CustomDialog(
+        title: title,
+        content: Text(description),
+        okCallBack: callBack,
+      );
+    },
+  );
+}
+
+class HeadWidget extends GetView<InitialPageController> {
+  const HeadWidget({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(
+      () {
+        //print('Semana ${controller.currentWeek.value.weekNumber} - ${controller.currentWeek.value.weekNumber}');
+        return Column(
+          children: [
+            Text(controller.weekDaysFromTo.value),
+            Text(controller.tasksPercentageCompleted.value),
+          ],
+        );
+      },
     );
   }
 }
