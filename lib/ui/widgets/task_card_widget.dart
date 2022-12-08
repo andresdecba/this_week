@@ -80,24 +80,16 @@ class _TaskCardWidgetState extends State<TaskCardWidget> {
           childrenPadding: const EdgeInsets.symmetric(horizontal: 26),
           expandedCrossAxisAlignment: CrossAxisAlignment.start,
           tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Icon(
-              //   Icons.task_alt,
-              //   size: 16,
-              //   color: statusColor,
-              // ),
-              Expanded(
-                child: Text(
-                  widget.tarea.title,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(),
-                ),
+          title: GestureDetector(
+            child: Expanded(
+              child: Text(
+                widget.tarea.title,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(),
               ),
-            ],
+            ),
+            onTap: () => _controller.navigate(taskKey: widget.tarea.key),
           ),
           subtitle: Padding(
             padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
@@ -165,22 +157,17 @@ class _TaskCardWidgetState extends State<TaskCardWidget> {
                 Wrap(
                   children: [
                     IconButton(
-                      // onPressed: () {
-                      //   widget.tarea.delete();
-                      //   _controller.dataList.removeAt(widget.index);
-                      //   _controller.removeItem(index, child)
-                      // },
                       onPressed: widget.onRemove,
                       icon: const Icon(Icons.delete),
                       iconSize: 16,
                       visualDensity: VisualDensity.compact,
                     ),
-                    IconButton(
-                      onPressed: () => _controller.navigate(taskKey: widget.tarea.key),
-                      icon: const Icon(Icons.edit),
-                      iconSize: 16,
-                      visualDensity: VisualDensity.compact,
-                    ),
+                    // IconButton(
+                    //   onPressed: () => _controller.navigate(taskKey: widget.tarea.key),
+                    //   icon: const Icon(Icons.edit),
+                    //   iconSize: 16,
+                    //   visualDensity: VisualDensity.compact,
+                    // ),
                   ],
                 )
               ],

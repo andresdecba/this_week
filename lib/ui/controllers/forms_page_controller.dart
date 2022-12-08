@@ -18,10 +18,7 @@ class FormsPageController extends GetxController {
   bool _isUpdate = false;
   bool _isSubtaskUpdate = false;
   int _subTaskIndex = 0;
-  RxBool enableAddTaskButton = false.obs;
-  RxBool hasUserInteraction = false.obs;
-  RxBool isTextFieldEnabled = false.obs;
-  //String taskStatus = TaskStatus.PENDING.toValue;
+  RxBool isEditionEnabled = false.obs;
 
   // observable list of subtasks
   final _subTasksTmp = Rx<List<SubTask>>([]);
@@ -31,10 +28,6 @@ class FormsPageController extends GetxController {
   @override
   void onInit() {
     setInit();
-    taskTitleCtrlr.addListener(() {
-      enableAddTaskButton.value = taskTitleCtrlr.text.isNotEmpty;
-      print('a ver $enableAddTaskButton');
-    });
     super.onInit();
   }
 
@@ -69,8 +62,7 @@ class FormsPageController extends GetxController {
     // create task on a specific date
     if (Get.parameters['date'] != null) {
       _time.value = DateTime.parse(Get.parameters['date']!);
-      isTextFieldEnabled.value = true;
-      //_task.value.dateTime = DateTime.parse(Get.parameters['date']!);
+      isEditionEnabled.value = true;
     }
   }
 
@@ -98,7 +90,6 @@ class FormsPageController extends GetxController {
       _isSubtaskUpdate = false;
     }
     subTaskTitleCtrlr.clear();
-    hasUserInteraction.value = true;
   }
 
   void deleteSubtask(int index) {
@@ -126,7 +117,6 @@ class FormsPageController extends GetxController {
 
   void saveAndNavigate() {
     createOrUpdateTask();
-    //int idFromFirstController = Get.find<InitialPageController>().updateDataList()
     Get.offAllNamed(Routes.INITIAL_PAGE);
   }
 
@@ -138,14 +128,14 @@ class FormsPageController extends GetxController {
 
   // alert dialog
   Future<bool> onWillPop(BuildContext context) async {
-    hasUserInteraction.value == true
+    isEditionEnabled.value == true
         ? showDialog(
             context: context,
             builder: (BuildContext context) {
               return CustomDialog(
                 title: "Salir sin guardar ?",
                 content: const Text("Si sale ahora sin guardar perderá los cambios"),
-                okCallBack: () => cancelAndNavigate(context), //() => saveAndNavigate(),
+                okCallBack: () => cancelAndNavigate(context),
                 isNavigable: true,
               );
             })

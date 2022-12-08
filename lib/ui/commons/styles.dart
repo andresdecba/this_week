@@ -48,8 +48,8 @@ const backgroundWidgetBoxDecoration = BoxDecoration(
   ),
 );
 
-const boxDecoration = BoxDecoration(
-  color: Colors.white,
+final boxDecoration = BoxDecoration(
+  color: Colors.grey[350],
   borderRadius: BorderRadius.all(Radius.circular(8)),
 );
 
@@ -59,16 +59,16 @@ const titleTextStyle = TextStyle(
 );
 
 /////// COLORS //////
-const iconsColor = Colors.blueGrey;
+const iconColor = Colors.blueGrey;
 final disabledColor = Colors.grey[300];
 
 //////// ICONS ////////
 ///
-IconButton customAddIcon({required VoidCallback onPressed}) {
+IconButton customAddIcon({required VoidCallback onPressed, bool isEnabled = true}) {
   return IconButton(
     icon: const Icon(Icons.add_circle_rounded),
     visualDensity: VisualDensity.compact,
     onPressed: onPressed,
-    color: iconsColor,
+    color: isEnabled ? iconColor : disabledColor,
   );
 }

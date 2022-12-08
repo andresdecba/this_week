@@ -17,163 +17,170 @@ class FormsPage extends GetView<FormsPageController> {
     return WillPopScope(
       onWillPop: () => controller.onWillPop(context),
       child: Scaffold(
-        //backgroundColor: Colors.white,
+
         appBar: AppBar(
           leading: IconButton(
             onPressed: () => controller.onWillPop(context),
             icon: const Icon(Icons.arrow_back),
           ),
           title: const Text('Agregar nueva tarea'),
+          actions: [
+            IconButton(
+              onPressed: () => controller.isEditionEnabled.value = true,
+              icon: const Icon(Icons.edit),
+            ),
+          ],
         ),
 
         bottomNavigationBar: Obx(
-          () => Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size.fromHeight(40),
-              ),
-              onPressed: controller.enableAddTaskButton.value == true ? () => controller.saveAndNavigate() : null,
-              child: const Text(
-                'Add task',
-              ),
-            ),
-          ),
+          () {
+            return controller.isEditionEnabled.value
+                ? Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size.fromHeight(40),
+                      ),
+                      onPressed: () => controller.saveAndNavigate(),
+                      child: const Text(
+                        'Add task',
+                      ),
+                    ),
+                  )
+                : const SizedBox();
+          },
         ),
 
         body: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(16.0),
-            physics: const BouncingScrollPhysics(),
-            child: Column(
-              children: [
-                // PASO 1: SELECCIONAR DIA
-                BackgroundWidget(
-                  child: Obx(() {
-                    return Column(
+          child: Obx(
+            () => SingleChildScrollView(
+              padding: const EdgeInsets.all(16.0),
+              physics: const BouncingScrollPhysics(),
+              child: Column(
+                children: [
+                  // PASO 1: SELECCIONAR DIA
+                  BackgroundWidget(
+                    child: Obx(() {
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            '1 - Crear tarea para el día:',
+                            style: titleTextStyle,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(ParseDateUtils.dateToString(controller.getTime)),
+                              IconButton(
+                                icon: const Icon(Icons.edit_calendar),
+                                visualDensity: VisualDensity.compact,
+                                color: controller.isEditionEnabled.value ? iconColor : disabledColor,
+                                onPressed: () async {
+                                  // show the dialog
+                                  var tmpData = controller.getTime;
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext ctx) {
+                                      return CustomDialog(
+                                        title: 'Cambiar fecha',
+                                        content: SizedBox(
+                                          height: 300,
+                                          width: 200,
+                                          child: CalendarDatePicker(
+                                            initialDate: controller.getTime,
+                                            firstDate: DateTime.now(),
+                                            lastDate: DateTime.now().add(const Duration(days: 365)),
+                                            onDateChanged: (date) {
+                                              tmpData = date;
+                                            },
+                                          ),
+                                        ),
+                                        okCallBack: () => controller.setTime = tmpData,
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ],
+                      );
+                    }),
+                  ),
+
+                  // PASO 2: PONER TITLE + DESCRIPTION
+                  BackgroundWidget(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: const [
+                            Text(
+                              '2 - Ingresa un título y una descripción',
+                              style: titleTextStyle,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                        const TitleAndDescriptionForms(),
+                      ],
+                    ),
+                  ),
+
+                  // PASO 3: AGREGAR UN STATUS
+                  BackgroundWidget(
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          '1 - Crear tarea para el día:',
+                          '3 - Opcional: definir un status inical',
                           style: titleTextStyle,
                         ),
+                        Center(
+                          child: ToggleStatusButton(
+                            task: controller.getTask,
+                            onChanged: () {},
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  // PASO 4: AGREGAR SUBTAREAS
+                  BackgroundWidget(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(ParseDateUtils.dateToString(controller.getTime)),
-                            IconButton(
-                              icon: const Icon(Icons.edit_calendar),
-                              visualDensity: VisualDensity.compact,
-                              color: iconsColor,
-                              onPressed: () async {
-                                // show the dialog
-                                var tmpData = controller.getTime;
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext ctx) {
-                                    return CustomDialog(
-                                      title: 'Cambiar fecha',
-                                      content: SizedBox(
-                                        height: 300,
-                                        width: 200,
-                                        child: CalendarDatePicker(
-                                          initialDate: controller.getTime,
-                                          firstDate: DateTime.now(),
-                                          lastDate: DateTime.now().add(const Duration(days: 365)),
-                                          onDateChanged: (date) {
-                                            tmpData = date;
-                                            controller.hasUserInteraction.value = true;
-                                          },
-                                        ),
-                                      ),
-                                      //content: Text('data'),
-                                      okCallBack: () => controller.setTime = tmpData,
-                                    );
-                                  },
-                                );
-                              },
+                            const Text(
+                              '4 - Opcional: agregar subtareas',
+                              style: titleTextStyle,
+                            ),
+                            customAddIcon(
+                              isEnabled: controller.isEditionEnabled.value,
+                              onPressed: () => showSubtaskDialog(
+                                context,
+                                () => controller.createOrUpdateSubTask(),
+                              ),
                             ),
                           ],
                         ),
+                        const SizedBox(height: 20),
+                        const SubTasksListView(),
+                        //const SizedBox(height: 30),
                       ],
-                    );
-                  }),
-                ),
-
-                // PASO 2: PONER TITLE + DESCRIPTION
-                BackgroundWidget(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            '2 - Ingresa un título y una descripción',
-                            style: titleTextStyle,
-                          ),
-                          IconButton(
-                            onPressed: () => controller.isTextFieldEnabled.value = true,
-                            icon: const Icon(Icons.edit),
-                          )
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-                      const TitleAndDescriptionForms(),
-                    ],
+                    ),
                   ),
-                ),
-
-                // PASO 3: AGREGAR UN STATUS
-                BackgroundWidget(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        '3 - Opcional: definir un status inical',
-                        style: titleTextStyle,
-                      ),
-                      Center(
-                        child: ToggleStatusButton(
-                          task: controller.getTask,
-                          onChanged: () => controller.hasUserInteraction.value = true,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                // PASO 4: AGREGAR SUBTAREAS
-                BackgroundWidget(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            '4 - Opcional: agregar subtareas',
-                            style: titleTextStyle,
-                          ),
-                          customAddIcon(
-                            onPressed: () => showSubtaskDialog(
-                              context,
-                              () => controller.createOrUpdateSubTask(),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-                      const SubTasksListView(),
-                      //const SizedBox(height: 30),
-                    ],
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -197,10 +204,10 @@ class TitleAndDescriptionForms extends GetView<FormsPageController> {
             children: [
               // titulo
               TextFormField(
-                enabled: controller.isTextFieldEnabled.value,
+                enabled: controller.isEditionEnabled.value,
                 controller: controller.taskTitleCtrlr,
                 decoration: customInputDecoration(
-                  hasBorder: controller.isTextFieldEnabled.value,
+                  hasBorder: controller.isEditionEnabled.value,
                   label: 'Título*',
                   hintText: 'Ingrese un título para la tarea',
                   borderColor: Colors.orange,
@@ -211,15 +218,14 @@ class TitleAndDescriptionForms extends GetView<FormsPageController> {
                 keyboardType: TextInputType.text,
                 textInputAction: TextInputAction.next,
                 onFieldSubmitted: (v) => FocusScope.of(context).nextFocus(),
-                onChanged: (value) => controller.hasUserInteraction.value = true,
               ),
               // descripcion
               const SizedBox(height: 10),
               TextFormField(
-                enabled: controller.isTextFieldEnabled.value,
+                enabled: controller.isEditionEnabled.value,
                 controller: controller.taskDescriptionCtrlr,
                 decoration: customInputDecoration(
-                  hasBorder: controller.isTextFieldEnabled.value,
+                  hasBorder: controller.isEditionEnabled.value,
                   label: 'Descripción',
                   hintText: 'Opcional: Ingrese un descripción',
                   clearText: () => controller.taskDescriptionCtrlr.clear(),
@@ -228,7 +234,6 @@ class TitleAndDescriptionForms extends GetView<FormsPageController> {
                 maxLength: 200,
                 keyboardType: TextInputType.multiline,
                 textInputAction: TextInputAction.done,
-                onChanged: (value) => controller.hasUserInteraction.value = true,
               ),
             ],
           ),

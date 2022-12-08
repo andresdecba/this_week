@@ -4,6 +4,7 @@ import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/controllers/initial_page_controller.dart';
 import 'package:todoapp/ui/widgets/alert_dialog.dart';
+import 'package:todoapp/ui/widgets/side_bar.dart';
 import 'package:todoapp/ui/widgets/task_card_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:todoapp/utils/parse_date_utils.dart';
@@ -28,43 +29,14 @@ class _InitialPageState extends State<InitialPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
+      /// Appbar
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            setState(() {
-              _controller.buildInfo();
-              _controller.addWeeks = 0;
-            });
-          },
-          icon: const Icon(Icons.today),
-        ),
-        actions: [
-          IconButton(
-            onPressed: _controller.addWeeks == 0
-                ? () {}
-                : () {
-                    setState(() {});
-                    _controller.addWeeks--;
-                    _controller.buildInfo(addWeeks: _controller.addWeeks);
-                  },
-            icon: Icon(
-              Icons.arrow_back_ios,
-              color: _controller.addWeeks == 0 ? Colors.white30 : Colors.white,
-            ),
-          ),
-          IconButton(
-            onPressed: () {
-              setState(() {});
-              _controller.addWeeks++;
-              _controller.buildInfo(addWeeks: _controller.addWeeks);
-            },
-            icon: const Icon(Icons.arrow_forward_ios),
-          ),
-        ],
+        leading: const Center(child: Text('LOGO')),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _controller.navigate(),
-      ),
+
+      // drawer o sidebar
+      endDrawer: const SideBar(),
 
       // dias + tareas
       body: SingleChildScrollView(
@@ -248,10 +220,34 @@ class HeadWidget extends GetView<InitialPageController> {
     return Obx(
       () {
         //print('Semana ${controller.currentWeek.value.weekNumber} - ${controller.currentWeek.value.weekNumber}');
-        return Column(
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Text(controller.weekDaysFromTo.value),
-            Text(controller.tasksPercentageCompleted.value),
+            IconButton(
+              onPressed: controller.addWeeks == 0
+                  ? () {}
+                  : () {
+                      controller.addWeeks--;
+                      controller.buildInfo(addWeeks: controller.addWeeks);
+                    },
+              icon: Icon(
+                Icons.arrow_back_ios,
+                color: controller.addWeeks == 0 ? disabledColor : null,
+              ),
+            ),
+            Column(
+              children: [
+                Text(controller.weekDaysFromTo.value),
+                Text(controller.tasksPercentageCompleted.value),
+              ],
+            ),
+            IconButton(
+              onPressed: () {
+                controller.addWeeks++;
+                controller.buildInfo(addWeeks: controller.addWeeks);
+              },
+              icon: const Icon(Icons.arrow_forward_ios),
+            ),
           ],
         );
       },
