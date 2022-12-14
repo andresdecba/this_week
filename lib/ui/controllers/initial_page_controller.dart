@@ -26,17 +26,10 @@ class InitialPageController extends GetxController {
   // others
   GlobalKey<AnimatedListState> key = GlobalKey();
 
-  void removeItem(int index) {
-    key.currentState?.removeItem(
-      index,
-      (BuildContext context, animation) {
-        return SizeTransition(
-          sizeFactor: animation,
-          child: const ExpansionTile(title: Text('deleted'), backgroundColor: Colors.red),
-        );
-      },
-      duration: const Duration(milliseconds: 300),
-    );
+  @override
+  void onInit() {
+    buildInfo();
+    super.onInit();
   }
 
   /// ejemplo del modelo de datos
@@ -50,18 +43,20 @@ class InitialPageController extends GetxController {
   //  'Domingo 02-12-2022'  : [],
   //};
 
-  void buildInfo({int? addWeeks}) {
+  void buildInfo() {
+    //{int? addWks}
     // limpiar lista para evitar duplicados
     weekDays.clear();
     buildWeek.clear();
     // crear los dias
     Week currentWeek = Week.current();
 
-    if (addWeeks == null) {
+    if (addWeeks == 0) {
+      //addWks == null
       weekDays = currentWeek.days;
       showCurrenWeekInfo = currentWeek;
     }
-    if (addWeeks != null) {
+    if (addWeeks > 0) {
       currentWeek = currentWeek.addWeeks(addWeeks);
       weekDays = currentWeek.days;
       showCurrenWeekInfo = currentWeek;
@@ -82,6 +77,7 @@ class InitialPageController extends GetxController {
     }
     setInitialAndFinalWeekDays();
     createCompletedTasksPercentage();
+    update();
   }
 
   /// create head info

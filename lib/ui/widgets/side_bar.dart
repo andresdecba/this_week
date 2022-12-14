@@ -1,21 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:todoapp/core/routes/routes.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/controllers/initial_page_controller.dart';
 
-
-class SideBar extends StatefulWidget {
+class SideBar extends GetView<InitialPageController> {
 
   const SideBar({super.key});
-
-  @override
-  State<SideBar> createState() => _SideBarState();
-}
-
-class _SideBarState extends State<SideBar> {
-  final InitialPageController _controller = Get.put(InitialPageController());
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +17,8 @@ class _SideBarState extends State<SideBar> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
-            //padding: const EdgeInsets.all(16),
             children: [
+              /// LOGO
               SvgPicture.asset(
                 'assets/weekly-logo.svg',
                 alignment: Alignment.center,
@@ -36,16 +27,16 @@ class _SideBarState extends State<SideBar> {
               ),
               const SizedBox(height: 20),
               const Divider(),
+
+              /// NAVEGACION
               const Text('Navegación'),
               ListTile(
                 leading: const Icon(Icons.today),
                 title: const Text('Ir a semana Actual'),
                 onTap: () {
-                  Navigator.of(context).setState(() {
-                    _controller.addWeeks = 0;
-                    _controller.buildInfo();
-                  });
-                  //setState(() {});
+                  controller.addWeeks = 0;
+                  controller.buildInfo();
+                  Navigator.of(context).pop();
                 },
               ),
               ListTile(
@@ -53,10 +44,12 @@ class _SideBarState extends State<SideBar> {
                 title: const Text('Agregar tarea nueva'),
                 onTap: () {
                   //Navigator.of(context).pop();
-                  _controller.navigate(date: DateTime.now());
+                  controller.navigate(date: DateTime.now());
                 },
               ),
               const Divider(),
+
+              /// CONFIG
               const Text('Configuración'),
               ListTile(
                 leading: const Icon(Icons.notifications_off_rounded),

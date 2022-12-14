@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:todoapp/core/routes/routes.dart';
 import 'package:todoapp/data_source/db_data_source.dart';
 import 'package:todoapp/models/task_model.dart';
+import 'package:todoapp/ui/controllers/initial_page_controller.dart';
 import 'package:todoapp/ui/widgets/alert_dialog.dart';
 
 class FormsPageController extends GetxController {
@@ -10,6 +11,7 @@ class FormsPageController extends GetxController {
   final taskTitleCtrlr = TextEditingController();
   final taskDescriptionCtrlr = TextEditingController();
   final subTaskTitleCtrlr = TextEditingController();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   // get boxes
   final tasksBox = Boxes.getTasksBox();
@@ -24,7 +26,9 @@ class FormsPageController extends GetxController {
   int _subTaskIndex = 0;
   RxBool isEditionEnabled = false.obs;
 
-  ///
+  RxBool enableAddTaskButton = false.obs;
+
+  final InitialPageController _initialPageController = Get.put(InitialPageController());
 
   // observable list of subtasks
   final _subTasksTmp = Rx<List<SubTask>>([]);
@@ -122,13 +126,18 @@ class FormsPageController extends GetxController {
   }
 
   void saveAndNavigate() {
-    createOrUpdateTask();
-    Get.offAllNamed(Routes.INITIAL_PAGE);
+    final FormState form = formKey.currentState!;
+    if (form.validate()) {
+      createOrUpdateTask();
+      _initialPageController.buildInfo();
+      Get.offAllNamed(Routes.INITIAL_PAGE);
+    }
   }
 
   /// CANCEL ///
   void cancelAndNavigate(BuildContext context) {
     tasksBox.flush();
+    _initialPageController.buildInfo();
     Get.offAllNamed(Routes.INITIAL_PAGE);
   }
 

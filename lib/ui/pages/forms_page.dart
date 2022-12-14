@@ -63,7 +63,7 @@ class FormsPage extends GetView<FormsPageController> {
                       style: ElevatedButton.styleFrom(
                         minimumSize: const Size.fromHeight(40),
                       ),
-                      onPressed: () => controller.saveAndNavigate(),
+                      onPressed: () => controller.saveAndNavigate(), //controller.enableAddTaskButton.value ? () => controller.saveAndNavigate() : null,
                       child: const Text(
                         'Add task',
                       ),
@@ -222,6 +222,7 @@ class TitleAndDescriptionForms extends GetView<FormsPageController> {
     return Obx(
       () {
         return Form(
+          key: controller.formKey,
           child: Column(
             children: [
               // titulo
@@ -240,6 +241,8 @@ class TitleAndDescriptionForms extends GetView<FormsPageController> {
                 keyboardType: TextInputType.text,
                 textInputAction: TextInputAction.next,
                 onFieldSubmitted: (v) => FocusScope.of(context).nextFocus(),
+                validator: (value) => value!.isEmpty ? 'Password cannot be blank' : null,
+                onTap: () => controller.formKey.currentState!.reset(),
               ),
               // descripcion
               const SizedBox(height: 10),
