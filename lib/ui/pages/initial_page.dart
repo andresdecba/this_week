@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/ui/commons/styles.dart';
@@ -29,10 +30,17 @@ class _InitialPageState extends State<InitialPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       /// Appbar
       appBar: AppBar(
-        leading: const Center(child: Text('LOGO')),
+        leadingWidth: 300,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 16),
+          child: SvgPicture.asset(
+            'assets/weekly-logo.svg',
+            alignment: Alignment.center,
+            color: Colors.black,
+          ),
+        ),
       ),
 
       // drawer o sidebar
@@ -45,8 +53,40 @@ class _InitialPageState extends State<InitialPage> {
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
-            /// TITULO
-            const HeadWidget(),
+            /// HEADER
+            //const HeadWidget(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(
+                  onPressed: _controller.addWeeks == 0
+                      ? () {}
+                      : () {
+                          _controller.addWeeks--;
+                          _controller.buildInfo(addWeeks: _controller.addWeeks);
+                          setState(() {});
+                        },
+                  icon: Icon(
+                    Icons.arrow_back_ios,
+                    color: _controller.addWeeks == 0 ? disabledColorLight : null,
+                  ),
+                ),
+                Column(
+                  children: [
+                    Text(_controller.weekDaysFromTo.value),
+                    Text(_controller.tasksPercentageCompleted.value),
+                  ],
+                ),
+                IconButton(
+                  onPressed: () {
+                    _controller.addWeeks++;
+                    _controller.buildInfo(addWeeks: _controller.addWeeks);
+                    setState(() {});
+                  },
+                  icon: const Icon(Icons.arrow_forward_ios),
+                ),
+              ],
+            ),
             const Divider(height: 40),
 
             /// DIAS + TAREAS
@@ -62,7 +102,7 @@ class _InitialPageState extends State<InitialPage> {
                 currentValue.addAll(_controller.buildWeek[currentKey]!);
                 GlobalKey<AnimatedListState> key = GlobalKey();
 
-                bool enableBtn = currentKey.isBefore(DateTime.now().subtract(const Duration(days: 1))) ? false : true;
+                bool isDateEnabled = currentKey.isBefore(DateTime.now().subtract(const Duration(days: 1))) ? false : true;
 
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -77,22 +117,26 @@ class _InitialPageState extends State<InitialPage> {
                           RichText(
                             text: TextSpan(
                               text: '> ${DateFormat('EEEE').format(currentKey)}',
-                              style: const TextStyle(fontSize: 18, color: Colors.black),
+                              style: TextStyle(fontSize: 18, color: isDateEnabled ? Colors.black : disabledColorDark),
                               children: <TextSpan>[
                                 TextSpan(
                                   text: '   ${DateFormat('MM-dd-yy').format(currentKey)}',
-                                  style: const TextStyle(fontSize: 12, color: Colors.grey, fontStyle: FontStyle.italic),
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: isDateEnabled ? Colors.black : disabledColorDark,
+                                    fontStyle: FontStyle.italic,
+                                  ),
                                 ),
                               ],
                             ),
                           ),
-                          enableBtn
+                          isDateEnabled
                               ? customAddIcon(onPressed: () => _controller.navigate(date: currentKey))
                               : Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Icon(
                                     Icons.add,
-                                    color: Colors.grey[300],
+                                    color: disabledColorLight,
                                   ),
                                 ),
                         ],
@@ -189,68 +233,68 @@ class _InitialPageState extends State<InitialPage> {
       ),
     );
   }
-}
 
-// eliminar tarea modal
-Future<dynamic> showCustomDialog({
-  required BuildContext context,
-  required VoidCallback callBack,
-  required String description,
-  required String title,
-}) {
-  return showDialog(
-    context: context,
-    builder: (_) {
-      return CustomDialog(
-        title: title,
-        content: Text(description),
-        okCallBack: callBack,
-      );
-    },
-  );
-}
-
-class HeadWidget extends GetView<InitialPageController> {
-  const HeadWidget({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Obx(
-      () {
-        //print('Semana ${controller.currentWeek.value.weekNumber} - ${controller.currentWeek.value.weekNumber}');
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            IconButton(
-              onPressed: controller.addWeeks == 0
-                  ? () {}
-                  : () {
-                      controller.addWeeks--;
-                      controller.buildInfo(addWeeks: controller.addWeeks);
-                    },
-              icon: Icon(
-                Icons.arrow_back_ios,
-                color: controller.addWeeks == 0 ? disabledColor : null,
-              ),
-            ),
-            Column(
-              children: [
-                Text(controller.weekDaysFromTo.value),
-                Text(controller.tasksPercentageCompleted.value),
-              ],
-            ),
-            IconButton(
-              onPressed: () {
-                controller.addWeeks++;
-                controller.buildInfo(addWeeks: controller.addWeeks);
-              },
-              icon: const Icon(Icons.arrow_forward_ios),
-            ),
-          ],
+  // eliminar tarea modal
+  Future<dynamic> showCustomDialog({
+    required BuildContext context,
+    required VoidCallback callBack,
+    required String description,
+    required String title,
+  }) {
+    return showDialog(
+      context: context,
+      builder: (_) {
+        return CustomDialog(
+          title: title,
+          content: Text(description),
+          okCallBack: callBack,
         );
       },
     );
   }
 }
+
+// class HeadWidget extends GetView<InitialPageController> {
+//   const HeadWidget({
+//     Key? key,
+//   }) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Obx(
+//       () {
+//         //print('Semana ${controller.currentWeek.value.weekNumber} - ${controller.currentWeek.value.weekNumber}');
+//         return Row(
+//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//           children: [
+//             IconButton(
+//               onPressed: controller.addWeeks == 0
+//                   ? () {}
+//                   : () {
+//                       controller.addWeeks--;
+//                       controller.buildInfo(addWeeks: controller.addWeeks);
+//                     },
+//               icon: Icon(
+//                 Icons.arrow_back_ios,
+//                 color: controller.addWeeks == 0 ? disabledColorLight : null,
+//               ),
+//             ),
+//             Column(
+//               children: [
+//                 Text(controller.weekDaysFromTo.value),
+//                 Text(controller.tasksPercentageCompleted.value),
+//               ],
+//             ),
+//             IconButton(
+//               onPressed: () {
+//                 controller.addWeeks++;
+//                 controller.buildInfo(addWeeks: controller.addWeeks);
+//               },
+//               icon: const Icon(Icons.arrow_forward_ios),
+//             ),
+//           ],
+//         );
+//       },
+//     );
+//   }
+// }

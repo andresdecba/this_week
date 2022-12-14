@@ -71,7 +71,7 @@ class _ToggleStatusButtonState extends State<ToggleStatusButton> {
             'Pending',
             style: TextStyle(
               fontSize: 16,
-              color: widget.task.status == TaskStatus.PENDING.toValue ? Colors.black : disabledColor,
+              color: widget.task.status == TaskStatus.PENDING.toValue ? Colors.black : disabledColorLight,
             ),
           ),
         ),
@@ -81,7 +81,7 @@ class _ToggleStatusButtonState extends State<ToggleStatusButton> {
             'In progress',
             style: TextStyle(
               fontSize: 16,
-              color: widget.task.status == TaskStatus.IN_PROGRESS.toValue ? Colors.green : disabledColor,
+              color: widget.task.status == TaskStatus.IN_PROGRESS.toValue ? Colors.green : disabledColorLight,
             ),
           ),
         ),
@@ -91,7 +91,7 @@ class _ToggleStatusButtonState extends State<ToggleStatusButton> {
             'Done',
             style: TextStyle(
               fontSize: 16,
-              color: widget.task.status == TaskStatus.DONE.toValue ? Colors.orange : disabledColor,
+              color: widget.task.status == TaskStatus.DONE.toValue ? Colors.orange : disabledColorLight,
             ),
           ),
         ),

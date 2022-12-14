@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/controllers/forms_page_controller.dart';
 import 'package:todoapp/ui/pages/forms_page.dart';
@@ -7,15 +8,18 @@ class SubTaskItem extends StatelessWidget {
   const SubTaskItem({
     required this.index,
     required this.controller,
+    required this.isEnabled,
     Key? key,
   }) : super(key: key);
 
   final int index;
   final FormsPageController controller;
+  final bool isEnabled;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Obx(
+      () => Container(
       key: Key('$index'),
       constraints: const BoxConstraints(minWidth: 100, maxWidth: 100),
       alignment: Alignment.centerLeft,
@@ -31,8 +35,7 @@ class SubTaskItem extends StatelessWidget {
                 child: Text(
                   controller.getSubTaskList.value[index].title,
                 ),
-              ),
-              
+                ),
             ],
           ),
 
@@ -59,25 +62,33 @@ class SubTaskItem extends StatelessWidget {
                     icon: const Icon(Icons.check_circle_outline),
                     color: Colors.green[600],
                   ),
+
+                    // editar subtask
                   IconButton(
-                    onPressed: () {
-                      controller.fillSubTaskTFWhenUpdate(index);
-                      showSubtaskDialog(context, () {});
-                    },
+                      onPressed: controller.isEditionEnabled.value
+                          ? () {
+                              controller.fillSubTaskTFWhenUpdate(index);
+                              showSubtaskDialog(context, () {});
+                            }
+                          : null,
                     visualDensity: VisualDensity.compact,
                     icon: const Icon(Icons.edit),
+                      color: controller.isEditionEnabled.value ? iconColor : disabledColorLight,
                   ),
+
                   // eliminar subtask
                   IconButton(
-                    onPressed: () => controller.deleteSubtask(index),
+                      onPressed: controller.isEditionEnabled.value ? () => controller.deleteSubtask(index) : null,
                     visualDensity: VisualDensity.compact,
                     icon: const Icon(Icons.delete_forever),
+                      color: controller.isEditionEnabled.value ? iconColor : disabledColorLight,
                   ),
                 ],
               ),
             ],
           ),
         ],
+      ),
       ),
     );
   }

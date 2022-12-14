@@ -21,23 +21,33 @@
 
 
 ////////// BUGS //////////
--Cuando haces una tarea en el dia de hoy a las 17hs., no se renderiza. Puede ser por el horario.
--en tarjeta subtask no andan los botones borrar, editar y task
--en agregar subtask el boton sigue funcionando aunque el modo edicion esté deshabilitado
+1- Cuando haces una tarea en el dia de hoy a las 17hs., no se renderiza. Puede ser por el horario.
+**2- en tarjeta subtask no andan los botones borrar, editar y task
+**3- en agregar subtask el boton sigue funcionando aunque el modo edicion esté deshabilitado
+**4- al hacer click en nueva tarea del drawer no inicia en modo edicion
+5- que no se pueda agregar un atarea sin el campo obligatorio titulo
+**6- deshabilitar botones editar y borrar en la tarjeta subtask cuando el modo edición esta deshabilitado
+**7- el boton editar tarea no se deshabilita en el segundo click
+**8- al icono "editar tarea" solo se debe mostrar cuando se abre una tarea existente, ocultar al crear una tarea nueva
+**9- mostrar titulo en el appbar de crear/editar segun sea crear o editar task
+10- al crear una tarea, si no hubo interacción del usuario, entonces NO mostrar el modal "salir sin guardar"
+**11- boton editar, cambiar color segun su estado
+**12- no anda pasar de semana en la pagina de inicio
+13- no anda "ir a semana actual" en el drawer
 
 
 ////////// DISEÑO //////////
 --- Pagina inicial ---
-1- agregar drawer con opciones "navegar entre semanas", "agregar nueva tarea", etc
-2- agregar menu hamburgues en el app bar con opciones: "borrar todo", "sileciar notificaciones", etc.
+**1- agregar drawer con opciones "navegar entre semanas", "agregar nueva tarea", etc
+**2- agregar menu hamburgues en el app bar con opciones: "borrar todo", "sileciar notificaciones", etc.
 3- cuando cambio de semana ver si podemos hacer una transcicion visual entre una y otra
 4- diseñar un header mas lindo(semana y estadistica)
-5- agregar un logo en el lado izquierdo del appbar
-6- color deshabilitado a los dias anteriores al actual
+**5- agregar un logo en el lado izquierdo del appbar
+**6- color deshabilitado a los dias anteriores al actual
 7- tarjeta de task: resumir info, se verá completa al abrir la task
 
 --- Pagina formularios ---
-1- texto del titulo en app bar es muy grande
+**1- texto del titulo en app bar es muy grande
 2- cambiar colores entre los modos mostrar y edicion
 3- mejorar subtask cards
 

@@ -14,7 +14,7 @@ abstract class ParseDateUtils {
 
   /// de DateTime to "05 DECEMBER"
   static String dateToAbbreviateString(DateTime date) {
-    String formattedDate = DateFormat('d MMMM').format(date);
+    String formattedDate = DateFormat('d/MM/yy').format(date);
     return formattedDate;
   }
 }

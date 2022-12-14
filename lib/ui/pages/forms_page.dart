@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/ui/commons/styles.dart';
@@ -19,15 +20,36 @@ class FormsPage extends GetView<FormsPageController> {
       child: Scaffold(
 
         appBar: AppBar(
+
+          // leadingWidth: 300,
+          // leading: Padding(
+          //   padding: const EdgeInsets.only(left: 16),
+          //   child: SvgPicture.asset(
+          //     'assets/weekly-logo.svg',
+          //     alignment: Alignment.center,
+          //     color: Colors.black,
+          //   ),
+          // ),
+
           leading: IconButton(
             onPressed: () => controller.onWillPop(context),
             icon: const Icon(Icons.arrow_back),
           ),
-          title: const Text('Agregar nueva tarea'),
+          title: Text(
+            controller.isTaskUpdate ? 'Ver tarea' : 'Crear nueva tarea',
+          ),
+          titleTextStyle: const TextStyle(fontSize: 16),
           actions: [
-            IconButton(
-              onPressed: () => controller.isEditionEnabled.value = true,
-              icon: const Icon(Icons.edit),
+
+            Obx(
+              () => Visibility(
+                visible: controller.isTaskUpdate,
+                child: IconButton(
+                  onPressed: () => controller.isEditionEnabled.value = !controller.isEditionEnabled.value,
+                  icon: const Icon(Icons.edit),
+                  color: !controller.isEditionEnabled.value ? Colors.white.withOpacity(0.5) : Colors.white,
+                ),
+              ),
             ),
           ],
         ),
@@ -76,7 +98,7 @@ class FormsPage extends GetView<FormsPageController> {
                               IconButton(
                                 icon: const Icon(Icons.edit_calendar),
                                 visualDensity: VisualDensity.compact,
-                                color: controller.isEditionEnabled.value ? iconColor : disabledColor,
+                                color: controller.isEditionEnabled.value ? iconColor : disabledColorLight,
                                 onPressed: () async {
                                   // show the dialog
                                   var tmpData = controller.getTime;
@@ -261,6 +283,7 @@ class SubTasksListView extends GetView<FormsPageController> {
                   controller: controller,
                   index: index,
                   key: Key('$index'),
+                  isEnabled: controller.isEditionEnabled.value,
                 );
               },
               onReorder: (int oldIndex, int newIndex) {

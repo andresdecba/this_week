@@ -60,7 +60,9 @@ const titleTextStyle = TextStyle(
 
 /////// COLORS //////
 const iconColor = Colors.blueGrey;
-final disabledColor = Colors.grey[300];
+final disabledColorLight = Colors.grey[300];
+const disabledColorDark = Colors.grey;
+const subTitleTextColor = Colors.grey;
 
 //////// ICONS ////////
 ///
@@ -68,7 +70,7 @@ IconButton customAddIcon({required VoidCallback onPressed, bool isEnabled = true
   return IconButton(
     icon: const Icon(Icons.add_circle_rounded),
     visualDensity: VisualDensity.compact,
-    onPressed: onPressed,
-    color: isEnabled ? iconColor : disabledColor,
+    onPressed: isEnabled ? onPressed : null,
+    color: isEnabled ? iconColor : disabledColorLight,
   );
 }

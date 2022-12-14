@@ -15,10 +15,16 @@ class FormsPageController extends GetxController {
   final tasksBox = Boxes.getTasksBox();
 
   // other properties
-  bool _isUpdate = false;
+  bool _isTaskUpdate = false;
+  get isTaskUpdate => _isTaskUpdate;
+
   bool _isSubtaskUpdate = false;
+  get isSubtaskUpdate => _isSubtaskUpdate;
+
   int _subTaskIndex = 0;
   RxBool isEditionEnabled = false.obs;
+
+  ///
 
   // observable list of subtasks
   final _subTasksTmp = Rx<List<SubTask>>([]);
@@ -54,7 +60,7 @@ class FormsPageController extends GetxController {
       _task.value = tasksBox.get(int.parse(Get.parameters['taskId']!))!;
       taskTitleCtrlr.text = _task.value.title;
       taskDescriptionCtrlr.text = _task.value.description;
-      _isUpdate = true;
+      _isTaskUpdate = true;
       _task.value.subTasks.forEach((element) {
         _subTasksTmp.value.add(SubTask.copyWith(element));
       });
@@ -104,11 +110,11 @@ class FormsPageController extends GetxController {
     _task.value.description = taskDescriptionCtrlr.text;
     _task.value.dateTime = DateTime(_time.value.year, _time.value.month, _time.value.day); //get date only, w/o hh:mm:ss;
 
-    if (!_isUpdate) {
+    if (!_isTaskUpdate) {
       _task.value.subTasks.addAll(_subTasksTmp.value);
       tasksBox.add(_task.value);
     }
-    if (_isUpdate) {
+    if (_isTaskUpdate) {
       _task.value.subTasks.clear();
       _task.value.subTasks.addAll(_subTasksTmp.value);
       _task.value.save();
