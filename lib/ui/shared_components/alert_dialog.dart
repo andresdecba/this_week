@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class CustomDialog extends StatelessWidget {
   const CustomDialog({
     this.title,
-    required this.content,
+    this.content,
     required this.okCallBack,
     this.cancelCallBack,
     this.isNavigable = false,
@@ -11,7 +11,7 @@ class CustomDialog extends StatelessWidget {
   }) : super(key: key);
 
   final String? title;
-  final Widget content;
+  final Widget? content;
   final VoidCallback okCallBack;
   final VoidCallback? cancelCallBack;
   final bool? isNavigable;
@@ -23,7 +23,7 @@ class CustomDialog extends StatelessWidget {
       actionsAlignment: MainAxisAlignment.center,
       scrollable: true,
       title: title != null ? Text(title!) : null,
-      content: content,
+      content: content ?? Container(),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(
           Radius.circular(8),

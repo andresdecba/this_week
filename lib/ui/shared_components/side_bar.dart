@@ -2,36 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:todoapp/ui/commons/styles.dart';
-import 'package:todoapp/ui/controllers/initial_page_controller.dart';
+import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 
 class SideBar extends GetView<InitialPageController> {
-
   const SideBar({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Drawer(
+    return Drawer(
+      child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              /// LOGO
-              SvgPicture.asset(
-                'assets/weekly-logo.svg',
-                alignment: Alignment.center,
-                color: Colors.blueAccent,
-                width: 100,
-              ),
               const SizedBox(height: 20),
               const Divider(),
 
               /// NAVEGACION
-              const Text('Navegación'),
               ListTile(
-                leading: const Icon(Icons.today),
+                leading: const Icon(Icons.navigate_next),
                 title: const Text('Ir a semana Actual'),
                 onTap: () {
                   controller.addWeeks = 0;
@@ -40,38 +31,42 @@ class SideBar extends GetView<InitialPageController> {
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.add_circle_outlined),
+                leading: const Icon(Icons.navigate_next),
                 title: const Text('Agregar tarea nueva'),
                 onTap: () {
                   //Navigator.of(context).pop();
                   controller.navigate(date: DateTime.now());
                 },
               ),
+
               const Divider(),
 
-              /// CONFIG
-              const Text('Configuración'),
               ListTile(
-                leading: const Icon(Icons.notifications_off_rounded),
+                leading: const Icon(Icons.navigate_next),
                 title: const Text('Silenciar notificaciones'),
                 onTap: () {
                   // TODO: implementar
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.restart_alt_rounded),
+                leading: const Icon(Icons.navigate_next),
                 title: const Text('Reset App'),
                 subtitle: const Text(
                   'Borrará todas las tareas',
-                  style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: subTitleTextColor),
+                  style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: bsubTitleTextColor),
                 ),
                 onTap: () {
                   // TODO: implementar
                 },
               ),
               const Divider(),
-
-              
+              const Spacer(),
+              SvgPicture.asset(
+                'assets/weekly-logo.svg',
+                alignment: Alignment.center,
+                color: Colors.blueAccent,
+                width: 100,
+              ),
             ],
           ),
         ),
@@ -82,6 +77,16 @@ class SideBar extends GetView<InitialPageController> {
 
 
 /*
+
+/// LOGO
+              SvgPicture.asset(
+                'assets/weekly-logo.svg',
+                alignment: Alignment.center,
+                color: Colors.blueAccent,
+                width: 100,
+              ),
+              const SizedBox(height: 20),
+              const Divider(),
 
   header:
  // UserAccountsDrawerHeader(

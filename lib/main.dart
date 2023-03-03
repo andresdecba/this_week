@@ -5,8 +5,16 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:todoapp/core/bindings/initial_page_week_binding.dart';
 import 'package:todoapp/core/routes/routes.dart';
 import 'package:todoapp/models/task_model.dart';
+import 'package:todoapp/services/local_notifications_service.dart';
 
-import 'package:todoapp/ui/pages/initial_page.dart';
+import 'package:flutter_native_timezone/flutter_native_timezone.dart'; //get the local timezone of the os
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
+import 'package:todoapp/ui/commons/styles.dart';
+
+import 'package:todoapp/ui/initial_page/initial_page_a.dart';
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey(debugLabel: "Main Navigator");
 
 void main() async {
   // flitter
@@ -15,9 +23,18 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(SubTaskAdapter());
   Hive.registerAdapter(TaskAdapter());
-
-  // open boxes
   await Hive.openBox<Task>('tasksBox');
+  // local notifications
+  await LocalNotificationService.initializePlatformNotifications(localNotifications);
+
+  //set timezone
+  tz.initializeTimeZones();
+  tz.setLocalLocation(
+    tz.getLocation(
+      await FlutterNativeTimezone.getLocalTimezone(),
+    ),
+  );
+
   // run app
   return runApp(const MyApp());
 }
@@ -31,13 +48,52 @@ class MyApp extends StatelessWidget {
       title: 'Material App',
       initialBinding: InitialPageBinding(),
       getPages: AppPages.getPages,
-      home: const InitialPage(),
+      home: const InitialPageA(), //InitialPage(),
       theme: ThemeData(
-        textTheme: GoogleFonts.ubuntuTextTheme(
-          Theme.of(context).textTheme,
+        //iconTheme: IconThemeData(color: black_bg),
+        primaryTextTheme: Typography().white,
+        scaffoldBackgroundColor: grey_bg,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: yellow_primary,
+          iconTheme: IconThemeData(color: enabled_grey),
+          toolbarTextStyle: TextStyle(color: black_bg),
+          titleTextStyle: TextStyle(color: black_bg, fontSize: 16),
         ),
-        scaffoldBackgroundColor: Colors.grey[200],
       ),
     );
   }
 }
+
+////////////// BORRAR /////////////
+
+// class Borrar extends StatefulWidget {
+//   const Borrar({Key? key}) : super(key: key);
+
+//   @override
+//   State<Borrar> createState() => _BorrarState();
+// }
+
+// class _BorrarState extends State<Borrar> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: Padding(
+//         padding: EdgeInsets.all(16),
+//         child: Center(child: InitialPageA()),
+//       ),
+//     );
+//   }
+// }
+
+final task = Task(
+  description: 'description',
+  dateTime: DateTime.now(),
+  notificationDateTime: DateTime.now(),
+  status: 'Pending',
+  subTasks: [],
+);
+
+const dummyText =
+    'But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the gre';
+
+///////////////////////////////////////////

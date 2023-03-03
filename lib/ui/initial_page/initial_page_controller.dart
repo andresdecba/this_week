@@ -5,7 +5,7 @@ import 'package:isoweek/isoweek.dart';
 import 'package:todoapp/core/routes/routes.dart';
 import 'package:todoapp/data_source/db_data_source.dart';
 import 'package:todoapp/models/task_model.dart';
-import 'package:todoapp/utils/parse_date_utils.dart';
+import 'package:todoapp/utils/utils.dart';
 
 class InitialPageController extends GetxController {
   // box de tasks
@@ -44,15 +44,15 @@ class InitialPageController extends GetxController {
   //};
 
   void buildInfo() {
-    //{int? addWks}
+
     // limpiar lista para evitar duplicados
     weekDays.clear();
     buildWeek.clear();
+
     // crear los dias
     Week currentWeek = Week.current();
 
     if (addWeeks == 0) {
-      //addWks == null
       weekDays = currentWeek.days;
       showCurrenWeekInfo = currentWeek;
     }
@@ -77,13 +77,13 @@ class InitialPageController extends GetxController {
     }
     setInitialAndFinalWeekDays();
     createCompletedTasksPercentage();
-    update();
+    update(['buildInfo']);
   }
 
   /// create head info
   void setInitialAndFinalWeekDays() {
     var week = showCurrenWeekInfo.weekNumber.toString();
-    var days = '${ParseDateUtils.dateToAbbreviateString(showCurrenWeekInfo.days.first)} al ${ParseDateUtils.dateToAbbreviateString(showCurrenWeekInfo.days.last)}';
+    var days = '${Utils.dateToAbbreviateString(showCurrenWeekInfo.days.first)} al ${Utils.dateToAbbreviateString(showCurrenWeekInfo.days.last)}';
     weekDaysFromTo.value = 'Semana $week: $days';
   }
 
@@ -114,6 +114,7 @@ class InitialPageController extends GetxController {
         "taskId": taskKey.toString(),
       };
       Get.offAllNamed(Routes.FORMS_PAGE, parameters: data);
+      //Get.delete<InitialPageController>();
       return;
     }
     if (date != null) {
@@ -121,9 +122,11 @@ class InitialPageController extends GetxController {
         "date": date.toString(),
       };
       Get.offAllNamed(Routes.FORMS_PAGE, parameters: data);
+      //Get.delete<InitialPageController>();
       return;
     }
     Get.offAllNamed(Routes.FORMS_PAGE);
+    //Get.delete<InitialPageController>();
   }
 }
 
