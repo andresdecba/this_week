@@ -70,7 +70,7 @@ class InitialPageController extends GetxController {
     for (var element in buildWeek.entries) {
       /// agregar la tarea
       for (var task in tasksBox.values) {
-        if (task.dateTime == element.key) {
+        if (task.taskDate == element.key) {
           element.value.add(task);
         }
       }

@@ -18,8 +18,8 @@ class TaskAdapter extends TypeAdapter<Task> {
     };
     return Task(
       description: fields[1] as String,
-      dateTime: fields[2] as DateTime,
-      notificationDateTime: fields[4] as DateTime?,
+      taskDate: fields[2] as DateTime,
+      notificationTime: fields[4] as TimeOfDay?,
       status: fields[3] as String,
       subTasks: (fields[5] as List).cast<SubTask>(),
     );
@@ -32,11 +32,11 @@ class TaskAdapter extends TypeAdapter<Task> {
       ..writeByte(1)
       ..write(obj.description)
       ..writeByte(2)
-      ..write(obj.dateTime)
+      ..write(obj.taskDate)
       ..writeByte(3)
       ..write(obj.status)
       ..writeByte(4)
-      ..write(obj.notificationDateTime)
+      ..write(obj.notificationTime)
       ..writeByte(5)
       ..write(obj.subTasks);
   }

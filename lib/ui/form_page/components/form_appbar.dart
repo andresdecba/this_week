@@ -28,7 +28,7 @@ class FormAppbar extends GetView<FormsPageController> implements PreferredSizeWi
         actions: [
           controller.isUpdateMode.value || controller.isNewMode.value
               ? IconButton(
-                  onPressed: () => controller.confirmAndNavigate(),
+                  onPressed: () => controller.confirmAndNavigate(context),
                   icon: const Icon(Icons.check_rounded),
                 )
               : IconButton(
@@ -42,12 +42,12 @@ class FormAppbar extends GetView<FormsPageController> implements PreferredSizeWi
 
   String taskState() {
     if (controller.currentPageMode.value == PageMode.UPDATE_MODE) {
-      return 'Update task ${Utils.parseDateTimeToShortFormat(controller.getTask.dateTime)}';
+      return 'Update task ${Utils.parseDateTimeToShortFormat(controller.getTask.taskDate)}';
     }
     if (controller.currentPageMode.value == PageMode.VIEW_MODE) {
-      return 'Task ${Utils.parseDateTimeToShortFormat(controller.getTask.dateTime)}';
+      return 'Task ${Utils.parseDateTimeToShortFormat(controller.getTask.taskDate)}';
     }
-    return 'New task ${Utils.parseDateTimeToShortFormat(controller.getTask.dateTime)}';
+    return 'New task ${Utils.parseDateTimeToShortFormat(controller.getTask.taskDate)}';
   }
 
   @override

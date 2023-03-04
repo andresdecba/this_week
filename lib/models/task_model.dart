@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 part 'task_model.g.dart';
 
@@ -25,25 +26,25 @@ class Task extends HiveObject {
   @HiveField(1)
   String description;
   @HiveField(2)
-  DateTime dateTime;
+  DateTime taskDate;
   @HiveField(3)
   String status;
   @HiveField(4)
-  DateTime? notificationDateTime;
+  TimeOfDay? notificationTime;
   @HiveField(5)
   List<SubTask> subTasks;
 
   Task({
     required this.description,
-    required this.dateTime,
-    required this.notificationDateTime,
+    required this.taskDate,
+    required this.notificationTime,
     required this.status,
     required this.subTasks,
   });
 
   @override
   String toString() {
-    return '{ $notificationDateTime, $description, $dateTime, $status, $subTasks }';
+    return '{ description: $description, task date: $taskDate, notification date: $notificationTime, status: $status, sub tasks: $subTasks }';
   }
 }
 

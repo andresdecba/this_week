@@ -22,19 +22,18 @@ class SetNotificationDatetime extends GetView<FormsPageController> {
               onTap: () async {
                 TimeOfDay? newTime = await showTimePicker(
                   context: context,
-                  initialTime: TimeOfDay.fromDateTime(controller.getTask.dateTime),
-                  //initialEntryMode: TimePickerEntryMode.input,
+                  initialTime: controller.notificationTime.value,
                 );
                 if (newTime == null) {
                   return;
                 } else {
-                  controller.setNotificationTime(newTime);
+                  controller.setNotificationTime = newTime;
                 }
               },
               child: controller.notificationText.value,
             ),
             IconButton(
-              onPressed: () => controller.changeNotificationIconAndText(),
+              onPressed: () => controller.enableDisableNotificationStyles(),
               icon: controller.notificationIcon.value,
               color: controller.notificationColor.value,
             ),

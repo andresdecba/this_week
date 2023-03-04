@@ -34,7 +34,6 @@ void main() async {
       await FlutterNativeTimezone.getLocalTimezone(),
     ),
   );
-
   // run app
   return runApp(const MyApp());
 }
@@ -63,37 +62,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-////////////// BORRAR /////////////
-
-// class Borrar extends StatefulWidget {
-//   const Borrar({Key? key}) : super(key: key);
-
-//   @override
-//   State<Borrar> createState() => _BorrarState();
-// }
-
-// class _BorrarState extends State<Borrar> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Padding(
-//         padding: EdgeInsets.all(16),
-//         child: Center(child: InitialPageA()),
-//       ),
-//     );
-//   }
-// }
-
-final task = Task(
-  description: 'description',
-  dateTime: DateTime.now(),
-  notificationDateTime: DateTime.now(),
-  status: 'Pending',
-  subTasks: [],
-);
-
-const dummyText =
-    'But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the gre';
-
-///////////////////////////////////////////

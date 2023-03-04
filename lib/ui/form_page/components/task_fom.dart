@@ -18,13 +18,14 @@ class TaskForm extends GetView<FormsPageController> {
           const SizedBox(height: 40),
           Form(
             key: controller.formKey,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             child: TextFormField(
               enabled: controller.isUpdateMode.value || controller.isNewMode.value,
               controller: controller.taskDescriptionCtrlr,
               decoration: customInputDecoration(
                 hasBorder: controller.isUpdateMode.value || controller.isNewMode.value,
                 label: 'Task description',
-                hintText: 'Add a task description in 200 characters or less.',
+                hintText: 'Add a task description between 7 and 200 characters.',
                 clearText: () => controller.taskDescriptionCtrlr.clear(),
                 isEnabled: controller.isUpdateMode.value || controller.isNewMode.value,
               ),
@@ -33,6 +34,13 @@ class TaskForm extends GetView<FormsPageController> {
               keyboardType: TextInputType.multiline,
               textInputAction: TextInputAction.done,
               style: kTitleMedium,
+              validator: (value) {
+                if (value != null && value.length < 7) {
+                  return 'Write at least 7 characters';
+                } else {
+                  return null;
+                }
+              },
             ),
           ),
         ],

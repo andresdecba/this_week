@@ -125,12 +125,16 @@ class TodoList extends GetView<FormsPageController> {
 }
 
 // crear subtarea modal
-Future<dynamic> showSubtaskDialog({required BuildContext context, required VoidCallback onOk, required VoidCallback onCancel}) {
+Future<dynamic> showSubtaskDialog({
+  required BuildContext context,
+  required VoidCallback onOk,
+  required VoidCallback onCancel,
+}) {
   return showDialog(
     context: context,
     builder: (_) {
       return CustomDialog(
-        content: Padding(
+        description: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
