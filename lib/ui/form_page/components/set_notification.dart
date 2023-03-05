@@ -19,21 +19,31 @@ class SetNotificationDatetime extends GetView<FormsPageController> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             GestureDetector(
-              onTap: () async {
+              key: UniqueKey(),
+              onTap: controller.isViewMode.value
+                  ? null
+                  : () async {
                 TimeOfDay? newTime = await showTimePicker(
                   context: context,
-                  initialTime: controller.notificationTime.value,
+                        initialTime: controller.notificationTime,
                 );
                 if (newTime == null) {
                   return;
                 } else {
-                  controller.setNotificationTime = newTime;
+                        controller.notificationTime = newTime;
                 }
+                      controller.enableDisableNotificationStyles();
               },
               child: controller.notificationText.value,
             ),
             IconButton(
-              onPressed: () => controller.enableDisableNotificationStyles(),
+              onPressed: controller.isViewMode.value
+                  ? null
+                  : () {
+                      controller.enableDisableNotification();
+                      controller.enableDisableNotificationStyles();
+                    },
+
               icon: controller.notificationIcon.value,
               color: controller.notificationColor.value,
             ),

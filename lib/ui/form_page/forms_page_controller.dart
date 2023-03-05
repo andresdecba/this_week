@@ -53,7 +53,6 @@ class FormsPageController extends GetxController {
     if (Get.parameters['date'] != null) {
       var arguments = DateTime.parse(Get.parameters['date']!);
       _task.value.taskDate = arguments;
-      notificationTime.value = TimeOfDay.now();
       currentPageMode.value = PageMode.NEW_MODE;
       return;
     }
@@ -81,17 +80,38 @@ class FormsPageController extends GetxController {
     }
   }
 
+  ////// manage UPDATE MODE //////
+
   void floatingActionButtonChangeMode() {
     if (currentPageMode.value == PageMode.VIEW_MODE) {
       currentPageMode.value = PageMode.UPDATE_MODE;
+      saveUpdateState();
       setPageModesHelper();
       return;
     }
     if (currentPageMode.value == PageMode.UPDATE_MODE) {
       currentPageMode.value = PageMode.VIEW_MODE;
+      restoreUpdateState();
       setPageModesHelper();
       return;
     }
+  }
+
+  // save old state
+  Map<String, dynamic> oldState = {};
+  saveUpdateState() {
+    oldState = {
+      'task_description': taskDescriptionCtrlr.text,
+      'notifyDate': notificationText.value,
+      'iconState': enableNotificationIcon.value,
+    };
+  }
+
+  restoreUpdateState() {
+    taskDescriptionCtrlr.text = oldState['task_description'];
+    notificationText.value = oldState['notifyDate'];
+    enableNotificationIcon.value = oldState['iconState'];
+    print('kkkkk $oldState');
   }
 
   ////// manage TASK FORM //////
@@ -148,12 +168,7 @@ class FormsPageController extends GetxController {
   ////// manage NOTIFICATIONS //////
 
   // guardar dia y hora de la notificacion en la tarea
-  Rx<TimeOfDay> notificationTime = TimeOfDay.now().obs;
-
-  set setNotificationTime(TimeOfDay value) {
-    notificationTime.value = value;
-    print('>>>> ${_task.value} <<<<');
-  }
+  TimeOfDay notificationTime = TimeOfDay.now();
 
   void createNotification() {
     if (enableNotificationIcon.value) {
@@ -161,8 +176,8 @@ class FormsPageController extends GetxController {
         _task.value.taskDate.year,
         _task.value.taskDate.month,
         _task.value.taskDate.day,
-        notificationTime.value.hour,
-        notificationTime.value.minute,
+        notificationTime.hour,
+        notificationTime.minute,
       );
       LocalNotificationService.showtNotificationScheduled(
         time: data,
@@ -173,6 +188,34 @@ class FormsPageController extends GetxController {
       );
     }
     return;
+  }
+
+  void validateNotification(BuildContext context) {
+    if (_task.value.notificationTime != null) {
+      // if notification is not before now
+      var notification = DateTime(
+        _task.value.taskDate.year,
+        _task.value.taskDate.month,
+        _task.value.taskDate.day,
+        _task.value.notificationTime!.hour,
+        _task.value.notificationTime!.minute,
+      );
+      if (notification.isBefore(DateTime.now())) {
+        showDialog(
+          context: context,
+          builder: (_) {
+            return CustomDialog(
+              title: "Warning",
+              description: const Text("You can't create a notification before now"),
+              okCallBack: () => Navigator.of(context).pop(),
+            );
+          },
+        );
+        return;
+      }
+      // then create it
+      createNotification();
+    }
   }
 
   ////// manage NAVIGATION //////
@@ -204,7 +247,7 @@ class FormsPageController extends GetxController {
   }
 
   bool hasUserInteraction() {
-    if (_task.value.subTasks.isNotEmpty || taskDescriptionCtrlr.text.isNotEmpty || !enableNotificationIcon.value) {
+    if (_task.value.subTasks.isNotEmpty || taskDescriptionCtrlr.text.isNotEmpty || enableNotificationIcon.value) {
       return true;
     } else {
       return false;
@@ -212,7 +255,6 @@ class FormsPageController extends GetxController {
   }
 
   void cancelAndNavigate() {
-    //_task.value.delete();
     Get.offAllNamed(Routes.INITIAL_PAGE);
   }
 
@@ -225,7 +267,7 @@ class FormsPageController extends GetxController {
 
   void enableDisableNotificationStyles() {
     const String noDateTxt = 'No notifications';
-    final String dateTxt = 'Notify me at ${notificationTime.value.hour}:${notificationTime.value.minute} hs.';
+    final String dateTxt = 'Notify me at ${notificationTime.hour}:${notificationTime.minute} hs.';
 
     if (isViewMode.value && !enableNotificationIcon.value) {
       notificationColor.value = disabled_grey;
@@ -259,12 +301,11 @@ class FormsPageController extends GetxController {
       notificationIcon.value = const Icon(Icons.notifications_active_rounded);
       notificationText.value = Text(dateTxt, style: newDateTxtStyle);
     }
-
-    enableNotificationIcon.value = !enableNotificationIcon.value;
   }
 
   void enableDisableNotification() {
-    enableNotificationIcon.value ? _task.value.notificationTime = notificationTime.value : _task.value.notificationTime = null;
+    enableNotificationIcon.value = !enableNotificationIcon.value;
+    enableNotificationIcon.value ? _task.value.notificationTime = notificationTime : _task.value.notificationTime = null;
   }
 
   ////// manage SAVE //////
@@ -296,34 +337,8 @@ class FormsPageController extends GetxController {
     // validate if form is filled
     var isFormValid = formKey.currentState!.validate();
 
-    // validate notification datetime can not be before now
-    var notification = DateTime(
-      _task.value.taskDate.year,
-      _task.value.taskDate.month,
-      _task.value.taskDate.day,
-      _task.value.notificationTime!.hour,
-      _task.value.notificationTime!.minute,
-    );
-
     if (isFormValid) {
-      //
-      if (notification != null) {
-        if (notification.isBefore(DateTime.now())) {
-          showDialog(
-            context: context,
-            builder: (_) {
-              return CustomDialog(
-                title: "Warning",
-                description: const Text("You can't create a notification before now"),
-                okCallBack: () => Navigator.of(context).pop(),
-              );
-            },
-          );
-          return;
-        }
-      }
-
-      createNotification();
+      validateNotification(context);
 
       if (isUpdateMode.value) {
         _task.value.description = taskDescriptionCtrlr.text;

@@ -24,7 +24,7 @@ class TodoList extends GetView<FormsPageController> {
               onPressed: () => showSubtaskDialog(
                 context: context,
                 onOk: () => controller.createSubtask(),
-                onCancel: () => controller.onCancelSubtask(context), //controller.createOrUpdateSubTask(),
+                controller: controller,
               ),
               icon: const Icon(Icons.add_circle_rounded),
             ),
@@ -95,7 +95,7 @@ class TodoList extends GetView<FormsPageController> {
                               showSubtaskDialog(
                                 context: context,
                                 onOk: () => controller.updateTextSubtask(i),
-                                onCancel: () => controller.onCancelSubtask(context),
+                                controller: controller,
                               );
                             },
                             leading: Checkbox(
@@ -126,9 +126,9 @@ class TodoList extends GetView<FormsPageController> {
 
 // crear subtarea modal
 Future<dynamic> showSubtaskDialog({
+  required FormsPageController controller,
   required BuildContext context,
   required VoidCallback onOk,
-  required VoidCallback onCancel,
 }) {
   return showDialog(
     context: context,
@@ -147,8 +147,11 @@ Future<dynamic> showSubtaskDialog({
             ],
           ),
         ),
-        okCallBack: onOk,
-        cancelCallBack: onCancel,
+        okCallBack: () {
+          onOk();
+          controller.onCancelSubtask(context);
+        },
+        cancelCallBack: () => controller.onCancelSubtask(context),
       );
     },
   );
