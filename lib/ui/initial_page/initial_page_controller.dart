@@ -83,8 +83,8 @@ class InitialPageController extends GetxController {
   /// create head info
   void setInitialAndFinalWeekDays() {
     var week = showCurrenWeekInfo.weekNumber.toString();
-    var days = '${Utils.dateToAbbreviateString(showCurrenWeekInfo.days.first)} al ${Utils.dateToAbbreviateString(showCurrenWeekInfo.days.last)}';
-    weekDaysFromTo.value = 'Semana $week: $days';
+    var days = '${Utils.dateToAbbreviateString(showCurrenWeekInfo.days.first)} to ${Utils.dateToAbbreviateString(showCurrenWeekInfo.days.last)}';
+    weekDaysFromTo.value = 'Week $week: $days';
   }
 
   void createCompletedTasksPercentage() {
@@ -104,7 +104,7 @@ class InitialPageController extends GetxController {
       completedTasksPercent = ((completedTotalTasks / totalTasks) * 100).toInt();
     }
     // set message
-    totalTasks == 0 ? tasksPercentageCompleted.value = 'No hay tareas para esta semana' : tasksPercentageCompleted.value = '$completedTasksPercent% de tareas completadas';
+    totalTasks == 0 ? tasksPercentageCompleted.value = 'No tasks for this week' : tasksPercentageCompleted.value = '$completedTasksPercent% of completed tasks';
   }
 
   /// navegar para crear o editar

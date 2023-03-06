@@ -116,6 +116,7 @@ class _TasksListState extends State<TasksList> with AutomaticKeepAliveClientMixi
                                       onStatusChange: () {
                                         e.status = changeTaskStatus(e.status);
                                         e.save();
+                                        controller.createCompletedTasksPercentage();
                                       },
                                     ),
                                   ),

@@ -292,6 +292,10 @@ class FormsPageController extends GetxController {
             _task.value.delete();
             Get.find<InitialPageController>().buildInfo();
             Get.offAllNamed(Routes.INITIAL_PAGE);
+            showSnackBar(
+              titleText: 'Task removed',
+              messageText: 'To 20-03-2023',
+            );
           },
         );
       },
@@ -322,7 +326,7 @@ class FormsPageController extends GetxController {
     }
   }
 
-  void confirmAndNavigate() {
+  void confirmAndNavigate() async {
     if (isUpdateMode.value) {
       _task.value.description = taskDescriptionCtrlr.text;
       createNotification();
@@ -330,6 +334,10 @@ class FormsPageController extends GetxController {
       currentPageMode.value = PageMode.VIEW_MODE;
       setPageModesHelper();
       enableDisableNotificationStyles();
+      showSnackBar(
+        titleText: 'Task updated',
+        messageText: '20-03-2023',
+      );
     }
     if (isNewMode.value) {
       _task.value.description = taskDescriptionCtrlr.text;
@@ -337,7 +345,42 @@ class FormsPageController extends GetxController {
       tasksBox.add(_task.value);
       _initialPageController.buildInfo();
       Get.offAllNamed(Routes.INITIAL_PAGE);
+      showSnackBar(
+        titleText: 'New task created',
+        messageText: '20-03-2023',
+      );
     }
+  }
+
+  void showSnackBar({required String titleText, required String messageText, Color? color}) async {
+    await Future.delayed(const Duration(milliseconds: 350));
+    Get.snackbar(
+      '',
+      '',
+      snackPosition: SnackPosition.BOTTOM,
+      animationDuration: const Duration(milliseconds: 500),
+      duration: const Duration(seconds: 10),
+      backgroundColor: color ?? blue_primary.withOpacity(0.25),
+      borderRadius: 8,
+      padding: const EdgeInsets.all(20),
+      snackStyle: SnackStyle.FLOATING,
+      margin: const EdgeInsets.all(20.0),
+      borderColor: withe_bg,
+      borderWidth: 2,
+      titleText: Text(
+        titleText,
+        style: kTitleLarge,
+      ),
+      messageText: Text(
+        messageText,
+        style: kBodyMedium,
+      ),
+      icon: const Icon(
+        Icons.info,
+        size: 30,
+      ),
+      shouldIconPulse: false,
+    );
   }
 }
 

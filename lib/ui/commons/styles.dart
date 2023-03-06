@@ -19,6 +19,8 @@ const text_bg = Color(0xFF000000);
 const warning = Color(0xFFD30000);
 const blue_primary = Color(0xFF0075FF);
 const icons_bg = Color(0xFF262626);
+const green_info = Color.fromARGB(255, 125, 252, 103);
+
 
 // titles
 final kTitleLarge = Theme.of(Get.context!).textTheme.titleLarge!;

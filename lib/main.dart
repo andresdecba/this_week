@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
       title: 'Material App',
       initialBinding: InitialPageBinding(),
       getPages: AppPages.getPages,
-      home: const InitialPageA(), //InitialPage(),
+      home: const InitialPageA(),
       theme: ThemeData(
         //iconTheme: IconThemeData(color: black_bg),
         primaryTextTheme: Typography().white,

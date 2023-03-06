@@ -45,7 +45,7 @@ class _TaskCardState extends State<TaskCard> {
               padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
               child: Text(
                 widget.task.description,
-                maxLines: 3,
+                maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: setStatusTextStyle(),
               ),
@@ -68,8 +68,10 @@ class _TaskCardState extends State<TaskCard> {
                       style: kLabelLarge.copyWith(color: setStatusColor()),
                     ),
                   ),
-                  Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.center,
+                  Row(
+                    //crossAxisAlignment: WrapCrossAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       /// task NOTIFICATION TIME
                       Wrap(
@@ -153,11 +155,11 @@ class _TaskCardState extends State<TaskCard> {
   TextStyle setStatusTextStyle() {
     switch (widget.task.status) {
       case 'Pending':
-        return kBodyMedium.copyWith(fontStyle: FontStyle.italic);
+        return kBodyMedium;
       case 'In progress':
         return kBodyMedium;
       case 'Done':
-        return kBodyMedium.copyWith(fontStyle: FontStyle.italic, decoration: TextDecoration.lineThrough);
+        return kBodyMedium.copyWith(fontStyle: FontStyle.italic, decoration: TextDecoration.lineThrough, color: disabled_grey);
       default:
         return kBodyMedium;
     }

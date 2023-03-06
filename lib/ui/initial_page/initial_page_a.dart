@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/initial_page/components/header.dart';
 import 'package:todoapp/ui/initial_page/components/tasks_list.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
@@ -11,7 +12,8 @@ class InitialPageA extends GetView<InitialPageController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    
+    return Scaffold( 
       // app bar
       appBar: AppBar(
         leadingWidth: 300,
@@ -29,18 +31,23 @@ class InitialPageA extends GetView<InitialPageController> {
       endDrawer: const SideBar(),
 
       // content
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        padding: const EdgeInsets.all(20),
-        // TODO poner un key de scroll,
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: const [
-            Header(),
-            Divider(height: 40),
-            TasksList(),
-          ],
-        ),
+      body: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Header(),
+          Expanded(
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                children: const [
+                  TasksList(),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
