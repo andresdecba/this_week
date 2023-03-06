@@ -129,11 +129,11 @@ class _TaskCardState extends State<TaskCard> {
 
   String calculateSubtasksDone() {
     int value = 0;
-    widget.task.subTasks.map((e) {
-      if (e.isDone) {
+    for (var i = 0; i < widget.task.subTasks.length; i++) {
+      if (widget.task.subTasks[i].isDone) {
         value++;
       }
-    });
+    }
     return '$value of ${widget.task.subTasks.length}';
   }
 

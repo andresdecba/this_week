@@ -30,7 +30,7 @@ class Task extends HiveObject {
   @HiveField(3)
   String status;
   @HiveField(4)
-  TimeOfDay? notificationTime;
+  DateTime? notificationTime;
   @HiveField(5)
   List<SubTask> subTasks;
 

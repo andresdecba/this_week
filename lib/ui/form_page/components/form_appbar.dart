@@ -28,7 +28,7 @@ class FormAppbar extends GetView<FormsPageController> implements PreferredSizeWi
         actions: [
           controller.isUpdateMode.value || controller.isNewMode.value
               ? IconButton(
-                  onPressed: () => controller.confirmAndNavigate(context),
+                  onPressed: () => controller.saveOrUpdateTask(context),
                   icon: const Icon(Icons.check_rounded),
                 )
               : IconButton(

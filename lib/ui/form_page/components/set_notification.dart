@@ -23,27 +23,28 @@ class SetNotificationDatetime extends GetView<FormsPageController> {
               onTap: controller.isViewMode.value
                   ? null
                   : () async {
-                TimeOfDay? newTime = await showTimePicker(
-                  context: context,
+                      TimeOfDay? newTime = await showTimePicker(
+                        context: context,
                         initialTime: controller.notificationTime,
-                );
-                if (newTime == null) {
-                  return;
-                } else {
+                      );
+                      if (newTime == null) {
+                        return;
+                      } else {
                         controller.notificationTime = newTime;
-                }
+                      }
                       controller.enableDisableNotificationStyles();
-              },
+                      controller.saveNotification();
+                    },
               child: controller.notificationText.value,
             ),
             IconButton(
               onPressed: controller.isViewMode.value
                   ? null
                   : () {
-                      controller.enableDisableNotification();
+                      controller.enableNotificationIcon.value = !controller.enableNotificationIcon.value;
                       controller.enableDisableNotificationStyles();
+                      controller.saveNotification();
                     },
-
               icon: controller.notificationIcon.value,
               color: controller.notificationColor.value,
             ),

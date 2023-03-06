@@ -167,9 +167,6 @@ class FormsPageController extends GetxController {
 
   ////// manage NOTIFICATIONS //////
 
-  // guardar dia y hora de la notificacion en la tarea
-  TimeOfDay notificationTime = TimeOfDay.now();
-
   void createNotification() {
     if (enableNotificationIcon.value) {
       var data = DateTime(
@@ -188,34 +185,6 @@ class FormsPageController extends GetxController {
       );
     }
     return;
-  }
-
-  void validateNotification(BuildContext context) {
-    if (_task.value.notificationTime != null) {
-      // if notification is not before now
-      var notification = DateTime(
-        _task.value.taskDate.year,
-        _task.value.taskDate.month,
-        _task.value.taskDate.day,
-        _task.value.notificationTime!.hour,
-        _task.value.notificationTime!.minute,
-      );
-      if (notification.isBefore(DateTime.now())) {
-        showDialog(
-          context: context,
-          builder: (_) {
-            return CustomDialog(
-              title: "Warning",
-              description: const Text("You can't create a notification before now"),
-              okCallBack: () => Navigator.of(context).pop(),
-            );
-          },
-        );
-        return;
-      }
-      // then create it
-      createNotification();
-    }
   }
 
   ////// manage NAVIGATION //////
@@ -259,6 +228,8 @@ class FormsPageController extends GetxController {
   }
 
   ////// manage ICON & TEXT NOTIFICATION //////
+
+  TimeOfDay notificationTime = TimeOfDay.now();
   RxBool enableNotificationIcon = false.obs;
 
   Rx<Icon> notificationIcon = const Icon(Icons.notifications_off_rounded).obs;
@@ -266,6 +237,12 @@ class FormsPageController extends GetxController {
   Rx<Text> notificationText = const Text('').obs;
 
   void enableDisableNotificationStyles() {
+
+    if (isViewMode.value && _task.value.notificationTime != null) {
+      enableNotificationIcon.value = true;
+      notificationTime = TimeOfDay(hour: _task.value.notificationTime!.hour, minute: _task.value.notificationTime!.minute);
+    }
+
     const String noDateTxt = 'No notifications';
     final String dateTxt = 'Notify me at ${notificationTime.hour}:${notificationTime.minute} hs.';
 
@@ -301,11 +278,23 @@ class FormsPageController extends GetxController {
       notificationIcon.value = const Icon(Icons.notifications_active_rounded);
       notificationText.value = Text(dateTxt, style: newDateTxtStyle);
     }
+    
   }
 
-  void enableDisableNotification() {
-    enableNotificationIcon.value = !enableNotificationIcon.value;
-    enableNotificationIcon.value ? _task.value.notificationTime = notificationTime : _task.value.notificationTime = null;
+  void saveNotification() {
+    enableNotificationIcon.value
+        ? _task.value.notificationTime = DateTime(
+            _task.value.taskDate.year,
+            _task.value.taskDate.month,
+            _task.value.taskDate.day,
+            notificationTime.hour,
+            notificationTime.minute,
+          )
+        : _task.value.notificationTime = null;
+
+    // print('from bool ${enableNotificationIcon.value}');
+    // print('from task ${_task.value.notificationTime}');
+    // print('from var $notificationTime');
   }
 
   ////// manage SAVE //////
@@ -327,31 +316,53 @@ class FormsPageController extends GetxController {
     );
   }
 
-  // void createOrUpdateTask() {
-  //   _task.value.description = taskDescriptionCtrlr.text;
-  //   tasksBox.add(_task.value);
-  //   //_task.value.save();
-  // }
-
-  void confirmAndNavigate(BuildContext context) {
-    // validate if form is filled
+  void saveOrUpdateTask(BuildContext context) {
     var isFormValid = formKey.currentState!.validate();
-
     if (isFormValid) {
-      validateNotification(context);
+      _task.value.notificationTime != null ? validateNotification(context) : confirmAndNavigate();
+    }
+  }
 
-      if (isUpdateMode.value) {
-        _task.value.description = taskDescriptionCtrlr.text;
-        _task.value.save();
-        currentPageMode.value = PageMode.VIEW_MODE;
-        setPageModesHelper();
-      }
-      if (isNewMode.value) {
-        _task.value.description = taskDescriptionCtrlr.text;
-        tasksBox.add(_task.value);
-        _initialPageController.buildInfo();
-        Get.offAllNamed(Routes.INITIAL_PAGE);
-      }
+  void validateNotification(BuildContext context) {
+    if (_task.value.notificationTime!.isBefore(DateTime.now())) {
+      showDialog(
+        context: context,
+        builder: (_) {
+          return CustomDialog(
+            title: "Warning",
+            description: const Text("You can't create a notification before now"),
+            okCallBack: () => Navigator.of(context).pop(),
+          );
+        },
+      );
+    } else {
+      confirmAndNavigate();
+    }
+  }
+
+  void confirmAndNavigate() {
+    if (isUpdateMode.value) {
+      _task.value.description = taskDescriptionCtrlr.text;
+      createNotification();
+      _task.value.save();
+      currentPageMode.value = PageMode.VIEW_MODE;
+      setPageModesHelper();
+      enableDisableNotificationStyles();
+    }
+    if (isNewMode.value) {
+      _task.value.description = taskDescriptionCtrlr.text;
+      createNotification();
+      tasksBox.add(_task.value);
+      _initialPageController.buildInfo();
+      Get.offAllNamed(Routes.INITIAL_PAGE);
     }
   }
 }
+
+/*
+hay notif programada:
+    si: validar
+        es anterior: mostrar modal
+        es posterior: guardar
+    no: guardar
+*/
