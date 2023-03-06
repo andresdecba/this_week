@@ -26,7 +26,10 @@ class TaskForm extends GetView<FormsPageController> {
                 hasBorder: controller.isUpdateMode.value || controller.isNewMode.value,
                 label: 'Task description',
                 hintText: 'Add a task description between 7 and 200 characters.',
-                clearText: () => controller.taskDescriptionCtrlr.clear(),
+                clearText: () {
+                  controller.taskDescriptionCtrlr.clear();
+                  controller.hasUserInteraction.value = false;
+                },
                 isEnabled: controller.isUpdateMode.value || controller.isNewMode.value,
               ),
               maxLines: 6,
@@ -40,6 +43,9 @@ class TaskForm extends GetView<FormsPageController> {
                 } else {
                   return null;
                 }
+              },
+              onChanged: (value) {
+                value.length >= 7 ? controller.hasUserInteraction.value = true : controller.hasUserInteraction.value = false;
               },
             ),
           ),

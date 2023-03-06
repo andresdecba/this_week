@@ -54,9 +54,10 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: grey_bg,
         appBarTheme: const AppBarTheme(
           backgroundColor: yellow_primary,
-          iconTheme: IconThemeData(color: enabled_grey),
+          iconTheme: IconThemeData(color: black_bg),
           toolbarTextStyle: TextStyle(color: black_bg),
           titleTextStyle: TextStyle(color: black_bg, fontSize: 16),
+          elevation: 0,
         ),
       ),
     );

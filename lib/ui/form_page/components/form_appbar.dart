@@ -12,29 +12,57 @@ class FormAppbar extends GetView<FormsPageController> implements PreferredSizeWi
     return Obx(() {
       return AppBar(
         // back
-        leading: Visibility(
-          visible: !controller.isUpdateMode.value,
-          child: IconButton(
-            onPressed: () => controller.navigate(context),
-            icon: const Icon(Icons.arrow_back),
-          ),
-        ),
+        // leading: controller.isNewMode.value
+        //     ? IconButton(
+        //         onPressed: () => controller.navigate(context),
+        //         icon: const Icon(Icons.arrow_back),
+        //       )
+        //     : null,
 
         // title
         title: Text(taskState()),
-        centerTitle: true,
 
         // create or update task
         actions: [
-          controller.isUpdateMode.value || controller.isNewMode.value
-              ? IconButton(
-                  onPressed: () => controller.saveOrUpdateTask(context),
-                  icon: const Icon(Icons.check_rounded),
+
+          controller.isViewMode.value
+              ? Wrap(
+                  children: [
+                    IconButton(
+                      onPressed: () => controller.deleteTask(context),
+                      icon: const Icon(Icons.delete_forever, color: text_bg),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        controller.floatingActionButtonChangeMode();
+                        controller.enableDisableNotificationStyles();
+                      },
+                      icon: const Icon(Icons.mode_edit_rounded),
+                    ),
+                  ],
                 )
-              : IconButton(
-                  onPressed: () => controller.deleteTask(context),
-                  icon: const Icon(Icons.delete_forever, color: text_bg),
-                ),
+              : controller.isUpdateMode.value
+                  ? IconButton(
+                      onPressed: () {
+                        controller.floatingActionButtonChangeMode();
+                        controller.enableDisableNotificationStyles();
+                      },
+                      icon: const Icon(Icons.edit_off_rounded),
+                    )
+                  : IconButton(
+                      onPressed: () => controller.cancelAndNavigate(context),
+                      icon: const Icon(Icons.home),
+                    ),
+
+          // controller.isUpdateMode.value || controller.isNewMode.value
+          //     ? IconButton(
+          //         onPressed: () => controller.saveOrUpdateTask(context),
+          //         icon: const Icon(Icons.check_rounded),
+          //       )
+          //     : IconButton(
+          //         onPressed: () => controller.deleteTask(context),
+          //         icon: const Icon(Icons.delete_forever, color: text_bg),
+          //       ),
         ],
       );
     });
@@ -49,9 +77,12 @@ class FormAppbar extends GetView<FormsPageController> implements PreferredSizeWi
     }
     return 'New task ${Utils.parseDateTimeToShortFormat(controller.getTask.taskDate)}';
   }
+  
+
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  /// default value: [kToolbarHeight]
 }
 
 // AppBar formAppbard(FormsPageController controller, BuildContext context) {

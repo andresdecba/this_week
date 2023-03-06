@@ -21,20 +21,35 @@ class FormPageA extends GetView<FormsPageController> {
           appBar: const FormAppbar(),
 
           // edit button
-          floatingActionButton: Visibility(
-            visible: controller.isViewMode.value || controller.isUpdateMode.value,
-            child: Obx(
-              () => FloatingActionButton(
-                onPressed: () {
-                  controller.floatingActionButtonChangeMode();
-                  controller.enableDisableNotificationStyles();
-                },
-                backgroundColor: controller.isViewMode.value ? yellow_primary : blue_primary,
-                child: Icon(
-                  controller.isViewMode.value ? Icons.mode_edit_rounded : Icons.edit_off_rounded,
-                  color: text_bg,
-                ),
+          floatingActionButton: Obx(
+            () => Visibility(
+              visible: controller.isNewMode.value || controller.isUpdateMode.value,
+
+              replacement: FloatingActionButton(
+                backgroundColor: yellow_primary,
+                onPressed: () => controller.cancelAndNavigate(context),
+                child: const Icon(Icons.home, color: text_bg),
               ),
+
+              child: FloatingActionButton(
+                backgroundColor: controller.hasUserInteraction.value ? blue_primary : disabled_grey,
+                onPressed: controller.hasUserInteraction.value ? () => controller.saveOrUpdateTask(context) : null,
+                child: const Icon(Icons.check_rounded),
+              ),
+
+              // child: Obx(
+              //   () => FloatingActionButton(
+              //     onPressed: () {
+              //       controller.floatingActionButtonChangeMode();
+              //       controller.enableDisableNotificationStyles();
+              //     },
+              //     backgroundColor: controller.isViewMode.value ? yellow_primary : blue_primary,
+              //     child: Icon(
+              //       controller.isViewMode.value ? Icons.mode_edit_rounded : Icons.edit_off_rounded,
+              //       color: text_bg,
+              //     ),
+              //   ),
+              // ),
             ),
           ),
 

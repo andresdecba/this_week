@@ -18,6 +18,7 @@ class FormsPageController extends GetxController {
     setInitialConfig();
     setPageModesHelper();
     enableDisableNotificationStyles();
+    hasUserInteractionInit();
     super.onInit();
   }
 
@@ -119,6 +120,12 @@ class FormsPageController extends GetxController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final focusNode = FocusNode();
 
+  RxBool hasUserInteraction = false.obs;
+
+  void hasUserInteractionInit() {
+    hasUserInteraction.value = taskDescriptionCtrlr.text.length >= 7 ? true : false;
+  }
+
   ////// manage SUBTASKS //////
   final subTaskTitleCtrlr = TextEditingController();
 
@@ -189,41 +196,18 @@ class FormsPageController extends GetxController {
 
   ////// manage NAVIGATION //////
   Future<bool> onWillPop(BuildContext context) async {
-    navigate(context);
-    return false;
-  }
-
-  void navigate(BuildContext context) {
-    if (isViewMode.value) {
-      Get.offAllNamed(Routes.INITIAL_PAGE);
-    }
     if (isNewMode.value) {
-      if (hasUserInteraction()) {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return CustomDialog(
-              title: "Salir sin guardar ?",
-              description: const Text("Si sale ahora sin guardar perderá los cambios"),
-              okCallBack: () => cancelAndNavigate(),
-            );
-          },
-        );
-      } else {
-        cancelAndNavigate();
-      }
-    }
-  }
-
-  bool hasUserInteraction() {
-    if (_task.value.subTasks.isNotEmpty || taskDescriptionCtrlr.text.isNotEmpty || enableNotificationIcon.value) {
+      cancelAndNavigate(context);
+      return true;
+    } else if (isViewMode.value) {
+      cancelAndNavigate(context);
       return true;
     } else {
       return false;
     }
   }
 
-  void cancelAndNavigate() {
+  void cancelAndNavigate(BuildContext context) {
     Get.offAllNamed(Routes.INITIAL_PAGE);
   }
 
@@ -237,7 +221,6 @@ class FormsPageController extends GetxController {
   Rx<Text> notificationText = const Text('').obs;
 
   void enableDisableNotificationStyles() {
-
     if (isViewMode.value && _task.value.notificationTime != null) {
       enableNotificationIcon.value = true;
       notificationTime = TimeOfDay(hour: _task.value.notificationTime!.hour, minute: _task.value.notificationTime!.minute);
@@ -278,7 +261,6 @@ class FormsPageController extends GetxController {
       notificationIcon.value = const Icon(Icons.notifications_active_rounded);
       notificationText.value = Text(dateTxt, style: newDateTxtStyle);
     }
-    
   }
 
   void saveNotification() {
