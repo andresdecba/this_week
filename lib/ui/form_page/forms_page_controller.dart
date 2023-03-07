@@ -6,7 +6,8 @@ import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/services/local_notifications_service.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
-import 'package:todoapp/ui/shared_components/alert_dialog.dart';
+import 'package:todoapp/ui/shared_components/dialogs.dart';
+import 'package:todoapp/ui/shared_components/snackbar.dart';
 import 'package:todoapp/utils/utils.dart';
 
 enum PageMode { VIEW_MODE, UPDATE_MODE, NEW_MODE }
@@ -283,20 +284,21 @@ class FormsPageController extends GetxController {
   final InitialPageController _initialPageController = Get.put(InitialPageController());
 
   void deleteTask(BuildContext context) {
-    showDialog(
+    myCustomDialog(
       context: context,
-      builder: (BuildContext context) {
-        return CustomDialog(
-          title: "Eliminar tarea ?",
-          okCallBack: () {
-            _task.value.delete();
-            Get.find<InitialPageController>().buildInfo();
-            Get.offAllNamed(Routes.INITIAL_PAGE);
-            showSnackBar(
-              titleText: 'Task removed',
-              messageText: 'To 20-03-2023',
-            );
-          },
+      title: 'Delete task ?',
+      subtitle: 'This action will delete the task permanently',
+      cancelTextButton: 'Cancel',
+      okTextButton: 'Delete',
+      iconPath: 'assets/warning.svg',
+      iconColor: warning,
+      onPressOk: () {
+        _task.value.delete();
+        Get.find<InitialPageController>().buildInfo();
+        Get.offAllNamed(Routes.INITIAL_PAGE);
+        showSnackBar(
+          titleText: 'Task removed',
+          messageText: 'To 20-03-2023',
         );
       },
     );
@@ -311,15 +313,14 @@ class FormsPageController extends GetxController {
 
   void validateNotification(BuildContext context) {
     if (_task.value.notificationTime!.isBefore(DateTime.now())) {
-      showDialog(
+      myCustomDialog(
         context: context,
-        builder: (_) {
-          return CustomDialog(
-            title: "Warning",
-            description: const Text("You can't create a notification before now"),
-            okCallBack: () => Navigator.of(context).pop(),
-          );
-        },
+        title: 'Atention !',
+        subtitle: "You can't create a notification before now.",
+        okTextButton: 'Ok',
+        iconPath: 'assets/info.svg',
+        iconColor: blue_primary,
+        onPressOk: () => Navigator.of(context).pop(),
       );
     } else {
       confirmAndNavigate();
@@ -350,37 +351,6 @@ class FormsPageController extends GetxController {
         messageText: '20-03-2023',
       );
     }
-  }
-
-  void showSnackBar({required String titleText, required String messageText, Color? color}) async {
-    await Future.delayed(const Duration(milliseconds: 350));
-    Get.snackbar(
-      '',
-      '',
-      snackPosition: SnackPosition.BOTTOM,
-      animationDuration: const Duration(milliseconds: 500),
-      duration: const Duration(seconds: 10),
-      backgroundColor: color ?? blue_primary.withOpacity(0.25),
-      borderRadius: 8,
-      padding: const EdgeInsets.all(20),
-      snackStyle: SnackStyle.FLOATING,
-      margin: const EdgeInsets.all(20.0),
-      borderColor: withe_bg,
-      borderWidth: 2,
-      titleText: Text(
-        titleText,
-        style: kTitleLarge,
-      ),
-      messageText: Text(
-        messageText,
-        style: kBodyMedium,
-      ),
-      icon: const Icon(
-        Icons.info,
-        size: 30,
-      ),
-      shouldIconPulse: false,
-    );
   }
 }
 

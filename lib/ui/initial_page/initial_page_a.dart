@@ -14,6 +14,7 @@ class InitialPageA extends GetView<InitialPageController> {
   Widget build(BuildContext context) {
     
     return Scaffold( 
+
       // app bar
       appBar: AppBar(
         leadingWidth: 300,

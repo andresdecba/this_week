@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/form_page/forms_page_controller.dart';
-import 'package:todoapp/ui/shared_components/alert_dialog.dart';
+import 'package:todoapp/ui/shared_components/dialogs.dart';
 
 class TodoList extends GetView<FormsPageController> {
   const TodoList({Key? key}) : super(key: key);
@@ -21,10 +21,13 @@ class TodoList extends GetView<FormsPageController> {
               style: kTitleLarge,
             ),
             IconButton(
-              onPressed: () => showSubtaskDialog(
+              onPressed: () => createSubtaskDialog(
                 context: context,
-                onOk: () => controller.createSubtask(),
-                controller: controller,
+                title: 'Create a new subtask',
+                content: subtaskForm(),
+                cancelTextButton: 'Cancel',
+                okTextButton: 'Create',
+                onPressOk: () => controller.createSubtask(),
               ),
               icon: const Icon(Icons.add_circle_rounded),
             ),
@@ -91,12 +94,15 @@ class TodoList extends GetView<FormsPageController> {
                             dense: true,
                             visualDensity: VisualDensity.compact,
                             onLongPress: () {
-                              controller.subTaskTitleCtrlr.text = subTask.title; //controller.updateSubtask(i);
-                              showSubtaskDialog(
+                              controller.subTaskTitleCtrlr.text = subTask.title;
+                              createSubtaskDialog(
                                 context: context,
-                                onOk: () => controller.updateTextSubtask(i),
-                                controller: controller,
-                              );
+                                title: 'Update subtask',
+                                content: subtaskForm(),
+                                cancelTextButton: 'Cancel',
+                                okTextButton: 'Update',
+                                onPressOk: () => controller.updateTextSubtask(i),
+                              );                             
                             },
                             leading: Checkbox(
                               shape: const CircleBorder(),
@@ -122,69 +128,24 @@ class TodoList extends GetView<FormsPageController> {
       ],
     );
   }
-}
 
-// crear subtarea modal
-Future<dynamic> showSubtaskDialog({
-  required FormsPageController controller,
-  required BuildContext context,
-  required VoidCallback onOk,
-}) {
-  return showDialog(
-    context: context,
-    builder: (_) {
-      return CustomDialog(
-        description: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: const <Widget>[
-              Text('Agregar una subtarea'),
-              SizedBox(height: 30),
-              SubTaskForms(),
-            ],
-          ),
-        ),
-        okCallBack: () {
-          onOk();
-          controller.onCancelSubtask(context);
-        },
-        cancelCallBack: () => controller.onCancelSubtask(context),
-      );
-    },
-  );
-}
-
-// textfield de la subtarea
-class SubTaskForms extends GetView<FormsPageController> {
-  const SubTaskForms({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  Widget subtaskForm() {
     return Form(
-      child: Column(
-        children: [
-          TextFormField(
-            controller: controller.subTaskTitleCtrlr,
-            enabled: true,
-            maxLines: 4,
-            decoration: customInputDecoration(
-              label: 'Subtarea',
-              hintText: 'Ingresar descripcion de la subtarea',
-              clearText: () => controller.subTaskTitleCtrlr.clear(),
-              isEnabled: true,
-              hasBorder: true,
-            ),
-            maxLength: 100,
-            keyboardType: TextInputType.text,
-            textInputAction: TextInputAction.done,
-            autofocus: true,
-          ),
-        ],
+      child: TextFormField(
+        controller: controller.subTaskTitleCtrlr,
+        enabled: true,
+        maxLines: 4,
+        decoration: customInputDecoration(
+          label: 'Subtarea',
+          hintText: 'Ingresar descripcion de la subtarea',
+          clearText: () => controller.subTaskTitleCtrlr.clear(),
+          isEnabled: true,
+          hasBorder: true,
+        ),
+        maxLength: 100,
+        keyboardType: TextInputType.text,
+        textInputAction: TextInputAction.done,
+        autofocus: true,
       ),
     );
   }

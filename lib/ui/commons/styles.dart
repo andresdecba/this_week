@@ -49,7 +49,7 @@ InputDecoration customInputDecoration({
 }) {
   return InputDecoration(
     //label: Text(label),
-    contentPadding: isEnabled ? const EdgeInsets.all(16) : EdgeInsets.zero,
+    contentPadding: isEnabled ? const EdgeInsets.all(10) : EdgeInsets.zero,
     isDense: true,
     border: hasBorder == true ? const OutlineInputBorder() : InputBorder.none,
     labelStyle: const TextStyle(color: disabled_grey),
