@@ -21,14 +21,17 @@ class TodoList extends GetView<FormsPageController> {
               style: kTitleLarge,
             ),
             IconButton(
-              onPressed: () => createSubtaskDialog(
-                context: context,
-                title: 'Create a new subtask',
-                content: subtaskForm(),
-                cancelTextButton: 'Cancel',
-                okTextButton: 'Create',
-                onPressOk: () => controller.createSubtask(),
-              ),
+              onPressed: () {
+                FocusScope.of(context).unfocus(); // hide keyboard if open
+                createSubtaskDialog(
+                  context: context,
+                  title: 'Create a new subtask',
+                  content: subtaskForm(),
+                  cancelTextButton: 'Cancel',
+                  okTextButton: 'Create',
+                  onPressOk: () => controller.createSubtask(),
+                );
+              },
               icon: const Icon(Icons.add_circle_rounded),
             ),
           ],
@@ -95,6 +98,7 @@ class TodoList extends GetView<FormsPageController> {
                             visualDensity: VisualDensity.compact,
                             onLongPress: () {
                               controller.subTaskTitleCtrlr.text = subTask.title;
+                              FocusScope.of(context).unfocus(); // hide keyboard if open
                               createSubtaskDialog(
                                 context: context,
                                 title: 'Update subtask',
@@ -102,7 +106,7 @@ class TodoList extends GetView<FormsPageController> {
                                 cancelTextButton: 'Cancel',
                                 okTextButton: 'Update',
                                 onPressOk: () => controller.updateTextSubtask(i),
-                              );                             
+                              );
                             },
                             leading: Checkbox(
                               shape: const CircleBorder(),

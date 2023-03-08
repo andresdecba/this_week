@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:todoapp/core/bindings/initial_page_week_binding.dart';
 import 'package:todoapp/core/routes/routes.dart';
 import 'package:todoapp/models/task_model.dart';
+import 'package:todoapp/services/ad_mob_service.dart';
 import 'package:todoapp/services/local_notifications_service.dart';
 
 import 'package:flutter_native_timezone/flutter_native_timezone.dart'; //get the local timezone of the os
@@ -26,6 +28,13 @@ void main() async {
   await Hive.openBox<Task>('tasksBox');
   // local notifications
   await LocalNotificationService.initializePlatformNotifications(localNotifications);
+  // google ads
+  await MobileAds.instance.initialize();
+
+  // remove before upload app
+  var devices = ["4C456C78BB5CAFE90286C23C5EA6A3CC"];
+  RequestConfiguration requestConfiguration = RequestConfiguration(testDeviceIds: devices);
+  MobileAds.instance.updateRequestConfiguration(requestConfiguration);
 
   //set timezone
   tz.initializeTimeZones();

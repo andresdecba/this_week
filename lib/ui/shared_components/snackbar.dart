@@ -13,7 +13,7 @@ void showSnackBar({
     '',
     snackPosition: SnackPosition.BOTTOM,
     animationDuration: const Duration(milliseconds: 500),
-    duration: const Duration(seconds: 15),
+    duration: const Duration(seconds: 3),
     backgroundColor: color ?? blue_primary.withOpacity(0.25),
     borderRadius: 8,
     padding: const EdgeInsets.all(20),

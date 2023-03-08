@@ -23,6 +23,7 @@ class SetNotificationDatetime extends GetView<FormsPageController> {
               onTap: controller.isViewMode.value
                   ? null
                   : () async {
+                      FocusScope.of(context).unfocus(); // hide keyboard if open
                       TimeOfDay? newTime = await showTimePicker(
                         context: context,
                         initialTime: controller.notificationTime,
