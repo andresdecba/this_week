@@ -47,7 +47,7 @@ class InitialPageA extends GetView<InitialPageController> {
       ),
 
       // sidebar
-      endDrawer: const SideBar(),
+      endDrawer: SideBar(),
 
       // content
       body: Obx(

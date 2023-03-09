@@ -11,9 +11,9 @@ import 'package:todoapp/models/my_app_config.dart';
 import 'package:todoapp/services/local_notifications_service.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/initial_page/initial_page_a.dart';
-import 'package:flutter_native_timezone/flutter_native_timezone.dart'; //get the local timezone of the os
-import 'package:timezone/data/latest_all.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
+// import 'package:flutter_native_timezone/flutter_native_timezone.dart'; //get the local timezone of the os
+// import 'package:timezone/data/latest_all.dart' as tz;
+// import 'package:timezone/timezone.dart' as tz;
 // ignore: depend_on_referenced_packages
 import 'package:flutter_localizations/flutter_localizations.dart'; // <-- NOOO BORRAR aunuqe salga que no se usa x sí se usa
 
@@ -37,15 +37,14 @@ Future<void> initAdMob() async {
   MobileAds.instance.updateRequestConfiguration(requestConfiguration);
 }
 
-//set timezone
-setalgo() async {
-
-  tz.initializeTimeZones();
-  tz.setLocalLocation(
-    tz.getLocation(
-      await FlutterNativeTimezone.getLocalTimezone(),
-  ));
-}
+// //set timezone
+// setalgo() async {
+//   tz.initializeTimeZones();
+//   tz.setLocalLocation(
+//     tz.getLocation(
+//       await FlutterNativeTimezone.getLocalTimezone(),
+//   ));
+// }
 
 Future<void> initLanguage() async {
   //
@@ -54,7 +53,6 @@ Future<void> initLanguage() async {
   if (userPrefs.isNotEmpty) {
     prefs = userPrefs.get('myAppConfig');
   }
-  //Intl.defaultLocale = 'us';
   Get.locale = prefs != null ? Locale(prefs.language!, '') : Get.deviceLocale;
 }
 
@@ -82,11 +80,9 @@ class MyApp extends StatelessWidget {
       title: 'Material App',
       initialBinding: InitialPageBinding(),
       getPages: AppPages.getPages,
-
-      ////
       translations: TranslationService(),
       locale: Get.locale,
-      fallbackLocale: const Locale('en', 'US'),
+      fallbackLocale: const Locale('en', ''),
       supportedLocales: const [
         Locale('en', ''), // English, no country code
         Locale('es', ''), // Spanish, no country code
@@ -98,8 +94,6 @@ class MyApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      /////
-
       theme: ThemeData(
         //iconTheme: IconThemeData(color: black_bg),
         primaryTextTheme: Typography().white,

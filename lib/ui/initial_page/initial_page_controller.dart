@@ -28,9 +28,15 @@ class InitialPageController extends GetxController with AdMobService {
   PageStorageKey keyScroll = const PageStorageKey<String>('home_page_scroll');
   RxBool simulateReloadPage = false.obs;
 
+  // langs
+  List<Locale> langsCodes = [const Locale('en', ''), const Locale('es', ''), const Locale('pt', '')];
+  List<String> languajes = ['English', 'Spanish', 'Portuguese'];
+  late Rx<Locale> languajeOption;
+
   @override
   void onInit() {
     buildInfo();
+    languajeOption = Get.locale!.obs;
     super.onInit();
   }
 

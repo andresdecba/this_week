@@ -9,7 +9,7 @@ import 'package:todoapp/ui/shared_components/dialogs.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SideBar extends GetView<InitialPageController> {
-  const SideBar({super.key});
+  SideBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -77,23 +77,49 @@ class SideBar extends GetView<InitialPageController> {
                   );
                 },
               ),
+
+              ///////////////////
               ListTile(
-                  visualDensity: VisualDensity.compact,
-                  trailing: const Icon(Icons.language_rounded),
-                  title: const Text('Languajes'),
-                  subtitle: const Text(
-                    'Change current languaje',
-                    style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: bsubTitleTextColor),
-                  ),
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    myCustomDialog(
-                      context: context,
-                      title: 'Title',
-                      onPressOk: () {},
-                    );
-                  }),
+                visualDensity: VisualDensity.compact,
+                trailing: const Icon(Icons.language_rounded),
+                title: const Text('Languajes'),
+                subtitle: const Text(
+                  'Change current languaje',
+                  style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: bsubTitleTextColor),
+                ),
+                onTap: () async {
+                  Navigator.of(context).pop();
+                  await changeLangDialog(
+                    context: context,
+                    title: 'Idioma',
+                    elements: Obx(
+                      () => Column(
+                        children: [
+                          ...controller.langsCodes.map((e) {
+                            var i = controller.langsCodes.indexOf(e);
+                            var isSelected = controller.languajeOption.value.languageCode == e.languageCode ? true : false;
+                            return RadioListTile(
+                              value: e,
+                              groupValue: controller.languajeOption.value,
+                              title: Text(controller.languajes[i]),
+                              selected: isSelected,
+                              toggleable: isSelected,
+                              onChanged: (ind) {
+                                controller.languajeOption.value = ind!;
+                                Get.updateLocale(e);
+                                Navigator.of(context).pop();
+                              },
+                              //toggleable: true,
+                            );
+                          }).toList(),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
               const Divider(),
+              ///////////////////
 
               /// SOCIAL
               ListTile(
@@ -163,4 +189,40 @@ class SideBar extends GetView<InitialPageController> {
     }
     Navigator.of(context).pop();
   }
+
+  // List<Widget> elements( String value ){
+
+  //   List<String> langs = ['English', 'Spanish', 'Portugese'];
+
+  //   // Column(
+  //   //       children: [
+  //   //         RadioListTile(
+  //   //           value: "English",
+  //   //           groupValue: lang,
+  //   //           onChanged: (ind) { lang = ind!;},
+  //   //           title: Text("Number $lang"),
+  //   //         ),
+  //   //         RadioListTile(
+  //   //           value: "Español",
+  //   //           groupValue: lang,
+  //   //           onChanged: (ind) { lang = ind!;},
+  //   //           title: Text("Number $lang"),
+  //   //         ),
+  //   //         RadioListTile(
+  //   //           value: "Portugese",
+  //   //           groupValue: lang,
+  //   //           onChanged: (ind) { lang = ind!;},
+  //   //           title: Text("Number $lang"),
+  //   //         ),
+  //   //       ],
+  //   //     );
+
+  //   return langs.map((e) => RadioListTile(
+  //             value: e,
+  //             groupValue: lang,
+  //             onChanged: (ind) { lang = ind!;},
+  //             title: Text("Number $lang"),
+  //           ),
+  //         ).toList();
+  // }
 }
