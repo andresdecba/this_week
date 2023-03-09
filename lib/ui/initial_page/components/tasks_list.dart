@@ -6,33 +6,24 @@ import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/ui/initial_page/components/task_card.dart';
 
-class TasksList extends StatefulWidget {
+class TasksList extends GetView<InitialPageController> {
   const TasksList({Key? key}) : super(key: key);
-  @override
-  State<TasksList> createState() => _TasksListState();
-}
 
-class _TasksListState extends State<TasksList> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-    InitialPageController controller = Get.put(InitialPageController()); // Rather Controller controller = Controller();
-
-    return GetBuilder<InitialPageController>(
-      id: 'buildInfo',
-      builder: (ctrlr) {
+    return Obx(
+      () {
         return ListView.builder(
           physics: const NeverScrollableScrollPhysics(),
-          key: ctrlr.key,
+          key: controller.keyScroll,
           shrinkWrap: true,
-          itemCount: ctrlr.buildWeek.length,
+          itemCount: controller.buildWeek.value.length,
           itemBuilder: (context, index) {
             //
-            DateTime currentDate = ctrlr.buildWeek.keys.toList()[index];
+            DateTime currentDate = controller.buildWeek.value.keys.toList()[index];
             List<Task> tasks = [];
-            tasks.addAll(ctrlr.buildWeek[currentDate]!);
+            tasks.addAll(controller.buildWeek.value[currentDate]!);
             bool isDateEnabled = currentDate.isBefore(DateTime.now().subtract(const Duration(days: 1))) ? false : true;
-
             //
             return Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -63,7 +54,7 @@ class _TasksListState extends State<TasksList> with AutomaticKeepAliveClientMixi
                           ? IconButton(
                               icon: const Icon(Icons.add_circle_rounded),
                               visualDensity: VisualDensity.compact,
-                              onPressed: () => ctrlr.navigate(date: currentDate),
+                              onPressed: () => controller.navigate(date: currentDate),
                               color: enabled_grey,
                             )
                           : const Padding(
@@ -148,7 +139,4 @@ class _TasksListState extends State<TasksList> with AutomaticKeepAliveClientMixi
         return TaskStatus.IN_PROGRESS.toValue;
     }
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

@@ -12,12 +12,11 @@ import 'package:todoapp/utils/utils.dart';
 class InitialPageController extends GetxController with AdMobService {
   // box de tasks
   Box<Task> tasksBox = Boxes.getTasksBox();
-  List<Task> get getTasks => tasksBox.values.toList();
 
   // related to buil days an weeks
   int addWeeks = 0;
   List<DateTime> weekDays = [];
-  Map<DateTime, List<Task>> buildWeek = {};
+  Rx<Map<DateTime, List<Task>>> buildWeek = Rx<Map<DateTime, List<Task>>>({}); // Type: Map<DateTime, List<Task>>
   String initialFinalDays = '';
 
   // create strings for head
@@ -26,7 +25,8 @@ class InitialPageController extends GetxController with AdMobService {
   Rx<String> tasksPercentageCompleted = ''.obs;
 
   // others
-  GlobalKey<AnimatedListState> key = GlobalKey();
+  PageStorageKey keyScroll = const PageStorageKey<String>('home_page_scroll');
+  RxBool simulateReloadPage = false.obs;
 
   @override
   void onInit() {
@@ -48,7 +48,7 @@ class InitialPageController extends GetxController with AdMobService {
   void buildInfo() {
     // limpiar lista para evitar duplicados
     weekDays.clear();
-    buildWeek.clear();
+    buildWeek.value.clear();
 
     // crear los dias
     Week currentWeek = Week.current();
@@ -65,10 +65,10 @@ class InitialPageController extends GetxController with AdMobService {
 
     // ordenar las tareas segun los dias
     for (var day in weekDays) {
-      buildWeek.addAll({day: []});
+      buildWeek.value.addAll({day: []});
     }
 
-    for (var element in buildWeek.entries) {
+    for (var element in buildWeek.value.entries) {
       /// agregar la tarea
       for (var task in tasksBox.values) {
         if (task.taskDate == element.key) {
@@ -78,7 +78,8 @@ class InitialPageController extends GetxController with AdMobService {
     }
     setInitialAndFinalWeekDays();
     createCompletedTasksPercentage();
-    update(['buildInfo']);
+    buildWeek.refresh();
+    print('Task_list: $buildWeek');
   }
 
   /// create head info
@@ -93,7 +94,7 @@ class InitialPageController extends GetxController with AdMobService {
     int completedTotalTasks = 0;
     int completedTasksPercent = 0;
 
-    for (var value in buildWeek.values) {
+    for (List value in buildWeek.value.values) {
       totalTasks += value.length;
       for (var element in value) {
         if (element.status == TaskStatus.DONE.toValue) {
@@ -114,7 +115,7 @@ class InitialPageController extends GetxController with AdMobService {
       Map<String, String> data = {
         "taskId": taskKey.toString(),
       };
-      Get.offAllNamed(Routes.FORMS_PAGE, parameters: data);
+      Get.toNamed(Routes.FORMS_PAGE, parameters: data);
       //Get.delete<InitialPageController>();
       return;
     }
@@ -122,11 +123,11 @@ class InitialPageController extends GetxController with AdMobService {
       Map<String, String> data = {
         "date": date.toString(),
       };
-      Get.offAllNamed(Routes.FORMS_PAGE, parameters: data);
+      Get.toNamed(Routes.FORMS_PAGE, parameters: data);
       //Get.delete<InitialPageController>();
       return;
     }
-    Get.offAllNamed(Routes.FORMS_PAGE);
+    Get.toNamed(Routes.FORMS_PAGE);
     //Get.delete<InitialPageController>();
   }
 
@@ -171,5 +172,4 @@ class InitialPageController extends GetxController with AdMobService {
     );
     myBanner.load();
   }
-
 }

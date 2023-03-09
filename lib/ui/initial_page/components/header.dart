@@ -10,7 +10,7 @@ class Header extends GetView<InitialPageController> {
   Widget build(BuildContext context) {
     return Obx(
       () => Container(
-        height: 75,
+        height: 60,
         alignment: Alignment.center,
         //decoration: BoxDecoration(color: grey_bg, border: Border.all(color: Colors.blueAccent)),
         decoration: const BoxDecoration(

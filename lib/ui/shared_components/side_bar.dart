@@ -1,8 +1,12 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
+import 'package:todoapp/ui/shared_components/dialogs.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SideBar extends GetView<InitialPageController> {
   const SideBar({super.key});
@@ -17,13 +21,21 @@ class SideBar extends GetView<InitialPageController> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 20),
+              //
               const Divider(),
 
               /// NAVEGACION
               ListTile(
-                leading: const Icon(Icons.navigate_next),
-                title: const Text('Ir a semana Actual'),
+                visualDensity: VisualDensity.compact,
+                trailing: const Icon(Icons.home_rounded),
+                title: Text(
+                  'week'.tr,
+                  style: TextStyle(),
+                ),
+                subtitle: const Text(
+                  'Go to current week',
+                  style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: bsubTitleTextColor),
+                ),
                 onTap: () {
                   controller.addWeeks = 0;
                   controller.buildInfo();
@@ -31,41 +43,94 @@ class SideBar extends GetView<InitialPageController> {
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.navigate_next),
-                title: const Text('Agregar tarea nueva'),
+                visualDensity: VisualDensity.compact,
+                trailing: const Icon(Icons.add_rounded),
+                title: const Text('New task'),
+                subtitle: const Text(
+                  'Add a new Task for any day',
+                  style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: bsubTitleTextColor),
+                ),
                 onTap: () {
-                  //Navigator.of(context).pop();
                   controller.navigate(date: DateTime.now());
                 },
               ),
-
               const Divider(),
 
+              /// CONFIGURACIÓN
               ListTile(
-                leading: const Icon(Icons.navigate_next),
-                title: const Text('Silenciar notificaciones'),
-                onTap: () {
-                  // TODO: implementar
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.navigate_next),
+                visualDensity: VisualDensity.compact,
+                trailing: const Icon(Icons.replay_rounded),
                 title: const Text('Reset App'),
                 subtitle: const Text(
                   'Borrará todas las tareas',
                   style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: bsubTitleTextColor),
                 ),
                 onTap: () {
-                  // TODO: implementar
+                  myCustomDialog(
+                    context: context,
+                    title: 'Delete Tasks',
+                    subtitle: 'This action will delete all tasks from the app.',
+                    iconColor: warning,
+                    iconPath: 'assets/warning.svg',
+                    okTextButton: 'Delete tasks',
+                    onPressOk: () async => await simulateDataLoading(context),
+                  );
                 },
               ),
+              ListTile(
+                  visualDensity: VisualDensity.compact,
+                  trailing: const Icon(Icons.language_rounded),
+                  title: const Text('Languajes'),
+                  subtitle: const Text(
+                    'Change current languaje',
+                    style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: bsubTitleTextColor),
+                  ),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    myCustomDialog(
+                      context: context,
+                      title: 'Title',
+                      onPressOk: () {},
+                    );
+                  }),
+              const Divider(),
+
+              /// SOCIAL
+              ListTile(
+                visualDensity: VisualDensity.compact,
+                trailing: const Icon(Icons.share_rounded),
+                title: const Text('Share'),
+                subtitle: const Text(
+                  'Share with your friends',
+                  style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: bsubTitleTextColor),
+                ),
+                onTap: () => shareApp(context),
+              ),
+              ListTile(
+                visualDensity: VisualDensity.compact,
+                trailing: const Icon(Icons.rate_review),
+                title: const Text('Rate'),
+                subtitle: const Text(
+                  'Rate in PlayStore',
+                  style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: bsubTitleTextColor),
+                ),
+                onTap: () => goToPlaystore(context),
+              ),
+
+              // LOGO
               const Divider(),
               const Spacer(),
-              SvgPicture.asset(
-                'assets/weekly-logo.svg',
-                alignment: Alignment.center,
-                color: Colors.blueAccent,
-                width: 100,
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SvgPicture.asset(
+                    'assets/weekly-logo.svg',
+                    alignment: Alignment.center,
+                    color: disabled_grey,
+                    width: 100,
+                  ),
+                ),
               ),
             ],
           ),
@@ -73,67 +138,29 @@ class SideBar extends GetView<InitialPageController> {
       ),
     );
   }
+
+  Future<void> simulateDataLoading(BuildContext context) async {
+    controller.simulateReloadPage.value = true;
+    Navigator.of(context).pop();
+    Navigator.of(context).pop();
+    await controller.tasksBox.clear();
+    controller.buildInfo();
+    Timer(const Duration(seconds: 2), () {
+      controller.simulateReloadPage.value = false;
+    });
+  }
+
+  void shareApp(BuildContext context) {
+    String message = 'Hi ! check this app out: https://play.google.com/store/apps/details?id=com.calculadora.desigual';
+    Share.share(message);
+    Navigator.of(context).pop();
+  }
+
+  Future<void> goToPlaystore(BuildContext context) async {
+    Uri url = Uri.parse('https://play.google.com/store/apps/details?id=com.calculadora.desigual');
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch $url');
+    }
+    Navigator.of(context).pop();
+  }
 }
-
-
-/*
-
-/// LOGO
-              SvgPicture.asset(
-                'assets/weekly-logo.svg',
-                alignment: Alignment.center,
-                color: Colors.blueAccent,
-                width: 100,
-              ),
-              const SizedBox(height: 20),
-              const Divider(),
-
-  header:
- // UserAccountsDrawerHeader(
-            //   accountName: Text('Oflutter.com'),
-            //   accountEmail: Text('example@gmail.com'),
-            //   currentAccountPicture: CircleAvatar(
-            //     child: ClipOval(
-            //       child: Image.network(
-            //         'https://oflutter.com/wp-content/uploads/2021/02/girl-profile.png',
-            //         fit: BoxFit.cover,
-            //         width: 90,
-            //         height: 90,
-            //       ),
-            //     ),
-            //   ),
-            //   decoration: BoxDecoration(
-            //     color: Colors.blue,
-            //     image: DecorationImage(
-            //         fit: BoxFit.fill,
-            //         image: NetworkImage(
-            //             'https://oflutter.com/wp-content/uploads/2021/02/profile-bg3.jpg')),
-            //   ),
-            // ),
-
-
-add an extra ‘notification’ to the Request
-tuto: https://oflutter.com/create-a-sidebar-menu-in-flutter/
-ListTile(
-  leading: Icon(Icons.notifications),
-  title: Text('Request'),
-  onTap: () => null,
-  trailing: ClipOval(
-    child: Container(
-      color: Colors.red,
-      width: 20,
-      height: 20,
-      child: Center(
-        child: Text(
-          '8',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 12,
-          ),
-        ),
-      ),
-    ),
-  ),
-),
-
-*/
