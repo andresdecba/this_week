@@ -1,5 +1,6 @@
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 
 ////// GENERAL DIALOG //////
@@ -112,7 +113,16 @@ Future<T?> changeLangDialog<T>({
           child: Text(title),
         ),
         titleTextStyle: kTitleLarge,
-        content: elements,
+        
+        content: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text('you will need to restart the app...'.tr, textAlign: TextAlign.center, style: kBodyMedium.copyWith(color: warning,),),
+            const SizedBox(height: 10,),
+            elements,
+          ],
+        ),
         actionsAlignment: MainAxisAlignment.center,
         actionsPadding: const EdgeInsets.only(bottom: 25),
       );

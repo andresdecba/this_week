@@ -4,6 +4,7 @@ const Map<String, String> pt_BR = {
   'week': 'Semana',
   'to': 'a',
   'no tasks for this week': 'Você não tem tarefas para esta semana.',
+  'of completed tasks' : 'de tarefas concluídas.',
 
   // side bar
   'home':'Home',
@@ -56,6 +57,7 @@ const Map<String, String> pt_BR = {
   'task deleted': 'Tarefa excluída.',
   'task updated': 'Tarefa atualizada.',
   'new task created': 'Nova tarefa criada.',
+  'you will need to restart the app...': 'Você precisará reiniciar o aplicativo para aplicar as alterações.',
 
   // UI elements texts
   'ok': 'Ok',

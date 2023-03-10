@@ -90,6 +90,8 @@ class SideBar extends GetView<InitialPageController> {
                     title: 'choose a language'.tr,
                     elements: Obx(
                       () => Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           ...controller.langsCodes.map((e) {
                             var i = controller.langsCodes.indexOf(e);

@@ -11,7 +11,6 @@ import 'package:todoapp/services/ad_mob_service.dart';
 import 'package:todoapp/utils/utils.dart';
 
 class InitialPageController extends GetxController with AdMobService {
-
   // box de tasks
   Box<Task> tasksBox = Boxes.getTasksBox();
 
@@ -39,7 +38,7 @@ class InitialPageController extends GetxController with AdMobService {
   Rx<Locale> currentLang = (Get.locale!).obs;
   void saveLocale(Locale data) {
     currentLang.value = data;
-    Get.updateLocale(data);
+    //Get.updateLocale(data);
     appConfig.language = data.languageCode;
     appConfig.save();
   }
@@ -49,7 +48,6 @@ class InitialPageController extends GetxController with AdMobService {
   Future<void> initConfig() async {
     appConfig = Boxes.getMyAppConfigBox().get('appConfig')!;
   }
-
 
   @override
   void onInit() async {
@@ -109,8 +107,8 @@ class InitialPageController extends GetxController with AdMobService {
   /// create head info
   void setInitialAndFinalWeekDays() {
     var week = showCurrenWeekInfo.weekNumber.toString();
-    var days = '${Utils.dateToAbbreviateString(showCurrenWeekInfo.days.first)} to ${Utils.dateToAbbreviateString(showCurrenWeekInfo.days.last)}';
-    weekDaysFromTo.value = '${"week".tr} $week: $days';
+    var days = '${Utils.dateToAbbreviateString(showCurrenWeekInfo.days.first)} ${'to'.tr} ${Utils.dateToAbbreviateString(showCurrenWeekInfo.days.last)}';
+    weekDaysFromTo.value = '${'week'.tr} $week: $days';
   }
 
   void createCompletedTasksPercentage() {
@@ -130,7 +128,7 @@ class InitialPageController extends GetxController with AdMobService {
       completedTasksPercent = ((completedTotalTasks / totalTasks) * 100).toInt();
     }
     // set message
-    totalTasks == 0 ? tasksPercentageCompleted.value = 'No tasks for this week'.tr : tasksPercentageCompleted.value = '$completedTasksPercent% of completed tasks';
+    totalTasks == 0 ? tasksPercentageCompleted.value = 'no tasks for this week'.tr : tasksPercentageCompleted.value = '$completedTasksPercent% ${'of completed tasks'.tr}';
   }
 
   /// navegar para crear o editar

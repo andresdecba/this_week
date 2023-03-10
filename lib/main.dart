@@ -41,14 +41,13 @@ Future<void> initAppConfig() async {
   // get box
   Box<MyAppConfig> userPrefs = Boxes.getMyAppConfigBox();
   // if config file doenst exists, creat it
-  if (!userPrefs.get('appConfig')!.isInBox) {
+  if (userPrefs.get('appConfig') == null) {
     var value = MyAppConfig();
     userPrefs.put('appConfig', value);
   }
   // set language
   MyAppConfig config = userPrefs.get('appConfig')!;
-  print('Language setted: ${config.language}');
-  Get.locale = config.language == "" ? Get.deviceLocale : Locale(config.language!, '');
+  Get.locale = config.language == null ? Get.deviceLocale : Locale(config.language!, '');
 }
 
 // //set timezone

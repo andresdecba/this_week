@@ -4,6 +4,7 @@ const Map<String, String> es_AR = {
   'week': 'Semana',
   'to': 'al',
   'no tasks for this week': 'No tienes tareas para esta semana',
+  'of completed tasks' : 'de tareas completadas.',
 
   // side bar
   'home':'Home',
@@ -56,6 +57,7 @@ const Map<String, String> es_AR = {
   'task deleted': 'Tarea borrada',
   'task updated': 'Tarea actualizada',
   'new task created': 'Nueva tarea creada',
+  'you will need to restart the app...': 'Necesitará reiniciar la aplicación para aplicar los cambios.',
 
   // UI elements texts
   'ok': 'Ok',
