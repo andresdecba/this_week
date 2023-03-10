@@ -5,11 +5,13 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:isoweek/isoweek.dart';
 import 'package:todoapp/core/routes/routes.dart';
 import 'package:todoapp/data_source/db_data_source.dart';
+import 'package:todoapp/models/my_app_config.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/services/ad_mob_service.dart';
 import 'package:todoapp/utils/utils.dart';
 
 class InitialPageController extends GetxController with AdMobService {
+
   // box de tasks
   Box<Task> tasksBox = Boxes.getTasksBox();
 
@@ -28,15 +30,31 @@ class InitialPageController extends GetxController with AdMobService {
   PageStorageKey keyScroll = const PageStorageKey<String>('home_page_scroll');
   RxBool simulateReloadPage = false.obs;
 
-  // langs
+  // scaffold key
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
+  // CHANGE LANGUAGE DIALOG on drawer //
   List<Locale> langsCodes = [const Locale('en', ''), const Locale('es', ''), const Locale('pt', '')];
-  List<String> languajes = ['English', 'Spanish', 'Portuguese'];
-  late Rx<Locale> languajeOption;
+  List<String> langs = ['English', 'Spanish', 'Portuguese'];
+  Rx<Locale> currentLang = (Get.locale!).obs;
+  void saveLocale(Locale data) {
+    currentLang.value = data;
+    Get.updateLocale(data);
+    appConfig.language = data.languageCode;
+    appConfig.save();
+  }
+
+  // INITIALIZE APP CONFIGURATIONS //
+  MyAppConfig appConfig = MyAppConfig();
+  Future<void> initConfig() async {
+    appConfig = Boxes.getMyAppConfigBox().get('appConfig')!;
+  }
+
 
   @override
-  void onInit() {
+  void onInit() async {
+    await initConfig();
     buildInfo();
-    languajeOption = Get.locale!.obs;
     super.onInit();
   }
 
@@ -92,7 +110,7 @@ class InitialPageController extends GetxController with AdMobService {
   void setInitialAndFinalWeekDays() {
     var week = showCurrenWeekInfo.weekNumber.toString();
     var days = '${Utils.dateToAbbreviateString(showCurrenWeekInfo.days.first)} to ${Utils.dateToAbbreviateString(showCurrenWeekInfo.days.last)}';
-    weekDaysFromTo.value = 'Week $week: $days';
+    weekDaysFromTo.value = '${"week".tr} $week: $days';
   }
 
   void createCompletedTasksPercentage() {
@@ -112,7 +130,7 @@ class InitialPageController extends GetxController with AdMobService {
       completedTasksPercent = ((completedTotalTasks / totalTasks) * 100).toInt();
     }
     // set message
-    totalTasks == 0 ? tasksPercentageCompleted.value = 'No tasks for this week' : tasksPercentageCompleted.value = '$completedTasksPercent% of completed tasks';
+    totalTasks == 0 ? tasksPercentageCompleted.value = 'No tasks for this week'.tr : tasksPercentageCompleted.value = '$completedTasksPercent% of completed tasks';
   }
 
   /// navegar para crear o editar
@@ -121,7 +139,7 @@ class InitialPageController extends GetxController with AdMobService {
       Map<String, String> data = {
         "taskId": taskKey.toString(),
       };
-      Get.toNamed(Routes.FORMS_PAGE, parameters: data);
+      Get.offAllNamed(Routes.FORMS_PAGE, parameters: data);
       //Get.delete<InitialPageController>();
       return;
     }
@@ -129,11 +147,11 @@ class InitialPageController extends GetxController with AdMobService {
       Map<String, String> data = {
         "date": date.toString(),
       };
-      Get.toNamed(Routes.FORMS_PAGE, parameters: data);
+      Get.offAllNamed(Routes.FORMS_PAGE, parameters: data);
       //Get.delete<InitialPageController>();
       return;
     }
-    Get.toNamed(Routes.FORMS_PAGE);
+    Get.offAllNamed(Routes.FORMS_PAGE);
     //Get.delete<InitialPageController>();
   }
 

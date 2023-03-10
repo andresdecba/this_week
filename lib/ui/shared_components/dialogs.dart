@@ -93,43 +93,26 @@ Future<T?> myCustomDialog<T>({
   );
 }
 
-////// GENERAL DIALOG //////
+////// CHANGE LANGUAGE //////
 Future<T?> changeLangDialog<T>({
   required BuildContext context,
   required String title,
   required Widget elements,
-  String? subtitle,
-  String? okTextButton,
-  String? cancelTextButton,
-  String? iconPath,
-  Color? iconColor,
 }) {
-
-  
-  //int ind = 1;
-  String lang = "english";
 
   return showDialog(
     context: context,
-    builder: (BuildContext context) {
+    builder: (BuildContext dialogContext) {
       return AlertDialog(
         alignment: Alignment.center,
         scrollable: true,
         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
-        //insetPadding: const EdgeInsets.all(5),
-        //iconPadding: const EdgeInsets.all(8),
-        //
         title: Align(
           alignment: Alignment.center,
           child: Text(title),
         ),
         titleTextStyle: kTitleLarge,
-        //titlePadding: const EdgeInsets.all(8),
-        //
-
-        /////////////
         content: elements,
-        
         actionsAlignment: MainAxisAlignment.center,
         actionsPadding: const EdgeInsets.only(bottom: 25),
       );

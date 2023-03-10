@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 
@@ -64,7 +65,7 @@ class _TaskCardState extends State<TaskCard> {
                       setState(() {});
                     },
                     child: Text(
-                      widget.task.status,
+                      setStatusLanguage(),
                       style: kLabelLarge.copyWith(color: setStatusColor()),
                     ),
                   ),
@@ -137,6 +138,19 @@ class _TaskCardState extends State<TaskCard> {
       }
     }
     return '$value of ${widget.task.subTasks.length}';
+  }
+
+  String setStatusLanguage() {
+    switch (widget.task.status) {
+      case 'Pending':
+        return 'pending'.tr;
+      case 'In progress':
+        return 'in progress'.tr;
+      case 'Done':
+        return 'done'.tr;
+      default:
+        return 'pending'.tr;
+    }
   }
 
   Color setStatusColor() {

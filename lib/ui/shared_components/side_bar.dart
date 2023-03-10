@@ -9,7 +9,7 @@ import 'package:todoapp/ui/shared_components/dialogs.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SideBar extends GetView<InitialPageController> {
-  SideBar({super.key});
+  const SideBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class SideBar extends GetView<InitialPageController> {
                 onTap: () {
                   controller.addWeeks = 0;
                   controller.buildInfo();
-                  Navigator.of(context).pop();
+                  controller.scaffoldKey.currentState!.closeEndDrawer();
                 },
               ),
               ListTile(
@@ -66,6 +66,7 @@ class SideBar extends GetView<InitialPageController> {
                   style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: bsubTitleTextColor),
                 ),
                 onTap: () {
+                  controller.scaffoldKey.currentState!.closeEndDrawer();
                   myCustomDialog(
                     context: context,
                     title: 'Delete Tasks',
@@ -77,18 +78,16 @@ class SideBar extends GetView<InitialPageController> {
                   );
                 },
               ),
-
-              ///////////////////
               ListTile(
                 visualDensity: VisualDensity.compact,
                 trailing: const Icon(Icons.language_rounded),
-                title: const Text('Languajes'),
+                title: const Text('Languages'),
                 subtitle: const Text(
-                  'Change current languaje',
+                  'Change current language',
                   style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: bsubTitleTextColor),
                 ),
                 onTap: () async {
-                  Navigator.of(context).pop();
+                  
                   await changeLangDialog(
                     context: context,
                     title: 'Idioma',
@@ -97,17 +96,14 @@ class SideBar extends GetView<InitialPageController> {
                         children: [
                           ...controller.langsCodes.map((e) {
                             var i = controller.langsCodes.indexOf(e);
-                            var isSelected = controller.languajeOption.value.languageCode == e.languageCode ? true : false;
                             return RadioListTile(
                               value: e,
-                              groupValue: controller.languajeOption.value,
-                              title: Text(controller.languajes[i]),
-                              selected: isSelected,
-                              toggleable: isSelected,
+                              groupValue: controller.currentLang.value,
+                              title: Text(controller.langs[i]),
                               onChanged: (ind) {
-                                controller.languajeOption.value = ind!;
-                                Get.updateLocale(e);
-                                Navigator.of(context).pop();
+                                controller.saveLocale(ind!);
+                                Navigator.of(context, rootNavigator: true).pop();
+                                controller.scaffoldKey.currentState!.closeEndDrawer();
                               },
                               //toggleable: true,
                             );
@@ -119,7 +115,6 @@ class SideBar extends GetView<InitialPageController> {
                 },
               ),
               const Divider(),
-              ///////////////////
 
               /// SOCIAL
               ListTile(
@@ -130,7 +125,10 @@ class SideBar extends GetView<InitialPageController> {
                   'Share with your friends',
                   style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: bsubTitleTextColor),
                 ),
-                onTap: () => shareApp(context),
+                onTap: () {
+                  controller.scaffoldKey.currentState!.closeEndDrawer();
+                  shareApp(context);
+                },
               ),
               ListTile(
                 visualDensity: VisualDensity.compact,
@@ -140,7 +138,10 @@ class SideBar extends GetView<InitialPageController> {
                   'Rate in PlayStore',
                   style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: bsubTitleTextColor),
                 ),
-                onTap: () => goToPlaystore(context),
+                onTap: () {
+                  controller.scaffoldKey.currentState!.closeEndDrawer();
+                  goToPlaystore(context);
+                },
               ),
 
               // LOGO
@@ -179,7 +180,6 @@ class SideBar extends GetView<InitialPageController> {
   void shareApp(BuildContext context) {
     String message = 'Hi ! check this app out: https://play.google.com/store/apps/details?id=com.calculadora.desigual';
     Share.share(message);
-    Navigator.of(context).pop();
   }
 
   Future<void> goToPlaystore(BuildContext context) async {
@@ -187,7 +187,6 @@ class SideBar extends GetView<InitialPageController> {
     if (!await launchUrl(url)) {
       throw Exception('Could not launch $url');
     }
-    Navigator.of(context).pop();
   }
 
   // List<Widget> elements( String value ){

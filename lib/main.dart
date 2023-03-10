@@ -25,7 +25,7 @@ Future<void> initHive() async {
   Hive.registerAdapter(TaskAdapter());
   await Hive.openBox<Task>('tasksBox');
   Hive.registerAdapter(MyAppConfigAdapter());
-  await Hive.openBox<MyAppConfig>('myAppConfig');
+  await Hive.openBox<MyAppConfig>('myAppConfigBox');
 }
 
 Future<void> initAdMob() async {
@@ -37,6 +37,20 @@ Future<void> initAdMob() async {
   MobileAds.instance.updateRequestConfiguration(requestConfiguration);
 }
 
+Future<void> initAppConfig() async {
+  // get box
+  Box<MyAppConfig> userPrefs = Boxes.getMyAppConfigBox();
+  // if config file doenst exists, creat it
+  if (!userPrefs.get('appConfig')!.isInBox) {
+    var value = MyAppConfig();
+    userPrefs.put('appConfig', value);
+  }
+  // set language
+  MyAppConfig config = userPrefs.get('appConfig')!;
+  print('Language setted: ${config.language}');
+  Get.locale = config.language == "" ? Get.deviceLocale : Locale(config.language!, '');
+}
+
 // //set timezone
 // setalgo() async {
 //   tz.initializeTimeZones();
@@ -45,16 +59,6 @@ Future<void> initAdMob() async {
 //       await FlutterNativeTimezone.getLocalTimezone(),
 //   ));
 // }
-
-Future<void> initLanguage() async {
-  //
-  Box<MyAppConfig> userPrefs = Boxes.getAppConfig();
-  MyAppConfig? prefs;
-  if (userPrefs.isNotEmpty) {
-    prefs = userPrefs.get('myAppConfig');
-  }
-  Get.locale = prefs != null ? Locale(prefs.language!, '') : Get.deviceLocale;
-}
 
 void main() async {
   // flutter
@@ -66,7 +70,7 @@ void main() async {
   // google ads
   await initAdMob();
   // language muust be init AFTER hive!
-  await initLanguage();
+  await initAppConfig();
   // run app
   return runApp(const MyApp());
 }
@@ -77,7 +81,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Material App',
+      title: 'Weekly tasks',
       initialBinding: InitialPageBinding(),
       getPages: AppPages.getPages,
       translations: TranslationService(),

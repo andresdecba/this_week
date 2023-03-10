@@ -13,6 +13,9 @@ class InitialPageA extends GetView<InitialPageController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //
+      key: controller.scaffoldKey,
+
       // ad
       bottomNavigationBar: Obx(
         () => controller.isAdLoaded.value
