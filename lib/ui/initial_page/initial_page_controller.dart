@@ -35,7 +35,7 @@ class InitialPageController extends GetxController with AdMobService {
 
   // CHANGE LANGUAGE DIALOG on drawer //
   List<Locale> langsCodes = [const Locale('en', ''), const Locale('es', ''), const Locale('pt', '')];
-  List<String> langs = ['English', 'Spanish', 'Portuguese'];
+  List<String> langs = ['English', 'Español', 'Português'];
   Rx<Locale> currentLang = (Get.locale!).obs;
   void saveLocale(Locale data) {
     currentLang.value = data;

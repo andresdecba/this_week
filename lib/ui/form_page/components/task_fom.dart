@@ -12,7 +12,7 @@ class TaskForm extends GetView<FormsPageController> {
       return Wrap(
         children: [
           Text(
-            'Task description',
+            'task description'.tr,
             style: kTitleLarge,
           ),
           const SizedBox(height: 40),
@@ -24,8 +24,8 @@ class TaskForm extends GetView<FormsPageController> {
               controller: controller.taskDescriptionCtrlr,
               decoration: customInputDecoration(
                 hasBorder: controller.isUpdateMode.value || controller.isNewMode.value,
-                label: 'Task description',
-                hintText: 'Add a task description between 7 and 200 characters.',
+                label: 'task description'.tr,
+                hintText: 'task description_description'.tr,
                 clearText: () {
                   controller.taskDescriptionCtrlr.clear();
                   controller.hasUserInteraction.value = false;
@@ -39,7 +39,7 @@ class TaskForm extends GetView<FormsPageController> {
               style: kTitleMedium,
               validator: (value) {
                 if (value != null && value.length < 7) {
-                  return 'Write at least 7 characters';
+                  return 'task description error'.tr;
                 } else {
                   return null;
                 }

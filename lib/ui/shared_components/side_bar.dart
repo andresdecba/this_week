@@ -28,13 +28,10 @@ class SideBar extends GetView<InitialPageController> {
               ListTile(
                 visualDensity: VisualDensity.compact,
                 trailing: const Icon(Icons.home_rounded),
-                title: Text(
-                  'week'.tr,
-                  style: TextStyle(),
-                ),
-                subtitle: const Text(
-                  'Go to current week',
-                  style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: bsubTitleTextColor),
+                title: Text('week'.tr),
+                subtitle: Text(
+                  'go to the current week'.tr,
+                  style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: bsubTitleTextColor),
                 ),
                 onTap: () {
                   controller.addWeeks = 0;
@@ -45,10 +42,10 @@ class SideBar extends GetView<InitialPageController> {
               ListTile(
                 visualDensity: VisualDensity.compact,
                 trailing: const Icon(Icons.add_rounded),
-                title: const Text('New task'),
-                subtitle: const Text(
-                  'Add a new Task for any day',
-                  style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: bsubTitleTextColor),
+                title: Text('new task_sidebar'.tr),
+                subtitle: Text(
+                  'add a new task for any day'.tr,
+                  style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: bsubTitleTextColor),
                 ),
                 onTap: () {
                   controller.navigate(date: DateTime.now());
@@ -60,20 +57,20 @@ class SideBar extends GetView<InitialPageController> {
               ListTile(
                 visualDensity: VisualDensity.compact,
                 trailing: const Icon(Icons.replay_rounded),
-                title: const Text('Reset App'),
-                subtitle: const Text(
-                  'Borrará todas las tareas',
-                  style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: bsubTitleTextColor),
+                title: Text('restore app'.tr),
+                subtitle: Text(
+                  'delete all tasks'.tr,
+                  style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: bsubTitleTextColor),
                 ),
                 onTap: () {
                   controller.scaffoldKey.currentState!.closeEndDrawer();
                   myCustomDialog(
                     context: context,
-                    title: 'Delete Tasks',
-                    subtitle: 'This action will delete all tasks from the app.',
+                    title: 'delete tasks'.tr,
+                    subtitle: 'this action will delete all...'.tr,
                     iconColor: warning,
                     iconPath: 'assets/warning.svg',
-                    okTextButton: 'Delete tasks',
+                    okTextButton: 'delete all'.tr,
                     onPressOk: () async => await simulateDataLoading(context),
                   );
                 },
@@ -81,16 +78,16 @@ class SideBar extends GetView<InitialPageController> {
               ListTile(
                 visualDensity: VisualDensity.compact,
                 trailing: const Icon(Icons.language_rounded),
-                title: const Text('Languages'),
-                subtitle: const Text(
-                  'Change current language',
-                  style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: bsubTitleTextColor),
+                title: Text('languages'.tr),
+                subtitle: Text(
+                  'change the current language'.tr,
+                  style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: bsubTitleTextColor),
                 ),
                 onTap: () async {
                   
                   await changeLangDialog(
                     context: context,
-                    title: 'Idioma',
+                    title: 'choose a language'.tr,
                     elements: Obx(
                       () => Column(
                         children: [
@@ -120,10 +117,10 @@ class SideBar extends GetView<InitialPageController> {
               ListTile(
                 visualDensity: VisualDensity.compact,
                 trailing: const Icon(Icons.share_rounded),
-                title: const Text('Share'),
-                subtitle: const Text(
-                  'Share with your friends',
-                  style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: bsubTitleTextColor),
+                title: Text('share'.tr),
+                subtitle: Text(
+                  'share this app with your friends'.tr,
+                  style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: bsubTitleTextColor),
                 ),
                 onTap: () {
                   controller.scaffoldKey.currentState!.closeEndDrawer();
@@ -133,10 +130,10 @@ class SideBar extends GetView<InitialPageController> {
               ListTile(
                 visualDensity: VisualDensity.compact,
                 trailing: const Icon(Icons.rate_review),
-                title: const Text('Rate'),
-                subtitle: const Text(
-                  'Rate in PlayStore',
-                  style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: bsubTitleTextColor),
+                title: Text('rate'.tr),
+                subtitle: Text(
+                  'rate us in playstore'.tr,
+                  style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: bsubTitleTextColor),
                 ),
                 onTap: () {
                   controller.scaffoldKey.currentState!.closeEndDrawer();
@@ -178,7 +175,7 @@ class SideBar extends GetView<InitialPageController> {
   }
 
   void shareApp(BuildContext context) {
-    String message = 'Hi ! check this app out: https://play.google.com/store/apps/details?id=com.calculadora.desigual';
+    String message = "hi! check this app out...".tr + '\nhttps://play.google.com/store/apps/details?id=com.calculadora.desigual';
     Share.share(message);
   }
 

@@ -11,20 +11,11 @@ class FormAppbar extends GetView<FormsPageController> implements PreferredSizeWi
   Widget build(BuildContext context) {
     return Obx(() {
       return AppBar(
-        // back
-        // leading: controller.isNewMode.value
-        //     ? IconButton(
-        //         onPressed: () => controller.navigate(context),
-        //         icon: const Icon(Icons.arrow_back),
-        //       )
-        //     : null,
-
         // title
         title: Text(taskState()),
 
         // create or update task
         actions: [
-
           controller.isViewMode.value
               ? Wrap(
                   children: [
@@ -53,16 +44,6 @@ class FormAppbar extends GetView<FormsPageController> implements PreferredSizeWi
                       onPressed: () => controller.cancelAndNavigate(context),
                       icon: const Icon(Icons.home),
                     ),
-
-          // controller.isUpdateMode.value || controller.isNewMode.value
-          //     ? IconButton(
-          //         onPressed: () => controller.saveOrUpdateTask(context),
-          //         icon: const Icon(Icons.check_rounded),
-          //       )
-          //     : IconButton(
-          //         onPressed: () => controller.deleteTask(context),
-          //         icon: const Icon(Icons.delete_forever, color: text_bg),
-          //       ),
         ],
       );
     });
@@ -70,18 +51,17 @@ class FormAppbar extends GetView<FormsPageController> implements PreferredSizeWi
 
   String taskState() {
     if (controller.currentPageMode.value == PageMode.UPDATE_MODE) {
-      return 'Update task ${Utils.parseDateTimeToShortFormat(controller.getTask.taskDate)}';
+      return '${'update task'.tr} ${Utils.parseDateTimeToShortFormat(controller.getTask.taskDate)}';
     }
     if (controller.currentPageMode.value == PageMode.VIEW_MODE) {
-      return 'Task ${Utils.parseDateTimeToShortFormat(controller.getTask.taskDate)}';
+      return  '${'task'.tr} ${Utils.parseDateTimeToShortFormat(controller.getTask.taskDate)}';
     }
-    return 'New task ${Utils.parseDateTimeToShortFormat(controller.getTask.taskDate)}';
+    return '${'new task_formPage'.tr} ${Utils.parseDateTimeToShortFormat(controller.getTask.taskDate)}';
   }
-  
-
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+
   /// default value: [kToolbarHeight]
 }
 

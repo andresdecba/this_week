@@ -1,3 +1,4 @@
+// ignore: constant_identifier_names
 const Map<String, String> pt_BR = {
     //header
   'week': 'Semana',
@@ -34,11 +35,13 @@ const Map<String, String> pt_BR = {
   'task description': 'Descrição da tarefa',
   'task description_description': 'Obrigatório: adicione uma descrição da tarefa entre 7 e 200 caracteres.',
   'todo list': 'Lista de subtarefas',
-  'todo list_description': 'Opcional: adicione uma lista de subtarefas.',
+  'Write at least 7 characters' : 'Escreva pelo menos 7 caracteres',
+  'here you can add a sub task list': 'Opcional: adicione uma lista de subtarefas.',
   'create subtask': 'Criar subtarefa',
   'create subtask_description': 'Adicione uma descrição entre 7 e 100 caracteres.',
   'task': 'Tarefa',
   'update task': 'Editar tarefa',
+  'update subtask' : 'Editar subtarefa',
 
   // alerts
   'delete task ?': 'Excluir tarefa ?',
@@ -46,6 +49,8 @@ const Map<String, String> pt_BR = {
   'delete tasks': 'Excluir tarefas',
   'this action will delete all...': 'Esta ação excluirá todas as tarefas permanentemente.',
   'choose a language': 'Escolha um idioma',
+  'atention !' : 'Atenção !',
+  'You cant create a...' : "Você não pode criar uma notificação até agora.",
 
   // snackbars
   'task deleted': 'Tarefa excluída.',
@@ -57,5 +62,6 @@ const Map<String, String> pt_BR = {
   'cancel': 'Cancelar',
   'create': 'Criar',
   'delete': 'Excluir',
-  'delete all': 'Excluir tudo'
+  'delete all': 'Excluir tudo',
+  'update': 'Atualizar',
 };

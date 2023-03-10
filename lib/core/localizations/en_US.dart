@@ -1,3 +1,4 @@
+// ignore: constant_identifier_names
 const Map<String, String> en_US = {
   //header
   'week': 'Week',
@@ -33,12 +34,14 @@ const Map<String, String> en_US = {
   'select time': 'Select time',
   'task description': 'Task description',
   'task description_description': 'Required: add a task description between 7 and 200 characters.',
+  'Write at least 7 characters' : 'Write at least 7 characters',
   'todo list': 'Todo list',
-  'todo list_description': 'Optional: add a subtasks list',
+  'here you can add a sub task list': 'Optional: add a subtasks list',
   'create subtask': 'Create a subtask',
   'create subtask_description': 'Add a subtask description betwwen 7 and 100 characters.',
   'task': 'Task',
   'update task': 'Update task',
+  'update subtask' : 'Update subtask',
 
   // alerts
   'delete task ?': 'Delete task ?',
@@ -46,6 +49,8 @@ const Map<String, String> en_US = {
   'delete tasks': 'Delete tasks',
   'this action will delete all...': 'This action will delete all tasks permanently.',
   'choose a language': 'Choose a language',
+  'atention !' : 'Atention !',
+  'You cant create a...' : "You can't create a notification before now.",
 
   // snackbars
   'task deleted': 'Task deleted.',
@@ -57,5 +62,6 @@ const Map<String, String> en_US = {
   'cancel': 'Cancel',
   'create': 'Create',
   'delete': 'Delete',
-  'delete all': 'Delete all'
+  'delete all': 'Delete all',
+  'update': 'Update',
 };

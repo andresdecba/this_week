@@ -17,7 +17,7 @@ class TodoList extends GetView<FormsPageController> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Todo list',
+              'todo list'.tr,
               style: kTitleLarge,
             ),
             IconButton(
@@ -25,10 +25,10 @@ class TodoList extends GetView<FormsPageController> {
                 FocusScope.of(context).unfocus(); // hide keyboard if open
                 createSubtaskDialog(
                   context: context,
-                  title: 'Create a new subtask',
+                  title: 'create subtask'.tr,
                   content: subtaskForm(),
-                  cancelTextButton: 'Cancel',
-                  okTextButton: 'Create',
+                  cancelTextButton: 'cancel'.tr,
+                  okTextButton: 'create'.tr,
                   onPressOk: () => controller.createSubtask(),
                 );
               },
@@ -52,7 +52,7 @@ class TodoList extends GetView<FormsPageController> {
                   alignment: Alignment.centerLeft,
                   padding: const EdgeInsets.all(16),
                   child: Text(
-                    'Here you can add a sub tasks list',
+                    'here you can add a sub task list'.tr,
                     style: kTitleSmall.copyWith(color: disabled_grey, fontStyle: FontStyle.italic),
                   ),
                 )
@@ -101,10 +101,10 @@ class TodoList extends GetView<FormsPageController> {
                               FocusScope.of(context).unfocus(); // hide keyboard if open
                               createSubtaskDialog(
                                 context: context,
-                                title: 'Update subtask',
+                                title: 'update subtask'.tr,
                                 content: subtaskForm(),
-                                cancelTextButton: 'Cancel',
-                                okTextButton: 'Update',
+                                cancelTextButton: 'cancel'.tr,
+                                okTextButton: 'update'.tr,
                                 onPressOk: () => controller.updateTextSubtask(i),
                               );
                             },
@@ -141,7 +141,7 @@ class TodoList extends GetView<FormsPageController> {
         maxLines: 4,
         decoration: customInputDecoration(
           label: 'Subtarea',
-          hintText: 'Ingresar descripcion de la subtarea',
+          hintText: 'create subtask_description'.tr,
           clearText: () => controller.subTaskTitleCtrlr.clear(),
           isEnabled: true,
           hasBorder: true,

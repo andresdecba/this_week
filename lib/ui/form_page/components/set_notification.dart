@@ -12,7 +12,7 @@ class SetNotificationDatetime extends GetView<FormsPageController> {
       return Wrap(children: [
         /// title ///
         Text(
-          'Notify',
+          'notify me:'.tr,
           style: kTitleLarge,
         ),
         Row(

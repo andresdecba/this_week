@@ -27,7 +27,9 @@ void showSnackBar({
     ),
     messageText: Text(
       messageText,
-      style: kBodyMedium,
+      style: kBodyMedium.copyWith(fontStyle: FontStyle.italic),
+      maxLines: 2,
+      overflow: TextOverflow.ellipsis,
     ),
     icon: const Icon(
       Icons.info,

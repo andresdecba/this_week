@@ -36,20 +36,6 @@ class FormPageA extends GetView<FormsPageController> {
                 onPressed: controller.hasUserInteraction.value ? () => controller.saveOrUpdateTask(context) : null,
                 child: const Icon(Icons.check_rounded),
               ),
-
-              // child: Obx(
-              //   () => FloatingActionButton(
-              //     onPressed: () {
-              //       controller.floatingActionButtonChangeMode();
-              //       controller.enableDisableNotificationStyles();
-              //     },
-              //     backgroundColor: controller.isViewMode.value ? yellow_primary : blue_primary,
-              //     child: Icon(
-              //       controller.isViewMode.value ? Icons.mode_edit_rounded : Icons.edit_off_rounded,
-              //       color: text_bg,
-              //     ),
-              //   ),
-              // ),
             ),
           ),
 

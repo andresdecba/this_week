@@ -227,8 +227,8 @@ class FormsPageController extends GetxController {
       notificationTime = TimeOfDay(hour: _task.value.notificationTime!.hour, minute: _task.value.notificationTime!.minute);
     }
 
-    const String noDateTxt = 'No notifications';
-    final String dateTxt = 'Notify me at ${notificationTime.hour}:${notificationTime.minute} hs.';
+    String noDateTxt = 'schedule a notification'.tr;
+    final String dateTxt = '${'notify me at:'.tr} ${notificationTime.hour}:${notificationTime.minute} hs.';
 
     if (isViewMode.value && !enableNotificationIcon.value) {
       notificationColor.value = disabled_grey;
@@ -286,19 +286,20 @@ class FormsPageController extends GetxController {
   void deleteTask(BuildContext context) {
     myCustomDialog(
       context: context,
-      title: 'Delete task ?',
-      subtitle: 'This action will delete the task permanently',
-      cancelTextButton: 'Cancel',
-      okTextButton: 'Delete',
+      title: 'delete task ?'.tr,
+      subtitle: 'this action will delete...'.tr,
+      cancelTextButton: 'cancel'.tr,
+      okTextButton: 'delete'.tr,
       iconPath: 'assets/warning.svg',
       iconColor: warning,
       onPressOk: () {
+        String tmp = _task.value.description;
         _task.value.delete();
         Get.find<InitialPageController>().buildInfo();
         Get.offAllNamed(Routes.INITIAL_PAGE);
         showSnackBar(
-          titleText: 'Task removed',
-          messageText: 'To 20-03-2023',
+          titleText: 'task deleted'.tr,
+          messageText: tmp,
         );
       },
     );
@@ -315,9 +316,9 @@ class FormsPageController extends GetxController {
     if (_task.value.notificationTime!.isBefore(DateTime.now())) {
       myCustomDialog(
         context: context,
-        title: 'Atention !',
-        subtitle: "You can't create a notification before now.",
-        okTextButton: 'Ok',
+        title: 'atention !'.tr,
+        subtitle: 'You cant create a...'.tr,
+        okTextButton: 'ok'.tr,
         iconPath: 'assets/info.svg',
         iconColor: blue_primary,
         onPressOk: () => Navigator.of(context).pop(),
@@ -336,8 +337,8 @@ class FormsPageController extends GetxController {
       setPageModesHelper();
       enableDisableNotificationStyles();
       showSnackBar(
-        titleText: 'Task updated',
-        messageText: '20-03-2023',
+        titleText: 'task updated'.tr,
+        messageText: _task.value.description,
       );
     }
     if (isNewMode.value) {
@@ -347,8 +348,8 @@ class FormsPageController extends GetxController {
       _initialPageController.buildInfo();
       Get.offAllNamed(Routes.INITIAL_PAGE);
       showSnackBar(
-        titleText: 'New task created',
-        messageText: '20-03-2023',
+        titleText: 'new task created'.tr,
+        messageText: _task.value.description,
       );
     }
   }
