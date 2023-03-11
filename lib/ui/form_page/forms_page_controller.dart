@@ -239,7 +239,7 @@ class FormsPageController extends GetxController {
     }
 
     String noDateTxt = 'schedule a notification'.tr;
-    final String dateTxt = '${'notify me at:'.tr} ${setNotificationTime.hour}:${setNotificationTime.minute} hs.';
+    final String dateTxt = '${'notify me at:'.tr} ${setNotificationTime.to24hours()}';
 
     if (isViewMode.value && !enableNotificationIcon.value) {
       notificationColor.value = disabled_grey;
@@ -361,11 +361,3 @@ class FormsPageController extends GetxController {
     }
   }
 }
-
-/*
-hay notif programada:
-    si: validar
-        es anterior: mostrar modal
-        es posterior: guardar
-    no: guardar
-*/

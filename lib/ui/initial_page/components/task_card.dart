@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/ui/commons/styles.dart';
+import 'package:todoapp/utils/helpers.dart';
 
 class TaskCard extends StatefulWidget {
   const TaskCard({
@@ -85,7 +86,7 @@ class _TaskCardState extends State<TaskCard> {
                           ),
                           const SizedBox(width: 12),
                           Text(
-                            widget.task.notificationTime != null ? '${widget.task.notificationTime!.hour}:${widget.task.notificationTime!.minute}' : '-- : --',
+                            widget.task.notificationTime != null ? timeFormater(widget.task.notificationTime!) : '-- : --', // TODO
                             style: kLabelMedium.copyWith(color: widget.task.notificationTime != null ? enabled_grey : disabled_grey),
                           ),
                         ],
