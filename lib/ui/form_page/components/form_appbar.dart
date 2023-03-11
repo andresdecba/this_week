@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/form_page/forms_page_controller.dart';
-import 'package:todoapp/utils/utils.dart';
+import 'package:todoapp/utils/helpers.dart';
 
 class FormAppbar extends GetView<FormsPageController> implements PreferredSizeWidget {
   const FormAppbar({Key? key}) : super(key: key);
@@ -12,7 +12,10 @@ class FormAppbar extends GetView<FormsPageController> implements PreferredSizeWi
     return Obx(() {
       return AppBar(
         // title
-        title: Text(taskState()),
+        title: Text(
+          taskState(),
+          style: kTitleLarge,
+        ),
 
         // create or update task
         actions: [
@@ -51,12 +54,12 @@ class FormAppbar extends GetView<FormsPageController> implements PreferredSizeWi
 
   String taskState() {
     if (controller.currentPageMode.value == PageMode.UPDATE_MODE) {
-      return '${'update task'.tr} ${Utils.parseDateTimeToShortFormat(controller.getTask.taskDate)}';
+      return 'update task'.tr;
     }
     if (controller.currentPageMode.value == PageMode.VIEW_MODE) {
-      return  '${'task'.tr} ${Utils.parseDateTimeToShortFormat(controller.getTask.taskDate)}';
+      return 'view task'.tr;
     }
-    return '${'new task_formPage'.tr} ${Utils.parseDateTimeToShortFormat(controller.getTask.taskDate)}';
+    return 'new task_formPage'.tr;
   }
 
   @override
@@ -64,32 +67,3 @@ class FormAppbar extends GetView<FormsPageController> implements PreferredSizeWi
 
   /// default value: [kToolbarHeight]
 }
-
-// AppBar formAppbard(FormsPageController controller, BuildContext context) {
-//   return AppBar(
-//     // back
-//     leading: IconButton(
-//       onPressed: () => controller.onWillPop(context),
-//       icon: const Icon(Icons.arrow_back),
-//     ),
-
-//     // title
-//     title: Text(
-//       controller.isTaskUpdate ? 'Update task ${Utils.parseDateTimeToShortFormat(controller.getTask.dateTime)}' : 'New task ${Utils.parseDateTimeToShortFormat(controller.getTask.dateTime)}',
-//     ),
-//     centerTitle: true,
-
-//     // create or update task
-//     actions: [
-//       controller.isTaskUpdate
-//           ? IconButton(
-//               onPressed: () => controller.isEditionEnabled.value = !controller.isEditionEnabled.value,
-//               icon: const Icon(Icons.edit),
-//             )
-//           : IconButton(
-//               onPressed: controller.isEditionEnabled.value ? () => controller.saveAndNavigate() : null,
-//               icon: const Icon(Icons.done_rounded),
-//             ),
-//     ],
-//   );
-// }

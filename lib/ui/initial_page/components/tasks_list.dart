@@ -5,6 +5,7 @@ import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/ui/initial_page/components/task_card.dart';
+import 'package:todoapp/utils/helpers.dart';
 
 class TasksList extends GetView<InitialPageController> {
   const TasksList({Key? key}) : super(key: key);
@@ -37,11 +38,11 @@ class TasksList extends GetView<InitialPageController> {
                     children: [
                       RichText(
                         text: TextSpan(
-                          text: '> ${DateFormat('EEEE').format(currentDate)}',
+                          text: '> ${weekdayOnlyFormater(currentDate)}', //TODO longDateHelper(currentDate)
                           style: kTitleMedium.copyWith(color: isDateEnabled ? text_bg : disabled_grey),
                           children: <TextSpan>[
                             TextSpan(
-                              text: '   ${DateFormat('MM-dd-yy').format(currentDate)}',
+                              text: '   ${standardDateFormater(currentDate)}',
                               style: kBodySmall.copyWith(
                                 fontStyle: FontStyle.italic,
                                 color: isDateEnabled ? text_bg : disabled_grey,

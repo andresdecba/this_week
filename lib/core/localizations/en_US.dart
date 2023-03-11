@@ -29,7 +29,7 @@ const Map<String, String> en_US = {
 
   // form page
   'new task_formPage': 'New task',
-  'notify me:': 'Notify me',
+  'notify me:': 'Notification and date',
   'schedule a notification': 'Optional: schedule a notification.',
   'notify me at:': 'Notify me at:',
   'select time': 'Select time',
@@ -40,7 +40,7 @@ const Map<String, String> en_US = {
   'here you can add a sub task list': 'Optional: add a subtasks list',
   'create subtask': 'Create a subtask',
   'create subtask_description': 'Add a subtask description betwwen 7 and 100 characters.',
-  'task': 'Task',
+  'view task': 'View task',
   'update task': 'Update task',
   'update subtask' : 'Update subtask',
 
@@ -57,7 +57,7 @@ const Map<String, String> en_US = {
   'task deleted': 'Task deleted.',
   'task updated': 'Task updated.',
   'new task created': 'New task created.',
-  'you will need to restart the app...': 'You will to need restart the app to apply the changes.',
+  'you will need to restart the app...': 'You will need to restart the app in order to apply the changes.',
 
   // UI elements texts
   'ok': 'Ok',

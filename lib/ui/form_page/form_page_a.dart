@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/form_page/components/form_appbar.dart';
-import 'package:todoapp/ui/form_page/components/set_notification.dart';
+import 'package:todoapp/ui/form_page/components/notification_and_date_picker.dart';
 import 'package:todoapp/ui/form_page/components/task_fom.dart';
 import 'package:todoapp/ui/form_page/components/todo_list.dart';
 import 'package:todoapp/ui/form_page/forms_page_controller.dart';
@@ -48,8 +48,8 @@ class FormPageA extends GetView<FormsPageController> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: const [
                 // notification
-                SetNotificationDatetime(),
-                Divider(height: 50),
+                NotificationAndDatePicker(),
+                 Divider(height: 50),
 
                 // textfield
                 TaskForm(),

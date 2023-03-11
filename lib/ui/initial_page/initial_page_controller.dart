@@ -8,7 +8,7 @@ import 'package:todoapp/data_source/db_data_source.dart';
 import 'package:todoapp/models/my_app_config.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/services/ad_mob_service.dart';
-import 'package:todoapp/utils/utils.dart';
+import 'package:todoapp/utils/helpers.dart';
 
 class InitialPageController extends GetxController with AdMobService {
   // box de tasks
@@ -101,13 +101,13 @@ class InitialPageController extends GetxController with AdMobService {
     setInitialAndFinalWeekDays();
     createCompletedTasksPercentage();
     buildWeek.refresh();
-    print('Task_list: $buildWeek');
   }
 
   /// create head info
   void setInitialAndFinalWeekDays() {
     var week = showCurrenWeekInfo.weekNumber.toString();
-    var days = '${Utils.dateToAbbreviateString(showCurrenWeekInfo.days.first)} ${'to'.tr} ${Utils.dateToAbbreviateString(showCurrenWeekInfo.days.last)}';
+    var days = '${dayAndMonthFormater(showCurrenWeekInfo.days.first)} ${'to'.tr} ${dayAndMonthFormater(showCurrenWeekInfo.days.last)}';
+    //var days = '${Utils.dateToAbbreviateString(showCurrenWeekInfo.days.first)} ${'to'.tr} ${Utils.dateToAbbreviateString(showCurrenWeekInfo.days.last)}';
     weekDaysFromTo.value = '${'week'.tr} $week: $days';
   }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:todoapp/core/bindings/initial_page_week_binding.dart';
 import 'package:todoapp/core/localizations/translations.dart';
 import 'package:todoapp/core/routes/routes.dart';
@@ -11,9 +12,6 @@ import 'package:todoapp/models/my_app_config.dart';
 import 'package:todoapp/services/local_notifications_service.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/initial_page/initial_page_a.dart';
-// import 'package:flutter_native_timezone/flutter_native_timezone.dart'; //get the local timezone of the os
-// import 'package:timezone/data/latest_all.dart' as tz;
-// import 'package:timezone/timezone.dart' as tz;
 // ignore: depend_on_referenced_packages
 import 'package:flutter_localizations/flutter_localizations.dart'; // <-- NOOO BORRAR aunuqe salga que no se usa x sí se usa
 
@@ -38,26 +36,18 @@ Future<void> initAdMob() async {
 }
 
 Future<void> initAppConfig() async {
-  // get box
+  // get the box
   Box<MyAppConfig> userPrefs = Boxes.getMyAppConfigBox();
   // if config file doenst exists, creat it
   if (userPrefs.get('appConfig') == null) {
     var value = MyAppConfig();
     userPrefs.put('appConfig', value);
   }
-  // set language
+  // set language whether it is stored or not
   MyAppConfig config = userPrefs.get('appConfig')!;
   Get.locale = config.language == null ? Get.deviceLocale : Locale(config.language!, '');
+  Intl.defaultLocale = Get.locale!.languageCode;
 }
-
-// //set timezone
-// setalgo() async {
-//   tz.initializeTimeZones();
-//   tz.setLocalLocation(
-//     tz.getLocation(
-//       await FlutterNativeTimezone.getLocalTimezone(),
-//   ));
-// }
 
 void main() async {
   // flutter
@@ -71,11 +61,21 @@ void main() async {
   // language muust be init AFTER hive!
   await initAppConfig();
   // run app
-  return runApp(const MyApp());
+  runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -85,7 +85,7 @@ class MyApp extends StatelessWidget {
       getPages: AppPages.getPages,
       translations: TranslationService(),
       locale: Get.locale,
-      fallbackLocale: const Locale('en', ''),
+      fallbackLocale: const Locale('en'),
       supportedLocales: const [
         Locale('en', ''), // English, no country code
         Locale('es', ''), // Spanish, no country code
@@ -94,8 +94,9 @@ class MyApp extends StatelessWidget {
       localizationsDelegates: const [
         //AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        //DefaultWidgetsLocalizations.delegate,
       ],
       theme: ThemeData(
         //iconTheme: IconThemeData(color: black_bg),

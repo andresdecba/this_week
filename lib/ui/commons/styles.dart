@@ -29,7 +29,7 @@ final kTitleSmall = Theme.of(Get.context!).textTheme.titleSmall!;
 // bodies
 final kBodySmall = Theme.of(Get.context!).textTheme.bodySmall!;
 final kBodyMedium = Theme.of(Get.context!).textTheme.bodyMedium!;
-final kBodyLarge = Theme.of(Get.context!).textTheme.bodyText1!;
+final kBodyLarge = Theme.of(Get.context!).textTheme.bodyLarge!;
 // labels
 final kLabelMedium = Theme.of(Get.context!).textTheme.labelMedium!;
 final kLabelLarge = Theme.of(Get.context!).textTheme.labelLarge!;

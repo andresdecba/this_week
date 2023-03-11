@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:intl/intl.dart';
 import 'package:todoapp/ui/initial_page/components/header.dart';
 import 'package:todoapp/ui/initial_page/components/tasks_list.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
@@ -10,8 +11,12 @@ import 'package:todoapp/ui/shared_components/side_bar.dart';
 class InitialPageA extends GetView<InitialPageController> {
   const InitialPageA({Key? key}) : super(key: key);
 
+  
+
   @override
   Widget build(BuildContext context) {
+
+    var date = DateTime.now().subtract(Duration(days: 2));
     return Scaffold(
       //
       key: controller.scaffoldKey,

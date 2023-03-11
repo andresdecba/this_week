@@ -40,7 +40,7 @@ const Map<String, String> es_AR = {
   'here you can add a sub task list': 'Opcional: Agrega una lista de subtareas.',
   'create subtask': 'Crear subtarea',
   'create subtask_description': 'Agrega una descripción de entre 7 y 100 caracteres.',
-  'task': 'Tarea',
+  'view task': 'Ver tarea',
   'update task': 'Editar tarea',
   'update subtask' : 'Editar subtask',
 

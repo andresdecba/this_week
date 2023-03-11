@@ -40,7 +40,7 @@ const Map<String, String> pt_BR = {
   'here you can add a sub task list': 'Opcional: adicione uma lista de subtarefas.',
   'create subtask': 'Criar subtarefa',
   'create subtask_description': 'Adicione uma descrição entre 7 e 100 caracteres.',
-  'task': 'Tarefa',
+  'view task': 'Tarefa',
   'update task': 'Editar tarefa',
   'update subtask' : 'Editar subtarefa',
 

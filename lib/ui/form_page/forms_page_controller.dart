@@ -8,7 +8,7 @@ import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/ui/shared_components/dialogs.dart';
 import 'package:todoapp/ui/shared_components/snackbar.dart';
-import 'package:todoapp/utils/utils.dart';
+import 'package:todoapp/utils/helpers.dart';
 
 enum PageMode { VIEW_MODE, UPDATE_MODE, NEW_MODE }
 
@@ -48,6 +48,7 @@ class FormsPageController extends GetxController {
     if (Get.parameters['taskId'] != null) {
       _task.value = tasksBox.get(int.parse(Get.parameters['taskId']!))!;
       taskDescriptionCtrlr.text = _task.value.description;
+      taskDate = _task.value.taskDate.obs;
       currentPageMode.value = PageMode.VIEW_MODE;
       return;
     }
@@ -55,6 +56,7 @@ class FormsPageController extends GetxController {
     if (Get.parameters['date'] != null) {
       var arguments = DateTime.parse(Get.parameters['date']!);
       _task.value.taskDate = arguments;
+      taskDate = _task.value.taskDate.obs;
       currentPageMode.value = PageMode.NEW_MODE;
       return;
     }
@@ -181,12 +183,12 @@ class FormsPageController extends GetxController {
         _task.value.taskDate.year,
         _task.value.taskDate.month,
         _task.value.taskDate.day,
-        notificationTime.hour,
-        notificationTime.minute,
+        setNotificationTime.hour,
+        setNotificationTime.minute,
       );
       LocalNotificationService.showtNotificationScheduled(
         time: data,
-        id: Utils.createNotificationId(),
+        id: createNotificationId(),
         body: _task.value.description,
         payload: '/formularios_page',
         fln: localNotifications,
@@ -212,9 +214,18 @@ class FormsPageController extends GetxController {
     Get.offAllNamed(Routes.INITIAL_PAGE);
   }
 
+  ////// manage DATE CHANGE //////
+  late Rx<DateTime> taskDate;
+  //RxBool hasDateChangeda = false.obs;
+
+  void saveNewDate() {
+    _task.value.taskDate = taskDate.value;
+    //hasDateChanged.value = true;
+  }
+
   ////// manage ICON & TEXT NOTIFICATION //////
 
-  TimeOfDay notificationTime = TimeOfDay.now();
+  TimeOfDay setNotificationTime = TimeOfDay.now();
   RxBool enableNotificationIcon = false.obs;
 
   Rx<Icon> notificationIcon = const Icon(Icons.notifications_off_rounded).obs;
@@ -224,11 +235,11 @@ class FormsPageController extends GetxController {
   void enableDisableNotificationStyles() {
     if (isViewMode.value && _task.value.notificationTime != null) {
       enableNotificationIcon.value = true;
-      notificationTime = TimeOfDay(hour: _task.value.notificationTime!.hour, minute: _task.value.notificationTime!.minute);
+      setNotificationTime = TimeOfDay(hour: _task.value.notificationTime!.hour, minute: _task.value.notificationTime!.minute);
     }
 
     String noDateTxt = 'schedule a notification'.tr;
-    final String dateTxt = '${'notify me at:'.tr} ${notificationTime.hour}:${notificationTime.minute} hs.';
+    final String dateTxt = '${'notify me at:'.tr} ${setNotificationTime.hour}:${setNotificationTime.minute} hs.';
 
     if (isViewMode.value && !enableNotificationIcon.value) {
       notificationColor.value = disabled_grey;
@@ -242,23 +253,23 @@ class FormsPageController extends GetxController {
     }
 
     if (isNewMode.value && !enableNotificationIcon.value) {
-      notificationColor.value = blue_primary;
+      notificationColor.value = black_bg;
       notificationIcon.value = const Icon(Icons.notifications_off_rounded);
       notificationText.value = Text(noDateTxt, style: noDateTxtStyle);
     }
     if (isNewMode.value && enableNotificationIcon.value) {
-      notificationColor.value = blue_primary;
+      notificationColor.value = black_bg;
       notificationIcon.value = const Icon(Icons.notifications_active_rounded);
       notificationText.value = Text(dateTxt, style: newDateTxtStyle);
     }
 
     if (isUpdateMode.value && !enableNotificationIcon.value) {
-      notificationColor.value = blue_primary;
+      notificationColor.value = black_bg;
       notificationIcon.value = const Icon(Icons.notifications_off_rounded);
       notificationText.value = Text(noDateTxt, style: noDateTxtStyle);
     }
     if (isUpdateMode.value && enableNotificationIcon.value) {
-      notificationColor.value = blue_primary;
+      notificationColor.value = black_bg;
       notificationIcon.value = const Icon(Icons.notifications_active_rounded);
       notificationText.value = Text(dateTxt, style: newDateTxtStyle);
     }
@@ -270,14 +281,10 @@ class FormsPageController extends GetxController {
             _task.value.taskDate.year,
             _task.value.taskDate.month,
             _task.value.taskDate.day,
-            notificationTime.hour,
-            notificationTime.minute,
+            setNotificationTime.hour,
+            setNotificationTime.minute,
           )
         : _task.value.notificationTime = null;
-
-    // print('from bool ${enableNotificationIcon.value}');
-    // print('from task ${_task.value.notificationTime}');
-    // print('from var $notificationTime');
   }
 
   ////// manage SAVE //////
