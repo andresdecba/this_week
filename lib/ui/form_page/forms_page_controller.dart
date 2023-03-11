@@ -179,15 +179,8 @@ class FormsPageController extends GetxController {
 
   void createNotification() {
     if (enableNotificationIcon.value) {
-      var data = DateTime(
-        _task.value.taskDate.year,
-        _task.value.taskDate.month,
-        _task.value.taskDate.day,
-        setNotificationTime.hour,
-        setNotificationTime.minute,
-      );
       LocalNotificationService.showtNotificationScheduled(
-        time: data,
+        time: _task.value.notificationTime!,
         id: createNotificationId(),
         body: _task.value.description,
         payload: '/formularios_page',
@@ -195,23 +188,6 @@ class FormsPageController extends GetxController {
       );
     }
     return;
-  }
-
-  ////// manage NAVIGATION //////
-  Future<bool> onWillPop(BuildContext context) async {
-    if (isNewMode.value) {
-      cancelAndNavigate(context);
-      return true;
-    } else if (isViewMode.value) {
-      cancelAndNavigate(context);
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  void cancelAndNavigate(BuildContext context) {
-    Get.offAllNamed(Routes.INITIAL_PAGE);
   }
 
   ////// manage DATE CHANGE //////
@@ -359,5 +335,24 @@ class FormsPageController extends GetxController {
         messageText: _task.value.description,
       );
     }
+  }
+
+  ////// manage NAVIGATION //////
+  Future<bool> onWillPop(BuildContext context) async {
+    if (isNewMode.value) {
+      cancelAndNavigate(context);
+      return true;
+    } else if (isViewMode.value) {
+      cancelAndNavigate(context);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  void cancelAndNavigate(BuildContext context) {
+    ////////// TODO TODO TODO
+    _initialPageController.buildInfo();
+    Get.offAllNamed(Routes.INITIAL_PAGE);
   }
 }

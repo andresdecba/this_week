@@ -12,6 +12,10 @@ import 'package:todoapp/models/my_app_config.dart';
 import 'package:todoapp/services/local_notifications_service.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/initial_page/initial_page_a.dart';
+// needed for notifications
+import 'package:flutter_native_timezone/flutter_native_timezone.dart'; //get the local timezone of the os
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 // ignore: depend_on_referenced_packages
 import 'package:flutter_localizations/flutter_localizations.dart'; // <-- NOOO BORRAR aunuqe salga que no se usa x sí se usa
 
@@ -49,6 +53,14 @@ Future<void> initAppConfig() async {
   Intl.defaultLocale = Get.locale!.languageCode;
 }
 
+//set timezone
+Future<void> initTimeZones() async {
+  tz.initializeTimeZones();
+  tz.setLocalLocation(tz.getLocation(
+    await FlutterNativeTimezone.getLocalTimezone(),
+  ));
+}
+
 void main() async {
   // flutter
   WidgetsFlutterBinding.ensureInitialized();
@@ -60,6 +72,8 @@ void main() async {
   await initAdMob();
   // language muust be init AFTER hive!
   await initAppConfig();
+  // needed for local notifications
+  await initTimeZones();
   // run app
   runApp(const MyApp());
 }

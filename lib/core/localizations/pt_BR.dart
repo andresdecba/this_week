@@ -51,7 +51,7 @@ const Map<String, String> pt_BR = {
   'this action will delete all...': 'Esta ação excluirá todas as tarefas permanentemente.',
   'choose a language': 'Escolha um idioma',
   'atention !' : 'Atenção !',
-  'You cant create a...' : "Você não pode criar uma notificação até agora.",
+  'You cant create a...' : "Você não pode criar uma notificação antes de HOJE e AGORA.",
 
   // snackbars
   'task deleted': 'Tarefa excluída.',

@@ -51,7 +51,7 @@ const Map<String, String> en_US = {
   'this action will delete all...': 'This action will delete all tasks permanently.',
   'choose a language': 'Choose a language',
   'atention !' : 'Atention !',
-  'You cant create a...' : "You can't create a notification before now.",
+  'You cant create a...' : "You can't create a notification before TODAY and NOW.",
 
   // snackbars
   'task deleted': 'Task deleted.',

@@ -51,7 +51,7 @@ const Map<String, String> es_AR = {
   'this action will delete all...': 'Esta acción borrará todas las tareas de forma permanente',
   'choose a language': 'Escoge un idioma',
   'atention !' : 'Atención !',
-  'You cant create a...' : "No puedes crear una notificación antes de ahora.",
+  'You cant create a...' : "No puedes crear una notificación antes de HOY y AHORA.",
 
   // snackbars
   'task deleted': 'Tarea borrada',

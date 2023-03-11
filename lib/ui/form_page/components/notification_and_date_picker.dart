@@ -57,7 +57,11 @@ class NotificationAndDatePicker extends GetView<FormsPageController> {
                 IconButton(
                   icon: const Icon(Icons.date_range_rounded),
                   visualDensity: VisualDensity.compact,
-                  onPressed: () => selectDate(context),
+                  onPressed: controller.isViewMode.value
+                      ? null
+                      : () {
+                          selectDate(context);
+                        },
                 ),
               ],
             ),
@@ -70,8 +74,9 @@ class NotificationAndDatePicker extends GetView<FormsPageController> {
   Future<void> selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: controller.getTask.taskDate, //controller.taskDate.value,
-      firstDate: DateTime(2015, 8),
+      initialDate: controller.getTask.taskDate,
+      //firstDate: DateTime.now().subtract(Duration(days: 4)),
+      firstDate: controller.isUpdateMode.value ? controller.getTask.taskDate : DateTime.now(),
       lastDate: DateTime(2101),
     );
     if (picked == null) {
