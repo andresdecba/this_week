@@ -15,7 +15,7 @@ const Map<String, String> pt_BR = {
   'delete all tasks': 'Exclua todas as tarefas.',
   'languages': 'línguas',
   'change the current language': 'Altere o idioma atual.',
-  'share': 'Compartilhar',
+  'share': 'Compartilhe-nos com seus amigos',
   'share this app with your friends': 'Compartilhe este aplicativo com seus amigos.',
   'hi! check this app out...': 'Oi! confira este aplicativo...',
   'rate': 'Nos avalie',

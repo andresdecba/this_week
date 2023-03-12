@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:todoapp/services/local_notifications_service.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/ui/shared_components/dialogs.dart';
@@ -63,7 +64,6 @@ class SideBar extends GetView<InitialPageController> {
                   style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: bsubTitleTextColor),
                 ),
                 onTap: () {
-                  controller.scaffoldKey.currentState!.closeEndDrawer();
                   myCustomDialog(
                     context: context,
                     title: 'delete tasks'.tr,
@@ -71,7 +71,7 @@ class SideBar extends GetView<InitialPageController> {
                     iconColor: warning,
                     iconPath: 'assets/warning.svg',
                     okTextButton: 'delete all'.tr,
-                    onPressOk: () async => await simulateDataLoading(context),
+                    onPressOk: () async => await deleteAndSimulateDataLoading(context),
                   );
                 },
               ),
@@ -165,10 +165,10 @@ class SideBar extends GetView<InitialPageController> {
     );
   }
 
-  Future<void> simulateDataLoading(BuildContext context) async {
+  Future<void> deleteAndSimulateDataLoading(BuildContext context) async {
     controller.simulateReloadPage.value = true;
     Navigator.of(context).pop();
-    Navigator.of(context).pop();
+    LocalNotificationService.deleteAllNotifications();
     await controller.tasksBox.clear();
     controller.buildInfo();
     Timer(const Duration(seconds: 2), () {
@@ -177,7 +177,7 @@ class SideBar extends GetView<InitialPageController> {
   }
 
   void shareApp(BuildContext context) {
-    String message = "hi! check this app out...".tr + '\nhttps://play.google.com/store/apps/details?id=com.calculadora.desigual';
+    String message = '${"hi! check this app out...".tr}\nhttps://play.google.com/store/apps/details?id=com.calculadora.desigual';
     Share.share(message);
   }
 
@@ -187,40 +187,4 @@ class SideBar extends GetView<InitialPageController> {
       throw Exception('Could not launch $url');
     }
   }
-
-  // List<Widget> elements( String value ){
-
-  //   List<String> langs = ['English', 'Spanish', 'Portugese'];
-
-  //   // Column(
-  //   //       children: [
-  //   //         RadioListTile(
-  //   //           value: "English",
-  //   //           groupValue: lang,
-  //   //           onChanged: (ind) { lang = ind!;},
-  //   //           title: Text("Number $lang"),
-  //   //         ),
-  //   //         RadioListTile(
-  //   //           value: "Español",
-  //   //           groupValue: lang,
-  //   //           onChanged: (ind) { lang = ind!;},
-  //   //           title: Text("Number $lang"),
-  //   //         ),
-  //   //         RadioListTile(
-  //   //           value: "Portugese",
-  //   //           groupValue: lang,
-  //   //           onChanged: (ind) { lang = ind!;},
-  //   //           title: Text("Number $lang"),
-  //   //         ),
-  //   //       ],
-  //   //     );
-
-  //   return langs.map((e) => RadioListTile(
-  //             value: e,
-  //             groupValue: lang,
-  //             onChanged: (ind) { lang = ind!;},
-  //             title: Text("Number $lang"),
-  //           ),
-  //         ).toList();
-  // }
 }

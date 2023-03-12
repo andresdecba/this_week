@@ -1,13 +1,10 @@
-/*
-********************************************************
-******* CONFIGURACION BASICA PARA NOTIFICACIONES *******
-********************************************************
-*/
+
+//********************************************************
+//******* CONFIGURACION BASICA PARA NOTIFICACIONES *******
+//********************************************************
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
 import 'package:timezone/timezone.dart' as tz;
-
 import 'package:todoapp/main.dart';
 
 // instanciar el plugin de notificaciones
@@ -93,10 +90,6 @@ class LocalNotificationService {
       ),
       iOS: DarwinNotificationDetails(),
     );
-
-    print('aaaaa ${tz.local}');
-    print('bbbbb $time');
-
     await fln.zonedSchedule(
       id,
       'Tienes una nueva tarea',
@@ -107,6 +100,17 @@ class LocalNotificationService {
       uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
       androidAllowWhileIdle: true,
     );
+  }
+
+
+  // borrar una notificacion
+  static Future deleteNotification( int id )async {
+    await localNotifications.cancel(id);
+  }
+
+   // borrar una notificacion
+  static Future deleteAllNotifications() async {
+    await localNotifications.cancelAll();
   }
 }
 

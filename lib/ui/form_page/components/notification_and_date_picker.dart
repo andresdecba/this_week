@@ -22,13 +22,13 @@ class NotificationAndDatePicker extends GetView<FormsPageController> {
         // elements
         Column(
           children: [
-            // notify picker //
+            // notification picker //
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 GestureDetector(
                   key: UniqueKey(),
-                  onTap: controller.isViewMode.value ? null : () => getTimePicker(context),
+                  onTap: controller.isViewMode.value ? null : () => timePicker(context),
                   child: controller.notificationText.value,
                 ),
                 IconButton(
@@ -40,7 +40,7 @@ class NotificationAndDatePicker extends GetView<FormsPageController> {
                       : () {
                           controller.enableNotificationIcon.value = !controller.enableNotificationIcon.value;
                           controller.enableDisableNotificationStyles();
-                          controller.saveNotification();
+                          controller.setNotificationValues();
                         },
                 ),
               ],
@@ -60,7 +60,7 @@ class NotificationAndDatePicker extends GetView<FormsPageController> {
                   onPressed: controller.isViewMode.value
                       ? null
                       : () {
-                          selectDate(context);
+                          datePicker(context);
                         },
                 ),
               ],
@@ -71,7 +71,7 @@ class NotificationAndDatePicker extends GetView<FormsPageController> {
     });
   }
 
-  Future<void> selectDate(BuildContext context) async {
+  Future<void> datePicker(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: controller.getTask.taskDate,
@@ -88,7 +88,7 @@ class NotificationAndDatePicker extends GetView<FormsPageController> {
     }
   }
 
-  Future<void> getTimePicker(BuildContext context) async {
+  Future<void> timePicker(BuildContext context) async {
     FocusScope.of(context).unfocus(); // hide keyboard if open
     TimeOfDay? newTime = await showTimePicker(
       context: context,
@@ -100,6 +100,6 @@ class NotificationAndDatePicker extends GetView<FormsPageController> {
       controller.setNotificationTime = newTime;
     }
     controller.enableDisableNotificationStyles();
-    controller.saveNotification();
+    controller.setNotificationValues();
   }
 }

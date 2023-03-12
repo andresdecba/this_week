@@ -15,7 +15,7 @@ const Map<String, String> en_US = {
   'delete all tasks': 'Delete all tasks.',
   'languages': 'Languages',
   'change the current language': 'Change the current language.',
-  'share': 'Share',
+  'share': 'Share us with your friends',
   'share this app with your friends': 'Share this app with your friends.',
   'hi! check this app out...': 'Hi! check this app out...',
   'rate': 'Rate us',

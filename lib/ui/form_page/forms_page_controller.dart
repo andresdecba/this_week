@@ -41,6 +41,7 @@ class FormsPageController extends GetxController {
     notificationTime: null,
     status: TaskStatus.PENDING.toValue,
     subTasks: [],
+    notificationId: null,
   ).obs;
 
   void setInitialConfig() {
@@ -50,6 +51,14 @@ class FormsPageController extends GetxController {
       taskDescriptionCtrlr.text = _task.value.description;
       taskDate = _task.value.taskDate.obs;
       currentPageMode.value = PageMode.VIEW_MODE;
+      initialTaskValues = _task.value.copyWith(
+        description: _task.value.description,
+        taskDate: _task.value.taskDate,
+        notificationTime: _task.value.notificationTime,
+        status: _task.value.status,
+        subTasks: _task.value.subTasks,
+        notificationId: _task.value.notificationId,
+      );
       return;
     }
     // new mode on a specific date
@@ -175,28 +184,13 @@ class FormsPageController extends GetxController {
     Navigator.of(context).pop();
   }
 
-  ////// manage NOTIFICATIONS //////
-
-  void createNotification() {
-    if (enableNotificationIcon.value) {
-      LocalNotificationService.showtNotificationScheduled(
-        time: _task.value.notificationTime!,
-        id: createNotificationId(),
-        body: _task.value.description,
-        payload: '/formularios_page',
-        fln: localNotifications,
-      );
-    }
-    return;
-  }
-
   ////// manage DATE CHANGE //////
   late Rx<DateTime> taskDate;
   //RxBool hasDateChangeda = false.obs;
 
   void saveNewDate() {
     _task.value.taskDate = taskDate.value;
-    //hasDateChanged.value = true;
+    setNotificationValues();
   }
 
   ////// manage ICON & TEXT NOTIFICATION //////
@@ -251,16 +245,57 @@ class FormsPageController extends GetxController {
     }
   }
 
-  void saveNotification() {
-    enableNotificationIcon.value
-        ? _task.value.notificationTime = DateTime(
-            _task.value.taskDate.year,
-            _task.value.taskDate.month,
-            _task.value.taskDate.day,
-            setNotificationTime.hour,
-            setNotificationTime.minute,
-          )
-        : _task.value.notificationTime = null;
+  ////// manage NOTIFICATIONS //////
+
+  late Task initialTaskValues;
+
+  void updateNotificationStatus() {
+    // caso 1: si NO habia y ahora si hay, crear notificación nueva.
+    if (initialTaskValues.notificationTime == null && enableNotificationIcon.value == true) {
+      createNotification();
+      return;
+    }
+    // caso 2: si SÍ habia pero la desactivó, borrar notificacion.
+    if (initialTaskValues.notificationTime != null && enableNotificationIcon.value == false) {
+      if (initialTaskValues.notificationTime!.isAfter(DateTime.now())) {
+        LocalNotificationService.deleteNotification(initialTaskValues.notificationId!);
+      }
+      return;
+    }
+    // caso 3: si habia pero cambió, borrar vieja y crear nueva
+    if (initialTaskValues.notificationTime != null && enableNotificationIcon.value == true && !_task.value.notificationTime!.isAtSameMomentAs(initialTaskValues.notificationTime!)) {
+      if (initialTaskValues.notificationTime!.isAfter(DateTime.now())) {
+        LocalNotificationService.deleteNotification(initialTaskValues.notificationId!);
+      }
+      createNotification();
+      return;
+    }
+  }
+
+  void setNotificationValues() {
+    if (enableNotificationIcon.value) {
+      _task.value.notificationTime = DateTime(
+        _task.value.taskDate.year,
+        _task.value.taskDate.month,
+        _task.value.taskDate.day,
+        setNotificationTime.hour,
+        setNotificationTime.minute,
+      );
+      _task.value.notificationId = createNotificationId();
+    } else {
+      _task.value.notificationTime = null;
+      _task.value.notificationId = null;
+    }
+  }
+
+  void createNotification() {
+    LocalNotificationService.showtNotificationScheduled(
+      time: _task.value.notificationTime!,
+      id: _task.value.notificationId!, //createNotificationId(),
+      body: _task.value.description,
+      payload: '/formularios_page',
+      fln: localNotifications,
+    );
   }
 
   ////// manage SAVE //////
@@ -276,6 +311,9 @@ class FormsPageController extends GetxController {
       iconPath: 'assets/warning.svg',
       iconColor: warning,
       onPressOk: () {
+        if (_task.value.notificationTime != null && _task.value.notificationTime!.isAfter(DateTime.now())) {
+          LocalNotificationService.deleteNotification(_task.value.notificationId!);
+        }
         String tmp = _task.value.description;
         _task.value.delete();
         Get.find<InitialPageController>().buildInfo();
@@ -287,6 +325,12 @@ class FormsPageController extends GetxController {
       },
     );
   }
+
+  // notificaciones, casos de edicion:
+  // 1- si tenia notificacion activa y la desactiva
+  // 2- si modifica la fecha de la notificacion
+  // 3- issue: si tenia una notificacion activa (ya creada) y actualiza algo de la tarea,
+  //    se genera una notif nueva a la misma hora
 
   void saveOrUpdateTask(BuildContext context) {
     var isFormValid = formKey.currentState!.validate();
@@ -314,7 +358,8 @@ class FormsPageController extends GetxController {
   void confirmAndNavigate() async {
     if (isUpdateMode.value) {
       _task.value.description = taskDescriptionCtrlr.text;
-      createNotification();
+      //createNotification();
+      updateNotificationStatus();
       _task.value.save();
       currentPageMode.value = PageMode.VIEW_MODE;
       setPageModesHelper();
@@ -323,10 +368,11 @@ class FormsPageController extends GetxController {
         titleText: 'task updated'.tr,
         messageText: _task.value.description,
       );
+      print('UPDATE: $_task');
     }
     if (isNewMode.value) {
       _task.value.description = taskDescriptionCtrlr.text;
-      createNotification();
+      enableNotificationIcon.value ? createNotification() : null;
       tasksBox.add(_task.value);
       _initialPageController.buildInfo();
       Get.offAllNamed(Routes.INITIAL_PAGE);
@@ -334,6 +380,7 @@ class FormsPageController extends GetxController {
         titleText: 'new task created'.tr,
         messageText: _task.value.description,
       );
+      print('NEW: $_task');
     }
   }
 
@@ -351,7 +398,6 @@ class FormsPageController extends GetxController {
   }
 
   void cancelAndNavigate(BuildContext context) {
-    ////////// TODO TODO TODO
     _initialPageController.buildInfo();
     Get.offAllNamed(Routes.INITIAL_PAGE);
   }

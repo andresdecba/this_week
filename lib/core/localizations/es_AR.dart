@@ -15,7 +15,7 @@ const Map<String, String> es_AR = {
   'delete all tasks': 'Borrar las tareas.',
   'languages': 'Idiomas',
   'change the current language': 'Cambiar el idioma actual.',
-  'share': 'Compartir',
+  'share': 'Compartenos con tus amigos',
   'share this app with your friends': 'Comparte esta app con tus amigos.',
   'hi! check this app out...': 'Hola! te recomiendo esta app...',
   'rate': 'Califícanos',

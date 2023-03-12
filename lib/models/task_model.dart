@@ -21,7 +21,6 @@ extension TaskStatusExtension on TaskStatus {
 
 @HiveType(typeId: 0)
 class Task extends HiveObject {
-
   @HiveField(1)
   String description;
   @HiveField(2)
@@ -32,18 +31,32 @@ class Task extends HiveObject {
   DateTime? notificationTime;
   @HiveField(5)
   List<SubTask> subTasks;
+  @HiveField(6)
+  int? notificationId;
 
-  Task({
-    required this.description,
-    required this.taskDate,
-    required this.notificationTime,
-    required this.status,
-    required this.subTasks,
-  });
+  Task({required this.description, required this.taskDate, required this.notificationTime, required this.status, required this.subTasks, required this.notificationId});
+
+  Task copyWith({
+    required description,
+    required taskDate,
+    required notificationTime,
+    required status,
+    required subTasks,
+    required notificationId,
+  }) {
+    return Task(
+      description: description,
+      taskDate: taskDate,
+      notificationTime: notificationTime,
+      status: status,
+      subTasks: subTasks,
+      notificationId: notificationId,
+    );
+  }
 
   @override
   String toString() {
-    return '{ description: $description, task date: $taskDate, notification date: $notificationTime, status: $status, sub tasks: $subTasks }';
+    return '{ description: $description, task date: $taskDate, notification date: $notificationTime, status: $status, sub tasks: $subTasks, notification Id: $notificationId }';
   }
 }
 
@@ -53,7 +66,6 @@ class SubTask {
   String title;
   @HiveField(1)
   bool isDone;
-
 
   SubTask({
     required this.title,
