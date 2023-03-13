@@ -92,7 +92,9 @@ class NotificationAndDatePicker extends GetView<FormsPageController> {
     FocusScope.of(context).unfocus(); // hide keyboard if open
     TimeOfDay? newTime = await showTimePicker(
       context: context,
-      initialTime: controller.setNotificationTime,
+      initialTime: controller.isNewMode.value
+        ? TimeOfDay(hour: controller.setNotificationTime.hour, minute: controller.setNotificationTime.minute + 5)
+        : controller.setNotificationTime,
     );
     if (newTime == null) {
       return;

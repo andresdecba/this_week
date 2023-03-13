@@ -5,6 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:isoweek/isoweek.dart';
 import 'package:todoapp/core/routes/routes.dart';
 import 'package:todoapp/data_source/db_data_source.dart';
+import 'package:todoapp/main.dart';
 import 'package:todoapp/models/my_app_config.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/services/ad_mob_service.dart';
@@ -53,6 +54,12 @@ class InitialPageController extends GetxController with AdMobService {
   void onInit() async {
     await initConfig();
     buildInfo();
+    /// TODO: mas adelante cambiar la logica y quitar pasar los argumentos 
+    /// medante getx y hacerlo por el constructor u otro medio para evitar este
+    /// fix medio truchardo
+    if (data != null) {
+       Get.offAndToNamed(Routes.FORMS_PAGE, arguments: data);
+    }  
     super.onInit();
   }
 
@@ -137,16 +144,14 @@ class InitialPageController extends GetxController with AdMobService {
       Map<String, String> data = {
         "taskId": taskKey.toString(),
       };
-      Get.offAllNamed(Routes.FORMS_PAGE, parameters: data);
-      //Get.delete<InitialPageController>();
+      Get.offAllNamed(Routes.FORMS_PAGE, arguments: data);
       return;
     }
     if (date != null) {
       Map<String, String> data = {
         "date": date.toString(),
       };
-      Get.offAllNamed(Routes.FORMS_PAGE, parameters: data);
-      //Get.delete<InitialPageController>();
+      Get.offAllNamed(Routes.FORMS_PAGE, arguments: data);
       return;
     }
     Get.offAllNamed(Routes.FORMS_PAGE);

@@ -1,47 +1,60 @@
-
 //********************************************************
 //******* CONFIGURACION BASICA PARA NOTIFICACIONES *******
 //********************************************************
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/get.dart';
 import 'package:timezone/timezone.dart' as tz;
-import 'package:todoapp/main.dart';
+import 'package:todoapp/core/routes/routes.dart';
 
 // instanciar el plugin de notificaciones
 final FlutterLocalNotificationsPlugin localNotifications = FlutterLocalNotificationsPlugin();
 
+@pragma('vm:entry-point')
+void notificationTapBackground(NotificationResponse notificationResponse) {
+  if (notificationResponse.payload != null) {
+    Map<String, String> data = {
+      "taskId": notificationResponse.payload!,
+    };
+    Get.offAndToNamed(Routes.FORMS_PAGE, arguments: data);
+  }
+}
+
 class LocalNotificationService {
   //
-  // llamar a esta funcion desde el main()
-  static Future<void> initializePlatformNotifications(FlutterLocalNotificationsPlugin localNotifications) async {
-    // android init
+  ////// INICIALIZAR //////
+  static Future<void> initializePlatformNotifications() async {
     const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('ic_notification');
-    // ios init
     const DarwinInitializationSettings initializationSettingsIOS = DarwinInitializationSettings(
-        // onDidReceiveLocalNotification: (id, title, body, payload) {
-        // setear aqui el payload
-        // },
-        );
-    // settings init
+      // onDidReceiveLocalNotification: (id, title, body, payload) {
+      // setear aqui el payload
+      // },
+    );
+    // settings
     const InitializationSettings initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
       iOS: initializationSettingsIOS,
     );
-    // inicializar el plugin de notificaciones
+    // inicializar el plugin
     await localNotifications.initialize(
+      // settings
       initializationSettings,
-      onDidReceiveNotificationResponse: (details) {
-        // accion al hacer click en la notificacion
-        navigatorKey.currentState!.pushNamed(details.payload!);
-      },
-      // onDidReceiveBackgroundNotificationResponse: (details) {
-      //   // accion al hacer click en la notificacion
-      //   navigatorKey.currentState!.pushNamed(details.payload!);
-      // },
+      // accion al hacer click en la notificacion en segundo plano?
+      onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
+
+      // accion en primer y segundo plano
+      onDidReceiveNotificationResponse: (NotificationResponse notificationResponse) {
+        if (notificationResponse.payload != null) {
+          Map<String, String> data = {
+            "taskId": notificationResponse.payload!,
+          };
+          Get.offAndToNamed(Routes.FORMS_PAGE, arguments: data);
+        }
+      },      
     );
   }
 
-  // funcion para disparar la notificacion al instante
+  ////// DISPARAR NOTIFICACIONES //////
   static Future showtNotificationNow({
     required String payload,
     required int id, // identificado unico, si hay dos con el mismo id, se sobreecriben
@@ -70,7 +83,6 @@ class LocalNotificationService {
     );
   }
 
-  // funcion para disparar la notificacion programada
   static Future showtNotificationScheduled({
     required String payload,
     required int id, // identificado unico, si hay dos con el mismo id, se sobreecriben
@@ -80,15 +92,27 @@ class LocalNotificationService {
     required DateTime time,
   }) async {
     const notificationDetails = NotificationDetails(
+      iOS: DarwinNotificationDetails(),
       android: AndroidNotificationDetails(
         'my_channel_id',
         'my_channel_name',
         playSound: true,
-        //sound: RawResourceAndroidNotificationSound('notification'),
         importance: Importance.max,
         priority: Priority.high,
+        // sound: RawResourceAndroidNotificationSound('notification'),
+        // actions: <AndroidNotificationAction>[
+        //   AndroidNotificationAction(
+        //     'id_1',
+        //     'Action 1',
+        //     //titleColor: Color.fromARGB(255, 255, 0, 0),
+        //     //icon: DrawableResourceAndroidBitmap('first_icon'),
+        //     // By default, Android plugin will dismiss the notification when the
+        //     // user tapped on a action (this mimics the behavior on iOS).
+        //     //cancelNotification: false,
+        //     //contextual: true,
+        //   ),
+        // ],
       ),
-      iOS: DarwinNotificationDetails(),
     );
     await fln.zonedSchedule(
       id,
@@ -102,18 +126,16 @@ class LocalNotificationService {
     );
   }
 
-
   // borrar una notificacion
-  static Future deleteNotification( int id )async {
+  static Future deleteNotification(int id) async {
     await localNotifications.cancel(id);
   }
 
-   // borrar una notificacion
+  // borrar una notificacion
   static Future deleteAllNotifications() async {
     await localNotifications.cancelAll();
   }
 }
-
 
 /*
 Tutorial: https://www.youtube.com/watch?v=g2V7y0eTTSE

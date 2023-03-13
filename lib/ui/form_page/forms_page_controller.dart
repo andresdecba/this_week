@@ -46,8 +46,8 @@ class FormsPageController extends GetxController {
 
   void setInitialConfig() {
     // view mode
-    if (Get.parameters['taskId'] != null) {
-      _task.value = tasksBox.get(int.parse(Get.parameters['taskId']!))!;
+    if (Get.arguments['taskId'] != null) {
+      _task.value = tasksBox.get(int.parse(Get.arguments['taskId']!))!;
       taskDescriptionCtrlr.text = _task.value.description;
       taskDate = _task.value.taskDate.obs;
       currentPageMode.value = PageMode.VIEW_MODE;
@@ -62,8 +62,8 @@ class FormsPageController extends GetxController {
       return;
     }
     // new mode on a specific date
-    if (Get.parameters['date'] != null) {
-      var arguments = DateTime.parse(Get.parameters['date']!);
+    if (Get.arguments['date'] != null) {
+      var arguments = DateTime.parse(Get.arguments['date']!);
       _task.value.taskDate = arguments;
       taskDate = _task.value.taskDate.obs;
       currentPageMode.value = PageMode.NEW_MODE;
@@ -293,7 +293,7 @@ class FormsPageController extends GetxController {
       time: _task.value.notificationTime!,
       id: _task.value.notificationId!, //createNotificationId(),
       body: _task.value.description,
-      payload: '/formularios_page',
+      payload: _task.value.key.toString(),
       fln: localNotifications,
     );
   }
@@ -372,15 +372,15 @@ class FormsPageController extends GetxController {
     }
     if (isNewMode.value) {
       _task.value.description = taskDescriptionCtrlr.text;
-      enableNotificationIcon.value ? createNotification() : null;
       tasksBox.add(_task.value);
+      enableNotificationIcon.value ? createNotification() : null;
       _initialPageController.buildInfo();
       Get.offAllNamed(Routes.INITIAL_PAGE);
       showSnackBar(
         titleText: 'new task created'.tr,
         messageText: _task.value.description,
       );
-      print('NEW: $_task');
+      print('NEW: ${_task.value.key}');
     }
   }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -20,6 +21,8 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter_localizations/flutter_localizations.dart'; // <-- NOOO BORRAR aunuqe salga que no se usa x sí se usa
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey(debugLabel: "Main Navigator");
+String initialRoute = Routes.INITIAL_PAGE;
+Map<String, String>? data;
 
 Future<void> initHive() async {
   await Hive.initFlutter();
@@ -53,12 +56,25 @@ Future<void> initAppConfig() async {
   Intl.defaultLocale = Get.locale!.languageCode;
 }
 
-//set timezone
-Future<void> initTimeZones() async {
+//ini tnotifications
+Future<void> initNotifications() async {
   tz.initializeTimeZones();
-  tz.setLocalLocation(tz.getLocation(
-    await FlutterNativeTimezone.getLocalTimezone(),
-  ));
+  tz.setLocalLocation(
+    tz.getLocation(
+      await FlutterNativeTimezone.getLocalTimezone(),
+    ),
+  );
+  LocalNotificationService.initializePlatformNotifications();
+  final NotificationAppLaunchDetails? notificationAppLaunchDetails = await localNotifications.getNotificationAppLaunchDetails();
+
+  // navegar cuando esta cerrada la app
+  if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
+    final payload = notificationAppLaunchDetails?.notificationResponse!.payload!;
+    data = {
+      "taskId": payload!,
+    };
+    /// TODO: se navega en el metodo onInit del [InitialPageController]
+  }
 }
 
 void main() async {
@@ -66,29 +82,19 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Hive
   await initHive();
-  // local notifications
-  await LocalNotificationService.initializePlatformNotifications(localNotifications);
   // google ads
   await initAdMob();
   // language muust be init AFTER hive!
   await initAppConfig();
   // needed for local notifications
-  await initTimeZones();
+  await initNotifications();
   // run app
   runApp(const MyApp());
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
+class MyApp extends StatelessWidget {
 
-class _MyAppState extends State<MyApp> {
-  @override
-  void initState() {
-    super.initState();
-  }
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -124,6 +130,8 @@ class _MyAppState extends State<MyApp> {
           elevation: 0,
         ),
       ),
+      //initialRoute: initialRoute,
+      //key: navigatorKey,
       home: const InitialPageA(),
     );
   }
