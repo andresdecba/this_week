@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -54,13 +56,21 @@ class InitialPageController extends GetxController with AdMobService {
   void onInit() async {
     await initConfig();
     buildInfo();
-    /// TODO: mas adelante cambiar la logica y quitar pasar los argumentos 
+
+    /// TODO: mas adelante cambiar la logica y quitar pasar los argumentos
     /// medante getx y hacerlo por el constructor u otro medio para evitar este
     /// fix medio truchardo
     if (data != null) {
-       Get.offAndToNamed(Routes.FORMS_PAGE, arguments: data);
-    }  
+      Get.offAndToNamed(Routes.FORMS_PAGE, arguments: data);
+    }
     super.onInit();
+  }
+
+  SimulateDataLoading() {
+    simulateReloadPage.value = true;
+    Timer(const Duration(seconds: 2), () {
+      simulateReloadPage.value = false;
+    });
   }
 
   /// ejemplo del modelo de datos

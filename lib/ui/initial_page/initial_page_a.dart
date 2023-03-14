@@ -66,17 +66,13 @@ class InitialPageA extends GetView<InitialPageController> {
             : Column(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Header(),
+                children:const [
+                   Header(),
                   Expanded(
                     child: SingleChildScrollView(
-                      physics: const BouncingScrollPhysics(),
-                      padding: const EdgeInsets.all(20),
-                      child: Column(
-                        children: const [
-                          TasksList(),
-                        ],
-                      ),
+                      physics: BouncingScrollPhysics(),
+                      padding: EdgeInsets.all(20),
+                      child: TasksList(),
                     ),
                   ),
                 ],

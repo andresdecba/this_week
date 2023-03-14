@@ -87,7 +87,7 @@ class TasksList extends GetView<InitialPageController> {
                         alignment: Alignment.centerLeft,
                         padding: const EdgeInsets.all(16),
                         child: Text(
-                          'No hay tareas',
+                          'no tasks'.tr,
                           style: kTitleSmall.copyWith(color: disabled_grey, fontStyle: FontStyle.italic),
                         ),
                       ),

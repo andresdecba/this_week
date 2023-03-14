@@ -71,7 +71,7 @@ class SideBar extends GetView<InitialPageController> {
                     iconColor: warning,
                     iconPath: 'assets/warning.svg',
                     okTextButton: 'delete all'.tr,
-                    onPressOk: () async => await deleteAndSimulateDataLoading(context),
+                    onPressOk: () async => await deleteAll(context),
                   );
                 },
               ),
@@ -84,7 +84,6 @@ class SideBar extends GetView<InitialPageController> {
                   style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: bsubTitleTextColor),
                 ),
                 onTap: () async {
-                  
                   await changeLangDialog(
                     context: context,
                     title: 'choose a language'.tr,
@@ -165,15 +164,13 @@ class SideBar extends GetView<InitialPageController> {
     );
   }
 
-  Future<void> deleteAndSimulateDataLoading(BuildContext context) async {
-    controller.simulateReloadPage.value = true;
+  Future<void> deleteAll(BuildContext context) async {
     Navigator.of(context).pop();
+    controller.scaffoldKey.currentState!.closeEndDrawer();
+    controller.SimulateDataLoading();
     LocalNotificationService.deleteAllNotifications();
     await controller.tasksBox.clear();
     controller.buildInfo();
-    Timer(const Duration(seconds: 2), () {
-      controller.simulateReloadPage.value = false;
-    });
   }
 
   void shareApp(BuildContext context) {

@@ -60,67 +60,73 @@ class _TaskCardState extends State<TaskCard> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   /// task STATUS
-                  GestureDetector(
-                    onTap: () {
-                      widget.onStatusChange();
-                      setState(() {});
-                    },
-                    child: Text(
-                      setStatusLanguage(),
-                      style: kLabelLarge.copyWith(color: setStatusColor()),
+                  Flexible(
+                    flex: 4,
+                    child: GestureDetector(
+                      onTap: () {
+                        widget.onStatusChange();
+                        setState(() {});
+                      },
+                      child: Text(
+                        setStatusLanguage(),
+                        style: kLabelLarge.copyWith(color: setStatusColor()),
+                      ),
                     ),
                   ),
-                  Row(
-                    //crossAxisAlignment: WrapCrossAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      /// task NOTIFICATION TIME
-                      Wrap(
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        children: [
-                          Icon(
-                            widget.task.notificationTime != null ? Icons.notifications_active_rounded : Icons.notifications_none_rounded,
-                            size: 20,
-                            color: widget.task.notificationTime != null ? enabled_grey : disabled_grey,
-                          ),
-                          const SizedBox(width: 12),
-                          Text(
-                            widget.task.notificationTime != null ? timeFormater(widget.task.notificationTime!) : '-- : --', // TODO
-                            style: kLabelMedium.copyWith(color: widget.task.notificationTime != null ? enabled_grey : disabled_grey),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(width: 32),
-
-                      /// task SUBTASKS
-                      Wrap(
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.checklist_rounded,
-                            size: 20,
-                            color: widget.task.subTasks.isEmpty ? disabled_grey : enabled_grey,
-                          ),
-                          const SizedBox(width: 12),
-                          Text(
-                            calculateSubtasksDone(),
-                            style: kLabelMedium.copyWith(color: widget.task.subTasks.isEmpty ? disabled_grey : enabled_grey),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(width: 32),
-
-                      /// task NAVIGATE
-                      IconButton(
-                        visualDensity: VisualDensity.compact,
-                        onPressed: () => widget.navigate(),
-                        icon: const Icon(
-                          Icons.arrow_forward_rounded,
+                  Flexible(
+                    flex: 6,
+                    child: Row(
+                      //crossAxisAlignment: WrapCrossAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        /// task NOTIFICATION TIME
+                        Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            Icon(
+                              widget.task.notificationTime != null ? Icons.notifications_active_rounded : Icons.notifications_none_rounded,
+                              size: 20,
+                              color: widget.task.notificationTime != null ? enabled_grey : disabled_grey,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              widget.task.notificationTime != null ? timeFormater(widget.task.notificationTime!) : '-- : --', // TODO
+                              style: kLabelMedium.copyWith(color: widget.task.notificationTime != null ? enabled_grey : disabled_grey),
+                            ),
+                          ],
                         ),
-                      ),
-                      const SizedBox(width: 12),
-                    ],
+                        const SizedBox(width: 8),
+                  
+                        /// task SUBTASKS
+                        Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.checklist_rounded,
+                              size: 20,
+                              color: widget.task.subTasks.isEmpty ? disabled_grey : enabled_grey,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              calculateSubtasksDone(),
+                              style: kLabelMedium.copyWith(color: widget.task.subTasks.isEmpty ? disabled_grey : enabled_grey),
+                            ),
+                          ],
+                        ),
+                        //const SizedBox(width: 32),
+                  
+                        /// task NAVIGATE
+                        IconButton(
+                          visualDensity: VisualDensity.compact,
+                          onPressed: () => widget.navigate(),
+                          icon: const Icon(
+                            Icons.arrow_forward_rounded,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                      ],
+                    ),
                   )
                 ],
               ),
