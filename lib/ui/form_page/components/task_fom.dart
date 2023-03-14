@@ -34,7 +34,8 @@ class TaskForm extends GetView<FormsPageController> {
               ),
               maxLines: 6,
               maxLength: 200,
-              keyboardType: TextInputType.multiline,
+              keyboardType: TextInputType.text,
+              textCapitalization: TextCapitalization.sentences,
               textInputAction: TextInputAction.done,
               style: kBodyMedium,
               validator: (value) {

@@ -152,6 +152,7 @@ class TodoList extends GetView<FormsPageController> {
         ),
         maxLength: 100,
         keyboardType: TextInputType.text,
+        textCapitalization: TextCapitalization.sentences,
         textInputAction: TextInputAction.done,
         autofocus: true,
       ),

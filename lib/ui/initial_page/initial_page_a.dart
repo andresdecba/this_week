@@ -42,7 +42,7 @@ class InitialPageA extends GetView<InitialPageController> {
         titleSpacing: 24,
         //title: SizedBox(),
         title: SvgPicture.asset(
-          'assets/weekly_tasks_logo.svg',
+          'assets/appbar_logo.svg',
           alignment: Alignment.center,
           color: Color.fromARGB(255, 139, 115, 28),
           fit: BoxFit.contain,

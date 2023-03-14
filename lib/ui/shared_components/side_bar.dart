@@ -150,7 +150,7 @@ class SideBar extends GetView<InitialPageController> {
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: SvgPicture.asset(
-                    'assets/weekly_tasks_logo.svg',
+                    'assets/appbar_logo.svg',
                     alignment: Alignment.center,
                     color: disabled_grey,
                     width: 124,

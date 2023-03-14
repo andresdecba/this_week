@@ -81,7 +81,7 @@ void main() async {
   // Hive
   await initHive();
   // google ads
-  await initAdMob();
+  // await initAdMob();
   // language muust be init AFTER hive!
   await initAppConfig();
   // needed for local notifications
