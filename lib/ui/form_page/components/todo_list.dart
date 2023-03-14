@@ -64,17 +64,13 @@ class TodoList extends GetView<FormsPageController> {
                       separatorBuilder: (context, i) => const Divider(height: 0),
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount: controller.getTask.subTasks.length, //controller.subTasks.value.length,
+                      itemCount: controller.getTask.subTasks.length,
                       itemBuilder: (BuildContext context, int i) {
-                        SubTask subTask = controller.getTask.subTasks[i]; //controller.subTasks.value[i];
+                        SubTask subTask = controller.getTask.subTasks[i];
 
                         return Dismissible(
                           key: UniqueKey(),
                           onDismissed: (direction) {
-                            // if (direction == DismissDirection.endToStart) {
-                            //   controller.fillSubTaskTFWhenUpdate(i);
-                            //   showSubtaskDialog(context, () {});
-                            // }
                             if (direction == DismissDirection.startToEnd) {
                               controller.deleteSubtask(i);
                             }
@@ -111,7 +107,7 @@ class TodoList extends GetView<FormsPageController> {
                             leading: Checkbox(
                               shape: const CircleBorder(),
                               activeColor: status_task_done,
-                              value: controller.getTask.subTasks[i].isDone, //controller.subTasks.value[i].isDone,
+                              value: controller.getTask.subTasks[i].isDone,
                               visualDensity: VisualDensity.compact,
                               onChanged: (value) {
                                 controller.updateStatusSubtask(i);

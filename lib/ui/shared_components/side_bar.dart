@@ -32,7 +32,7 @@ class SideBar extends GetView<InitialPageController> {
                 title: Text('week'.tr),
                 subtitle: Text(
                   'go to the current week'.tr,
-                  style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: bsubTitleTextColor),
+                  style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: disabled_grey),
                 ),
                 onTap: () {
                   controller.addWeeks = 0;
@@ -46,7 +46,7 @@ class SideBar extends GetView<InitialPageController> {
                 title: Text('new task_sidebar'.tr),
                 subtitle: Text(
                   'add a new task for any day'.tr,
-                  style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: bsubTitleTextColor),
+                  style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: disabled_grey),
                 ),
                 onTap: () {
                   controller.navigate(date: DateTime.now());
@@ -61,7 +61,7 @@ class SideBar extends GetView<InitialPageController> {
                 title: Text('restore app'.tr),
                 subtitle: Text(
                   'delete all tasks'.tr,
-                  style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: bsubTitleTextColor),
+                  style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: disabled_grey),
                 ),
                 onTap: () {
                   myCustomDialog(
@@ -81,7 +81,7 @@ class SideBar extends GetView<InitialPageController> {
                 title: Text('languages'.tr),
                 subtitle: Text(
                   'change the current language'.tr,
-                  style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: bsubTitleTextColor),
+                  style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: disabled_grey),
                 ),
                 onTap: () async {
                   await changeLangDialog(
@@ -121,7 +121,7 @@ class SideBar extends GetView<InitialPageController> {
                 title: Text('share'.tr),
                 subtitle: Text(
                   'share this app with your friends'.tr,
-                  style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: bsubTitleTextColor),
+                  style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: disabled_grey),
                 ),
                 onTap: () {
                   controller.scaffoldKey.currentState!.closeEndDrawer();
@@ -134,7 +134,7 @@ class SideBar extends GetView<InitialPageController> {
                 title: Text('rate'.tr),
                 subtitle: Text(
                   'rate us in playstore'.tr,
-                  style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: bsubTitleTextColor),
+                  style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: disabled_grey),
                 ),
                 onTap: () {
                   controller.scaffoldKey.currentState!.closeEndDrawer();

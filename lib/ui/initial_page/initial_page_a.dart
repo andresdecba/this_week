@@ -6,7 +6,6 @@ import 'package:todoapp/ui/initial_page/components/header.dart';
 import 'package:todoapp/ui/initial_page/components/tasks_list.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/ui/shared_components/side_bar.dart';
-import 'package:todoapp/ui/shared_components/snackbar.dart';
 
 class InitialPageA extends GetView<InitialPageController> {
   const InitialPageA({Key? key}) : super(key: key);

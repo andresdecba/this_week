@@ -13,15 +13,13 @@ import 'package:todoapp/models/my_app_config.dart';
 import 'package:todoapp/services/local_notifications_service.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/initial_page/initial_page_a.dart';
-// needed for notifications
-import 'package:flutter_native_timezone/flutter_native_timezone.dart'; //get the local timezone of the os
+// needed for notifications, get the local timezone of the os
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
-// ignore: depend_on_referenced_packages
-import 'package:flutter_localizations/flutter_localizations.dart'; // <-- NOOO BORRAR aunuqe salga que no se usa x sí se usa
+// ignore: depend_on_referenced_packages, NOOO BORRAR aunuqe salga que no se usa x sí se usa
+import 'package:flutter_localizations/flutter_localizations.dart';
 
-final GlobalKey<NavigatorState> navigatorKey = GlobalKey(debugLabel: "Main Navigator");
-String initialRoute = Routes.INITIAL_PAGE;
 Map<String, String>? data;
 
 Future<void> initHive() async {
@@ -36,7 +34,7 @@ Future<void> initHive() async {
 Future<void> initAdMob() async {
   // initializa
   await MobileAds.instance.initialize();
-  // remove before upload app ?
+  // dispositivos de prueba
   var devices = ["4C456C78BB5CAFE90286C23C5EA6A3CC"];
   RequestConfiguration requestConfiguration = RequestConfiguration(testDeviceIds: devices);
   MobileAds.instance.updateRequestConfiguration(requestConfiguration);
@@ -113,13 +111,12 @@ class MyApp extends StatelessWidget {
       ],
       localizationsDelegates: const [
         //AppLocalizations.delegate,
+        //DefaultWidgetsLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
-        //DefaultWidgetsLocalizations.delegate,
       ],
       theme: ThemeData(
-        //iconTheme: IconThemeData(color: black_bg),
         primaryTextTheme: Typography().white,
         scaffoldBackgroundColor: grey_bg,
         appBarTheme: const AppBarTheme(
@@ -130,8 +127,6 @@ class MyApp extends StatelessWidget {
           elevation: 0,
         ),
       ),
-      //initialRoute: initialRoute,
-      //key: navigatorKey,
       home: const InitialPageA(),
     );
   }

@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -20,7 +19,7 @@ class InitialPageController extends GetxController with AdMobService {
   // related to buil days an weeks
   int addWeeks = 0;
   List<DateTime> weekDays = [];
-  Rx<Map<DateTime, List<Task>>> buildWeek = Rx<Map<DateTime, List<Task>>>({}); // Type: Map<DateTime, List<Task>>
+  Rx<Map<DateTime, List<Task>>> buildWeek = Rx<Map<DateTime, List<Task>>>({});
   String initialFinalDays = '';
 
   // create strings for head
@@ -124,7 +123,6 @@ class InitialPageController extends GetxController with AdMobService {
   void setInitialAndFinalWeekDays() {
     var week = showCurrenWeekInfo.weekNumber.toString();
     var days = '${dayAndMonthFormater(showCurrenWeekInfo.days.first)} ${'to'.tr} ${dayAndMonthFormater(showCurrenWeekInfo.days.last)}';
-    //var days = '${Utils.dateToAbbreviateString(showCurrenWeekInfo.days.first)} ${'to'.tr} ${Utils.dateToAbbreviateString(showCurrenWeekInfo.days.last)}';
     weekDaysFromTo.value = '${'week'.tr} $week: $days';
   }
 
@@ -165,11 +163,10 @@ class InitialPageController extends GetxController with AdMobService {
       return;
     }
     Get.offAllNamed(Routes.FORMS_PAGE);
-    //Get.delete<InitialPageController>();
   }
 
   ////// manage GOOGLE ADS //////
-  ///
+
   late BannerAd myBanner;
   RxBool isAdLoaded = false.obs;
 

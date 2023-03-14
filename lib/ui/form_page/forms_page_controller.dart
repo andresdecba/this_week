@@ -124,7 +124,6 @@ class FormsPageController extends GetxController {
     taskDescriptionCtrlr.text = oldState['task_description'];
     notificationText.value = oldState['notifyDate'];
     enableNotificationIcon.value = oldState['iconState'];
-    print('kkkkk $oldState');
   }
 
   ////// manage TASK FORM //////
@@ -369,7 +368,6 @@ class FormsPageController extends GetxController {
         messageText: _task.value.description,
         marginFromBottom: 80,
       );
-      print('UPDATE: $_task');
     }
     if (isNewMode.value) {
       _task.value.description = taskDescriptionCtrlr.text;
@@ -381,7 +379,6 @@ class FormsPageController extends GetxController {
         titleText: 'new task created'.tr,
         messageText: _task.value.description,
       );
-      print('NEW: ${_task.value.key}');
     }
   }
 
