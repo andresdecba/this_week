@@ -32,14 +32,14 @@ class TasksList extends GetView<InitialPageController> {
               children: [
                 /// SHOW DATE
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  padding: const EdgeInsets.only(left: 8),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       RichText(
                         text: TextSpan(
-                          text: '> ${weekdayOnlyFormater(currentDate)}', //TODO longDateHelper(currentDate)
-                          style: kTitleMedium.copyWith(color: isDateEnabled ? text_bg : disabled_grey),
+                          text: weekdayOnlyFormater(currentDate),
+                          style: kTitleMedium.copyWith(color: isDateEnabled ? text_bg : disabled_grey, fontSize: 17),
                           children: <TextSpan>[
                             TextSpan(
                               text: '   ${standardDateFormater(currentDate)}',
@@ -56,14 +56,12 @@ class TasksList extends GetView<InitialPageController> {
                               icon: const Icon(Icons.add_circle_rounded),
                               visualDensity: VisualDensity.compact,
                               onPressed: () => controller.navigate(date: currentDate),
-                              color: enabled_grey,
                             )
-                          : const Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Icon(
-                                Icons.add,
-                                color: disabled_grey,
-                              ),
+                          : const IconButton(
+                              onPressed: null,
+                              visualDensity: VisualDensity.compact,
+                              disabledColor: disabled_grey,
+                              icon: Icon(Icons.add),
                             ),
                     ],
                   ),

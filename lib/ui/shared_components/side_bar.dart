@@ -148,12 +148,12 @@ class SideBar extends GetView<InitialPageController> {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(16.0),
                   child: SvgPicture.asset(
-                    'assets/weekly-logo.svg',
+                    'assets/weekly_tasks_logo.svg',
                     alignment: Alignment.center,
                     color: disabled_grey,
-                    width: 100,
+                    width: 124,
                   ),
                 ),
               ),

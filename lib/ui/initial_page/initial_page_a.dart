@@ -40,12 +40,13 @@ class InitialPageA extends GetView<InitialPageController> {
       // app bar
       appBar: AppBar(
         titleSpacing: 24,
+        //title: SizedBox(),
         title: SvgPicture.asset(
-          'assets/weekly-logo.svg',
+          'assets/weekly_tasks_logo.svg',
           alignment: Alignment.center,
-          color: Colors.black,
+          color: Color.fromARGB(255, 139, 115, 28),
           fit: BoxFit.contain,
-          height: 30,
+          height: 21,
         ),
       ),
 

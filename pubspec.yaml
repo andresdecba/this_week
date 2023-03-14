@@ -12,8 +12,10 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter:
     sdk: flutter
+  flutter_launcher_icons: ^0.12.0
   flutter_local_notifications: ^13.0.0
   flutter_localization: null
+  flutter_native_splash: ^2.2.19
   flutter_native_timezone: ^2.0.0
   flutter_svg: ^1.1.6
   get: ^4.6.5
@@ -39,3 +41,12 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
+
+flutter_native_splash:
+  color: "#FFC700"
+  image: "assets/splash_logo.png"
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/ic_launcher.png"

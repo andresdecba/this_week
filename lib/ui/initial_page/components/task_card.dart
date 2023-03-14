@@ -29,7 +29,7 @@ class _TaskCardState extends State<TaskCard> {
         //padding: const EdgeInsets.all(16),
         width: double.infinity,
         decoration: BoxDecoration(
-          color: widget.task.status == 'Done' ? Colors.grey[100] : Colors.white,
+          color:  Colors.white,
           border: Border(
             left: BorderSide(
               color: setStatusColor(),
