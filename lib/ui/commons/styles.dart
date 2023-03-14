@@ -9,9 +9,9 @@ import 'package:google_fonts/google_fonts.dart';
 const grey_bg = Color(0xFFE8E8E8);
 const enabled_grey = Color(0xFF626262);
 const disabled_grey = Color(0xFFA6A6A6);
-const status_task_pending = Color(0xFFDBC75D);
-const status_task_in_progress = Color(0xFFFF7A00);
-const status_task_done = Color(0xFF117600);
+const status_task_pending = Color.fromARGB(255, 248, 228, 125);
+const status_task_in_progress = Color.fromARGB(255, 56, 149, 255);
+const status_task_done = Color.fromARGB(255, 138, 173, 131);
 const yellow_primary = Color(0xFFFFC700);
 const withe_bg = Color(0xFFFFFFFF);
 const black_bg = Color(0xFF000000);
@@ -55,7 +55,7 @@ InputDecoration customInputDecoration({
     labelStyle: const TextStyle(color: disabled_grey),
     alignLabelWithHint: true,
     hintText: hintText,
-    hintStyle: const TextStyle(color: disabled_grey, fontStyle: FontStyle.italic),
+    hintStyle: kBodyMedium.copyWith(fontStyle: FontStyle.italic, color: disabled_grey),
     filled: isEnabled,
     fillColor: withe_bg.withOpacity(0.4),
     suffixIcon: hasBorder == true

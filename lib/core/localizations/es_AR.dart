@@ -29,11 +29,11 @@ const Map<String, String> es_AR = {
 
   // form page
   'new task_formPage': 'Nueva tarea',
-  'notify me:': 'Notificarme',
-  'schedule a notification': 'Opcional: programar una notificación.',
+  'notify me:': 'Fecha',
+  'schedule a notification': 'No hay una notificación programada.',
   'notify me at:': 'Notificarme a las:',
   'select time': 'Elija un horario',
-  'task description': 'Descríbe tu tarea',
+  'task description': 'Descripción',
   'task description_description': 'Requerído: agrega una descripción de entre 7 y 200 caracteres.',
   'Write at least 7 characters' : 'Escribe al menos 7 caracters',
   'todo list': 'Lista de subtareas',
@@ -66,4 +66,7 @@ const Map<String, String> es_AR = {
   'delete': 'Borrar',
   'delete all': 'Borrar tareas',
   'update': 'Actualizar',
+
+  // notifications
+  'scheduled task' : 'Tarea programada'
 };

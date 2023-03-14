@@ -36,7 +36,7 @@ class TaskForm extends GetView<FormsPageController> {
               maxLength: 200,
               keyboardType: TextInputType.multiline,
               textInputAction: TextInputAction.done,
-              style: kTitleMedium,
+              style: kBodyMedium,
               validator: (value) {
                 if (value != null && value.length < 7) {
                   return 'task description error'.tr;

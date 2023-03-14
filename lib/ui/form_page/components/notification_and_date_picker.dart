@@ -22,7 +22,7 @@ class NotificationAndDatePicker extends GetView<FormsPageController> {
         // elements
         Column(
           children: [
-            // notification picker //
+            // time picker //
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -32,6 +32,7 @@ class NotificationAndDatePicker extends GetView<FormsPageController> {
                   child: controller.notificationText.value,
                 ),
                 IconButton(
+                  disabledColor: black_bg,
                   icon: controller.notificationIcon.value,
                   color: controller.notificationColor.value,
                   visualDensity: VisualDensity.compact,
@@ -50,18 +51,22 @@ class NotificationAndDatePicker extends GetView<FormsPageController> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  longDateFormater(controller.taskDate.value),
-                  //style: controller.hasDateChanged.value ? newDateTxtStyle : noDateTxtStyle,
-                ),
-                IconButton(
-                  icon: const Icon(Icons.date_range_rounded),
-                  visualDensity: VisualDensity.compact,
-                  onPressed: controller.isViewMode.value
+                GestureDetector(
+                  onTap: controller.isViewMode.value
                       ? null
                       : () {
                           datePicker(context);
                         },
+                  child: Text(
+                    longDateFormater(controller.taskDate.value),
+                    style: controller.isViewMode.value ? kBodyMedium : kBodyMedium.copyWith(color: blue_primary),
+                  ),
+                ),
+                const IconButton(
+                  icon: Icon(Icons.date_range_rounded),
+                  visualDensity: VisualDensity.compact,
+                  disabledColor: black_bg,
+                  onPressed: null,
                 ),
               ],
             ),

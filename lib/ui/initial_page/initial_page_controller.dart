@@ -177,7 +177,7 @@ class InitialPageController extends GetxController with AdMobService {
   /// navigation events, like snackbar, dialogs, or a new route, or async request.
   @override
   void onReady() {
-    initSmartBannerAd();
+    //initSmartBannerAd();
     super.onReady();
   }
 

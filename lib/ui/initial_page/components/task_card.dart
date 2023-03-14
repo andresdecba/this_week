@@ -29,11 +29,11 @@ class _TaskCardState extends State<TaskCard> {
         //padding: const EdgeInsets.all(16),
         width: double.infinity,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: widget.task.status == 'Done' ? Colors.grey[100] : Colors.white,
           border: Border(
             left: BorderSide(
               color: setStatusColor(),
-              width: 3,
+              width: 4,
             ),
           ),
         ),
@@ -44,7 +44,7 @@ class _TaskCardState extends State<TaskCard> {
           children: [
             /// task DESCRIPTION
             Padding(
-              padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+              padding: const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 12),
               child: Text(
                 widget.task.description,
                 maxLines: 2,
@@ -52,9 +52,9 @@ class _TaskCardState extends State<TaskCard> {
                 style: setStatusTextStyle(),
               ),
             ),
-            const SizedBox(height: 12),
+            //const SizedBox(height: 12),
             Padding(
-              padding: const EdgeInsets.only(left: 16, bottom: 8),
+              padding: const EdgeInsets.only(left: 16, bottom: 8, right: 16),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -96,7 +96,7 @@ class _TaskCardState extends State<TaskCard> {
                             ),
                           ],
                         ),
-                        const SizedBox(width: 8),
+                        //const SizedBox(width: 8),
                   
                         /// task SUBTASKS
                         Wrap(
@@ -124,7 +124,7 @@ class _TaskCardState extends State<TaskCard> {
                             Icons.arrow_forward_rounded,
                           ),
                         ),
-                        const SizedBox(width: 12),
+                        //const SizedBox(width: 12),
                       ],
                     ),
                   )

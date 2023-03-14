@@ -212,36 +212,36 @@ class FormsPageController extends GetxController {
     final String dateTxt = '${'notify me at:'.tr} ${setNotificationTime.to24hours()}';
 
     if (isViewMode.value && !enableNotificationIcon.value) {
-      notificationColor.value = disabled_grey;
+      notificationColor.value = black_bg;
       notificationIcon.value = const Icon(Icons.notifications_off_rounded);
-      notificationText.value = Text(noDateTxt, style: noDateTxtStyle);
+      notificationText.value = Text(noDateTxt, style: kBodyMedium);
     }
     if (isViewMode.value && enableNotificationIcon.value) {
-      notificationColor.value = enabled_grey;
+      notificationColor.value = black_bg;
       notificationIcon.value = const Icon(Icons.notifications_active_rounded);
-      notificationText.value = Text(dateTxt, style: dateTxtStyle);
+      notificationText.value = Text(dateTxt, style: kBodyMedium);
     }
 
     if (isNewMode.value && !enableNotificationIcon.value) {
-      notificationColor.value = black_bg;
+      notificationColor.value = blue_primary;
       notificationIcon.value = const Icon(Icons.notifications_off_rounded);
-      notificationText.value = Text(noDateTxt, style: noDateTxtStyle);
+      notificationText.value = Text(noDateTxt, style: kBodyMedium);
     }
     if (isNewMode.value && enableNotificationIcon.value) {
-      notificationColor.value = black_bg;
+      notificationColor.value = blue_primary;
       notificationIcon.value = const Icon(Icons.notifications_active_rounded);
-      notificationText.value = Text(dateTxt, style: newDateTxtStyle);
+      notificationText.value = Text(dateTxt, style: kBodyMedium.copyWith(color: blue_primary));
     }
 
     if (isUpdateMode.value && !enableNotificationIcon.value) {
-      notificationColor.value = black_bg;
+      notificationColor.value = blue_primary;
       notificationIcon.value = const Icon(Icons.notifications_off_rounded);
-      notificationText.value = Text(noDateTxt, style: noDateTxtStyle);
+      notificationText.value = Text(noDateTxt, style: kBodyMedium.copyWith(color: disabled_grey));
     }
     if (isUpdateMode.value && enableNotificationIcon.value) {
-      notificationColor.value = black_bg;
+      notificationColor.value = blue_primary;
       notificationIcon.value = const Icon(Icons.notifications_active_rounded);
-      notificationText.value = Text(dateTxt, style: newDateTxtStyle);
+      notificationText.value = Text(dateTxt, style: kBodyMedium.copyWith(color: blue_primary));
     }
   }
 
@@ -367,6 +367,7 @@ class FormsPageController extends GetxController {
       showSnackBar(
         titleText: 'task updated'.tr,
         messageText: _task.value.description,
+        marginFromBottom: 80,
       );
       print('UPDATE: $_task');
     }

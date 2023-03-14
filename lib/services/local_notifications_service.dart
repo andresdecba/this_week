@@ -91,6 +91,8 @@ class LocalNotificationService {
     required FlutterLocalNotificationsPlugin fln,
     required DateTime time,
   }) async {
+
+    // details
     const notificationDetails = NotificationDetails(
       iOS: DarwinNotificationDetails(),
       android: AndroidNotificationDetails(
@@ -114,11 +116,13 @@ class LocalNotificationService {
         // ],
       ),
     );
+
+    // notification
     await fln.zonedSchedule(
       id,
-      'Tienes una nueva tarea',
+      'scheduled task'.tr,
       body,
-      tz.TZDateTime.from(time, tz.local), //now(tz.local).add(const Duration(seconds: 10)),
+      tz.TZDateTime.from(time, tz.local),
       notificationDetails,
       payload: payload,
       uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,

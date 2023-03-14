@@ -29,11 +29,11 @@ const Map<String, String> en_US = {
 
   // form page
   'new task_formPage': 'New task',
-  'notify me:': 'Notification and date',
-  'schedule a notification': 'Optional: schedule a notification.',
+  'notify me:': 'Task',
+  'schedule a notification': 'No notification scheduled.',
   'notify me at:': 'Notify me at:',
   'select time': 'Select time',
-  'task description': 'Task description',
+  'task description': 'Description',
   'task description_description': 'Required: add a task description between 7 and 200 characters.',
   'Write at least 7 characters' : 'Write at least 7 characters',
   'todo list': 'Todo list',
@@ -66,4 +66,7 @@ const Map<String, String> en_US = {
   'delete': 'Delete',
   'delete all': 'Delete all',
   'update': 'Update',
+
+  // notifications
+  'scheduled task' : 'Scheduled task'
 };

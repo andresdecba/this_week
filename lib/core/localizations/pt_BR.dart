@@ -29,11 +29,11 @@ const Map<String, String> pt_BR = {
 
   // form page
   'new task_formPage': 'Nova tarefa',
-  'notify me:': 'Me avise',
-  'schedule a notification': 'Opcional: agende uma notificação.',
-  'notify me at:': 'Avise-me em:',
+  'notify me:': 'Data',
+  'schedule a notification': 'Nenhuma notificação programada.',
+  'notify me at:': 'Notifique-me em:',
   'select time': 'Selecione a hora',
-  'task description': 'Descrição da tarefa',
+  'task description': 'Descrição',
   'task description_description': 'Obrigatório: adicione uma descrição da tarefa entre 7 e 200 caracteres.',
   'todo list': 'Lista de subtarefas',
   'Write at least 7 characters' : 'Escreva pelo menos 7 caracteres',
@@ -66,4 +66,7 @@ const Map<String, String> pt_BR = {
   'delete': 'Excluir',
   'delete all': 'Excluir tudo',
   'update': 'Atualizar',
+
+  // notifications
+  'scheduled task' : 'Tarefa agendada'
 };

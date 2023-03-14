@@ -39,7 +39,7 @@ class TodoList extends GetView<FormsPageController> {
         const SizedBox(height: 30),
         // CREATE LIST
         Obx(
-          () => controller.getTask.subTasks.isEmpty //controller.subTasks.value.isEmpty
+          () => controller.getTask.subTasks.isEmpty
               // SHOW NO SUBTASKS
               ? Container(
                   key: UniqueKey(),
@@ -53,15 +53,15 @@ class TodoList extends GetView<FormsPageController> {
                   padding: const EdgeInsets.all(16),
                   child: Text(
                     'here you can add a sub task list'.tr,
-                    style: kTitleSmall.copyWith(color: disabled_grey, fontStyle: FontStyle.italic),
+                    style: kBodyMedium.copyWith(color: disabled_grey, fontStyle: FontStyle.italic),
                   ),
                 )
               // SHOW TASKS
               : Wrap(
                   children: [
-                    const Divider(thickness: 1, height: 0),
+                    const Divider(height: 0),
                     ListView.separated(
-                      separatorBuilder: (context, i) => const Divider(thickness: 1, height: 0),
+                      separatorBuilder: (context, i) => const Divider(height: 0),
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: controller.getTask.subTasks.length, //controller.subTasks.value.length,
@@ -93,7 +93,7 @@ class TodoList extends GetView<FormsPageController> {
                           //// CARD SUBTASK ////
                           child: ListTile(
                             key: UniqueKey(),
-                            contentPadding: const EdgeInsets.symmetric(vertical: 16),
+                            contentPadding: const EdgeInsets.symmetric(vertical: 8),
                             dense: true,
                             visualDensity: VisualDensity.compact,
                             onLongPress: () {
@@ -118,14 +118,22 @@ class TodoList extends GetView<FormsPageController> {
                               },
                             ),
                             title: Text(
-                              '$i - ${subTask.title}',
-                              style: subTask.isDone ? kBodyMedium.copyWith(decoration: TextDecoration.lineThrough, fontStyle: FontStyle.italic, color: disabled_grey) : kBodyMedium,
+                              '${i + 1} - ${subTask.title}',
+                              style: subTask.isDone
+                                  ? kBodyMedium.copyWith(
+                                      decoration: TextDecoration.lineThrough,
+                                      fontStyle: FontStyle.italic,
+                                      color: disabled_grey,
+                                    )
+                                  : kBodyMedium.copyWith(
+                                      color: enabled_grey,
+                                    ),
                             ),
                           ),
                         );
                       },
                     ),
-                    const Divider(thickness: 1, height: 0),
+                    const Divider(height: 0),
                   ],
                 ),
         ),

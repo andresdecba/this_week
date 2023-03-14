@@ -49,11 +49,11 @@ class FormPageA extends GetView<FormsPageController> {
               children: const [
                 // notification
                 NotificationAndDatePicker(),
-                 Divider(height: 50),
+                 SizedBox(height: 30),
 
                 // textfield
                 TaskForm(),
-                Divider(height: 20),
+                SizedBox(height: 20),
 
                 // todo list
                 TodoList(),
