@@ -68,5 +68,5 @@ const Map<String, String> es_AR = {
   'update': 'Actualizar',
 
   // notifications
-  'scheduled task' : 'Tarea programada'
+  'scheduled task' : 'this_week: Tarea programada'
 };

@@ -68,5 +68,5 @@ const Map<String, String> en_US = {
   'update': 'Update',
 
   // notifications
-  'scheduled task' : 'Scheduled task'
+  'scheduled task' : 'this_week: Scheduled task'
 };

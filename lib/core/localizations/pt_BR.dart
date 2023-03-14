@@ -68,5 +68,5 @@ const Map<String, String> pt_BR = {
   'update': 'Atualizar',
 
   // notifications
-  'scheduled task' : 'Tarefa agendada'
+  'scheduled task' : 'this_week: tarefa agendada'
 };
