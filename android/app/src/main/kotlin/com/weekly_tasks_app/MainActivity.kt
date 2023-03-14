@@ -1,4 +1,4 @@
-package com.weekly_tasks_app
+package site.thisweek
 
 import io.flutter.embedding.android.FlutterActivity
 
