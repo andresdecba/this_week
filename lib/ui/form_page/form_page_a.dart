@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/form_page/components/form_appbar.dart';
 import 'package:todoapp/ui/form_page/components/notification_and_date_picker.dart';
@@ -19,6 +20,26 @@ class FormPageA extends GetView<FormsPageController> {
         child: Scaffold(
           // appbar
           appBar: const FormAppbar(),
+
+          bottomNavigationBar: Obx(
+            () => controller.isAdLoaded.value
+                ? SizedBox(
+                    height: controller.myBanner.size.height.toDouble(),
+                    width: controller.myBanner.size.height.toDouble(),
+                    child: AdWidget(ad: controller.myBanner),
+                  )
+                : const Padding(
+                    padding: EdgeInsets.all(12.0),
+                    child: SizedBox(
+                      height: 50.0,
+                      width: 50.0,
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
+                  ),
+          ),
 
           // edit button
           floatingActionButton: Obx(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -38,6 +39,10 @@ Future<void> initAdMob() async {
   var devices = ["4C456C78BB5CAFE90286C23C5EA6A3CC"];
   RequestConfiguration requestConfiguration = RequestConfiguration(testDeviceIds: devices);
   MobileAds.instance.updateRequestConfiguration(requestConfiguration);
+  /// TODO:
+  /// 1- habilitar esta función en el main
+  /// 2- agregar el permiso de internet
+  /// 3- cambiar los ids de ad de prueba a los mios
 }
 
 Future<void> initAppConfig() async {
@@ -81,13 +86,13 @@ void main() async {
   // Hive
   await initHive();
   // google ads
-  // await initAdMob();
-  // language muust be init AFTER hive!
+  await initAdMob();
+  // language must be init AFTER hive!
   await initAppConfig();
   // needed for local notifications
   await initNotifications();
-  // run app
-  runApp(const MyApp());
+  // prevent portrait orientation and then run app
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((value) => runApp(const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -128,6 +133,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       home: const InitialPageA(),
+
     );
   }
 }

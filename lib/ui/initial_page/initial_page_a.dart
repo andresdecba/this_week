@@ -17,25 +17,25 @@ class InitialPageA extends GetView<InitialPageController> {
       key: controller.scaffoldKey,      
 
       // ad
-      // bottomNavigationBar: Obx(
-      //   () => controller.isAdLoaded.value
-      //       ? SizedBox(
-      //           height: controller.myBanner.size.height.toDouble(),
-      //           width: controller.myBanner.size.height.toDouble(),
-      //           child: AdWidget(ad: controller.myBanner),
-      //         )
-      //       : const Padding(
-      //           padding: EdgeInsets.all(12.0),
-      //           child: SizedBox(
-      //             height: 50.0,
-      //             width: 50.0,
-      //             child: Align(
-      //               alignment: Alignment.center,
-      //               child: CircularProgressIndicator(),
-      //             ),
-      //           ),
-      //         ),
-      // ),
+      bottomNavigationBar: Obx(
+        () => controller.isAdLoaded.value
+            ? SizedBox(
+                height: controller.myBanner.size.height.toDouble(),
+                width: controller.myBanner.size.height.toDouble(),
+                child: AdWidget(ad: controller.myBanner),
+              )
+            : const Padding(
+                padding: EdgeInsets.all(12.0),
+                child: SizedBox(
+                  height: 50.0,
+                  width: 50.0,
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+              ),
+      ),
 
       // app bar
       appBar: AppBar(

@@ -25,9 +25,9 @@ mixin AdMobService {
   // para banner_2
   static String? get bannerTwoAdUnit {
     if (Platform.isAndroid) {
-      return '';
+      return 'ca-app-pub-9058342620461440/3050624967';
     } else if (Platform.isIOS) {
-      return '';
+      return 'ca-app-pub-9058342620461440/8753806961';
     }
     return null;
   }

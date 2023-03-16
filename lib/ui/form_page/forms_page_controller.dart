@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:todoapp/core/routes/routes.dart';
 import 'package:todoapp/data_source/db_data_source.dart';
 import 'package:todoapp/models/task_model.dart';
+import 'package:todoapp/services/ad_mob_service.dart';
 import 'package:todoapp/services/local_notifications_service.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
@@ -398,5 +400,47 @@ class FormsPageController extends GetxController {
   void cancelAndNavigate(BuildContext context) {
     _initialPageController.buildInfo();
     Get.offAllNamed(Routes.INITIAL_PAGE);
+  }
+
+  ////// manage GOOGLE ADS //////
+
+  late BannerAd myBanner;
+  RxBool isAdLoaded = false.obs;
+
+  /// onReady() Called 1 frame after onInit(). It is the perfect place to enter
+  /// navigation events, like snackbar, dialogs, or a new route, or async request.
+  @override
+  void onReady() {
+    initSmartBannerAd();
+    super.onReady();
+  }
+
+  void initSmartBannerAd() async {
+    final AnchoredAdaptiveBannerAdSize? size = await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
+      MediaQuery.of(Get.context!).size.width.truncate(),
+    );
+
+    if (size == null) {
+      print('Unable to get height of anchored banner.');
+      return;
+    }
+
+    myBanner = BannerAd(
+      adUnitId: AdMobService.bannerTwoAdUnit!,
+      size: size,
+      request: const AdRequest(),
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          isAdLoaded.value = true;
+          print('**ad ok!** $ad');
+        },
+        onAdFailedToLoad: (ad, error) {
+          isAdLoaded.value = true;
+          ad.dispose();
+          print('**ad error** $error');
+        },
+      ),
+    );
+    myBanner.load();
   }
 }

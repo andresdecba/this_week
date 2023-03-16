@@ -174,7 +174,7 @@ class InitialPageController extends GetxController with AdMobService {
   /// navigation events, like snackbar, dialogs, or a new route, or async request.
   @override
   void onReady() {
-    //initSmartBannerAd();
+    initSmartBannerAd();
     super.onReady();
   }
 
@@ -189,7 +189,7 @@ class InitialPageController extends GetxController with AdMobService {
     }
 
     myBanner = BannerAd(
-      adUnitId: AdMobService.banner_TEST!,
+      adUnitId: AdMobService.bannerOneAdUnit!,
       size: size,
       request: const AdRequest(),
       listener: BannerAdListener(
