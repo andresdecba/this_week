@@ -55,7 +55,7 @@ class OnBoardingPageState extends State<OnBoardingPage> {
           allowImplicitScrolling: true,
           autoScrollDuration: 3000,
           onDone: () => _onboardingDone(),
-          onSkip: () => _onboardingDone(), // You can override onSkip callback
+          onSkip: () => Get.offAllNamed(Routes.INITIAL_PAGE),
           showSkipButton: true,
           back: const Icon(Icons.arrow_back),
           skip: Text('skip_onboarding'.tr, style: kTitleLarge.copyWith(color: blue_primary)),
