@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:todoapp/core/routes/routes.dart';
 import 'package:todoapp/data_source/db_data_source.dart';
+import 'package:todoapp/models/my_app_config.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/services/ad_mob_service.dart';
 import 'package:todoapp/services/local_notifications_service.dart';
@@ -34,6 +35,9 @@ class FormsPageController extends GetxController {
 
   ////// manage HIVE //////
   final tasksBox = Boxes.getTasksBox();
+
+  ////// manage APP CONFIG //////
+  final userPrefs = Boxes.getMyAppConfigBox();
 
   ////// manage INITIAL PAGE ACTIVITY //////
   Task get getTask => _task.value;
@@ -303,6 +307,9 @@ class FormsPageController extends GetxController {
   final InitialPageController _initialPageController = Get.put(InitialPageController());
 
   void deleteTask(BuildContext context) {
+    MyAppConfig config = userPrefs.get('appConfig')!;
+    String tmp = _task.value.description;
+
     myCustomDialog(
       context: context,
       title: 'delete task ?'.tr,
@@ -315,7 +322,10 @@ class FormsPageController extends GetxController {
         if (_task.value.notificationTime != null && _task.value.notificationTime!.isAfter(DateTime.now())) {
           LocalNotificationService.deleteNotification(_task.value.notificationId!);
         }
-        String tmp = _task.value.description;
+        if (_task.value.key == 999999) {
+          config.createSampleTask = false;
+          config.save();
+        }
         _task.value.delete();
         Get.find<InitialPageController>().buildInfo();
         Get.offAllNamed(Routes.INITIAL_PAGE);
@@ -426,7 +436,7 @@ class FormsPageController extends GetxController {
     }
 
     myBanner = BannerAd(
-      adUnitId: AdMobService.bannerTwoAdUnit!,
+      adUnitId: AdMobService.banner_TEST!,
       size: size,
       request: const AdRequest(),
       listener: BannerAdListener(

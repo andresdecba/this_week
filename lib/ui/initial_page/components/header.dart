@@ -28,15 +28,15 @@ class Header extends GetView<InitialPageController> {
 
           children: [
             IconButton(
-              onPressed: controller.addWeeks == 0
+              onPressed: controller.week == 0
                   ? () {}
                   : () {
-                      controller.addWeeks--;
+                      controller.decreaseWeek();
                       controller.buildInfo(); //addWks: controller.addWeeks
                     },
               icon: Icon(
                 Icons.arrow_back_ios,
-                color: controller.addWeeks == 0 ? disabled_grey : null,
+                color: controller.week == 0 ? disabled_grey : null,
               ),
             ),
             Column(
@@ -56,7 +56,7 @@ class Header extends GetView<InitialPageController> {
             ),
             IconButton(
               onPressed: () {
-                controller.addWeeks++;
+                controller.increaseWeek();
                 controller.buildInfo(); //addWks: controller.addWeeks
               },
               icon: const Icon(Icons.arrow_forward_ios),

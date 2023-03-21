@@ -35,7 +35,7 @@ class SideBar extends GetView<InitialPageController> {
                   style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: disabled_grey),
                 ),
                 onTap: () {
-                  controller.addWeeks = 0;
+                  controller.week = 0;
                   controller.buildInfo();
                   controller.scaffoldKey.currentState!.closeEndDrawer();
                 },
@@ -101,7 +101,16 @@ class SideBar extends GetView<InitialPageController> {
                               onChanged: (ind) {
                                 controller.saveLocale(ind!);
                                 Navigator.of(context, rootNavigator: true).pop();
-                                controller.scaffoldKey.currentState!.closeEndDrawer();
+                                // alerta reinicio
+                                myCustomDialog(
+                                  context: context,
+                                  title: 'you will need to restart the app...'.tr,
+                                  iconPath: 'assets/warning.svg',
+                                  onPressOk: () {
+                                    controller.scaffoldKey.currentState!.closeEndDrawer();
+                                    Navigator.of(context, rootNavigator: true).pop();
+                                  },
+                                );
                               },
                               //toggleable: true,
                             );
@@ -167,7 +176,7 @@ class SideBar extends GetView<InitialPageController> {
   Future<void> deleteAll(BuildContext context) async {
     Navigator.of(context).pop();
     controller.scaffoldKey.currentState!.closeEndDrawer();
-    controller.SimulateDataLoading();
+    controller.simulateDataLoading();
     LocalNotificationService.deleteAllNotifications();
     await controller.tasksBox.clear();
     controller.buildInfo();

@@ -68,5 +68,20 @@ const Map<String, String> pt_BR = {
   'update': 'Atualizar',
 
   // notifications
-  'scheduled task' : 'this_week: tarefa agendada'
+  'scheduled task': 'this_week: tarefa agendada',
+
+  'sample task description': 'Organizar minha festa de aniversário 🎂🍾🥰🎉\n(tarefa de exemplo)',
+  'sample task  subtask_1 description': 'Enviar convites 🙆‍♀️',
+  'sample task  subtask_2 description': 'Compre um bolo 🍰',
+
+  // onboarding
+  'skip_onboarding': 'Pular',
+  'done_onboarding': 'Feito',
+  'welcome': 'Bem-vindo !',
+  'welcome_desc': 'Obrigado por usar esta semana.\nAqui estão duas dicas sobre como começar.',
+  'step one': 'Passo um...',
+  'step one_desc': 'Para começar, você pode adicionar uma tarefa a qualquer dia da semana clicando no botão "+".',
+  'step two': 'passo dois...',
+  'step two_desc': 'Adicione uma descrição da sua tarefa e pronto! Se desejar, você também pode ativar um aviso de lembrete e uma lista de tarefas.',
+
 };

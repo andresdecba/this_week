@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
@@ -24,13 +23,18 @@ class TasksList extends GetView<InitialPageController> {
             DateTime currentDate = controller.buildWeek.value.keys.toList()[index];
             List<Task> tasks = [];
             tasks.addAll(controller.buildWeek.value[currentDate]!);
-            bool isDateEnabled = currentDate.isBefore(DateTime.now().subtract(const Duration(days: 1))) ? false : true;
-            //
+            // si es el dia de ayer y no tiene una tarea, esconder ese dia
+            bool hideEmptyYesterday = (currentDate.isBefore(DateTime.now().subtract(const Duration(days: 1))) && tasks.isEmpty) ? true : false;
+            // si es el dia de ayer pero si tiene tareas, deshabilitar el dia
+            bool disableYesterday = (currentDate.isBefore(DateTime.now().subtract(const Duration(days: 1))) && tasks.isNotEmpty) ? true : false;
+
+            // crear en una columna todos los dias con sus respectivas tareas
             return Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 /// SHOW DATE
+                if (!hideEmptyYesterday)
                 Padding(
                   padding: const EdgeInsets.only(left: 8),
                   child: Row(
@@ -39,30 +43,31 @@ class TasksList extends GetView<InitialPageController> {
                       RichText(
                         text: TextSpan(
                           text: weekdayOnlyFormater(currentDate),
-                          style: kTitleMedium.copyWith(color: isDateEnabled ? text_bg : disabled_grey, fontSize: 17),
+                            style: kTitleMedium.copyWith(color: disableYesterday ? disabled_grey : text_bg, fontSize: 17),
                           children: <TextSpan>[
                             TextSpan(
                               text: '   ${standardDateFormater(currentDate)}',
                               style: kBodySmall.copyWith(
                                 fontStyle: FontStyle.italic,
-                                color: isDateEnabled ? text_bg : disabled_grey,
+                                  color: disableYesterday ? disabled_grey : text_bg,
                               ), //ktitleSmall!.copyWith(color: isDateEnabled ? text_bg : disabled_grey),
                             ),
                           ],
                         ),
                       ),
-                      isDateEnabled
-                          ? IconButton(
-                              icon: const Icon(Icons.add_circle_rounded),
-                              visualDensity: VisualDensity.compact,
-                              onPressed: () => controller.navigate(date: currentDate),
-                            )
-                          : const IconButton(
+                        disableYesterday
+                            ? const IconButton(
                               onPressed: null,
                               visualDensity: VisualDensity.compact,
                               disabledColor: disabled_grey,
                               icon: Icon(Icons.add),
+                              )
+                            : IconButton(
+                                icon: const Icon(Icons.add_circle_rounded),
+                                visualDensity: VisualDensity.compact,
+                                onPressed: () => controller.navigate(date: currentDate),
                             ),
+                          
                     ],
                   ),
                 ),
@@ -74,21 +79,22 @@ class TasksList extends GetView<InitialPageController> {
                     alignment: Alignment.topCenter,
                     children: [
                       /// SHOW NO TASKS
-                      Container(
-                        key: UniqueKey(),
-                        height: 50,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.4),
-                          borderRadius: const BorderRadius.all(Radius.circular(5)),
+                      if (!hideEmptyYesterday)
+                        Container(
+                          key: UniqueKey(),
+                          height: 50,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.4),
+                            borderRadius: const BorderRadius.all(Radius.circular(5)),
+                          ),
+                          alignment: Alignment.centerLeft,
+                          padding: const EdgeInsets.all(16),
+                          child: Text(
+                            'no tasks'.tr,
+                            style: kTitleSmall.copyWith(color: disabled_grey, fontStyle: FontStyle.italic),
+                          ),
                         ),
-                        alignment: Alignment.centerLeft,
-                        padding: const EdgeInsets.all(16),
-                        child: Text(
-                          'no tasks'.tr,
-                          style: kTitleSmall.copyWith(color: disabled_grey, fontStyle: FontStyle.italic),
-                        ),
-                      ),
 
                       /// SHOW TASKS IF EXISTS
                       tasks.isNotEmpty
@@ -100,6 +106,7 @@ class TasksList extends GetView<InitialPageController> {
                                   (e) => Padding(
                                     padding: const EdgeInsets.only(bottom: 8),
                                     child: TaskCard(
+                                      //isDisabled: disableYesterday,
                                       key: UniqueKey(),
                                       task: e,
                                       navigate: () => controller.navigate(taskKey: e.key),

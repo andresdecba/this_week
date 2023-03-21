@@ -68,5 +68,20 @@ const Map<String, String> es_AR = {
   'update': 'Actualizar',
 
   // notifications
-  'scheduled task' : 'this_week: Tarea programada'
+  'scheduled task': 'this_week: Tarea programada',
+
+  // sample task
+  'sample task description': 'Organizar mi fiesta de cumpleaños 🎂🍾🥰🎉\n(tarea de ejemplo)',
+  'sample task  subtask_1 description': 'Enviar las invitaciones 🙆‍♀️',
+  'sample task  subtask_2 description': 'Comprar una torta 🍰',
+
+  // onboarding
+  'skip_onboarding': 'Saltar',
+  'done_onboarding': 'Hecho',
+  'welcome': '¡ Bienvenido !',
+  'welcome_desc': 'Gracias por utilizar This Week,\nA continuación, dos concejos sobre cómo iniciar.',
+  'step one': 'Paso uno...',
+  'step one_desc': 'Para comenzar puedes agregar una tarea a cualquier día de la semana, haciendo click en el botón "+".',
+  'step two': 'Paso dos...',
+  'step two_desc': 'Agrega una descripción de tu tarea y listo ! si lo deseas tambien puedes activar un aviso recordatorio y una lista de quehaceres.',
 };

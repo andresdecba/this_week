@@ -13,15 +13,18 @@ import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/models/my_app_config.dart';
 import 'package:todoapp/services/local_notifications_service.dart';
 import 'package:todoapp/ui/commons/styles.dart';
-import 'package:todoapp/ui/initial_page/initial_page_a.dart';
 // needed for notifications, get the local timezone of the os
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 // ignore: depend_on_referenced_packages, NOOO BORRAR aunuqe salga que no se usa x sí se usa
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:todoapp/ui/initial_page/initial_page_a.dart';
+import 'package:todoapp/ui/shared_components/onborading.dart';
 
 Map<String, String>? data;
+Box<MyAppConfig> userPrefs = Boxes.getMyAppConfigBox();
+MyAppConfig config = userPrefs.get('appConfig')!;
 
 Future<void> initHive() async {
   await Hive.initFlutter();
@@ -39,6 +42,7 @@ Future<void> initAdMob() async {
   var devices = ["4C456C78BB5CAFE90286C23C5EA6A3CC"];
   RequestConfiguration requestConfiguration = RequestConfiguration(testDeviceIds: devices);
   MobileAds.instance.updateRequestConfiguration(requestConfiguration);
+
   /// TODO:
   /// 1- habilitar esta función en el main
   /// 2- agregar el permiso de internet
@@ -46,15 +50,14 @@ Future<void> initAdMob() async {
 }
 
 Future<void> initAppConfig() async {
-  // get the box
-  Box<MyAppConfig> userPrefs = Boxes.getMyAppConfigBox();
+  
   // if config file doenst exists, creat it
   if (userPrefs.get('appConfig') == null) {
     var value = MyAppConfig();
     userPrefs.put('appConfig', value);
   }
   // set language whether it is stored or not
-  MyAppConfig config = userPrefs.get('appConfig')!;
+  
   Get.locale = config.language == null ? Get.deviceLocale : Locale(config.language!, '');
   Intl.defaultLocale = Get.locale!.languageCode;
 }
@@ -76,6 +79,7 @@ Future<void> initNotifications() async {
     data = {
       "taskId": payload!,
     };
+
     /// TODO: se navega en el metodo onInit del [InitialPageController]
   }
 }
@@ -96,7 +100,6 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-
   const MyApp({Key? key}) : super(key: key);
 
   @override
@@ -132,8 +135,7 @@ class MyApp extends StatelessWidget {
           elevation: 0,
         ),
       ),
-      home: const InitialPageA(),
-
+      home: config.isOnboardingDone ? const InitialPageA() : const OnBoardingPage(),
     );
   }
 }

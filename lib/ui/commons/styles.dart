@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 // colors
 // ignore: constant_identifier_names
 const grey_bg = Color(0xFFE8E8E8);
+const disabled_task_bg = Color.fromARGB(255, 206, 206, 206);
 const enabled_grey = Color(0xFF626262);
 const disabled_grey = Color(0xFFA6A6A6);
 const status_task_pending = Color.fromARGB(255, 248, 228, 125);
@@ -23,6 +24,9 @@ const green_info = Color.fromARGB(255, 125, 252, 103);
 final kTitleLarge = Theme.of(Get.context!).textTheme.titleLarge!;
 final kTitleMedium = Theme.of(Get.context!).textTheme.titleMedium!;
 final kTitleSmall = Theme.of(Get.context!).textTheme.titleSmall!;
+final kHeadlineLarge = Theme.of(Get.context!).textTheme.headlineLarge!.copyWith(fontWeight: FontWeight.bold);
+
+
 // bodies
 final kBodySmall = Theme.of(Get.context!).textTheme.bodySmall!;
 final kBodyMedium = Theme.of(Get.context!).textTheme.bodyMedium!;

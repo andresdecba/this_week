@@ -10,11 +10,13 @@ class TaskCard extends StatefulWidget {
     required this.navigate,
     required this.onStatusChange,
     required Key key,
+    this.isDisabled,
   }) : super(key: key);
 
   final Task task;
   final VoidCallback navigate;
   final VoidCallback onStatusChange;
+  final bool? isDisabled;
 
   @override
   State<TaskCard> createState() => _TaskCardState();
@@ -29,7 +31,7 @@ class _TaskCardState extends State<TaskCard> {
         //padding: const EdgeInsets.all(16),
         width: double.infinity,
         decoration: BoxDecoration(
-          color:  Colors.white,
+          color: Colors.white,
           border: Border(
             left: BorderSide(
               color: setStatusColor(),
@@ -97,7 +99,7 @@ class _TaskCardState extends State<TaskCard> {
                           ],
                         ),
                         //const SizedBox(width: 8),
-                  
+
                         /// task SUBTASKS
                         Wrap(
                           crossAxisAlignment: WrapCrossAlignment.center,
@@ -115,7 +117,7 @@ class _TaskCardState extends State<TaskCard> {
                           ],
                         ),
                         //const SizedBox(width: 32),
-                  
+
                         /// task NAVIGATE
                         IconButton(
                           visualDensity: VisualDensity.compact,

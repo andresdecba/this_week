@@ -118,8 +118,8 @@ Future<T?> changeLangDialog<T>({
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text('you will need to restart the app...'.tr, textAlign: TextAlign.center, style: kBodyMedium.copyWith(color: warning,),),
-            const SizedBox(height: 10,),
+            // Text('you will need to restart the app...'.tr, textAlign: TextAlign.center, style: kBodyMedium.copyWith(color: warning,),),
+            // const SizedBox(height: 10,),
             elements,
           ],
         ),
