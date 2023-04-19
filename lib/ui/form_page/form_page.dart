@@ -23,20 +23,22 @@ class FormPage extends GetView<FormsPageController> {
 
           bottomNavigationBar: Obx(
             () => controller.isAdLoaded.value
-                ? SizedBox(
+                ? Container(
                     height: controller.myBanner.size.height.toDouble(),
                     width: controller.myBanner.size.height.toDouble(),
-                    child: AdWidget(ad: controller.myBanner),
+                    color: enabled_grey,
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: AdWidget(ad: controller.myBanner),
+                    ),
                   )
-                : const Padding(
-                    padding: EdgeInsets.all(12.0),
-                    child: SizedBox(
-                      height: 50.0,
-                      width: 50.0,
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: CircularProgressIndicator(),
-                      ),
+                : Container(
+                    height: 60.0,
+                    width: double.infinity,
+                    color: enabled_grey,
+                    child: const Align(
+                      alignment: Alignment.center,
+                      child: CircularProgressIndicator(),
                     ),
                   ),
           ),

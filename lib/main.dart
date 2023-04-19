@@ -37,16 +37,15 @@ Future<void> initHive() async {
 
 Future<void> initAdMob() async {
   // initializa
-  await MobileAds.instance.initialize();
-  // dispositivos de prueba
+  await MobileAds.instance.initialize(); 
+
+  /// TODO antes de publicar: cometar las siguientes lineas (dispositivos de prueba):
   var devices = ["4C456C78BB5CAFE90286C23C5EA6A3CC"];
   RequestConfiguration requestConfiguration = RequestConfiguration(testDeviceIds: devices);
   MobileAds.instance.updateRequestConfiguration(requestConfiguration);
 
-  /// TODO:
-  /// 1- habilitar esta función en el main
-  /// 2- agregar el permiso de internet
-  /// 3- cambiar los ids de ad de prueba a los mios
+  /// TODO antes de publicar: cambiar los ids de ad de prueba por los reales en
+  /// [InitialPageController] y [FormsPageController] => [BannerAd]
 }
 
 Future<void> initAppConfig() async {

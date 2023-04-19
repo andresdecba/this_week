@@ -1,10 +1,8 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:todoapp/core/routes/routes.dart';
 import 'package:todoapp/data_source/db_data_source.dart';
-import 'package:todoapp/models/my_app_config.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 
 
@@ -53,7 +51,7 @@ class OnBoardingPageState extends State<OnBoardingPage> {
           key: introKey,
           globalBackgroundColor: Colors.white,
           allowImplicitScrolling: true,
-          autoScrollDuration: 3000,
+          autoScrollDuration: 5000,
           onDone: () => _onboardingDone(),
           onSkip: () => Get.offAllNamed(Routes.INITIAL_PAGE),
           showSkipButton: true,

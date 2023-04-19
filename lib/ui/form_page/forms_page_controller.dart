@@ -149,13 +149,13 @@ class FormsPageController extends GetxController {
   final subTaskTitleCtrlr = TextEditingController();
 
   void reorderSubtasks({required int oldIndex, required int newIndex}) {
-    //
-    // if (oldIndex < newIndex) {
-    //   newIndex -= 1;
-    // }
+ 
     final item = _task.value.subTasks.removeAt(oldIndex);
     _task.value.subTasks.insert(newIndex, item);
-    _task.value.save();
+    
+    if (currentPageMode.value == PageMode.VIEW_MODE || currentPageMode.value == PageMode.UPDATE_MODE) {
+      _task.value.save();
+    }
   }
 
   void createSubtask() {
@@ -457,6 +457,7 @@ class FormsPageController extends GetxController {
 
     myBanner = BannerAd(
       adUnitId: AdMobService.banner_TEST!,
+      //adUnitId: AdMobService.bannerTwoAdUnit!,
       size: size,
       request: const AdRequest(),
       listener: BannerAdListener(

@@ -177,7 +177,7 @@ class SideBar extends GetView<InitialPageController> {
   Future<void> deleteAll(BuildContext context) async {
     Navigator.of(context).pop();
     controller.scaffoldKey.currentState!.closeEndDrawer();
-    controller.simulateDataLoading();
+    controller.simulateDeletingData();
     LocalNotificationService.deleteAllNotifications();
     await controller.tasksBox.clear();
     controller.buildInfo();

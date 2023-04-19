@@ -15,12 +15,7 @@ class Header extends GetView<InitialPageController> {
         //decoration: BoxDecoration(color: grey_bg, border: Border.all(color: Colors.blueAccent)),
         padding: const EdgeInsets.symmetric(horizontal: 8),
         decoration: const BoxDecoration(
-          color: grey_bg,
-          border: Border(
-            bottom: BorderSide(
-              color: disabled_grey,
-            ),
-          ),
+          color: yellow_header,      
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

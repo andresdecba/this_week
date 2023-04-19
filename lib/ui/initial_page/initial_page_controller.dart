@@ -29,7 +29,7 @@ class InitialPageController extends GetxController with AdMobService {
 
   // others
   PageStorageKey keyScroll = const PageStorageKey<String>('home_page_scroll');
-  RxBool simulateReloadPage = false.obs;
+  RxBool simulateDeleting = false.obs;
 
   // scaffold key
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
@@ -66,10 +66,10 @@ class InitialPageController extends GetxController with AdMobService {
     super.onInit();
   }
 
-  void simulateDataLoading() {
-    simulateReloadPage.value = true;
+  void simulateDeletingData() {
+    simulateDeleting.value = true;
     Timer(const Duration(seconds: 1), () {
-      simulateReloadPage.value = false;
+      simulateDeleting.value = false;
     });
   }
 
@@ -232,6 +232,7 @@ class InitialPageController extends GetxController with AdMobService {
 
     myBanner = BannerAd(
       adUnitId: AdMobService.banner_TEST!,
+      //adUnitId: AdMobService.bannerOneAdUnit!,
       size: size,
       request: const AdRequest(),
       listener: BannerAdListener(
