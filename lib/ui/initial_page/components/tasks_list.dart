@@ -73,56 +73,53 @@ class TasksList extends GetView<InitialPageController> {
                 ),
 
                 //
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 6),
-                  child: Stack(
-                    alignment: Alignment.topCenter,
-                    children: [
-                      /// SHOW NO TASKS
-                      if (!hideEmptyYesterday)
-                        Container(
-                          key: UniqueKey(),
-                          height: 50,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.4),
-                            borderRadius: const BorderRadius.all(Radius.circular(5)),
-                          ),
-                          alignment: Alignment.centerLeft,
-                          padding: const EdgeInsets.all(16),
-                          child: Text(
-                            'no tasks'.tr,
-                            style: kTitleSmall.copyWith(color: disabled_grey, fontStyle: FontStyle.italic),
-                          ),
+                Stack(
+                  alignment: Alignment.topCenter,
+                  children: [
+                    /// SHOW NO TASKS
+                    if (!hideEmptyYesterday)
+                      Container(
+                        key: UniqueKey(),
+                        height: 50,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.4),
+                          borderRadius: const BorderRadius.all(Radius.circular(5)),
                         ),
+                        alignment: Alignment.centerLeft,
+                        padding: const EdgeInsets.all(16),
+                        child: Text(
+                          'no tasks'.tr,
+                          style: kTitleSmall.copyWith(color: disabled_grey, fontStyle: FontStyle.italic),
+                        ),
+                      ),
 
-                      /// SHOW TASKS IF EXISTS
-                      tasks.isNotEmpty
-                          ? ListView(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              children: [
-                                ...tasks.map(
-                                  (e) => Padding(
-                                    padding: const EdgeInsets.only(bottom: 8),
-                                    child: TaskCard(
-                                      //isDisabled: disableYesterday,
-                                      key: UniqueKey(),
-                                      task: e,
-                                      navigate: () => controller.navigate(taskKey: e.key),
-                                      onStatusChange: () {
-                                        e.status = changeTaskStatus(e.status);
-                                        e.save();
-                                        controller.createCompletedTasksPercentage();
-                                      },
-                                    ),
+                    /// SHOW TASKS IF EXISTS
+                    tasks.isNotEmpty
+                        ? ListView(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            children: [
+                              ...tasks.map(
+                                (e) => Padding(
+                                  padding: const EdgeInsets.only(bottom: 8),
+                                  child: TaskCard(
+                                    //isDisabled: disableYesterday,
+                                    key: UniqueKey(),
+                                    task: e,
+                                    navigate: () => controller.navigate(taskKey: e.key),
+                                    onStatusChange: () {
+                                      e.status = changeTaskStatus(e.status);
+                                      e.save();
+                                      controller.createCompletedTasksPercentage();
+                                    },
                                   ),
                                 ),
-                              ],
-                            )
-                          : const SizedBox(),
-                    ],
-                  ),
+                              ),
+                            ],
+                          )
+                        : const SizedBox(),
+                  ],
                 ),
                 const SizedBox(height: 16),
               ],

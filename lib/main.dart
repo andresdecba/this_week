@@ -19,7 +19,7 @@ import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 // ignore: depend_on_referenced_packages, NOOO BORRAR aunuqe salga que no se usa x sí se usa
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:todoapp/ui/initial_page/initial_page_a.dart';
+import 'package:todoapp/ui/initial_page/initial_page.dart';
 import 'package:todoapp/ui/shared_components/onborading.dart';
 
 Map<String, String>? data;
@@ -135,7 +135,7 @@ class MyApp extends StatelessWidget {
           elevation: 0,
         ),
       ),
-      home: config.isOnboardingDone ? const InitialPageA() : const OnBoardingPage(),
+      home: config.isOnboardingDone ? const InitialPage() : const OnBoardingPage(),
     );
   }
 }

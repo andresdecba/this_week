@@ -6,7 +6,7 @@ import 'package:todoapp/core/routes/routes.dart';
 import 'package:todoapp/data_source/db_data_source.dart';
 import 'package:todoapp/models/my_app_config.dart';
 import 'package:todoapp/ui/commons/styles.dart';
-import 'package:todoapp/ui/initial_page/initial_page_a.dart';
+
 
 class OnBoardingPage extends StatefulWidget {
   const OnBoardingPage({Key? key}) : super(key: key);

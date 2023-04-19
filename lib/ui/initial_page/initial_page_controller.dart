@@ -38,10 +38,10 @@ class InitialPageController extends GetxController with AdMobService {
   List<Locale> langsCodes = [const Locale('en', ''), const Locale('es', ''), const Locale('pt', '')];
   List<String> langs = ['English', 'Español', 'Português'];
   Rx<Locale> currentLang = (Get.locale!).obs;
-  void saveLocale(Locale data) {
-    currentLang.value = data;
+  void saveLocale(String langCode) {
+    //currentLang.value = data;
     //Get.updateLocale(data);
-    appConfig.language = data.languageCode;
+    appConfig.language = langCode;
     appConfig.save();
   }
 
@@ -76,7 +76,7 @@ class InitialPageController extends GetxController with AdMobService {
   void initSampleTask() {
     final tasksBox = Boxes.getTasksBox();
 
-    if (config.createSampleTask && tasksBox.get(999999) == null) {
+    if (config.createSampleTask && tasksBox.get(0) == null) {
       final DateTime today = DateTime(
         DateTime.now().year,
         DateTime.now().month,
@@ -97,7 +97,7 @@ class InitialPageController extends GetxController with AdMobService {
         ],
         notificationId: null,
       );
-      tasksBox.put(999999, task);
+      tasksBox.put(0, task);
     }
   }
 
@@ -117,8 +117,10 @@ class InitialPageController extends GetxController with AdMobService {
     weekDays.clear();
     buildWeek.value.clear();
 
-    // crear la semana actual
-    Week currentWeek = Week.current();
+    // crear las semanas: si existen tareas que estan ANTES de la semana actual,
+    // empezar desde ahí, si no, empezar desde la semana actual
+    late Week currentWeek;
+    tasksBox.isNotEmpty ? currentWeek = Week.fromDate(tasksBox.values.first.taskDate) : currentWeek = Week.current();
 
     // semana actual: week = 0, semana siguiente: week = 1, ...
     if (week == 0) {
@@ -137,14 +139,13 @@ class InitialPageController extends GetxController with AdMobService {
       buildWeek.value.addAll({day: []});
     }
 
-    // si hay tareas guerdadas, agregarlas al dia correspondinete
+    // si hay tareas guardadas, agregarlas al dia correspondinete
     // ej: 20/03/2023: [Task_1{}, task_2{}]
     for (var element in buildWeek.value.entries) {
       for (var task in tasksBox.values) {
         if (task.taskDate == element.key) {
           element.value.add(task);
         }
-        print('holaa ${task.key}');
       }
     }
     setInitialAndFinalWeekDays();

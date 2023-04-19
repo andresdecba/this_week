@@ -95,11 +95,12 @@ class SideBar extends GetView<InitialPageController> {
                           ...controller.langsCodes.map((e) {
                             var i = controller.langsCodes.indexOf(e);
                             return RadioListTile(
-                              value: e,
-                              groupValue: controller.currentLang.value,
+                              value: e.languageCode,
+                              groupValue: controller.currentLang.value.languageCode,
                               title: Text(controller.langs[i]),
-                              onChanged: (ind) {
-                                controller.saveLocale(ind!);
+
+                              onChanged: (index) {
+                                controller.saveLocale(index!);
                                 Navigator.of(context, rootNavigator: true).pop();
                                 // alerta reinicio
                                 myCustomDialog(

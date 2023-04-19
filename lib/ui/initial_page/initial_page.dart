@@ -7,14 +7,14 @@ import 'package:todoapp/ui/initial_page/components/tasks_list.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/ui/shared_components/side_bar.dart';
 
-class InitialPageA extends GetView<InitialPageController> {
-  const InitialPageA({Key? key}) : super(key: key);
+class InitialPage extends GetView<InitialPageController> {
+  const InitialPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       //
-      key: controller.scaffoldKey,      
+      key: controller.scaffoldKey,
 
       // ad
       bottomNavigationBar: Obx(
@@ -60,14 +60,13 @@ class InitialPageA extends GetView<InitialPageController> {
                 child: CircularProgressIndicator(),
               )
             : Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: const [
                   Header(),
                   Expanded(
                     child: SingleChildScrollView(
                       physics: BouncingScrollPhysics(),
-                      padding: EdgeInsets.all(20),
+                      padding: EdgeInsets.only(bottom: 20, left: 20, right: 20),
                       child: TasksList(),
                     ),
                   ),

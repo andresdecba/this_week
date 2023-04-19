@@ -322,7 +322,7 @@ class FormsPageController extends GetxController {
         if (_task.value.notificationTime != null && _task.value.notificationTime!.isAfter(DateTime.now())) {
           LocalNotificationService.deleteNotification(_task.value.notificationId!);
         }
-        if (_task.value.key == 999999) {
+        if (_task.value.key == 0) {
           config.createSampleTask = false;
           config.save();
         }
