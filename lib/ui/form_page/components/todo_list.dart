@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/form_page/forms_page_controller.dart';
 import 'package:todoapp/ui/shared_components/dialogs.dart';
@@ -26,7 +25,7 @@ class TodoList extends GetView<FormsPageController> {
                 createSubtaskDialog(
                   context: context,
                   title: 'create subtask'.tr,
-                  content: subtaskForm(),
+                  content: _SubtaskForm(controller: controller),
                   cancelTextButton: 'cancel'.tr,
                   okTextButton: 'create'.tr,
                   onPressOk: () => controller.createSubtask(),
@@ -60,75 +59,7 @@ class TodoList extends GetView<FormsPageController> {
               : Wrap(
                   children: [
                     const Divider(height: 0),
-                    ListView.separated(
-                      separatorBuilder: (context, i) => const Divider(height: 0),
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: controller.getTask.subTasks.length,
-                      itemBuilder: (BuildContext context, int i) {
-                        SubTask subTask = controller.getTask.subTasks[i];
-
-                        return Dismissible(
-                          key: UniqueKey(),
-                          onDismissed: (direction) {
-                            if (direction == DismissDirection.startToEnd) {
-                              controller.deleteSubtask(i);
-                            }
-                          },
-                          direction: DismissDirection.startToEnd,
-                          background: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            alignment: Alignment.centerLeft,
-                            color: warning,
-                            child: const Icon(
-                              Icons.delete_forever_rounded,
-                              color: withe_bg,
-                            ),
-                          ),
-
-                          //// CARD SUBTASK ////
-                          child: ListTile(
-                            key: UniqueKey(),
-                            contentPadding: const EdgeInsets.symmetric(vertical: 8),
-                            dense: true,
-                            visualDensity: VisualDensity.compact,
-                            onLongPress: () {
-                              controller.subTaskTitleCtrlr.text = subTask.title;
-                              FocusScope.of(context).unfocus(); // hide keyboard if open
-                              createSubtaskDialog(
-                                context: context,
-                                title: 'update subtask'.tr,
-                                content: subtaskForm(),
-                                cancelTextButton: 'cancel'.tr,
-                                okTextButton: 'update'.tr,
-                                onPressOk: () => controller.updateTextSubtask(i),
-                              );
-                            },
-                            leading: Checkbox(
-                              shape: const CircleBorder(),
-                              activeColor: status_task_done,
-                              value: controller.getTask.subTasks[i].isDone,
-                              visualDensity: VisualDensity.compact,
-                              onChanged: (value) {
-                                controller.updateStatusSubtask(i);
-                              },
-                            ),
-                            title: Text(
-                              '${i + 1} - ${subTask.title}',
-                              style: subTask.isDone
-                                  ? kBodyMedium.copyWith(
-                                      decoration: TextDecoration.lineThrough,
-                                      fontStyle: FontStyle.italic,
-                                      color: disabled_grey,
-                                    )
-                                  : kBodyMedium.copyWith(
-                                      color: enabled_grey,
-                                    ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
+                    _TodoList(controller: controller),
                     const Divider(height: 0),
                   ],
                 ),
@@ -136,8 +67,18 @@ class TodoList extends GetView<FormsPageController> {
       ],
     );
   }
+}
 
-  Widget subtaskForm() {
+class _SubtaskForm extends StatelessWidget {
+  const _SubtaskForm({
+    Key? key,
+    required this.controller,
+  }) : super(key: key);
+
+  final FormsPageController controller;
+
+  @override
+  Widget build(BuildContext context) {
     return Form(
       child: TextFormField(
         controller: controller.subTaskTitleCtrlr,
@@ -156,6 +97,106 @@ class TodoList extends GetView<FormsPageController> {
         textInputAction: TextInputAction.done,
         autofocus: true,
       ),
+    );
+  }
+}
+
+class _TodoList extends StatefulWidget {
+  const _TodoList({
+    required this.controller,
+    Key? key,
+  }) : super(key: key);
+  final FormsPageController controller;
+  @override
+  State<_TodoList> createState() => _TodoListState();
+}
+
+class _TodoListState extends State<_TodoList> {
+  @override
+  Widget build(BuildContext context) {
+    return ReorderableListView(
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      buildDefaultDragHandles: false,
+      onReorder: (int oldIndex, int newIndex) {
+        setState(() {
+          if (oldIndex < newIndex) {
+            newIndex -= 1;
+          }
+          widget.controller.reorderSubtasks(newIndex: newIndex, oldIndex: oldIndex);
+        });
+      },
+      children: widget.controller.getTask.subTasks.map(
+        (e) {
+          int i = widget.controller.getTask.subTasks.indexOf(e);
+          return Dismissible(
+            key: UniqueKey(),
+            onDismissed: (direction) {
+              if (direction == DismissDirection.startToEnd) {
+                widget.controller.deleteSubtask(i);
+              }
+            },
+            direction: DismissDirection.startToEnd,
+            background: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              alignment: Alignment.centerLeft,
+              color: warning,
+              child: const Icon(
+                Icons.delete_forever_rounded,
+                color: withe_bg,
+              ),
+            ),
+
+            //// CARD SUBTASK ////
+            child: ListTile(
+              key: ValueKey(i),
+              contentPadding: const EdgeInsets.symmetric(vertical: 8),
+              dense: true,
+              visualDensity: VisualDensity.compact,
+              trailing: ReorderableDragStartListener(
+                index: i,
+                child: const IconButton(
+                  icon: Icon(Icons.drag_handle),
+                  onPressed: null,
+                ),
+              ),
+              onLongPress: () {
+                widget.controller.subTaskTitleCtrlr.text = e.title;
+                FocusScope.of(context).unfocus(); // hide keyboard if open
+                createSubtaskDialog(
+                  context: context,
+                  title: 'update subtask'.tr,
+                  content: _SubtaskForm(controller: widget.controller),
+                  cancelTextButton: 'cancel'.tr,
+                  okTextButton: 'update'.tr,
+                  onPressOk: () => widget.controller.updateTextSubtask(i),
+                );
+              },
+              leading: Checkbox(
+                shape: const CircleBorder(),
+                activeColor: status_task_done,
+                value: widget.controller.getTask.subTasks[i].isDone,
+                visualDensity: VisualDensity.compact,
+                onChanged: (value) {
+                  widget.controller.updateStatusSubtask(i);
+                },
+              ),
+              title: Text(
+                e.title,
+                style: e.isDone
+                    ? kBodyMedium.copyWith(
+                        decoration: TextDecoration.lineThrough,
+                        fontStyle: FontStyle.italic,
+                        color: disabled_grey,
+                      )
+                    : kBodyMedium.copyWith(
+                        color: enabled_grey,
+                      ),
+              ),
+            ),
+          );
+        },
+      ).toList(),
     );
   }
 }

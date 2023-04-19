@@ -77,6 +77,8 @@ class FormsPageController extends GetxController {
     }
   }
 
+  ///////////
+
   ////// manage PAGE MODES ///////
   Rx<PageMode> currentPageMode = PageMode.NEW_MODE.obs;
   RxBool isViewMode = false.obs;
@@ -146,14 +148,26 @@ class FormsPageController extends GetxController {
   ////// manage SUBTASKS //////
   final subTaskTitleCtrlr = TextEditingController();
 
+  void reorderSubtasks({required int oldIndex, required int newIndex}) {
+    //
+    // if (oldIndex < newIndex) {
+    //   newIndex -= 1;
+    // }
+    final item = _task.value.subTasks.removeAt(oldIndex);
+    _task.value.subTasks.insert(newIndex, item);
+    _task.value.save();
+  }
+
   void createSubtask() {
     _task.update(
       (val) {
-        _task.value.subTasks.add(
+        val!.subTasks.add(
           SubTask(title: subTaskTitleCtrlr.text, isDone: false),
         );
+        if (currentPageMode.value == PageMode.VIEW_MODE || currentPageMode.value == PageMode.UPDATE_MODE) {
+          _task.value.save();
+        }
         subTaskTitleCtrlr.clear();
-        //_task.value.save();
       },
     );
   }
@@ -161,8 +175,10 @@ class FormsPageController extends GetxController {
   void updateTextSubtask(int index) {
     _task.update(
       (val) {
-        _task.value.subTasks[index].title = subTaskTitleCtrlr.text;
-        //_task.value.save();
+        val!.subTasks[index].title = subTaskTitleCtrlr.text;
+        if (currentPageMode.value == PageMode.VIEW_MODE || currentPageMode.value == PageMode.UPDATE_MODE) {
+          _task.value.save();
+        }
         subTaskTitleCtrlr.clear();
       },
     );
@@ -171,16 +187,20 @@ class FormsPageController extends GetxController {
   void updateStatusSubtask(int index) {
     _task.update(
       (val) {
-        _task.value.subTasks[index].isDone = !_task.value.subTasks[index].isDone;
-        //_task.value.save();
+        val!.subTasks[index].isDone = !_task.value.subTasks[index].isDone;
+        if (currentPageMode.value == PageMode.VIEW_MODE || currentPageMode.value == PageMode.UPDATE_MODE) {
+          _task.value.save();
+        }
       },
     );
   }
 
   void deleteSubtask(int index) {
     _task.update((val) {
-      _task.value.subTasks.removeAt(index);
-      //_task.value.save();
+      val!.subTasks.removeAt(index);
+      if (currentPageMode.value == PageMode.VIEW_MODE || currentPageMode.value == PageMode.UPDATE_MODE) {
+        _task.value.save();
+      }
     });
   }
 
