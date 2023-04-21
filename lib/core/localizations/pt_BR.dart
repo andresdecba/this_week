@@ -43,6 +43,7 @@ const Map<String, String> pt_BR = {
   'view task': 'Tarefa',
   'update task': 'Editar tarefa',
   'update subtask' : 'Editar subtarefa',
+  'repeat this task every': 'Repetir esta tarefa toda',
 
   // alerts
   'delete task ?': 'Excluir tarefa ?',

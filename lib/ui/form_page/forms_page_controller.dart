@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:todoapp/core/routes/routes.dart';
@@ -48,6 +49,7 @@ class FormsPageController extends GetxController {
     status: TaskStatus.PENDING.toValue,
     subTasks: [],
     notificationId: null,
+    repeatId: null,
   ).obs;
 
   void setInitialConfig() {
@@ -64,6 +66,7 @@ class FormsPageController extends GetxController {
         status: _task.value.status,
         subTasks: _task.value.subTasks,
         notificationId: _task.value.notificationId,
+        repeatId: _task.value.repeatId,
       );
       return;
     }
@@ -76,8 +79,6 @@ class FormsPageController extends GetxController {
       return;
     }
   }
-
-  ///////////
 
   ////// manage PAGE MODES ///////
   Rx<PageMode> currentPageMode = PageMode.NEW_MODE.obs;
@@ -149,10 +150,9 @@ class FormsPageController extends GetxController {
   final subTaskTitleCtrlr = TextEditingController();
 
   void reorderSubtasks({required int oldIndex, required int newIndex}) {
- 
     final item = _task.value.subTasks.removeAt(oldIndex);
     _task.value.subTasks.insert(newIndex, item);
-    
+
     if (currentPageMode.value == PageMode.VIEW_MODE || currentPageMode.value == PageMode.UPDATE_MODE) {
       _task.value.save();
     }
@@ -274,10 +274,10 @@ class FormsPageController extends GetxController {
 
   late Task initialTaskValues;
 
-  void updateNotificationStatus() {
+  void updateNotificationStatus() async {
     // caso 1: si NO habia y ahora si hay, crear notificación nueva.
     if (initialTaskValues.notificationTime == null && enableNotificationIcon.value == true) {
-      createNotification();
+      await createNotification();
       return;
     }
     // caso 2: si SÍ habia pero la desactivó, borrar notificacion.
@@ -292,7 +292,7 @@ class FormsPageController extends GetxController {
       if (initialTaskValues.notificationTime!.isAfter(DateTime.now())) {
         LocalNotificationService.deleteNotification(initialTaskValues.notificationId!);
       }
-      createNotification();
+      await createNotification();
       return;
     }
   }
@@ -313,12 +313,12 @@ class FormsPageController extends GetxController {
     }
   }
 
-  void createNotification() {
-    LocalNotificationService.showtNotificationScheduled(
-      time: _task.value.notificationTime!,
-      id: _task.value.notificationId!, //createNotificationId(),
+  Future<void> createNotification({DateTime? notif, int? id, String? payload}) async {
+    await LocalNotificationService.showtNotificationScheduled(
+      time: notif ?? _task.value.notificationTime!,
+      id: id ?? _task.value.notificationId!,
       body: _task.value.description,
-      payload: _task.value.key.toString(),
+      payload: payload ?? _task.value.key.toString(),
       fln: localNotifications,
     );
   }
@@ -326,18 +326,32 @@ class FormsPageController extends GetxController {
   ////// manage SAVE //////
   final InitialPageController _initialPageController = Get.put(InitialPageController());
 
+
   void deleteTask(BuildContext context) {
     MyAppConfig config = userPrefs.get('appConfig')!;
     String tmp = _task.value.description;
 
+    bool isChecked = false;
+
     myCustomDialog(
       context: context,
-      title: 'delete task ?'.tr,
-      subtitle: 'this action will delete...'.tr,
+      //title: 'delete task ?'.tr,
+      title: 'this action will delete...'.tr,
+      //subtitle: 'this action will delete...'.tr,
       cancelTextButton: 'cancel'.tr,
       okTextButton: 'delete'.tr,
       iconPath: 'assets/warning.svg',
       iconColor: warning,
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Checkbox(
+            value: isChecked,
+            onChanged: (value) => isChecked = !isChecked,
+          ),
+          Text('Borrar tareas repetidas'),
+        ],
+      ),
       onPressOk: () {
         if (_task.value.notificationTime != null && _task.value.notificationTime!.isAfter(DateTime.now())) {
           LocalNotificationService.deleteNotification(_task.value.notificationId!);
@@ -387,9 +401,9 @@ class FormsPageController extends GetxController {
   }
 
   void confirmAndNavigate() async {
+    _task.value.description = taskDescriptionCtrlr.text;
+
     if (isUpdateMode.value) {
-      _task.value.description = taskDescriptionCtrlr.text;
-      //createNotification();
       updateNotificationStatus();
       _task.value.save();
       currentPageMode.value = PageMode.VIEW_MODE;
@@ -401,10 +415,18 @@ class FormsPageController extends GetxController {
         marginFromBottom: 80,
       );
     }
+
     if (isNewMode.value) {
-      _task.value.description = taskDescriptionCtrlr.text;
       tasksBox.add(_task.value);
-      enableNotificationIcon.value ? createNotification() : null;
+
+      if (enableNotificationIcon.value) {
+        await createNotification();
+      }
+
+      if (isTaskRepeat.value) {
+        generateRepeatedTasks();
+      }
+
       _initialPageController.buildInfo();
       Get.offAllNamed(Routes.INITIAL_PAGE);
       showSnackBar(
@@ -412,6 +434,58 @@ class FormsPageController extends GetxController {
         messageText: _task.value.description,
       );
     }
+  }
+
+  ////// manage REPEAT TASK //////
+  /*
+     **1- agregar un id unico al modelo de la tarea para identificar las repetidas
+     **2- poner switch: repetir tarea todos los martes*? S/N
+     **3- hacer funcion repetir
+     4- eliminar ESTA tarea o todas las demás ?
+     5- editar ESTA tarea o todas las demás ?
+  */
+  // Future<void> printNotifications() async {
+  //   final List<PendingNotificationRequest> pendingNotificationRequests = await localNotifications.pendingNotificationRequests();
+  //   print('notif lenght: ${pendingNotificationRequests.length}');
+  //   for (var element in pendingNotificationRequests) {
+  //     print('notif: ${element.payload}');
+  //   }
+  // }
+
+  final RxBool isTaskRepeat = false.obs;
+  void generateRepeatedTasks() async {
+    // list
+    List<Task> taskList = [];
+    final String repeatId = UniqueKey().toString();
+
+    // iterar
+    for (var i = 1; i < 365; i++) {
+      var date = _task.value.taskDate.add(Duration(days: i));
+      int notificationId = createNotificationId();
+      //
+      if (date.weekday == _task.value.taskDate.weekday) {
+        // agregar a la lista
+        taskList.add(_task.value.copyWith(
+          description: _task.value.description,
+          taskDate: date,
+          notificationTime: _task.value.notificationTime,
+          status: _task.value.status,
+          notificationId: notificationId,
+          repeatId: repeatId,
+          subTasks: _task.value.subTasks.map((e) => e.copyWith(value: e.title, isDone: e.isDone)).toList(),
+        ));
+        // crear notif
+        if (enableNotificationIcon.value) {
+          await createNotification(
+            notif: _task.value.notificationTime!.add(Duration(days: i)),
+            id: notificationId,
+            payload: _task.value.notificationTime!.add(Duration(days: i)).toString(),
+          );
+        }
+      }
+    }
+    // add all to box
+    tasksBox.addAll(taskList);
   }
 
   ////// manage NAVIGATION //////

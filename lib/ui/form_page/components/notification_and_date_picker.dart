@@ -4,8 +4,8 @@ import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/form_page/forms_page_controller.dart';
 import 'package:todoapp/utils/helpers.dart';
 
-class NotificationAndDatePicker extends GetView<FormsPageController> {
-  const NotificationAndDatePicker({Key? key}) : super(key: key);
+class NotificationsAndDate extends GetView<FormsPageController> {
+  const NotificationsAndDate({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -70,10 +70,41 @@ class NotificationAndDatePicker extends GetView<FormsPageController> {
                 ),
               ],
             ),
+
+            // repeat date //
+            Visibility(
+              visible: controller.isNewMode.value,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '${'repeat this task every'.tr} ${showDay()} ?',
+                    style: kBodyMedium,
+                  ),
+                  Switch(
+                    value: controller.isTaskRepeat.value,
+                    onChanged: (value) {
+                      controller.isTaskRepeat.value = value;
+                    },
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ]);
     });
+  }
+
+  String showDay() {
+    var day = weekdayOnlyFormater(controller.taskDate.value);
+    if (day == 'sábado') {
+      return 'sábados';
+    }
+    if (day == 'domingo') {
+      return 'domingos';
+    }
+    return day;
   }
 
   Future<void> datePicker(BuildContext context) async {
@@ -97,9 +128,7 @@ class NotificationAndDatePicker extends GetView<FormsPageController> {
     FocusScope.of(context).unfocus(); // hide keyboard if open
     TimeOfDay? newTime = await showTimePicker(
       context: context,
-      initialTime: controller.isNewMode.value
-        ? TimeOfDay(hour: controller.setNotificationTime.hour, minute: controller.setNotificationTime.minute + 5)
-        : controller.setNotificationTime,
+      initialTime: controller.isNewMode.value ? TimeOfDay(hour: controller.setNotificationTime.hour, minute: controller.setNotificationTime.minute + 5) : controller.setNotificationTime,
     );
     if (newTime == null) {
       return;

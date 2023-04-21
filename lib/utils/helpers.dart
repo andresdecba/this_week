@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -32,12 +34,14 @@ String timeFormater(DateTime date) {
 
 int createNotificationId() {
   // las notificaciones aceptan un id de hasta 9 numeros
-  String number = DateTime.now().millisecondsSinceEpoch.toString();
-  int startValue = number.length - 9;
-  int trimmedId = int.parse(number.substring(startValue, number.length));
-  return trimmedId;
+  // String value = DateTime.now().millisecondsSinceEpoch.toString();
+  // int startValue = value.length - 9;
+  // int trimmedId = int.parse(value.substring(startValue, value.length));
+  // return trimmedId;
+  int value = Random().nextInt(999999999);
+  print('generateRandom: $value');
+  return value;
 }
-
 extension TimeOfDayConverter on TimeOfDay {
   String to24hours() {
     final hour = this.hour.toString().padLeft(2, "0");

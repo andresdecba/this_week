@@ -9,6 +9,7 @@ class FormAppbar extends GetView<FormsPageController> implements PreferredSizeWi
   @override
   Widget build(BuildContext context) {
     return Obx(() {
+
       return AppBar(
         // title
         title: Text(

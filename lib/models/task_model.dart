@@ -33,16 +33,27 @@ class Task extends HiveObject {
   List<SubTask> subTasks;
   @HiveField(6)
   int? notificationId;
+  @HiveField(7)
+  String? repeatId;
 
-  Task({required this.description, required this.taskDate, required this.notificationTime, required this.status, required this.subTasks, required this.notificationId});
+  Task({
+    required this.description,
+    required this.taskDate,
+    required this.notificationTime,
+    required this.status,
+    required this.subTasks,
+    required this.notificationId,
+    required this.repeatId,
+  });
 
   Task copyWith({
-    required description,
-    required taskDate,
-    required notificationTime,
-    required status,
-    required subTasks,
-    required notificationId,
+    required String description,
+    required DateTime taskDate,
+    required String status,
+    required DateTime? notificationTime,
+    required List<SubTask> subTasks,
+    required int? notificationId,
+    required String? repeatId,
   }) {
     return Task(
       description: description,
@@ -51,12 +62,13 @@ class Task extends HiveObject {
       status: status,
       subTasks: subTasks,
       notificationId: notificationId,
+      repeatId: repeatId,
     );
   }
 
   @override
   String toString() {
-    return '{ description: $description, task date: $taskDate, notification date: $notificationTime, status: $status, sub tasks: $subTasks, notification Id: $notificationId }';
+    return '{ description: $description, task date: $taskDate, notification date: $notificationTime, status: $status, sub tasks: $subTasks, notification Id: $notificationId, repeat Id: $repeatId }';
   }
 }
 
@@ -72,12 +84,18 @@ class SubTask {
     required this.isDone,
   });
 
+  SubTask copyWith({
+    required String value,
+    required bool isDone,
+  }) {
+    return SubTask(
+      title: title,
+      isDone: isDone,
+    );
+  }
+
   @override
   String toString() {
     return '{$title, $isDone}';
-  }
-
-  static SubTask copyWith(SubTask value) {
-    return SubTask(title: value.title, isDone: value.isDone);
   }
 }

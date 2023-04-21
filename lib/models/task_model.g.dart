@@ -23,13 +23,14 @@ class TaskAdapter extends TypeAdapter<Task> {
       status: fields[3] as String,
       subTasks: (fields[5] as List).cast<SubTask>(),
       notificationId: fields[6] as int?,
+      repeatId: fields[7] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, Task obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(1)
       ..write(obj.description)
       ..writeByte(2)
@@ -41,7 +42,9 @@ class TaskAdapter extends TypeAdapter<Task> {
       ..writeByte(5)
       ..write(obj.subTasks)
       ..writeByte(6)
-      ..write(obj.notificationId);
+      ..write(obj.notificationId)
+      ..writeByte(7)
+      ..write(obj.repeatId);
   }
 
   @override

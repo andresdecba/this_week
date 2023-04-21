@@ -43,6 +43,7 @@ const Map<String, String> es_AR = {
   'view task': 'Ver tarea',
   'update task': 'Editar tarea',
   'update subtask' : 'Editar subtask',
+  'repeat this task every': 'Repetir esta tarea todos los',
 
   // alerts
   'delete task ?': '¿Borrar tarea?',

@@ -13,6 +13,7 @@ Future<T?> myCustomDialog<T>({
   String? cancelTextButton,
   String? iconPath,
   Color? iconColor,
+  Widget? content,
 }) {
   return showDialog(
     context: context,
@@ -41,12 +42,13 @@ Future<T?> myCustomDialog<T>({
         titleTextStyle: kTitleLarge,
         //titlePadding: const EdgeInsets.all(8),
         //
-        content: subtitle != null
-            ? Align(
-                alignment: Alignment.center,
-                child: Text(subtitle, textAlign: TextAlign.center),
-              )
-            : null,
+        content: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (subtitle != null) Text(subtitle, textAlign: TextAlign.center),
+            if (content != null) content,
+          ],
+        ),
         contentTextStyle: kTitleMedium,
         //contentPadding: const EdgeInsets.all(8),
         //

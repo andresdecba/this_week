@@ -43,6 +43,7 @@ const Map<String, String> en_US = {
   'view task': 'View task',
   'update task': 'Update task',
   'update subtask' : 'Update subtask',
+  'repeat this task every': 'Repeat this task every',
 
   // alerts
   'delete task ?': 'Delete task ?',

@@ -69,7 +69,7 @@ class FormPage extends GetView<FormsPageController> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: const [
                 // notification
-                NotificationAndDatePicker(),
+                NotificationsAndDate(),
                 SizedBox(height: 30),
 
                 // textfield

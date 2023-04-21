@@ -51,11 +51,19 @@ class InitialPageController extends GetxController with AdMobService {
     appConfig = Boxes.getMyAppConfigBox().get('appConfig')!;
   }
 
+  void printInfo() {
+    for (var element in tasksBox.values) {
+      print('averga: ${element.repeatId.toString()}');
+    }
+  }
+
   @override
   void onInit() async {
     initSampleTask();
     await initConfig();
     buildInfo();
+
+    printInfo();
 
     /// TODO: mas adelante cambiar la logica y quitar pasar los argumentos
     /// medante getx y hacerlo por el constructor u otro medio para evitar este
@@ -96,6 +104,7 @@ class InitialPageController extends GetxController with AdMobService {
           SubTask(title: 'sample task  subtask_2 description'.tr, isDone: true),
         ],
         notificationId: null,
+        repeatId: null,
       );
       tasksBox.put(0, task);
     }
