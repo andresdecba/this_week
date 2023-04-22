@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -95,7 +96,7 @@ class _DelegateWithHeader extends SliverPersistentHeaderDelegate {
 
     return AnimatedOpacity(
       opacity: shrinkOffset == 0 ? 1 : 0.0,
-      duration: const Duration(milliseconds: 600),
+      duration: const Duration(milliseconds: 400), // no es
       curve: Curves.easeIn,
       child: Container(
         height: 80,
@@ -107,10 +108,10 @@ class _DelegateWithHeader extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get maxExtent => 80;
+  double get maxExtent => 80; //no es
 
   @override
-  double get minExtent => 80;
+  double get minExtent => 80; // no es
 
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => true;

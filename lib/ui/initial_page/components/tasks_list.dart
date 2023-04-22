@@ -30,70 +30,73 @@ class TasksList extends GetView<InitialPageController> {
 
             // crear en una columna todos los dias con sus respectivas tareas
             return Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                /// SHOW DATE
-                if (!hideEmptyYesterday)
-                Padding(
-                  padding: const EdgeInsets.only(left: 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      RichText(
-                        text: TextSpan(
-                          text: weekdayOnlyFormater(currentDate),
+                /// SHOW WEEKDAY AND DATE
+                Visibility(
+                  visible: !hideEmptyYesterday,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 8, top: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        RichText(
+                          text: TextSpan(
+                            text: weekdayOnlyFormater(currentDate),
                             style: kTitleMedium.copyWith(color: disableYesterday ? disabled_grey : text_bg, fontSize: 17),
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: '   ${standardDateFormater(currentDate)}',
-                              style: kBodySmall.copyWith(
-                                fontStyle: FontStyle.italic,
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: '   ${standardDateFormater(currentDate)}',
+                                style: kBodySmall.copyWith(
+                                  fontStyle: FontStyle.italic,
                                   color: disableYesterday ? disabled_grey : text_bg,
-                              ), //ktitleSmall!.copyWith(color: isDateEnabled ? text_bg : disabled_grey),
-                            ),
-                          ],
+                                ), //ktitleSmall!.copyWith(color: isDateEnabled ? text_bg : disabled_grey),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
                         disableYesterday
                             ? const IconButton(
-                              onPressed: null,
-                              visualDensity: VisualDensity.compact,
-                              disabledColor: disabled_grey,
-                              icon: Icon(Icons.add),
+                                onPressed: null,
+                                visualDensity: VisualDensity.compact,
+                                disabledColor: disabled_grey,
+                                icon: Icon(Icons.add),
                               )
                             : IconButton(
                                 icon: const Icon(Icons.add_circle_rounded),
                                 visualDensity: VisualDensity.compact,
                                 onPressed: () => controller.navigate(date: currentDate),
-                            ),
-                          
-                    ],
+                              ),
+                      ],
+                    ),
                   ),
                 ),
-
-                //
+            
                 Stack(
                   alignment: Alignment.topCenter,
                   children: [
                     /// SHOW NO TASKS
-                    if (!hideEmptyYesterday)
-                      Container(
-                        key: UniqueKey(),
-                        height: 50,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.4),
-                          borderRadius: const BorderRadius.all(Radius.circular(5)),
-                        ),
-                        alignment: Alignment.centerLeft,
-                        padding: const EdgeInsets.all(16),
-                        child: Text(
-                          'no tasks'.tr,
-                          style: kTitleSmall.copyWith(color: disabled_grey, fontStyle: FontStyle.italic),
+                    Visibility(
+                      visible: !hideEmptyYesterday,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: Container(
+                          key: UniqueKey(),
+                          height: 50,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.4),
+                            borderRadius: const BorderRadius.all(Radius.circular(5)),
+                          ),
+                          alignment: Alignment.centerLeft,
+                          padding: const EdgeInsets.all(16),
+                          child: Text(
+                            'no tasks'.tr,
+                            style: kTitleSmall.copyWith(color: disabled_grey, fontStyle: FontStyle.italic),
+                          ),
                         ),
                       ),
-
+                    ),
+            
                     /// SHOW TASKS IF EXISTS
                     tasks.isNotEmpty
                         ? ListView(
@@ -103,6 +106,7 @@ class TasksList extends GetView<InitialPageController> {
                               ...tasks.map(
                                 (e) => Padding(
                                   padding: const EdgeInsets.only(bottom: 8),
+
                                   child: TaskCard(
                                     //isDisabled: disableYesterday,
                                     key: UniqueKey(),
@@ -121,7 +125,6 @@ class TasksList extends GetView<InitialPageController> {
                         : const SizedBox(),
                   ],
                 ),
-                const SizedBox(height: 16),
               ],
             );
           },

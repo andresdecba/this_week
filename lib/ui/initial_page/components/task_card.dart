@@ -47,11 +47,29 @@ class _TaskCardState extends State<TaskCard> {
             /// task DESCRIPTION
             Padding(
               padding: const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 12),
-              child: Text(
-                widget.task.description,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: setStatusTextStyle(),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Visibility(
+                    visible: widget.task.repeatId != null,
+                    child: const Padding(
+                      padding: EdgeInsets.only(right: 8),
+                      child: Icon(
+                        Icons.push_pin_rounded,
+                        size: 20,
+                        color: enabled_grey,
+                      ),
+                    ),
+                  ),
+                  Flexible(
+                    child: Text(
+                      widget.task.description,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: setStatusTextStyle(),
+                    ),
+                  ),
+                ],
               ),
             ),
             //const SizedBox(height: 12),
@@ -81,7 +99,8 @@ class _TaskCardState extends State<TaskCard> {
                       //crossAxisAlignment: WrapCrossAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
+                      children: [                  
+
                         /// task NOTIFICATION TIME
                         Wrap(
                           crossAxisAlignment: WrapCrossAlignment.center,

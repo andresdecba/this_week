@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/form_page/forms_page_controller.dart';
+import 'package:todoapp/ui/shared_components/dialogs.dart';
 
 class FormAppbar extends GetView<FormsPageController> implements PreferredSizeWidget {
   const FormAppbar({Key? key}) : super(key: key);
@@ -9,7 +10,6 @@ class FormAppbar extends GetView<FormsPageController> implements PreferredSizeWi
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-
       return AppBar(
         // title
         title: Text(
@@ -23,7 +23,19 @@ class FormAppbar extends GetView<FormsPageController> implements PreferredSizeWi
               ? Wrap(
                   children: [
                     IconButton(
-                      onPressed: () => controller.deleteTask(context),
+                      onPressed: () {
+                        myCustomDialog(
+                          context: context,
+                          title: 'this action will delete...'.tr,
+                          cancelTextButton: 'cancel'.tr,
+                          okTextButton: 'delete'.tr,
+                          iconPath: 'assets/warning.svg',
+                          iconColor: warning,
+                          onPressOk: () => controller.deleteTask(),
+                          content: controller.getTask.repeatId != null ? const _BuildCheckBox() : null,
+                          //subtitle: controller.getTask.repeatId != null ? 'Esta es una tarea periódica' : null,
+                        );
+                      },
                       icon: const Icon(Icons.delete_forever, color: text_bg),
                     ),
                     IconButton(
@@ -66,4 +78,42 @@ class FormAppbar extends GetView<FormsPageController> implements PreferredSizeWi
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
   /// default value: [kToolbarHeight]
+}
+
+class _BuildCheckBox extends GetView<FormsPageController> {
+  const _BuildCheckBox({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() => Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              'this is a periodic task'.tr,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Checkbox(
+                  value: controller.isChecked.value,
+                  onChanged: (value) => controller.isChecked.value = !controller.isChecked.value,
+                ),
+                Expanded(child: Text('delete current task and subsequent...'.tr)),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Checkbox(
+                  value: !controller.isChecked.value,
+                  onChanged: (value) => controller.isChecked.value = !controller.isChecked.value,
+                ),
+                Expanded(child: Text('delete current task'.tr)),
+              ],
+            ),
+          ],
+        ));
+  }
 }

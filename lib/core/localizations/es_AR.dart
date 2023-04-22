@@ -53,6 +53,9 @@ const Map<String, String> es_AR = {
   'choose a language': 'Escoge un idioma',
   'atention !' : 'Atención !',
   'You cant create a...' : "No puedes crear una notificación antes de HOY y AHORA.",
+  'this is a periodic task': 'Esta es una tarea periódica,\n¿ que desea hacer ?',
+  'delete current task': 'Borrar tarea actual.',
+  'delete current task and subsequent...': 'Borrar tarea actual y las posteriores.',
 
   // snackbars
   'task deleted': 'Tarea borrada',

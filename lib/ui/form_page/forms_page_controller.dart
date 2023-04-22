@@ -325,49 +325,50 @@ class FormsPageController extends GetxController {
 
   ////// manage SAVE //////
   final InitialPageController _initialPageController = Get.put(InitialPageController());
+  RxBool isChecked = false.obs;  
 
-
-  void deleteTask(BuildContext context) {
+  void deleteTask() {
     MyAppConfig config = userPrefs.get('appConfig')!;
     String tmp = _task.value.description;
 
-    bool isChecked = false;
+    // si es tarea repetida //
+    if (isChecked.value) {
+      // buscar todas las tasks con el mismo repeatId
+      List<Task> tasks = [];
+      for (var element in tasksBox.values) {
+        if (element.repeatId == _task.value.repeatId) {
+          tasks.add(element);
+        }
+      }
+      // buscar las notif y borrarlas
+      for (var element in tasks) {
+        if (element.notificationTime != null && element.notificationTime!.isAfter(DateTime.now())) {
+          LocalNotificationService.deleteNotification(element.notificationId!);
+        }
+      }
+      // borrar las tasks con el mismo id
+      for (var element in tasks) {
+        element.delete();
+      }
+    }
 
-    myCustomDialog(
-      context: context,
-      //title: 'delete task ?'.tr,
-      title: 'this action will delete...'.tr,
-      //subtitle: 'this action will delete...'.tr,
-      cancelTextButton: 'cancel'.tr,
-      okTextButton: 'delete'.tr,
-      iconPath: 'assets/warning.svg',
-      iconColor: warning,
-      content: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Checkbox(
-            value: isChecked,
-            onChanged: (value) => isChecked = !isChecked,
-          ),
-          Text('Borrar tareas repetidas'),
-        ],
-      ),
-      onPressOk: () {
-        if (_task.value.notificationTime != null && _task.value.notificationTime!.isAfter(DateTime.now())) {
-          LocalNotificationService.deleteNotification(_task.value.notificationId!);
-        }
-        if (_task.value.key == 0) {
-          config.createSampleTask = false;
-          config.save();
-        }
-        _task.value.delete();
-        Get.find<InitialPageController>().buildInfo();
-        Get.offAllNamed(Routes.INITIAL_PAGE);
-        showSnackBar(
-          titleText: 'task deleted'.tr,
-          messageText: tmp,
-        );
-      },
+    // si NO es tarea repetida //
+    if (!isChecked.value) {
+      if (_task.value.notificationTime != null && _task.value.notificationTime!.isAfter(DateTime.now())) {
+        LocalNotificationService.deleteNotification(_task.value.notificationId!);
+      }
+      if (_task.value.key == 0) {
+        config.createSampleTask = false;
+        config.save();
+      }
+      _task.value.delete();
+    }
+
+    Get.find<InitialPageController>().buildInfo();
+    Get.offAllNamed(Routes.INITIAL_PAGE);
+    showSnackBar(
+      titleText: 'task deleted'.tr,
+      messageText: tmp,
     );
   }
 
@@ -437,26 +438,15 @@ class FormsPageController extends GetxController {
   }
 
   ////// manage REPEAT TASK //////
-  /*
-     **1- agregar un id unico al modelo de la tarea para identificar las repetidas
-     **2- poner switch: repetir tarea todos los martes*? S/N
-     **3- hacer funcion repetir
-     4- eliminar ESTA tarea o todas las demás ?
-     5- editar ESTA tarea o todas las demás ?
-  */
-  // Future<void> printNotifications() async {
-  //   final List<PendingNotificationRequest> pendingNotificationRequests = await localNotifications.pendingNotificationRequests();
-  //   print('notif lenght: ${pendingNotificationRequests.length}');
-  //   for (var element in pendingNotificationRequests) {
-  //     print('notif: ${element.payload}');
-  //   }
-  // }
-
   final RxBool isTaskRepeat = false.obs;
+  
   void generateRepeatedTasks() async {
     // list
     List<Task> taskList = [];
     final String repeatId = UniqueKey().toString();
+
+    // agregar el repeatId a la tarea actual
+    _task.value.repeatId = repeatId;
 
     // iterar
     for (var i = 1; i < 365; i++) {

@@ -53,6 +53,9 @@ const Map<String, String> en_US = {
   'choose a language': 'Choose a language',
   'atention !' : 'Atention !',
   'You cant create a...' : "You can't create a notification before TODAY and NOW.",
+  'this is a periodic task': 'This is a periodic task,\nwhat do you want to do?',
+  'delete current task': 'Delete current task.',
+  'delete current task and subsequent...': 'Delete current task and subsequent ones.',
 
   // snackbars
   'task deleted': 'Task deleted.',

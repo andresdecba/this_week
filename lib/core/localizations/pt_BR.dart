@@ -53,6 +53,9 @@ const Map<String, String> pt_BR = {
   'choose a language': 'Escolha um idioma',
   'atention !' : 'Atenção !',
   'You cant create a...' : "Você não pode criar uma notificação antes de HOJE e AGORA.",
+  'this is a periodic task': 'Esta é uma tarefa periódica,\no que você quer fazer?',
+  'delete current task': 'Excluir tarefa atual.',
+  'delete current task and subsequent...': 'Excluir tarefa atual e subsequentes.',
 
   // snackbars
   'task deleted': 'Tarefa excluída.',
