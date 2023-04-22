@@ -5,7 +5,6 @@ import 'package:todoapp/core/routes/routes.dart';
 import 'package:todoapp/data_source/db_data_source.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 
-
 class OnBoardingPage extends StatefulWidget {
   const OnBoardingPage({Key? key}) : super(key: key);
   @override
@@ -15,10 +14,16 @@ class OnBoardingPage extends StatefulWidget {
 class OnBoardingPageState extends State<OnBoardingPage> {
   // onboarding done
   var appConfig = Boxes.getMyAppConfigBox().get('appConfig')!;
-  void _onboardingDone() {
+  void _onDone() {
     appConfig.isOnboardingDone = true;
     appConfig.save();
-    Get.offAllNamed(Routes.INITIAL_PAGE);
+    Get.toNamed(Routes.INITIAL_PAGE);
+    //Get.offAllNamed(Routes.INITIAL_PAGE); //no usar 'Get.off' x que se clava si la saltas rapido
+  }
+
+  void _onSkip() {
+    Get.toNamed(Routes.INITIAL_PAGE);
+    //Get.offAllNamed(Routes.INITIAL_PAGE); //no usar 'Get.off' x que se clava si la saltas rapido
   }
 
   // key
@@ -52,8 +57,8 @@ class OnBoardingPageState extends State<OnBoardingPage> {
           globalBackgroundColor: Colors.white,
           allowImplicitScrolling: true,
           autoScrollDuration: 5000,
-          onDone: () => _onboardingDone(),
-          onSkip: () => Get.offAllNamed(Routes.INITIAL_PAGE),
+          onDone: () => _onDone(),
+          onSkip: () => _onSkip(),
           showSkipButton: true,
           back: const Icon(Icons.arrow_back),
           skip: Text('skip_onboarding'.tr, style: kTitleLarge.copyWith(color: blue_primary)),

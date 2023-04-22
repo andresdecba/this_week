@@ -134,7 +134,8 @@ class MyApp extends StatelessWidget {
           elevation: 0,
         ),
       ),
-      home: config.isOnboardingDone ? const InitialPage() : const OnBoardingPage(),
+      initialRoute: config.isOnboardingDone ? Routes.INITIAL_PAGE : Routes.ONBOARDING_PAGE,
+      
     );
   }
 }

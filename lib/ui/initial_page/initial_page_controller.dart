@@ -240,8 +240,8 @@ class InitialPageController extends GetxController with AdMobService {
     }
 
     myBanner = BannerAd(
-      adUnitId: AdMobService.banner_TEST!,
-      //adUnitId: AdMobService.bannerOneAdUnit!,
+      adUnitId: AdMobService.testBanner!,
+      //adUnitId: AdMobService.initialPageBanner!,
       size: size,
       request: const AdRequest(),
       listener: BannerAdListener(

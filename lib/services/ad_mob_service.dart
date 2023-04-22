@@ -3,7 +3,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 mixin AdMobService {
   // TEST BANNER
-  static String? get banner_TEST {
+  static String? get testBanner {
     if (Platform.isAndroid) {
       return 'ca-app-pub-3940256099942544/6300978111';
     } else if (Platform.isIOS) {
@@ -12,8 +12,8 @@ mixin AdMobService {
     return null;
   }
 
-  // para banner_1
-  static String? get bannerOneAdUnit {
+  // banner initial page
+  static String? get initialPageBanner {
     if (Platform.isAndroid) {
       return 'ca-app-pub-9058342620461440/8299319891';
     } else if (Platform.isIOS) {
@@ -23,7 +23,7 @@ mixin AdMobService {
   }
 
   // para banner_2
-  static String? get bannerTwoAdUnit {
+  static String? get formPageBanner {
     if (Platform.isAndroid) {
       return 'ca-app-pub-9058342620461440/3050624967';
     } else if (Platform.isIOS) {
