@@ -1,0 +1,11 @@
+CREAR APP BUNDLE
+1- En main.dart comentar las líneas de initAdMob() (dispositivo de prueba)
+2- En [InitialPageController] y [FormsPageController] cambiar la función [BannerAd]
+3- En pubspec.yaml actualizar siguiente versión ej: "version: 1.2.0"
+4- En android\app\build.gradle cambiar:
+	linea 14: def flutterVersionCode = 4 //version para la playstore (incrementar de a 1 en 1)
+	linea 19: def flutterVersionName = "1.2.0" //version que ve el publico, misma version que en pubspec.yaml
+5- Ejecutar: "flutter build appbundle"
+6- volver a comentar las lineas de los puntos 1 y 2
+
+tuto: https://www.udemy.com/course/flutter-ios-android-fernando-herrera/learn/lecture/14708750?start=0#overview

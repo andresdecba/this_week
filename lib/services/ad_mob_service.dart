@@ -22,7 +22,7 @@ mixin AdMobService {
     return null;
   }
 
-  // para banner_2
+  // banner form page
   static String? get formPageBanner {
     if (Platform.isAndroid) {
       return 'ca-app-pub-9058342620461440/3050624967';
