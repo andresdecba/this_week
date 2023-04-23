@@ -105,7 +105,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Weekly tasks',
+      title: 'This Week Calendar',
       initialBinding: InitialPageBinding(),
       getPages: AppPages.getPages,
       translations: TranslationService(),

@@ -184,12 +184,12 @@ class SideBar extends GetView<InitialPageController> {
   }
 
   void shareApp(BuildContext context) {
-    String message = '${"hi! check this app out...".tr}\nhttps://play.google.com/store/apps/details?id=com.calculadora.desigual';
+    String message = '${"hi! check this app out...".tr}\nhttps://play.google.com/store/apps/details?id=site.thisweek';
     Share.share(message);
   }
 
   Future<void> goToPlaystore(BuildContext context) async {
-    Uri url = Uri.parse('https://play.google.com/store/apps/details?id=com.calculadora.desigual');
+    Uri url = Uri.parse('https://play.google.com/store/apps/details?id=site.thisweek');
     if (!await launchUrl(url)) {
       throw Exception('Could not launch $url');
     }
