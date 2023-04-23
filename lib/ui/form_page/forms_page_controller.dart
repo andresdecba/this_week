@@ -31,6 +31,7 @@ class FormsPageController extends GetxController {
   void onClose() {
     taskDescriptionCtrlr.dispose();
     subTaskTitleCtrlr.dispose();
+    bannerAd.dispose();
     super.onClose();
   }
 
@@ -325,7 +326,7 @@ class FormsPageController extends GetxController {
 
   ////// manage SAVE //////
   final InitialPageController _initialPageController = Get.put(InitialPageController());
-  RxBool isChecked = false.obs;  
+  RxBool isChecked = false.obs;
 
   void deleteTask() {
     MyAppConfig config = userPrefs.get('appConfig')!;
@@ -439,7 +440,7 @@ class FormsPageController extends GetxController {
 
   ////// manage REPEAT TASK //////
   final RxBool isTaskRepeat = false.obs;
-  
+
   void generateRepeatedTasks() async {
     // list
     List<Task> taskList = [];
@@ -498,7 +499,7 @@ class FormsPageController extends GetxController {
 
   ////// manage GOOGLE ADS //////
 
-  late BannerAd myBanner;
+  late BannerAd bannerAd;
   RxBool isAdLoaded = false.obs;
 
   /// onReady() Called 1 frame after onInit(). It is the perfect place to enter
@@ -519,23 +520,23 @@ class FormsPageController extends GetxController {
       return;
     }
 
-    myBanner = BannerAd(
+    bannerAd = BannerAd(
       adUnitId: AdMobService.testBanner!,
-      //adUnitId: AdMobService.formPageBanner!,
+      //adUnitId: AdMobService.initialPageBanner!,
       size: size,
       request: const AdRequest(),
       listener: BannerAdListener(
         onAdLoaded: (ad) {
           isAdLoaded.value = true;
-          print('**ad ok!** $ad');
+          print('FORM page banner: responseId = ${ad.responseInfo!.responseId} / adId = ${ad.adUnitId}');
         },
         onAdFailedToLoad: (ad, error) {
           isAdLoaded.value = true;
           ad.dispose();
-          print('**ad error** $error');
+          print('**banner_2 error** $error');
         },
       ),
     );
-    myBanner.load();
+    bannerAd.load();
   }
 }

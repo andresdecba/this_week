@@ -12,7 +12,7 @@ mixin AdMobService {
     return null;
   }
 
-  // banner initial page
+  // BANNER 1
   static String? get initialPageBanner {
     if (Platform.isAndroid) {
       return 'ca-app-pub-9058342620461440/8299319891';
@@ -22,7 +22,7 @@ mixin AdMobService {
     return null;
   }
 
-  // banner form page
+  // BANNER 2
   static String? get formPageBanner {
     if (Platform.isAndroid) {
       return 'ca-app-pub-9058342620461440/3050624967';

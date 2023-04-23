@@ -21,12 +21,12 @@ class InitialPage extends GetView<InitialPageController> {
       bottomNavigationBar: Obx(
         () => controller.isAdLoaded.value
             ? Container(
-                height: controller.myBanner.size.height.toDouble(),
-                width: controller.myBanner.size.height.toDouble(),
+                height: controller.bannerAd.size.height.toDouble(),
+                width: controller.bannerAd.size.height.toDouble(),
                 color: enabled_grey,
                 child: Align(
                   alignment: Alignment.center,
-                  child: AdWidget(ad: controller.myBanner),
+                  child: AdWidget(ad: controller.bannerAd),
                 ),
               )
             : Container(

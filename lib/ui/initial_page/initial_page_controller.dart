@@ -74,6 +74,12 @@ class InitialPageController extends GetxController with AdMobService {
     super.onInit();
   }
 
+  @override
+  void onClose() {
+    bannerAd.dispose();
+    super.onClose();
+  }
+
   void simulateDeletingData() {
     simulateDeleting.value = true;
     Timer(const Duration(seconds: 1), () {
@@ -218,7 +224,7 @@ class InitialPageController extends GetxController with AdMobService {
 
   ////// manage GOOGLE ADS //////
 
-  late BannerAd myBanner;
+  late BannerAd bannerAd;
   RxBool isAdLoaded = false.obs;
 
   /// onReady() Called 1 frame after onInit(). It is the perfect place to enter
@@ -239,7 +245,7 @@ class InitialPageController extends GetxController with AdMobService {
       return;
     }
 
-    myBanner = BannerAd(
+    bannerAd = BannerAd(
       adUnitId: AdMobService.testBanner!,
       //adUnitId: AdMobService.initialPageBanner!,
       size: size,
@@ -247,15 +253,15 @@ class InitialPageController extends GetxController with AdMobService {
       listener: BannerAdListener(
         onAdLoaded: (ad) {
           isAdLoaded.value = true;
-          print('**ad ok!** $ad');
+          print('INITIAL page banner: responseId = ${ad.responseInfo!.responseId} / adId = ${ad.adUnitId}');
         },
         onAdFailedToLoad: (ad, error) {
           isAdLoaded.value = true;
           ad.dispose();
-          print('**ad error** $error');
+          print('**banner_1 error** $error');
         },
       ),
     );
-    myBanner.load();
+    bannerAd.load();
   }
 }
