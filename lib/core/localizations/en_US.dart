@@ -2,6 +2,7 @@
 const Map<String, String> en_US = {
   //header
   'week': 'Week',
+  'current week': 'CURRENT WEEK:',
   'to': 'to',
   'no tasks for this week': 'You have no tasks for this week.',
   'of completed tasks' : 'of completed tasks.',
@@ -22,10 +23,13 @@ const Map<String, String> en_US = {
   'rate us in playstore' : 'Rate us on Play Strore',
 
   // task card
-  'no tasks': 'No tasks.',
+  'no tasks': 'Add a task.',
   'pending': 'Pending',
   'in progress': 'In progress',
   'done': 'Done',
+
+  // tasks list
+  'there were no tasks': 'there were no tasks',
 
   // form page
   'new task_formPage': 'New task',

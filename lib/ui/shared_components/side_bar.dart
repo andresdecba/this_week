@@ -35,7 +35,7 @@ class SideBar extends GetView<InitialPageController> {
                   style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: disabled_grey),
                 ),
                 onTap: () {
-                  controller.week = 0;
+                  controller.oldWeeks = 0;
                   controller.buildInfo();
                   controller.scaffoldKey.currentState!.closeEndDrawer();
                 },

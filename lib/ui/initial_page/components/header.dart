@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:isoweek/isoweek.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 
@@ -12,48 +13,42 @@ class Header extends GetView<InitialPageController> {
       () => Container(
         height: 80,
         alignment: Alignment.center,
-        //decoration: BoxDecoration(color: grey_bg, border: Border.all(color: Colors.blueAccent)),
         padding: const EdgeInsets.symmetric(horizontal: 8),
         decoration: const BoxDecoration(
-          color: yellow_header,      
+          color: grey_bg,
+          boxShadow: [
+            BoxShadow(
+              color: disabled_grey,
+              offset: Offset(0.0, 1.0), //(x,y)
+              blurRadius: 6.0,
+            ),
+          ],
         ),
+            
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
 
           children: [
             IconButton(
-              onPressed: controller.week == 0
-                  ? () {}
-                  : () {
-                      controller.decreaseWeek();
-                      controller.buildInfo(); //addWks: controller.addWeeks
-                    },
-              icon: Icon(
-                Icons.arrow_back_ios,
-                color: controller.week == 0 ? disabled_grey : null,
-              ),
+              onPressed: controller.increaseDecreaseWeeks == 0 ? null : () => controller.decreaseWeek(),
+              icon: const Icon(Icons.arrow_back_ios),
             ),
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
                   controller.weekDaysFromTo.value,
-                  style: kTitleMedium.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: controller.week == Week.current() ? kTitleMedium.copyWith(fontWeight: FontWeight.bold, color: blue_primary) : kTitleMedium.copyWith(fontWeight: FontWeight.bold),
                 ),
                 Text(
                   controller.tasksPercentageCompleted.value,
-                  style: kTitleSmall.copyWith(height: 1.5),
+                  style: controller.week == Week.current() ? kTitleSmall.copyWith(height: 1.5, color: blue_primary) : kTitleMedium,
                 ),
               ],
             ),
             IconButton(
-              onPressed: () {
-                controller.increaseWeek();
-                controller.buildInfo(); //addWks: controller.addWeeks
-              },
+              onPressed: () => controller.increaseWeek(),
               icon: const Icon(Icons.arrow_forward_ios),
             ),
           ],

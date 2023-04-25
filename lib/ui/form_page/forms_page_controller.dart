@@ -521,8 +521,8 @@ class FormsPageController extends GetxController {
     }
 
     bannerAd = BannerAd(
-      adUnitId: AdMobService.testBanner!,
-      //adUnitId: AdMobService.initialPageBanner!,
+      //adUnitId: AdMobService.testBanner!,
+      adUnitId: AdMobService.initialPageBanner!,
       size: size,
       request: const AdRequest(),
       listener: BannerAdListener(

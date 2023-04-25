@@ -17,12 +17,12 @@ class TasksList extends GetView<InitialPageController> {
           physics: const NeverScrollableScrollPhysics(),
           key: controller.keyScroll,
           shrinkWrap: true,
-          itemCount: controller.buildWeek.value.length,
+          itemCount: controller.buildWeekInUI.value.length,
           itemBuilder: (context, index) {
             //
-            DateTime currentDate = controller.buildWeek.value.keys.toList()[index];
+            DateTime currentDate = controller.buildWeekInUI.value.keys.toList()[index];
             List<Task> tasks = [];
-            tasks.addAll(controller.buildWeek.value[currentDate]!);
+            tasks.addAll(controller.buildWeekInUI.value[currentDate]!);
             // si es el dia de ayer y no tiene una tarea, esconder ese dia
             bool hideEmptyYesterday = (currentDate.isBefore(DateTime.now().subtract(const Duration(days: 1))) && tasks.isEmpty) ? true : false;
             // si es el dia de ayer pero si tiene tareas, deshabilitar el dia
@@ -31,6 +31,81 @@ class TasksList extends GetView<InitialPageController> {
             // crear en una columna todos los dias con sus respectivas tareas
             return Column(
               children: [
+
+                /// THERE WHERENT TASKS
+                // Visibility(
+                //   visible: hideEmptyYesterday,
+                //   child: Padding(
+                //     padding: const EdgeInsets.only(top: 8),
+                //     child: Container(
+                //       key: UniqueKey(),
+                //       height: 50,
+                //       width: double.infinity,
+                //       decoration: BoxDecoration(
+                //         color: Colors.white.withOpacity(0.4),
+                //         borderRadius: const BorderRadius.all(Radius.circular(5)),
+                //       ),
+                //       alignment: Alignment.centerLeft,
+                //       padding: const EdgeInsets.all(16),
+                //       child: RichText(
+                //         text: TextSpan(
+                //           text: weekdayOnlyFormater(currentDate),
+                //           style: kTitleSmall.copyWith(color: disabled_grey, fontStyle: FontStyle.italic),
+                //           children: <TextSpan>[
+                //             TextSpan(
+                //               text: '  ${standardDateFormater(currentDate)}:  ${'there were no tasks'.tr}',
+                //               style: kTitleSmall.copyWith(color: disabled_grey, fontStyle: FontStyle.italic), //ktitleSmall!.copyWith(color: isDateEnabled ? text_bg : disabled_grey),
+                //             ),
+                //           ],
+                //         ),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+
+                Visibility(
+                  visible: hideEmptyYesterday,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8, bottom: 8, left: 8),
+                        child: Row(
+                          //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            RichText(
+                              text: TextSpan(
+                                text: weekdayOnlyFormater(currentDate),
+                                style: kTitleMedium.copyWith(
+                                  color: disabled_grey,
+                                  fontSize: 17,
+                                ),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text: '  ${standardDateFormater(currentDate)}: ${'there were no tasks'.tr}',
+                                    style: kBodySmall.copyWith(
+                                      fontStyle: FontStyle.italic,
+                                      color: disabled_grey,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 38),
+                            // Text(
+                            //   'there were no tasks'.tr,
+                            //   style: kBodySmall.copyWith(
+                            //     fontStyle: FontStyle.italic,
+                            //     color: disabled_grey,
+                            //   ),
+                            // ),
+                          ],
+                        ),
+                      ),
+                      const Divider(height: 0, thickness: 1),
+                    ],
+                  ),
+                ),
+
                 /// SHOW WEEKDAY AND DATE
                 Visibility(
                   visible: !hideEmptyYesterday,
@@ -49,7 +124,7 @@ class TasksList extends GetView<InitialPageController> {
                                 style: kBodySmall.copyWith(
                                   fontStyle: FontStyle.italic,
                                   color: disableYesterday ? disabled_grey : text_bg,
-                                ), //ktitleSmall!.copyWith(color: isDateEnabled ? text_bg : disabled_grey),
+                                ), 
                               ),
                             ],
                           ),

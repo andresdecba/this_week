@@ -16,14 +16,8 @@ class InitialPageController extends GetxController with AdMobService {
   // box de tasks
   Box<Task> tasksBox = Boxes.getTasksBox();
 
-  // related to buil days an weeks
-  int week = 0;
-  List<DateTime> weekDays = [];
-  Rx<Map<DateTime, List<Task>>> buildWeek = Rx<Map<DateTime, List<Task>>>({});
-  String initialFinalDays = '';
-
   // create strings for head
-  Week showCurrenWeekInfo = Week.current();
+  //Week showCurrenWeekInfo = Week.current();
   Rx<String> weekDaysFromTo = ''.obs;
   Rx<String> tasksPercentageCompleted = ''.obs;
 
@@ -51,19 +45,12 @@ class InitialPageController extends GetxController with AdMobService {
     appConfig = Boxes.getMyAppConfigBox().get('appConfig')!;
   }
 
-  void printInfo() {
-    for (var element in tasksBox.values) {
-      print('averga: ${element.repeatId.toString()}');
-    }
-  }
-
   @override
   void onInit() async {
     initSampleTask();
     await initConfig();
     buildInfo();
-
-    printInfo();
+    calculateWeeksDifference();
 
     /// TODO: mas adelante cambiar la logica y quitar pasar los argumentos
     /// medante getx y hacerlo por el constructor u otro medio para evitar este
@@ -127,36 +114,54 @@ class InitialPageController extends GetxController with AdMobService {
   //  'Domingo 02-12-2022'  : [],
   //};
 
+  // related to buil days an weeks
+  late int oldWeeks = 0;
+  late int increaseDecreaseWeeks;
+  Week week = Week.current();
+  Rx<Map<DateTime, List<Task>>> buildWeekInUI = Rx<Map<DateTime, List<Task>>>({});
+
+  void increaseWeek() {
+    week = week.next;
+    // if (increaseDecreaseWeeks < oldWeeks) {
+    //   increaseDecreaseWeeks++;
+    // }
+    increaseDecreaseWeeks++;
+    print('averga increase $increaseDecreaseWeeks');
+    buildInfo();
+  }
+
+  void decreaseWeek() {
+    if (increaseDecreaseWeeks > 0) {
+      week = week.previous;
+      increaseDecreaseWeeks--;
+    }
+    print('averga decrease $increaseDecreaseWeeks');
+    buildInfo();
+  }
+
+  void calculateWeeksDifference() {
+    if (tasksBox.isNotEmpty) {
+      var firstTaskWeek = Week.fromDate(tasksBox.values.first.taskDate);
+      var currentWeek = Week.current();
+      oldWeeks = currentWeek.weekNumber - firstTaskWeek.weekNumber;
+      increaseDecreaseWeeks = oldWeeks;
+    }
+    print('averga increaseDecreaseWeeks $increaseDecreaseWeeks / oldWeeks $oldWeeks');
+  }
+
   void buildInfo() {
     // limpiar lista para evitar duplicados
-    weekDays.clear();
-    buildWeek.value.clear();
-
-    // crear las semanas: si existen tareas que estan ANTES de la semana actual,
-    // empezar desde ahí, si no, empezar desde la semana actual
-    late Week currentWeek;
-    tasksBox.isNotEmpty ? currentWeek = Week.fromDate(tasksBox.values.first.taskDate) : currentWeek = Week.current();
-
-    // semana actual: week = 0, semana siguiente: week = 1, ...
-    if (week == 0) {
-      weekDays = currentWeek.days;
-      showCurrenWeekInfo = currentWeek;
-    }
-    if (week > 0) {
-      currentWeek = currentWeek.addWeeks(week);
-      weekDays = currentWeek.days;
-      showCurrenWeekInfo = currentWeek;
-    }
+    buildWeekInUI.value.clear();
 
     // agregar el dia como key al mapa de la semana
     // ej: 20/03/2023: []
-    for (var day in weekDays) {
-      buildWeek.value.addAll({day: []});
+    for (var day in week.days) {
+      buildWeekInUI.value.addAll({day: []});
     }
 
     // si hay tareas guardadas, agregarlas al dia correspondinete
     // ej: 20/03/2023: [Task_1{}, task_2{}]
-    for (var element in buildWeek.value.entries) {
+    for (var element in buildWeekInUI.value.entries) {
       for (var task in tasksBox.values) {
         if (task.taskDate == element.key) {
           element.value.add(task);
@@ -165,22 +170,13 @@ class InitialPageController extends GetxController with AdMobService {
     }
     setInitialAndFinalWeekDays();
     createCompletedTasksPercentage();
-    buildWeek.refresh();
-  }
-
-  void increaseWeek() {
-    week++;
-  }
-
-  void decreaseWeek() {
-    week--;
+    buildWeekInUI.refresh();
   }
 
   /// create head info
   void setInitialAndFinalWeekDays() {
-    var week = showCurrenWeekInfo.weekNumber.toString();
-    var days = '${dayAndMonthFormater(showCurrenWeekInfo.days.first)} ${'to'.tr} ${dayAndMonthFormater(showCurrenWeekInfo.days.last)}';
-    weekDaysFromTo.value = '${'week'.tr} $week: $days';
+    var days = '${dayAndMonthFormater(week.days.first)} ${'to'.tr} ${dayAndMonthFormater(week.days.last)}';
+    weekDaysFromTo.value = week == Week.current() ? '${'current week'.tr} $days' : '${'week'.tr} ${week.weekNumber}: $days';
   }
 
   void createCompletedTasksPercentage() {
@@ -188,7 +184,7 @@ class InitialPageController extends GetxController with AdMobService {
     int completedTotalTasks = 0;
     int completedTasksPercent = 0;
 
-    for (List value in buildWeek.value.values) {
+    for (List value in buildWeekInUI.value.values) {
       totalTasks += value.length;
       for (var element in value) {
         if (element.status == TaskStatus.DONE.toValue) {
@@ -246,8 +242,8 @@ class InitialPageController extends GetxController with AdMobService {
     }
 
     bannerAd = BannerAd(
-      adUnitId: AdMobService.testBanner!,
-      //adUnitId: AdMobService.initialPageBanner!,
+      //adUnitId: AdMobService.testBanner!,
+      adUnitId: AdMobService.initialPageBanner!,
       size: size,
       request: const AdRequest(),
       listener: BannerAdListener(

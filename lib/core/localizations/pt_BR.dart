@@ -2,6 +2,7 @@
 const Map<String, String> pt_BR = {
     //header
   'week': 'Semana',
+  'current week': 'SEMANA ATUAL:',
   'to': 'a',
   'no tasks for this week': 'Você não tem tarefas para esta semana.',
   'of completed tasks' : 'de tarefas concluídas.',
@@ -22,10 +23,13 @@ const Map<String, String> pt_BR = {
   'rate us in playstore' : 'Avalie-nos na Play Store',
 
   // task card
-  'no tasks': 'Sem tarefas.',
+  'no tasks': 'adicionar uma tarefa.',
   'pending': 'Pendente',
   'in progress': 'Em andamento',
   'done': 'Feita',
+
+  // tasks list
+  'there were no tasks': 'não havia tarefas',
 
   // form page
   'new task_formPage': 'Nova tarefa',
