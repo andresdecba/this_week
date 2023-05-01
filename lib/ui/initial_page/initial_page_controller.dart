@@ -51,13 +51,6 @@ class InitialPageController extends GetxController with AdMobService {
     await initConfig();
     buildInfo();
     calculateWeeksDifference();
-
-    /// TODO: mas adelante cambiar la logica y quitar pasar los argumentos
-    /// medante getx y hacerlo por el constructor u otro medio para evitar este
-    /// fix medio truchardo
-    if (data != null) {
-      Get.offAndToNamed(Routes.FORMS_PAGE, arguments: data);
-    }
     super.onInit();
   }
 
@@ -242,8 +235,8 @@ class InitialPageController extends GetxController with AdMobService {
     }
 
     bannerAd = BannerAd(
-      //adUnitId: AdMobService.testBanner!,
-      adUnitId: AdMobService.initialPageBanner!,
+      adUnitId: AdMobService.testBanner!,
+      //adUnitId: AdMobService.initialPageBanner!,
       size: size,
       request: const AdRequest(),
       listener: BannerAdListener(

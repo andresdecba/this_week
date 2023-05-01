@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:todoapp/core/bindings/initial_page_week_binding.dart';
+import 'package:todoapp/core/bindings/initial_page_binding.dart';
 import 'package:todoapp/core/localizations/translations.dart';
 import 'package:todoapp/core/routes/routes.dart';
 import 'package:todoapp/data_source/db_data_source.dart';
@@ -19,10 +19,9 @@ import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 // ignore: depend_on_referenced_packages, NOOO BORRAR aunuqe salga que no se usa x sí se usa
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:todoapp/ui/initial_page/initial_page.dart';
-import 'package:todoapp/ui/shared_components/onborading.dart';
 
-Map<String, String>? data;
+Map<String, String>? notificationPayload;
+String? initialRoute;
 Box<MyAppConfig> userPrefs = Boxes.getMyAppConfigBox();
 MyAppConfig config = userPrefs.get('appConfig')!;
 
@@ -37,26 +36,25 @@ Future<void> initHive() async {
 
 Future<void> initAdMob() async {
   // initializa
-  await MobileAds.instance.initialize(); 
+  await MobileAds.instance.initialize();
 
   /// TODO antes de publicar: cometar las siguientes lineas (dispositivos de prueba):
-  // var devices = ["4C456C78BB5CAFE90286C23C5EA6A3CC"];
-  // RequestConfiguration requestConfiguration = RequestConfiguration(testDeviceIds: devices);
-  // MobileAds.instance.updateRequestConfiguration(requestConfiguration);
+  var devices = ["4C456C78BB5CAFE90286C23C5EA6A3CC"];
+  RequestConfiguration requestConfiguration = RequestConfiguration(testDeviceIds: devices);
+  MobileAds.instance.updateRequestConfiguration(requestConfiguration);
 
   /// TODO antes de publicar: cambiar los ids de ad de prueba por los reales en
   /// [InitialPageController] y [FormsPageController] => [BannerAd]
 }
 
 Future<void> initAppConfig() async {
-  
   // if config file doenst exists, creat it
   if (userPrefs.get('appConfig') == null) {
     var value = MyAppConfig();
     userPrefs.put('appConfig', value);
   }
   // set language whether it is stored or not
-  
+
   Get.locale = config.language == null ? Get.deviceLocale : Locale(config.language!, '');
   Intl.defaultLocale = Get.locale!.languageCode;
 }
@@ -69,19 +67,40 @@ Future<void> initNotifications() async {
       await FlutterNativeTimezone.getLocalTimezone(),
     ),
   );
-  LocalNotificationService.initializePlatformNotifications();
-  final NotificationAppLaunchDetails? notificationAppLaunchDetails = await localNotifications.getNotificationAppLaunchDetails();
 
   // navegar cuando esta cerrada la app
-  if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
-    final payload = notificationAppLaunchDetails?.notificationResponse!.payload!;
-    data = {
-      "taskId": payload!,
-    };
+  LocalNotificationService.initializePlatformNotifications();
+  final notificationLaunchDetails = await localNotifications.getNotificationAppLaunchDetails();
 
-    /// TODO: se navega en el metodo onInit del [InitialPageController]
+  // si la app esta CERRADA y fue lanzada via la notificacion, entra acá:
+  if (notificationLaunchDetails?.didNotificationLaunchApp ?? false) {
+    // llega payload
+    final details = notificationLaunchDetails!.notificationResponse!;
+    if (details.payload != null) {
+      notificationPayload = {"taskId": details.payload!};
+    }
+    // si tocaron del action
+    if (details.notificationResponseType == NotificationResponseType.selectedNotificationAction) {
+      if (details.actionId.toString() == 'postposeActionId') {
+        initialRoute = Routes.POSTPOSE_PAGE;
+      }
+    }
+    // si tocaron el body
+    if (details.notificationResponseType == NotificationResponseType.selectedNotification) {
+      if (notificationPayload != null) {
+        initialRoute = Routes.FORMS_PAGE;
+      }
+      if (notificationPayload == null) {
+        initialRoute = Routes.INITIAL_PAGE;
+      }
+    }
+    // borrar la notificacion de la barra de notificaciones
+    localNotifications.cancel(details.id!);
   }
 }
+
+// en cuerpo de notif: NotificationResponseType.selectedNotification
+// en action         : NotificationResponseType.selectedNotificationAction
 
 void main() async {
   // flutter
@@ -134,8 +153,18 @@ class MyApp extends StatelessWidget {
           elevation: 0,
         ),
       ),
-      initialRoute: config.isOnboardingDone ? Routes.INITIAL_PAGE : Routes.ONBOARDING_PAGE,
-      
+      //initialRoute: initialRoute ?? (config.isOnboardingDone ? Routes.INITIAL_PAGE : Routes.ONBOARDING_PAGE),
+      initialRoute: setInitialRoute(),
     );
   }
+}
+
+String setInitialRoute() {
+  if (!config.isOnboardingDone) {
+    return Routes.ONBOARDING_PAGE;
+  }
+  if (initialRoute != null) {
+    return initialRoute!;
+  }
+  return Routes.INITIAL_PAGE;
 }

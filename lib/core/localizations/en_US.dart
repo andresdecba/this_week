@@ -76,7 +76,7 @@ const Map<String, String> en_US = {
   'update': 'Update',
 
   // notifications
-  'scheduled task': 'this_week: Scheduled task',
+  'task reminder': 'Task reminder',
 
   // sample task
   'sample task description': 'Organize my birthday party 🎂🍾🥰🎉\n(sample task)',

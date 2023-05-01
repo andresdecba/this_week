@@ -76,7 +76,7 @@ const Map<String, String> es_AR = {
   'update': 'Actualizar',
 
   // notifications
-  'scheduled task': 'this_week: Tarea programada',
+  'task reminder': 'Recordatorio de tarea',
 
   // sample task
   'sample task description': 'Organizar mi fiesta de cumpleaños 🎂🍾🥰🎉\n(tarea de ejemplo)',

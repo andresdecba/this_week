@@ -34,7 +34,7 @@ class Task extends HiveObject {
   @HiveField(6)
   int? notificationId;
   @HiveField(7)
-  String? repeatId;
+  String? repeatId; // si esta tarea se repite todos los dias o no (rutina)
 
   Task({
     required this.description,

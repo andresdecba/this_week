@@ -1,35 +1,51 @@
-//********************************************************
-//******* CONFIGURACION BASICA PARA NOTIFICACIONES *******
-//********************************************************
-
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:todoapp/core/routes/routes.dart';
 
-// instanciar el plugin de notificaciones
+// instanciar
 final FlutterLocalNotificationsPlugin localNotifications = FlutterLocalNotificationsPlugin();
 
 @pragma('vm:entry-point')
-void notificationTapBackground(NotificationResponse notificationResponse) {
-  if (notificationResponse.payload != null) {
-    Map<String, String> data = {
-      "taskId": notificationResponse.payload!,
-    };
-    Get.offAndToNamed(Routes.FORMS_PAGE, arguments: data);
+void onSelectNotificationBackground(NotificationResponse notificationResponse) {
+  // HACER ALGO...
+}
+
+void onSelectNotification(NotificationResponse details) {
+  //set args
+  Map<String, String>? arguments;
+  if (details.payload != null) {
+    arguments = {'taskId': details.payload!};
+  }
+
+  // si tocaron del action
+  if (details.notificationResponseType == NotificationResponseType.selectedNotificationAction) {
+    if (details.actionId.toString() == 'postposeActionId') {
+      Get.offAllNamed(Routes.POSTPOSE_PAGE, arguments: arguments);
+    }
+  }
+
+  // si tocaron el body
+  if (details.notificationResponseType == NotificationResponseType.selectedNotification) {
+    if (arguments != null) {
+      Get.offAllNamed(Routes.FORMS_PAGE, arguments: arguments);
+    }
+    if (arguments == null) {
+      Get.offAllNamed(Routes.INITIAL_PAGE);
+    }
   }
 }
 
 class LocalNotificationService {
-  //
-  ////// INICIALIZAR //////
+  // inicializar el servicio
   static Future<void> initializePlatformNotifications() async {
     const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('ic_notification');
     const DarwinInitializationSettings initializationSettingsIOS = DarwinInitializationSettings(
-      // onDidReceiveLocalNotification: (id, title, body, payload) {
-      // setear aqui el payload
-      // },
-    );
+        // onDidReceiveLocalNotification: (id, title, body, payload) {
+        // setear aqui el payload
+        // },
+        );
     // settings
     const InitializationSettings initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
@@ -39,95 +55,14 @@ class LocalNotificationService {
     await localNotifications.initialize(
       // settings
       initializationSettings,
-      // accion al hacer click en la notificacion en segundo plano?
-      onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
+      // abre la app estando en primer o segundo plano
+      onDidReceiveNotificationResponse: onSelectNotification,
 
-      // accion en primer y segundo plano
-      onDidReceiveNotificationResponse: (NotificationResponse notificationResponse) {
-        if (notificationResponse.payload != null) {
-          Map<String, String> data = {
-            "taskId": notificationResponse.payload!,
-          };
-          Get.offAndToNamed(Routes.FORMS_PAGE, arguments: data);
-        }
-      },      
+      // NO SÉ COMO SE USA: ejecuta algo algo sin abrir la app (background isolate)
+      onDidReceiveBackgroundNotificationResponse: onSelectNotificationBackground,
+      /* FROM DOCS: The [onDidReceiveNotificationResponse] callback is fired when the user selects a notification or notification action that should show the application/user interface. application was running. To handle when a notification launched an application, use [getNotificationAppLaunchDetails]. For notification actions that don't show the application/user interface, the [onDidReceiveBackgroundNotificationResponse] callback is invoked on a background isolate. Functions passed to the [onDidReceiveBackgroundNotificationResponse] callback need to be annotated with the @pragma('vm:entry-point') annotation to ensure they are not stripped out by the Dart compiler.*/
     );
-  }
-
-  ////// DISPARAR NOTIFICACIONES //////
-  static Future showtNotificationNow({
-    required String payload,
-    required int id, // identificado unico, si hay dos con el mismo id, se sobreecriben
-    required String title,
-    required String body,
-    required FlutterLocalNotificationsPlugin fln,
-  }) async {
-    const notificationDetails = NotificationDetails(
-      android: AndroidNotificationDetails(
-        'my_channel_id',
-        'my_channel_name',
-        playSound: true,
-        //sound: RawResourceAndroidNotificationSound('notification'),
-        importance: Importance.max,
-        priority: Priority.high,
-      ),
-      iOS: DarwinNotificationDetails(),
-    );
-
-    await fln.show(
-      id,
-      title,
-      body,
-      notificationDetails,
-      payload: payload,
-    );
-  }
-
-  static Future showtNotificationScheduled({
-    required String payload,
-    required int id, // identificado unico, si hay dos con el mismo id, se sobreecriben
-    //required String title,
-    required String body,
-    required FlutterLocalNotificationsPlugin fln,
-    required DateTime time,
-  }) async {
-
-    // details
-    const notificationDetails = NotificationDetails(
-      iOS: DarwinNotificationDetails(),
-      android: AndroidNotificationDetails(
-        'my_channel_id',
-        'my_channel_name',
-        playSound: true,
-        importance: Importance.max,
-        priority: Priority.high,
-        // sound: RawResourceAndroidNotificationSound('notification'),
-        // actions: <AndroidNotificationAction>[
-        //   AndroidNotificationAction(
-        //     'id_1',
-        //     'Action 1',
-        //     //titleColor: Color.fromARGB(255, 255, 0, 0),
-        //     //icon: DrawableResourceAndroidBitmap('first_icon'),
-        //     // By default, Android plugin will dismiss the notification when the
-        //     // user tapped on a action (this mimics the behavior on iOS).
-        //     //cancelNotification: false,
-        //     //contextual: true,
-        //   ),
-        // ],
-      ),
-    );
-
-    // notification
-    await fln.zonedSchedule(
-      id,
-      'scheduled task'.tr,
-      body,
-      tz.TZDateTime.from(time, tz.local),
-      notificationDetails,
-      payload: payload,
-      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
-      androidAllowWhileIdle: true,
-    );
+    
   }
 
   // borrar una notificacion
@@ -138,6 +73,51 @@ class LocalNotificationService {
   // borrar una notificacion
   static Future deleteAllNotifications() async {
     await localNotifications.cancelAll();
+  }
+
+  // crear notificacion programada
+  static Future createNotificationScheduled({
+    required String payload,
+    required int id,
+    required String body,
+    required FlutterLocalNotificationsPlugin fln,
+    required DateTime time,
+  }) async {
+    // crear notificacion
+    const notificationDetails = NotificationDetails(
+      iOS: DarwinNotificationDetails(),
+      android: AndroidNotificationDetails(
+        'my_channel_id',
+        'my_channel_name',
+        playSound: true,
+        importance: Importance.max,
+        priority: Priority.high,
+        autoCancel: true,
+        enableVibration: true,
+        visibility: NotificationVisibility.public,
+        actions: <AndroidNotificationAction>[
+          AndroidNotificationAction(
+            'postposeActionId', //action id
+            'Posponer', //action title
+            titleColor: Colors.blue,
+            showsUserInterface: true,
+            cancelNotification: true,
+          ),
+        ],
+      ),
+    );
+
+    // programar lanzamiento
+    await fln.zonedSchedule(
+      id,
+      body, // titulo
+      'task reminder'.tr, // body
+      tz.TZDateTime.from(time, tz.local),
+      notificationDetails,
+      payload: payload,
+      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+      androidScheduleMode: AndroidScheduleMode.exact,
+    );
   }
 }
 

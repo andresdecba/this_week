@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:todoapp/core/routes/routes.dart';
 import 'package:todoapp/data_source/db_data_source.dart';
+import 'package:todoapp/main.dart';
 import 'package:todoapp/models/my_app_config.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/services/ad_mob_service.dart';
@@ -11,6 +11,7 @@ import 'package:todoapp/services/local_notifications_service.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/ui/shared_components/dialogs.dart';
+import 'package:todoapp/ui/shared_components/postpose_snackbar.dart';
 import 'package:todoapp/ui/shared_components/snackbar.dart';
 import 'package:todoapp/utils/helpers.dart';
 
@@ -25,6 +26,14 @@ class FormsPageController extends GetxController {
     enableDisableNotificationStyles();
     hasUserInteractionInit();
     super.onInit();
+  }
+
+  /// onReady() Called 1 frame after onInit(). It is the perfect place to enter
+  /// navigation events, like snackbar, dialogs, or a new route, or async request.
+  @override
+  void onReady() {
+    initSmartBannerAd();
+    super.onReady();
   }
 
   @override
@@ -53,10 +62,8 @@ class FormsPageController extends GetxController {
     repeatId: null,
   ).obs;
 
-  void setInitialConfig() {
-    // view mode
-    if (Get.arguments['taskId'] != null) {
-      _task.value = tasksBox.get(int.parse(Get.arguments['taskId']!))!;
+  void llenarInfo(int value) {
+    _task.value = tasksBox.get(value)!;
       taskDescriptionCtrlr.text = _task.value.description;
       taskDate = _task.value.taskDate.obs;
       currentPageMode.value = PageMode.VIEW_MODE;
@@ -69,9 +76,21 @@ class FormsPageController extends GetxController {
         notificationId: _task.value.notificationId,
         repeatId: _task.value.repeatId,
       );
+  }
+
+  // TODO: cuando refactoricemos, hacer algo mas pro con el tema de los argumentos
+  void setInitialConfig() {
+    // argumentos desde la notificacion
+    if (notificationPayload != null) {
+      llenarInfo(int.parse(notificationPayload!['taskId']!));
       return;
     }
-    // new mode on a specific date
+    // argumentos desde la pagina de inicio al abrir una tarea existnte
+    if (Get.arguments['taskId'] != null) {
+      llenarInfo(int.parse(Get.arguments['taskId']!));
+      return;
+    }
+    // argumentos desde la pagina de inicio al crear nueva tarea en una fecha especifica
     if (Get.arguments['date'] != null) {
       var arguments = DateTime.parse(Get.arguments['date']!);
       _task.value.taskDate = arguments;
@@ -314,12 +333,31 @@ class FormsPageController extends GetxController {
     }
   }
 
-  Future<void> createNotification({DateTime? notif, int? id, String? payload}) async {
-    await LocalNotificationService.showtNotificationScheduled(
+  Future<void> createNotification({DateTime? notif, int? id, String? payload, String? body}) async {
+    await LocalNotificationService.createNotificationScheduled(
       time: notif ?? _task.value.notificationTime!,
       id: id ?? _task.value.notificationId!,
-      body: _task.value.description,
+      body: body ?? _task.value.description,
       payload: payload ?? _task.value.key.toString(),
+      fln: localNotifications,
+    );
+  }
+
+  postposeNotification(Duration duration) {
+    // estos argumentos vienen del servicio de notificaciones
+    // var args = Get.arguments['taskId']!;
+    // var task = tasksBox.get(int.parse(args))!;
+    _task.value.notificationTime = DateTime.now().add(duration);
+    _task.value.save();
+    _createNotificationREFACTORIZED(task: _task.value);
+  }
+
+  Future<void> _createNotificationREFACTORIZED({required Task task}) async {
+    await LocalNotificationService.createNotificationScheduled(
+      time: task.notificationTime!,
+      id: createNotificationId(),
+      body: task.description,
+      payload: task.key.toString(),
       fln: localNotifications,
     );
   }
@@ -502,14 +540,6 @@ class FormsPageController extends GetxController {
   late BannerAd bannerAd;
   RxBool isAdLoaded = false.obs;
 
-  /// onReady() Called 1 frame after onInit(). It is the perfect place to enter
-  /// navigation events, like snackbar, dialogs, or a new route, or async request.
-  @override
-  void onReady() {
-    initSmartBannerAd();
-    super.onReady();
-  }
-
   void initSmartBannerAd() async {
     final AnchoredAdaptiveBannerAdSize? size = await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
       MediaQuery.of(Get.context!).size.width.truncate(),
@@ -521,8 +551,8 @@ class FormsPageController extends GetxController {
     }
 
     bannerAd = BannerAd(
-      //adUnitId: AdMobService.testBanner!,
-      adUnitId: AdMobService.initialPageBanner!,
+      adUnitId: AdMobService.testBanner!,
+      //adUnitId: AdMobService.initialPageBanner!,
       size: size,
       request: const AdRequest(),
       listener: BannerAdListener(

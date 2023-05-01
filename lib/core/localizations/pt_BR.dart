@@ -76,7 +76,7 @@ const Map<String, String> pt_BR = {
   'update': 'Atualizar',
 
   // notifications
-  'scheduled task': 'this_week: tarefa agendada',
+  'task reminder': 'Lembrete de tarefa',
 
   'sample task description': 'Organizar minha festa de aniversário 🎂🍾🥰🎉\n(tarefa de exemplo)',
   'sample task  subtask_1 description': 'Enviar convites 🙆‍♀️',
