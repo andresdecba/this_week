@@ -49,6 +49,22 @@ const Map<String, String> es_AR = {
   'update subtask' : 'Editar subtask',
   'repeat this task every': 'Repetir esta tarea todos los',
 
+  // postpose page
+  '15 minutes': '15 minutos',
+  '1 hour': '1 hora',
+  '3 hours': '3 horas',
+  '1 day': '1 día',
+  'personalized': 'Personalizado',
+  'today': 'hoy',
+  'tomorrow': 'Mañana',
+  'select...': 'Seleccionar...',
+  'select date and time': 'Seleccione un día y hora.',
+  'postponed task title': 'Tarea pospuesta',
+  'postponed task description': 'Para:',
+  'hr': 'hs.',
+  'at': 'a las',
+  'postpone task': 'Posponer tarea',
+
   // alerts
   'delete task ?': '¿Borrar tarea?',
   'this action will delete...': 'Esta acción borrará la tarea permanentemente.',
@@ -68,7 +84,7 @@ const Map<String, String> es_AR = {
   'you will need to restart the app...': 'Necesitará reiniciar la aplicación para aplicar los cambios.',
 
   // UI elements texts
-  'ok': 'Ok',
+  'ok': 'Aceptar',
   'cancel': 'Cancelar',
   'create': 'Crear',
   'delete': 'Borrar',

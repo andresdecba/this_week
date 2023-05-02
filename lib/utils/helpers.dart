@@ -6,6 +6,11 @@ import 'package:intl/intl.dart';
 /// Utils docs
 /// https://pub.dev/documentation/intl/latest/intl/DateFormat-class.html
 /// https://www.flutterbeads.com/format-datetime-in-flutter/
+///
+String longDateFormaterWithoutYear(DateTime date) {
+  // sábado, 26/01
+  return "${DateFormat('EEEE').format(date)} ${DateFormat.Md().format(date)}";
+}
 
 String longDateFormater(DateTime date) {
   // sábado, 26/01/2023
@@ -42,6 +47,7 @@ int createNotificationId() {
   print('generateRandom: $value');
   return value;
 }
+
 extension TimeOfDayConverter on TimeOfDay {
   String to24hours() {
     final hour = this.hour.toString().padLeft(2, "0");

@@ -49,6 +49,22 @@ const Map<String, String> en_US = {
   'update subtask' : 'Update subtask',
   'repeat this task every': 'Repeat this task every',
 
+  // postpose page
+  '15 minutes': '15 minutes',
+  '1 hour': '1 hour',
+  '3 hours': '3 hours',
+  '1 day': '1 day',
+  'personalized': 'Personalized',
+  'today': 'Today',
+  'tomorrow': 'Tomorrow',
+  'select...': 'Select...',
+  'select date and time': 'Select date and time.',
+  'postponed task title': 'Postponed task',
+  'postponed task description': 'To:',
+  'hr': 'hr.',
+  'at': 'at',
+  'postpone task': 'Postpone task',
+
   // alerts
   'delete task ?': 'Delete task ?',
   'this action will delete...': 'This action will delete the task permanently.',

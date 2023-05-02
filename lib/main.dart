@@ -143,6 +143,7 @@ class MyApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
       ],
       theme: ThemeData(
+        dividerColor: Colors.transparent,
         primaryTextTheme: Typography().white,
         scaffoldBackgroundColor: grey_bg,
         appBarTheme: const AppBarTheme(

@@ -49,6 +49,22 @@ const Map<String, String> pt_BR = {
   'update subtask' : 'Editar subtarefa',
   'repeat this task every': 'Repetir esta tarefa toda',
 
+  // postpose page
+  '15 minutes': '15 minutos',
+  '1 hour': '1 hora',
+  '3 hours': '3 horas',
+  '1 day': '1 dia',
+  'personalized': 'Personalizado',
+  'today': 'Hoje',
+  'tomorrow': 'Manhã',
+  'select...': 'Seleccionar...',
+  'select date and time': 'Selecione um dia e hora.',
+  'postponed task title': 'Tarefa adiada.',
+  'postponed task description': 'Para:',
+  'hr': 'h.',
+  'at': 'às',
+  'postpone task': 'adiar tarefa',
+
   // alerts
   'delete task ?': 'Excluir tarefa ?',
   'this action will delete...': 'Esta ação excluirá a tarefa permanentemente.',
@@ -68,7 +84,7 @@ const Map<String, String> pt_BR = {
   'you will need to restart the app...': 'Você precisará reiniciar o aplicativo para aplicar as alterações.',
 
   // UI elements texts
-  'ok': 'Ok',
+  'ok': 'Aceitar',
   'cancel': 'Cancelar',
   'create': 'Criar',
   'delete': 'Excluir',

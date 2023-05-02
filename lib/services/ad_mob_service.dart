@@ -12,7 +12,7 @@ mixin AdMobService {
     return null;
   }
 
-  // BANNER 1
+  // Initial page Banner
   static String? get initialPageBanner {
     if (Platform.isAndroid) {
       return 'ca-app-pub-9058342620461440/8299319891';
@@ -22,7 +22,7 @@ mixin AdMobService {
     return null;
   }
 
-  // BANNER 2
+  // Forms page Banner
   static String? get formPageBanner {
     if (Platform.isAndroid) {
       return 'ca-app-pub-9058342620461440/3050624967';
@@ -31,6 +31,17 @@ mixin AdMobService {
     }
     return null;
   }
+
+  // Postpose page Banner
+  static String? get postposePageBanner {
+    if (Platform.isAndroid) {
+      return 'ca-app-pub-9058342620461440/1390532667';
+    } else if (Platform.isIOS) {
+      return 'ca-app-pub-9058342620461440/8753806961';
+    }
+    return null;
+  }
+  
 
   final BannerAdListener listenerAaa = BannerAdListener(
     // Called when an ad is successfully received.
