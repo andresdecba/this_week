@@ -40,7 +40,7 @@ const Map<String, String> es_AR = {
   'task description': 'Descripción',
   'task description_description': 'Requerído: agrega una descripción de entre 7 y 200 caracteres.',
   'Write at least 7 characters' : 'Escribe al menos 7 caracters',
-  'todo list': 'Lista de subtareas',
+  'todo list': 'Subtareas',
   'here you can add a sub task list': 'Opcional: Agrega una lista de subtareas.',
   'create subtask': 'Crear subtarea',
   'create subtask_description': 'Agrega una descripción de entre 7 y 100 caracteres.',
@@ -64,6 +64,7 @@ const Map<String, String> es_AR = {
   'hr': 'hs.',
   'at': 'a las',
   'postpone task': 'Posponer tarea',
+  'no subtasks': 'No hay subtareas.',
 
   // alerts
   'delete task ?': '¿Borrar tarea?',
@@ -93,6 +94,7 @@ const Map<String, String> es_AR = {
 
   // notifications
   'task reminder': 'Recordatorio de tarea',
+  'postpone': 'Posponer',
 
   // sample task
   'sample task description': 'Organizar mi fiesta de cumpleaños 🎂🍾🥰🎉\n(tarea de ejemplo)',

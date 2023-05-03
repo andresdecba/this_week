@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:todoapp/core/routes/routes.dart';
 import 'package:todoapp/ui/commons/styles.dart';
-import 'package:todoapp/ui/initial_page/components/task_card.dart';
+import 'package:todoapp/ui/postpose_page/components/view_task.dart';
+import 'package:todoapp/ui/shared_components/bottomsheet.dart';
 import 'package:todoapp/ui/postpose_page/postpose_page_controller.dart';
 
 class PostPosePage extends GetView<PostPosePageController> {
@@ -26,6 +26,7 @@ class PostPosePage extends GetView<PostPosePageController> {
         ),
       ),
 
+      // Aceptar o cancelar
       persistentFooterButtons: [
         Padding(
           padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
@@ -35,11 +36,11 @@ class PostPosePage extends GetView<PostPosePageController> {
               Expanded(
                 flex: 1,
                 child: OutlinedButton(
-                  onPressed: () => Get.offAllNamed(Routes.INITIAL_PAGE),
+                  onPressed: () => controller.cancelPostpose(),
                   style: OutlinedButton.styleFrom(
                     side: const BorderSide(color: blue_primary),
                   ),
-                  child: Text('Cancelar'),
+                  child: Text('cancel'.tr),
                 ),
               ),
               const SizedBox(width: 8),
@@ -47,7 +48,7 @@ class PostPosePage extends GetView<PostPosePageController> {
                 flex: 1,
                 child: ElevatedButton(
                   onPressed: () => controller.savePostpose(controller.selectedItem.value),
-                  child: Text('Aceptar'),
+                  child: Text('ok'.tr),
                 ),
               ),
             ],
@@ -83,20 +84,29 @@ class PostPosePage extends GetView<PostPosePageController> {
         () => SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.fromLTRB(20, 10, 20, 40),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                
                 /// titulo
-                Text(
-                  'Posponer tarea',
-                  style: kTitleLarge,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'postpone task'.tr,
+                      style: kTitleLarge,
+                    ),
+                    
+                    IconButton(
+                      icon: const Icon(Icons.open_in_new),
+                      onPressed: () => openBottomSheet(context: context, widget: ViewTask(task: controller.task)),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 20),
 
                 /// opciones de posponer
-                //const _Divider(),
                 ...PostposeEnum.values.toList().map((e) {
                   bool isSelected = controller.isSelected(e);
                   return Column(
@@ -105,6 +115,7 @@ class PostPosePage extends GetView<PostPosePageController> {
                         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
                         visualDensity: VisualDensity.compact,
                         activeColor: blue_primary,
+                        contentPadding: EdgeInsets.zero,
                         title: Text(
                           controller.setTitle(e),
                           style: TextStyle(fontWeight: isSelected ? FontWeight.bold : FontWeight.normal),
@@ -127,15 +138,6 @@ class PostPosePage extends GetView<PostPosePageController> {
                     ],
                   );
                 }),
-                const SizedBox(height: 40),
-
-                TaskCard(
-                  task: controller.task,
-                  key: UniqueKey(),
-                  navigate: () => controller.navigateCard(),
-                  onStatusChange: () => controller.changeTaskStatus(controller.task),
-                ),
-                const SizedBox(height: 20),
               ],
             ),
           ),
@@ -144,6 +146,8 @@ class PostPosePage extends GetView<PostPosePageController> {
     );
   }
 }
+
+
 
 class _Divider extends StatelessWidget {
   const _Divider({Key? key}) : super(key: key);

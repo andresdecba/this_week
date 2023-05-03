@@ -34,7 +34,7 @@ class _TaskCardState extends State<TaskCard> {
           color: Colors.white,
           border: Border(
             left: BorderSide(
-              color: setStatusColor(),
+              color: setStatusColor(widget.task),
               width: 4,
             ),
           ),
@@ -66,7 +66,7 @@ class _TaskCardState extends State<TaskCard> {
                       widget.task.description,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: setStatusTextStyle(),
+                      style: setStatusTextStyle(widget.task),
                     ),
                   ),
                 ],
@@ -88,8 +88,8 @@ class _TaskCardState extends State<TaskCard> {
                         setState(() {});
                       },
                       child: Text(
-                        setStatusLanguage(),
-                        style: kLabelLarge.copyWith(color: setStatusColor()),
+                        setStatusLanguage(widget.task),
+                        style: kLabelLarge.copyWith(color: setStatusColor(widget.task)),
                       ),
                     ),
                   ),
@@ -166,44 +166,5 @@ class _TaskCardState extends State<TaskCard> {
       }
     }
     return '$value of ${widget.task.subTasks.length}';
-  }
-
-  String setStatusLanguage() {
-    switch (widget.task.status) {
-      case 'Pending':
-        return 'pending'.tr;
-      case 'In progress':
-        return 'in progress'.tr;
-      case 'Done':
-        return 'done'.tr;
-      default:
-        return 'pending'.tr;
-    }
-  }
-
-  Color setStatusColor() {
-    switch (widget.task.status) {
-      case 'Pending':
-        return status_task_pending;
-      case 'In progress':
-        return status_task_in_progress;
-      case 'Done':
-        return status_task_done;
-      default:
-        return status_task_pending;
-    }
-  }
-
-  TextStyle setStatusTextStyle() {
-    switch (widget.task.status) {
-      case 'Pending':
-        return kBodyMedium;
-      case 'In progress':
-        return kBodyMedium;
-      case 'Done':
-        return kBodyMedium.copyWith(fontStyle: FontStyle.italic, decoration: TextDecoration.lineThrough, color: disabled_grey);
-      default:
-        return kBodyMedium;
-    }
   }
 }

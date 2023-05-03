@@ -65,16 +65,16 @@ class PostPosePageController extends GetxController {
     final DateTime tmp4 = task.notificationTime!;
     switch (data) {
       case PostposeEnum.fifteenMinutes:
-        return '${'today'.tr}, ${'at'.tr} ${timeFormater(tmp1.add(const Duration(minutes: 15)))} ${'hr'.tr}';
+        return '${'today'.tr}, ${'at'.tr} ${timeFormater(tmp1.add(const Duration(minutes: 15)))}';
       case PostposeEnum.oneHour:
-        return '${'today'.tr}, ${'at'.tr} ${timeFormater(tmp2.add(const Duration(hours: 1)))} ${'hr'.tr}';
+        return '${'today'.tr}, ${'at'.tr} ${timeFormater(tmp2.add(const Duration(hours: 1)))}';
       case PostposeEnum.threeHours:
-        return '${'today'.tr}, ${'at'.tr} ${timeFormater(tmp3.add(const Duration(hours: 3)))} ${'hr'.tr}';
+        return '${'today'.tr}, ${'at'.tr} ${timeFormater(tmp3.add(const Duration(hours: 3)))}';
       case PostposeEnum.oneDay:
-        return '${'tomorrow'.tr}, ${'at'.tr} ${timeFormater(tmp4.add(const Duration(days: 1)))} ${'hr'.tr}';
+        return '${'tomorrow'.tr}, ${'at'.tr} ${timeFormater(tmp4.add(const Duration(days: 1)))}';
       case PostposeEnum.personalized:
         if (personalizedNotificationDateTime.value != null && personalizedTaskDate != null) {
-          return '${longDateFormaterWithoutYear(personalizedNotificationDateTime.value!)}, ${'at'.tr} ${timeFormater(personalizedNotificationDateTime.value!)} ${'hr'.tr}';
+          return '${longDateFormaterWithoutYear(personalizedNotificationDateTime.value!)}, ${'at'.tr} ${timeFormater(personalizedNotificationDateTime.value!)}';
         } else {
           return 'select...'.tr;
         }
@@ -137,7 +137,7 @@ class PostPosePageController extends GetxController {
     Get.offAllNamed(Routes.INITIAL_PAGE);
     showSnackBar(
       titleText: 'postponed task title'.tr,
-      messageText: '${'postponed task description'.tr} ${longDateFormaterWithoutYear(task.taskDate)}, ${'at'.tr} ${timeFormater(task.notificationTime!)} ${'hr'.tr}',
+      messageText: '${'postponed task description'.tr} ${longDateFormaterWithoutYear(task.taskDate)}, ${'at'.tr} ${timeFormater(task.notificationTime!)}',
     );
   }
 
@@ -149,6 +149,14 @@ class PostPosePageController extends GetxController {
       payload: task.key.toString(),
       fln: localNotifications,
     );
+  }
+
+  ///// manage CANCEL AND NAVIGATE /////
+  void cancelPostpose() {
+    Map<String, String> data = {
+      "taskId": task.key.toString(),
+    };
+    Get.offAllNamed(Routes.FORMS_PAGE, arguments: data);
   }
 
   ///// manage PERSONALIZED DATE AND TIME /////

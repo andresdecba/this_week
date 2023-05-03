@@ -14,6 +14,7 @@ const yellow_primary = Color(0xFFFFC700);
 const header = Color.fromARGB(255, 201, 241, 253);
 const withe_bg = Color(0xFFFFFFFF);
 const black_bg = Color(0xFF000000);
+const appBar_logo = Color(0xFF000000);
 const text_bg = Color(0xFF000000);
 const warning = Color(0xFFD30000);
 const blue_primary = Color(0xFF0075FF);

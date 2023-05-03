@@ -1,7 +1,14 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:todoapp/models/task_model.dart';
+import 'package:todoapp/ui/commons/styles.dart';
+
+//////////////////////////////
+/// DATE & TIME HELPERS ///
+/////////////////////////////
 
 /// Utils docs
 /// https://pub.dev/documentation/intl/latest/intl/DateFormat-class.html
@@ -34,7 +41,7 @@ String dayAndMonthFormater(DateTime date) {
 
 String timeFormater(DateTime date) {
   // 22:01
-  return DateFormat.Hm().format(date);
+  return "${DateFormat.Hm().format(date)} ${'hr'.tr}";
 }
 
 int createNotificationId() {
@@ -44,7 +51,6 @@ int createNotificationId() {
   // int trimmedId = int.parse(value.substring(startValue, value.length));
   // return trimmedId;
   int value = Random().nextInt(999999999);
-  print('generateRandom: $value');
   return value;
 }
 
@@ -53,5 +59,48 @@ extension TimeOfDayConverter on TimeOfDay {
     final hour = this.hour.toString().padLeft(2, "0");
     final min = this.minute.toString().padLeft(2, "0");
     return "$hour:$min";
+  }
+}
+
+//////////////////////////////
+/// TASK THINGS HELPERS ///
+/////////////////////////////
+
+String setStatusLanguage(Task task) {
+  switch (task.status) {
+    case 'Pending':
+      return 'pending'.tr;
+    case 'In progress':
+      return 'in progress'.tr;
+    case 'Done':
+      return 'done'.tr;
+    default:
+      return 'pending'.tr;
+  }
+}
+
+Color setStatusColor(Task task) {
+  switch (task.status) {
+    case 'Pending':
+      return status_task_pending;
+    case 'In progress':
+      return status_task_in_progress;
+    case 'Done':
+      return status_task_done;
+    default:
+      return status_task_pending;
+  }
+}
+
+TextStyle setStatusTextStyle(Task task) {
+  switch (task.status) {
+    case 'Pending':
+      return kBodyMedium;
+    case 'In progress':
+      return kBodyMedium;
+    case 'Done':
+      return kBodyMedium.copyWith(fontStyle: FontStyle.italic, decoration: TextDecoration.lineThrough, color: disabled_grey);
+    default:
+      return kBodyMedium;
   }
 }

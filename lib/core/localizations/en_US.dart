@@ -40,7 +40,7 @@ const Map<String, String> en_US = {
   'task description': 'Description',
   'task description_description': 'Required: add a task description between 7 and 200 characters.',
   'Write at least 7 characters' : 'Write at least 7 characters',
-  'todo list': 'Todo list',
+  'todo list': 'Todo',
   'here you can add a sub task list': 'Optional: add a subtasks list',
   'create subtask': 'Create a subtask',
   'create subtask_description': 'Add a subtask description betwwen 7 and 100 characters.',
@@ -64,6 +64,7 @@ const Map<String, String> en_US = {
   'hr': 'hr.',
   'at': 'at',
   'postpone task': 'Postpone task',
+  'no subtasks': 'No subtasks.',
 
   // alerts
   'delete task ?': 'Delete task ?',
@@ -93,6 +94,7 @@ const Map<String, String> en_US = {
 
   // notifications
   'task reminder': 'Task reminder',
+  'postpone': 'Postpone',
 
   // sample task
   'sample task description': 'Organize my birthday party 🎂🍾🥰🎉\n(sample task)',

@@ -84,8 +84,8 @@ class LocalNotificationService {
     required DateTime time,
   }) async {
     // crear notificacion
-    const notificationDetails = NotificationDetails(
-      iOS: DarwinNotificationDetails(),
+    final notificationDetails = NotificationDetails(
+      iOS: const DarwinNotificationDetails(),
       android: AndroidNotificationDetails(
         'my_channel_id',
         'my_channel_name',
@@ -98,7 +98,7 @@ class LocalNotificationService {
         actions: <AndroidNotificationAction>[
           AndroidNotificationAction(
             'postposeActionId', //action id
-            'Posponer', //action title
+            'postpone'.tr, //action title
             titleColor: Colors.blue,
             showsUserInterface: true,
             cancelNotification: true,

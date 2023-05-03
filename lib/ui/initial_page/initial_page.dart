@@ -46,7 +46,7 @@ class InitialPage extends GetView<InitialPageController> {
         title: SvgPicture.asset(
           'assets/appbar_logo.svg',
           alignment: Alignment.center,
-          color: const Color.fromARGB(255, 139, 115, 28),
+          color: appBar_logo,
           fit: BoxFit.contain,
           height: 21,
         ),

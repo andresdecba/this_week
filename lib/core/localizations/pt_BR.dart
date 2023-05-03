@@ -39,8 +39,8 @@ const Map<String, String> pt_BR = {
   'select time': 'Selecione a hora',
   'task description': 'Descrição',
   'task description_description': 'Obrigatório: adicione uma descrição da tarefa entre 7 e 200 caracteres.',
-  'todo list': 'Lista de subtarefas',
   'Write at least 7 characters' : 'Escreva pelo menos 7 caracteres',
+  'todo list': 'Subtarefas',
   'here you can add a sub task list': 'Opcional: adicione uma lista de subtarefas.',
   'create subtask': 'Criar subtarefa',
   'create subtask_description': 'Adicione uma descrição entre 7 e 100 caracteres.',
@@ -64,6 +64,7 @@ const Map<String, String> pt_BR = {
   'hr': 'h.',
   'at': 'às',
   'postpone task': 'adiar tarefa',
+  'no subtasks': 'Sem subtarefas.',
 
   // alerts
   'delete task ?': 'Excluir tarefa ?',
@@ -93,6 +94,7 @@ const Map<String, String> pt_BR = {
 
   // notifications
   'task reminder': 'Lembrete de tarefa',
+  'postpone': 'adiar',
 
   'sample task description': 'Organizar minha festa de aniversário 🎂🍾🥰🎉\n(tarefa de exemplo)',
   'sample task  subtask_1 description': 'Enviar convites 🙆‍♀️',
