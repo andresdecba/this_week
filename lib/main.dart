@@ -20,7 +20,7 @@ import 'package:timezone/timezone.dart' as tz;
 // ignore: depend_on_referenced_packages, NOOO BORRAR aunuqe salga que no se usa x sí se usa
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-Map<String, String>? notificationPayload;
+String? notificationPayload; //en el payload llega el task id de hive
 String? initialRoute;
 Box<MyAppConfig> userPrefs = Boxes.getMyAppConfigBox();
 MyAppConfig config = userPrefs.get('appConfig')!;
@@ -74,18 +74,19 @@ Future<void> initNotifications() async {
 
   // si la app esta CERRADA y fue lanzada via la notificacion, entra acá:
   if (notificationLaunchDetails?.didNotificationLaunchApp ?? false) {
-    // llega payload
     final details = notificationLaunchDetails!.notificationResponse!;
+    // llega payload
     if (details.payload != null) {
-      notificationPayload = {"taskId": details.payload!};
+      notificationPayload = details.payload!;
     }
-    // si tocaron del action
+    // si tocaron el action de la notificacion
     if (details.notificationResponseType == NotificationResponseType.selectedNotificationAction) {
-      if (details.actionId.toString() == 'postposeActionId') {
+      // si tocaron el action de posponer
+      if (details.actionId.toString() == 'notificationPostponeACTION' && notificationPayload != null) {
         initialRoute = Routes.POSTPOSE_PAGE;
       }
     }
-    // si tocaron el body
+    // si tocaron el body de la notificacion
     if (details.notificationResponseType == NotificationResponseType.selectedNotification) {
       if (notificationPayload != null) {
         initialRoute = Routes.FORMS_PAGE;

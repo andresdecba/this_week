@@ -13,15 +13,16 @@ void onSelectNotificationBackground(NotificationResponse notificationResponse) {
 }
 
 void onSelectNotification(NotificationResponse details) {
+
   //set args
   Map<String, String>? arguments;
   if (details.payload != null) {
-    arguments = {'taskId': details.payload!};
+    arguments = {'notificationPAYLOAD': details.payload!}; //en el payload llega el task id de hive
   }
 
   // si tocaron del action
   if (details.notificationResponseType == NotificationResponseType.selectedNotificationAction) {
-    if (details.actionId.toString() == 'postposeActionId') {
+    if (details.actionId.toString() == 'notificationPostponeACTION') {
       Get.offAllNamed(Routes.POSTPOSE_PAGE, arguments: arguments);
     }
   }
@@ -97,7 +98,7 @@ class LocalNotificationService {
         visibility: NotificationVisibility.public,
         actions: <AndroidNotificationAction>[
           AndroidNotificationAction(
-            'postposeActionId', //action id
+            'notificationPostponeACTION', //action id
             'postpone'.tr, //action title
             titleColor: Colors.blue,
             showsUserInterface: true,

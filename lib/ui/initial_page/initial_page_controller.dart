@@ -194,6 +194,8 @@ class InitialPageController extends GetxController with AdMobService {
 
   /// navegar para crear o editar
   void navigate({int? taskKey, DateTime? date}) {
+
+    // si quiere abrir una tarea
     if (taskKey != null) {
       Map<String, String> data = {
         "taskId": taskKey.toString(),
@@ -201,13 +203,15 @@ class InitialPageController extends GetxController with AdMobService {
       Get.offAllNamed(Routes.FORMS_PAGE, arguments: data);
       return;
     }
+    // si quiere crear una tarea a partir de una fecha en particular
     if (date != null) {
       Map<String, String> data = {
-        "date": date.toString(), //subtract(Duration(days: 1))
+        "date": date.toString(),
       };
       Get.offAllNamed(Routes.FORMS_PAGE, arguments: data);
       return;
     }
+    // si quiere crear una tarea a partir de nada
     Get.offAllNamed(Routes.FORMS_PAGE);
   }
 

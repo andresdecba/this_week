@@ -72,7 +72,10 @@ class ViewTask extends StatelessWidget {
               children: [
                 //descripcion y subtareas
                 Text("${'task description'.tr}:"),
-                const SizedBox(height: 10),
+                const SizedBox(
+                  height: 10,
+                  width: double.infinity,
+                ),
                 Text(
                   task.description,
                   style: kBodyMedium.copyWith(fontWeight: FontWeight.bold),

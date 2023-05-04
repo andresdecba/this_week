@@ -63,33 +63,42 @@ class FormsPageController extends GetxController {
 
   void llenarInfo(int value) {
     _task.value = tasksBox.get(value)!;
-      taskDescriptionCtrlr.text = _task.value.description;
-      taskDate = _task.value.taskDate.obs;
-      currentPageMode.value = PageMode.VIEW_MODE;
-      initialTaskValues = _task.value.copyWith(
-        description: _task.value.description,
-        taskDate: _task.value.taskDate,
-        notificationTime: _task.value.notificationTime,
-        status: _task.value.status,
-        subTasks: _task.value.subTasks,
-        notificationId: _task.value.notificationId,
-        repeatId: _task.value.repeatId,
-      );
+    taskDescriptionCtrlr.text = _task.value.description;
+    taskDate = _task.value.taskDate.obs;
+    currentPageMode.value = PageMode.VIEW_MODE;
+    initialTaskValues = _task.value.copyWith(
+      description: _task.value.description,
+      taskDate: _task.value.taskDate,
+      notificationTime: _task.value.notificationTime,
+      status: _task.value.status,
+      subTasks: _task.value.subTasks,
+      notificationId: _task.value.notificationId,
+      repeatId: _task.value.repeatId,
+    );
   }
 
   // TODO: cuando refactoricemos, hacer algo mas pro con el tema de los argumentos
   void setInitialConfig() {
-    // argumentos desde la notificacion
+    // desde la notificacion con la app cerrada
     if (notificationPayload != null) {
-      llenarInfo(int.parse(notificationPayload!['taskId']!));
+      llenarInfo(int.parse(notificationPayload!));
+      notificationPayload = null;
       return;
     }
-    // argumentos desde la pagina de inicio al abrir una tarea existnte
+
+    // desde la notificación con la app abierta o en segundo plano
+    if (Get.arguments['notificationPAYLOAD'] != null) {
+      llenarInfo(int.parse(Get.arguments['notificationPAYLOAD']!));
+      return;
+    }
+
+    // desde la pagina de inicio al abrir una tarea existente
     if (Get.arguments['taskId'] != null) {
       llenarInfo(int.parse(Get.arguments['taskId']!));
       return;
     }
-    // argumentos desde la pagina de inicio al crear nueva tarea en una fecha especifica
+
+    // desde la pagina de inicio al crear nueva tarea en una fecha especifica
     if (Get.arguments['date'] != null) {
       var arguments = DateTime.parse(Get.arguments['date']!);
       _task.value.taskDate = arguments;
@@ -340,6 +349,8 @@ class FormsPageController extends GetxController {
       payload: payload ?? _task.value.key.toString(),
       fln: localNotifications,
     );
+    print('payload-1: $payload');
+    print('payload-2: ${_task.value.key.toString()}');
   }
 
   postposeNotification(Duration duration) {

@@ -26,14 +26,15 @@ class PostPosePageController extends GetxController {
   late Task task;
 
   void getCurrentTask() {
-    // argumentos desde la notificacion
+    // argumentos desde la notificacion cuando la app esta cerrada
     if (notificationPayload != null) {
-      task = tasksBox.get(int.parse(notificationPayload!['taskId']!))!;
+      task = tasksBox.get(int.parse(notificationPayload!))!;
+      notificationPayload = null;
       return;
     }
-    // argumentos desde la pagina de inicio al abrir una tarea existnte
-    if (Get.arguments['taskId'] != null) {
-      task = tasksBox.get(int.parse(Get.arguments['taskId']!))!;
+    // argumentos desde notificacion cuando la app esta abierta o en segundo plano
+    if (Get.arguments['notificationPAYLOAD'] != null) {
+      task = tasksBox.get(int.parse(Get.arguments['notificationPAYLOAD']!))!;
       return;
     }
   }
@@ -154,7 +155,7 @@ class PostPosePageController extends GetxController {
   ///// manage CANCEL AND NAVIGATE /////
   void cancelPostpose() {
     Map<String, String> data = {
-      "taskId": task.key.toString(),
+      "notificationPAYLOAD": task.key.toString(),
     };
     Get.offAllNamed(Routes.FORMS_PAGE, arguments: data);
   }
@@ -197,33 +198,7 @@ class PostPosePageController extends GetxController {
     }
   }
 
-  ///// manage TASK CARD /////
-  void navigateCard() {
-    Map<String, String> data = {
-      "taskId": task.key.toString(),
-    };
-    Get.toNamed(Routes.FORMS_PAGE, arguments: data);
-  }
-
-  void changeTaskStatus(Task task) {
-    switch (task.status) {
-      case 'Pending':
-        task.status = TaskStatus.IN_PROGRESS.toValue;
-        task.save();
-        break;
-      case 'In progress':
-        task.status = TaskStatus.DONE.toValue;
-        task.save();
-        break;
-      case 'Done':
-        task.status = TaskStatus.PENDING.toValue;
-        task.save();
-        break;
-    }
-  }
-
   ////// manage GOOGLE ADS //////
-
   late BannerAd bannerAd;
   RxBool isAdLoaded = false.obs;
 
