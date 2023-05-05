@@ -110,4 +110,7 @@ const Map<String, String> en_US = {
   'step one_desc': 'To start you can add a task to any day of the week by clicking on the "+" button.',
   'step two': 'Step two...',
   'step two_desc': "Add a description of your task and you're done! If you wish, you can also activate a reminder notice and a to-do list.",
+
+  // ad banners
+  'failed to load AD': 'Failed to load AD.',
 };

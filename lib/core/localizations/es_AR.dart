@@ -110,4 +110,7 @@ const Map<String, String> es_AR = {
   'step one_desc': 'Para comenzar puedes agregar una tarea a cualquier día de la semana, haciendo click en el botón "+".',
   'step two': 'Paso dos...',
   'step two_desc': 'Agrega una descripción de tu tarea y listo ! si lo deseas tambien puedes activar un aviso recordatorio y una lista de quehaceres.',
+
+  // ad banners
+  'failed to load AD': 'Error al cargar AD.',
 };

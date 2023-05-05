@@ -12,8 +12,7 @@ import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/services/ad_mob_service.dart';
 import 'package:todoapp/utils/helpers.dart';
 
-class InitialPageController extends GetxController with AdMobService {
-
+class InitialPageController extends GetxController with AdMobService, StateMixin<dynamic> {
   @override
   void onInit() async {
     initSampleTask();
@@ -25,13 +24,28 @@ class InitialPageController extends GetxController with AdMobService {
 
   @override
   void onReady() {
-    initSmartBannerAd();
+    loadBannerAd(bannerListener: initialPageBannerListener());
+    //loadBannerAd(bannerListener: initialPageBannerListener(), adUnitId: AdMobService.initialPageBanner!);
     super.onReady();
   }
 
   @override
   void onClose() {
     super.onClose();
+  }
+
+  // LOAD GOOGLE AD //
+  BannerAdListener initialPageBannerListener() {
+    change(Null, status: RxStatus.loading());
+    return BannerAdListener(
+      onAdLoaded: (Ad ad) {
+        change(ad, status: RxStatus.success());
+      },
+      onAdFailedToLoad: (Ad ad, LoadAdError adError) {
+        change(null, status: RxStatus.error('failed to load AD'.tr));
+        ad.dispose();
+      },
+    );
   }
 
   // box de tasks
@@ -65,8 +79,6 @@ class InitialPageController extends GetxController with AdMobService {
   Future<void> initConfig() async {
     appConfig = Boxes.getMyAppConfigBox().get('appConfig')!;
   }
-
-
 
   void simulateDeletingData() {
     simulateDeleting.value = true;
@@ -202,7 +214,6 @@ class InitialPageController extends GetxController with AdMobService {
 
   /// navegar para crear o editar
   void navigate({int? taskKey, DateTime? date}) {
-
     // si quiere abrir una tarea
     if (taskKey != null) {
       Map<String, String> data = {
@@ -221,40 +232,5 @@ class InitialPageController extends GetxController with AdMobService {
     }
     // si quiere crear una tarea a partir de nada
     Get.offAllNamed(Routes.FORMS_PAGE);
-  }
-
-  ////// manage GOOGLE ADS //////
-
-  late BannerAd bannerAd;
-  RxBool isAdLoaded = false.obs;
- 
-  void initSmartBannerAd() async {
-    final AnchoredAdaptiveBannerAdSize? size = await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
-      MediaQuery.of(Get.context!).size.width.truncate(),
-    );
-
-    if (size == null) {
-      print('Unable to get height of anchored banner.');
-      return;
-    }
-
-    bannerAd = BannerAd(
-      adUnitId: AdMobService.testBanner!,
-      //adUnitId: AdMobService.initialPageBanner!,
-      size: size,
-      request: const AdRequest(),
-      listener: BannerAdListener(
-        onAdLoaded: (ad) {
-          isAdLoaded.value = true;
-          print('INITIAL page banner: responseId = ${ad.responseInfo!.responseId} / adId = ${ad.adUnitId}');
-        },
-        onAdFailedToLoad: (ad, error) {
-          isAdLoaded.value = true;
-          ad.dispose();
-          print('**banner_1 error** $error');
-        },
-      ),
-    );
-    bannerAd.load();
   }
 }

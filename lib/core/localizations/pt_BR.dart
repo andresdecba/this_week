@@ -110,4 +110,6 @@ const Map<String, String> pt_BR = {
   'step two': 'passo dois...',
   'step two_desc': 'Adicione uma descrição da sua tarefa e pronto! Se desejar, você também pode ativar um aviso de lembrete e uma lista de tarefas.',
 
+  // ad banners
+  'failed to load AD': 'Falha ao carregar AD.',
 };

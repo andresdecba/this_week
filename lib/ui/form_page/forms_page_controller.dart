@@ -16,7 +16,7 @@ import 'package:todoapp/utils/helpers.dart';
 
 enum PageMode { VIEW_MODE, UPDATE_MODE, NEW_MODE }
 
-class FormsPageController extends GetxController {
+class FormsPageController extends GetxController with AdMobService, StateMixin<dynamic> {
   //
   @override
   void onInit() {
@@ -29,7 +29,8 @@ class FormsPageController extends GetxController {
 
   @override
   void onReady() {
-    initSmartBannerAd();
+    loadBannerAd(bannerListener: initialPageBannerListener());
+    //loadBannerAd(bannerListener: initialPageBannerListener(), adUnitId: AdMobService.formPageBanner!);
     super.onReady();
   }
 
@@ -542,37 +543,16 @@ class FormsPageController extends GetxController {
   }
 
   ////// manage GOOGLE ADS //////
-
-  late BannerAd bannerAd;
-  RxBool isAdLoaded = false.obs;
-
-  void initSmartBannerAd() async {
-    final AnchoredAdaptiveBannerAdSize? size = await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
-      MediaQuery.of(Get.context!).size.width.truncate(),
+  BannerAdListener initialPageBannerListener() {
+    change(Null, status: RxStatus.loading());
+    return BannerAdListener(
+      onAdLoaded: (Ad ad) {
+        change(ad, status: RxStatus.success());
+      },
+      onAdFailedToLoad: (Ad ad, LoadAdError adError) {
+        change(null, status: RxStatus.error('failed to load AD'.tr));
+        ad.dispose();
+      },
     );
-
-    if (size == null) {
-      print('Unable to get height of anchored banner.');
-      return;
-    }
-
-    bannerAd = BannerAd(
-      adUnitId: AdMobService.testBanner!,
-      //adUnitId: AdMobService.formPageBanner!,
-      size: size,
-      request: const AdRequest(),
-      listener: BannerAdListener(
-        onAdLoaded: (ad) {
-          isAdLoaded.value = true;
-          print('FORM page banner: responseId = ${ad.responseInfo!.responseId} / adId = ${ad.adUnitId}');
-        },
-        onAdFailedToLoad: (ad, error) {
-          isAdLoaded.value = true;
-          ad.dispose();
-          print('**banner_2 error** $error');
-        },
-      ),
-    );
-    bannerAd.load();
   }
 }

@@ -57,26 +57,37 @@ class PostPosePage extends GetView<PostPosePageController> {
       ],
 
       // adMob
-      bottomNavigationBar: Obx(
-        () => controller.isAdLoaded.value
-            ? Container(
-                height: controller.bannerAd.size.height.toDouble(),
-                width: controller.bannerAd.size.height.toDouble(),
-                color: enabled_grey,
-                child: Align(
-                  alignment: Alignment.center,
-                  child: AdWidget(ad: controller.bannerAd),
-                ),
-              )
-            : Container(
-                height: 60.0,
-                width: double.infinity,
-                color: enabled_grey,
-                child: const Align(
-                  alignment: Alignment.center,
-                  child: CircularProgressIndicator(),
-                ),
-              ),
+      bottomNavigationBar: controller.obx(
+        (ad) => Container(
+          height: ad.size.height.toDouble(),
+          width: ad.size.height.toDouble(),
+          color: enabled_grey,
+          child: Align(
+            alignment: Alignment.center,
+            child: AdWidget(ad: ad),
+          ),
+        ),
+        onLoading: Container(
+          height: 60.0,
+          width: double.infinity,
+          color: enabled_grey,
+          child: const Align(
+            alignment: Alignment.center,
+            child: CircularProgressIndicator(),
+          ),
+        ),
+        onError: (error) => Container(
+          height: 60.0,
+          width: double.infinity,
+          color: enabled_grey,
+          child: Align(
+            alignment: Alignment.center,
+            child: Text(
+              error!,
+              style: kTitleMedium.copyWith(color: withe_bg),
+            ),
+          ),
+        ),
       ),
 
       // body

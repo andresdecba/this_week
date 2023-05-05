@@ -15,7 +15,7 @@ import 'dart:async';
 
 enum PostposeEnum { fifteenMinutes, oneHour, threeHours, oneDay, personalized }
 
-class PostPosePageController extends GetxController {
+class PostPosePageController extends GetxController with AdMobService, StateMixin<dynamic> {
   @override
   void onInit() {
     getCurrentTask();
@@ -25,7 +25,8 @@ class PostPosePageController extends GetxController {
 
   @override
   void onReady() {
-    initSmartBannerAd();
+    loadBannerAd(bannerListener: initialPageBannerListener());
+    //loadBannerAd(bannerListener: initialPageBannerListener(), adUnitId: AdMobService.postposePageBanner!);
     super.onReady();
   }
 
@@ -227,37 +228,17 @@ class PostPosePageController extends GetxController {
     }
   }
 
-  ////// manage GOOGLE ADS //////
-  late BannerAd bannerAd;
-  RxBool isAdLoaded = false.obs;
-
-  void initSmartBannerAd() async {
-    final AnchoredAdaptiveBannerAdSize? size = await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
-      MediaQuery.of(Get.context!).size.width.truncate(),
+  ///// manage LOAD GOOGLE AD /////
+  BannerAdListener initialPageBannerListener() {
+    change(Null, status: RxStatus.loading());
+    return BannerAdListener(
+      onAdLoaded: (Ad ad) {
+        change(ad, status: RxStatus.success());
+      },
+      onAdFailedToLoad: (Ad ad, LoadAdError adError) {
+        change(null, status: RxStatus.error('failed to load AD'.tr));
+        ad.dispose();
+      },
     );
-
-    if (size == null) {
-      print('Unable to get height of anchored banner.');
-      return;
-    }
-
-    bannerAd = BannerAd(
-      adUnitId: AdMobService.testBanner!,
-      //adUnitId: AdMobService.postposePageBanner!,
-      size: size,
-      request: const AdRequest(),
-      listener: BannerAdListener(
-        onAdLoaded: (ad) {
-          isAdLoaded.value = true;
-          print('INITIAL page banner: responseId = ${ad.responseInfo!.responseId} / adId = ${ad.adUnitId}');
-        },
-        onAdFailedToLoad: (ad, error) {
-          isAdLoaded.value = true;
-          ad.dispose();
-          print('**banner_1 error** $error');
-        },
-      ),
-    );
-    bannerAd.load();
   }
 }
