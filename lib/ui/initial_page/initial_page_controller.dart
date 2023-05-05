@@ -34,20 +34,6 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
     super.onClose();
   }
 
-  // LOAD GOOGLE AD //
-  BannerAdListener initialPageBannerListener() {
-    change(Null, status: RxStatus.loading());
-    return BannerAdListener(
-      onAdLoaded: (Ad ad) {
-        change(ad, status: RxStatus.success());
-      },
-      onAdFailedToLoad: (Ad ad, LoadAdError adError) {
-        change(null, status: RxStatus.error('failed to load AD'.tr));
-        ad.dispose();
-      },
-    );
-  }
-
   // box de tasks
   Box<Task> tasksBox = Boxes.getTasksBox();
 
@@ -232,5 +218,19 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
     }
     // si quiere crear una tarea a partir de nada
     Get.offAllNamed(Routes.FORMS_PAGE);
+  }
+
+  // LOAD GOOGLE AD //
+  BannerAdListener initialPageBannerListener() {
+    change(Null, status: RxStatus.loading());
+    return BannerAdListener(
+      onAdLoaded: (Ad ad) {
+        change(ad, status: RxStatus.success());
+      },
+      onAdFailedToLoad: (Ad ad, LoadAdError adError) {
+        change(null, status: RxStatus.error('failed to load AD'.tr));
+        ad.dispose();
+      },
+    );
   }
 }

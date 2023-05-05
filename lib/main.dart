@@ -38,13 +38,10 @@ Future<void> initAdMob() async {
   // initializa
   await MobileAds.instance.initialize();
 
-  /// TODO antes de publicar: cometar las siguientes lineas (dispositivos de prueba):
+  // TODO antes de publicar: cometar las siguientes lineas (dispositivos de prueba):
   var devices = ["4C456C78BB5CAFE90286C23C5EA6A3CC"];
   RequestConfiguration requestConfiguration = RequestConfiguration(testDeviceIds: devices);
   MobileAds.instance.updateRequestConfiguration(requestConfiguration);
-
-  /// TODO antes de publicar: cambiar los ids de ad de prueba por los reales en
-  /// [InitialPageController] y [FormsPageController] => [BannerAd]
 }
 
 Future<void> initAppConfig() async {
