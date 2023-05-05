@@ -13,6 +13,27 @@ import 'package:todoapp/services/ad_mob_service.dart';
 import 'package:todoapp/utils/helpers.dart';
 
 class InitialPageController extends GetxController with AdMobService {
+
+  @override
+  void onInit() async {
+    initSampleTask();
+    await initConfig();
+    buildInfo();
+    calculateWeeksDifference();
+    super.onInit();
+  }
+
+  @override
+  void onReady() {
+    initSmartBannerAd();
+    super.onReady();
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
+  }
+
   // box de tasks
   Box<Task> tasksBox = Boxes.getTasksBox();
 
@@ -45,20 +66,7 @@ class InitialPageController extends GetxController with AdMobService {
     appConfig = Boxes.getMyAppConfigBox().get('appConfig')!;
   }
 
-  @override
-  void onInit() async {
-    initSampleTask();
-    await initConfig();
-    buildInfo();
-    calculateWeeksDifference();
-    super.onInit();
-  }
 
-  @override
-  void onClose() {
-    bannerAd.dispose();
-    super.onClose();
-  }
 
   void simulateDeletingData() {
     simulateDeleting.value = true;
@@ -219,15 +227,7 @@ class InitialPageController extends GetxController with AdMobService {
 
   late BannerAd bannerAd;
   RxBool isAdLoaded = false.obs;
-
-  /// onReady() Called 1 frame after onInit(). It is the perfect place to enter
-  /// navigation events, like snackbar, dialogs, or a new route, or async request.
-  @override
-  void onReady() {
-    initSmartBannerAd();
-    super.onReady();
-  }
-
+ 
   void initSmartBannerAd() async {
     final AnchoredAdaptiveBannerAdSize? size = await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
       MediaQuery.of(Get.context!).size.width.truncate(),

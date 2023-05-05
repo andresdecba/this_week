@@ -11,6 +11,7 @@ import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/ui/shared_components/dialogs.dart';
 import 'package:todoapp/ui/shared_components/snackbar.dart';
 import 'package:todoapp/utils/helpers.dart';
+import 'dart:async';
 
 enum PostposeEnum { fifteenMinutes, oneHour, threeHours, oneDay, personalized }
 
@@ -18,7 +19,20 @@ class PostPosePageController extends GetxController {
   @override
   void onInit() {
     getCurrentTask();
+    setTimer();
     super.onInit();
+  }
+
+  @override
+  void onReady() {
+    initSmartBannerAd();
+    super.onReady();
+  }
+
+  @override
+  void onClose() {
+    timer.cancel();
+    super.onClose();
   }
 
   //// manage HIVE //////
@@ -29,7 +43,7 @@ class PostPosePageController extends GetxController {
     // argumentos desde la notificacion cuando la app esta cerrada
     if (notificationPayload != null) {
       task = tasksBox.get(int.parse(notificationPayload!))!;
-      notificationPayload = null;
+
       return;
     }
     // argumentos desde notificacion cuando la app esta abierta o en segundo plano
@@ -59,20 +73,21 @@ class PostPosePageController extends GetxController {
     }
   }
 
+  RxString subtitle = ''.obs;
   String setSubTitle(PostposeEnum data) {
-    final DateTime tmp1 = task.notificationTime!;
-    final DateTime tmp2 = task.notificationTime!;
-    final DateTime tmp3 = task.notificationTime!;
-    final DateTime tmp4 = task.notificationTime!;
+    final DateTime tmp1 = DateTime.now().add(const Duration(minutes: 15));
+    final DateTime tmp2 = DateTime.now().add(const Duration(hours: 1));
+    final DateTime tmp3 = DateTime.now().add(const Duration(hours: 3));
+    final DateTime tmp4 = task.notificationTime!.add(const Duration(days: 1));
     switch (data) {
       case PostposeEnum.fifteenMinutes:
-        return '${'today'.tr}, ${'at'.tr} ${timeFormater(tmp1.add(const Duration(minutes: 15)))}';
+        return '${'today'.tr}, ${'at'.tr} ${timeFormater(tmp1)}';
       case PostposeEnum.oneHour:
-        return '${'today'.tr}, ${'at'.tr} ${timeFormater(tmp2.add(const Duration(hours: 1)))}';
+        return '${'today'.tr}, ${'at'.tr} ${timeFormater(tmp2)}';
       case PostposeEnum.threeHours:
-        return '${'today'.tr}, ${'at'.tr} ${timeFormater(tmp3.add(const Duration(hours: 3)))}';
+        return '${'today'.tr}, ${'at'.tr} ${timeFormater(tmp3)}';
       case PostposeEnum.oneDay:
-        return '${'tomorrow'.tr}, ${'at'.tr} ${timeFormater(tmp4.add(const Duration(days: 1)))}';
+        return '${'tomorrow'.tr}, ${'at'.tr} ${timeFormater(tmp4)}';
       case PostposeEnum.personalized:
         if (personalizedNotificationDateTime.value != null && personalizedTaskDate != null) {
           return '${longDateFormaterWithoutYear(personalizedNotificationDateTime.value!)}, ${'at'.tr} ${timeFormater(personalizedNotificationDateTime.value!)}';
@@ -82,6 +97,18 @@ class PostPosePageController extends GetxController {
       default:
         return '...';
     }
+  }
+
+  // refrescar el subtitulo cada un minuto si el usuario se demora
+  // mucho tiempo en seleccionar una opción.
+  late Timer timer;
+  void setTimer() {
+    timer = Timer.periodic(const Duration(minutes: 1), (timer) {
+      subtitle.refresh();
+      if (timer.tick == 10) {
+        cancelPostpose();
+      }
+    });
   }
 
   bool isSelected(PostposeEnum data) {
@@ -100,15 +127,17 @@ class PostPosePageController extends GetxController {
 
   void savePostpose(PostposeEnum data) {
     switch (data) {
+      // si pospone para HOY: DateTime.now() + el tiempo a posponer.
       case PostposeEnum.fifteenMinutes:
-        task.notificationTime = task.notificationTime!.add(const Duration(minutes: 15));
+        task.notificationTime = DateTime.now().add(const Duration(minutes: 15));
         break;
       case PostposeEnum.oneHour:
-        task.notificationTime = task.notificationTime!.add(const Duration(hours: 1));
+        task.notificationTime = DateTime.now().add(const Duration(hours: 1));
         break;
       case PostposeEnum.threeHours:
-        task.notificationTime = task.notificationTime!.add(const Duration(hours: 3));
+        task.notificationTime = DateTime.now().add(const Duration(hours: 3));
         break;
+      // si pospone para MAÑANA:, conservar la hora original de la notificación.
       case PostposeEnum.oneDay:
         task.taskDate = task.taskDate.add(const Duration(days: 1));
         task.notificationTime = task.notificationTime!.add(const Duration(days: 1));
@@ -201,12 +230,6 @@ class PostPosePageController extends GetxController {
   ////// manage GOOGLE ADS //////
   late BannerAd bannerAd;
   RxBool isAdLoaded = false.obs;
-
-  @override
-  void onReady() {
-    initSmartBannerAd();
-    super.onReady();
-  }
 
   void initSmartBannerAd() async {
     final AnchoredAdaptiveBannerAdSize? size = await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(

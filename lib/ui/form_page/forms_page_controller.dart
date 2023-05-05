@@ -27,8 +27,6 @@ class FormsPageController extends GetxController {
     super.onInit();
   }
 
-  /// onReady() Called 1 frame after onInit(). It is the perfect place to enter
-  /// navigation events, like snackbar, dialogs, or a new route, or async request.
   @override
   void onReady() {
     initSmartBannerAd();
@@ -39,7 +37,6 @@ class FormsPageController extends GetxController {
   void onClose() {
     taskDescriptionCtrlr.dispose();
     subTaskTitleCtrlr.dispose();
-    bannerAd.dispose();
     super.onClose();
   }
 
@@ -82,7 +79,6 @@ class FormsPageController extends GetxController {
     // desde la notificacion con la app cerrada
     if (notificationPayload != null) {
       llenarInfo(int.parse(notificationPayload!));
-      notificationPayload = null;
       return;
     }
 

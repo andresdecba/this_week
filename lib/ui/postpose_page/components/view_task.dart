@@ -10,6 +10,7 @@ class ViewTask extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -17,6 +18,7 @@ class ViewTask extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               // dia
               _CustomTile(
@@ -61,12 +63,13 @@ class ViewTask extends StatelessWidget {
           height: 0,
         ),
 
-        // cosas
+        // description + subtasks
         Expanded(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.only(bottom: 70, left: 20, right: 20, top: 20),
+            padding: const EdgeInsets.all(20),
             physics: const BouncingScrollPhysics(),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

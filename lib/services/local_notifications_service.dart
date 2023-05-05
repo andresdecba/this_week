@@ -7,26 +7,25 @@ import 'package:todoapp/core/routes/routes.dart';
 // instanciar
 final FlutterLocalNotificationsPlugin localNotifications = FlutterLocalNotificationsPlugin();
 
+// cuando la app esta cerrada, no sé bien como se usa...
 @pragma('vm:entry-point')
 void onSelectNotificationBackground(NotificationResponse notificationResponse) {
   // HACER ALGO...
 }
 
+// si la notificacion entra estando en primer plano o segundo plano
 void onSelectNotification(NotificationResponse details) {
-
   //set args
   Map<String, String>? arguments;
   if (details.payload != null) {
     arguments = {'notificationPAYLOAD': details.payload!}; //en el payload llega el task id de hive
   }
-
   // si tocaron del action
   if (details.notificationResponseType == NotificationResponseType.selectedNotificationAction) {
     if (details.actionId.toString() == 'notificationPostponeACTION') {
       Get.offAllNamed(Routes.POSTPOSE_PAGE, arguments: arguments);
     }
   }
-
   // si tocaron el body
   if (details.notificationResponseType == NotificationResponseType.selectedNotification) {
     if (arguments != null) {

@@ -21,7 +21,7 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 String? notificationPayload; //en el payload llega el task id de hive
-String? initialRoute;
+String initialRoute = Routes.INITIAL_PAGE;
 Box<MyAppConfig> userPrefs = Boxes.getMyAppConfigBox();
 MyAppConfig config = userPrefs.get('appConfig')!;
 
@@ -61,19 +61,22 @@ Future<void> initAppConfig() async {
 
 //ini tnotifications
 Future<void> initNotifications() async {
+
+  // inicializar las notificaciones
   tz.initializeTimeZones();
   tz.setLocalLocation(
     tz.getLocation(
       await FlutterNativeTimezone.getLocalTimezone(),
     ),
   );
+  LocalNotificationService.initializePlatformNotifications();
 
   // navegar cuando esta cerrada la app
-  LocalNotificationService.initializePlatformNotifications();
   final notificationLaunchDetails = await localNotifications.getNotificationAppLaunchDetails();
 
   // si la app esta CERRADA y fue lanzada via la notificacion, entra acá:
   if (notificationLaunchDetails?.didNotificationLaunchApp ?? false) {
+    
     final details = notificationLaunchDetails!.notificationResponse!;
     // llega payload
     if (details.payload != null) {
@@ -100,9 +103,6 @@ Future<void> initNotifications() async {
   }
 }
 
-// en cuerpo de notif: NotificationResponseType.selectedNotification
-// en action         : NotificationResponseType.selectedNotificationAction
-
 void main() async {
   // flutter
   WidgetsFlutterBinding.ensureInitialized();
@@ -123,6 +123,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('rutaaa $initialRoute');
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'This Week Calendar',
@@ -155,18 +156,7 @@ class MyApp extends StatelessWidget {
           elevation: 0,
         ),
       ),
-      //initialRoute: initialRoute ?? (config.isOnboardingDone ? Routes.INITIAL_PAGE : Routes.ONBOARDING_PAGE),
-      initialRoute: setInitialRoute(),
+      initialRoute: !config.isOnboardingDone ? Routes.ONBOARDING_PAGE : initialRoute,
     );
   }
-}
-
-String setInitialRoute() {
-  if (!config.isOnboardingDone) {
-    return Routes.ONBOARDING_PAGE;
-  }
-  if (initialRoute != null) {
-    return initialRoute!;
-  }
-  return Routes.INITIAL_PAGE;
 }

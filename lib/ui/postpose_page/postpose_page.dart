@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/postpose_page/components/view_task.dart';
-import 'package:todoapp/ui/shared_components/bottomsheet.dart';
 import 'package:todoapp/ui/postpose_page/postpose_page_controller.dart';
+import 'package:todoapp/ui/shared_components/bottomsheet_with_scroll.dart';
 
 class PostPosePage extends GetView<PostPosePageController> {
   const PostPosePage({Key? key}) : super(key: key);
@@ -89,7 +89,6 @@ class PostPosePage extends GetView<PostPosePageController> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                
                 /// titulo
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -98,10 +97,9 @@ class PostPosePage extends GetView<PostPosePageController> {
                       'postpone task'.tr,
                       style: kTitleLarge,
                     ),
-                    
                     IconButton(
                       icon: const Icon(Icons.open_in_new),
-                      onPressed: () => openBottomSheet(context: context, widget: ViewTask(task: controller.task)),
+                      onPressed: () => openBottomSheetWithScroll(context: context, widget: ViewTask(task: controller.task)),
                     ),
                   ],
                 ),
@@ -109,6 +107,7 @@ class PostPosePage extends GetView<PostPosePageController> {
                 /// opciones de posponer
                 ...PostposeEnum.values.toList().map((e) {
                   bool isSelected = controller.isSelected(e);
+                  controller.subtitle.value = controller.setSubTitle(e);
                   return Column(
                     children: [
                       RadioListTile(
@@ -120,7 +119,7 @@ class PostPosePage extends GetView<PostPosePageController> {
                           controller.setTitle(e),
                           style: TextStyle(fontWeight: isSelected ? FontWeight.bold : FontWeight.normal),
                         ),
-                        subtitle: Text(controller.setSubTitle(e)),
+                        subtitle: Text(controller.subtitle.value), //Text(controller.setSubTitle(e)),
                         selected: isSelected,
                         value: e,
                         groupValue: controller.selectedItem.value,
@@ -137,7 +136,7 @@ class PostPosePage extends GetView<PostPosePageController> {
                       e.index == 4 ? const SizedBox() : const _Divider(),
                     ],
                   );
-                }),
+                })
               ],
             ),
           ),
@@ -146,8 +145,6 @@ class PostPosePage extends GetView<PostPosePageController> {
     );
   }
 }
-
-
 
 class _Divider extends StatelessWidget {
   const _Divider({Key? key}) : super(key: key);
