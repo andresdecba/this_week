@@ -4,18 +4,26 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:todoapp/core/routes/routes.dart';
 import 'package:todoapp/data_source/db_data_source.dart';
 import 'package:todoapp/main.dart';
+import 'package:todoapp/models/notification_model.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/services/ad_mob_service.dart';
 import 'package:todoapp/services/local_notifications_service.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/ui/shared_components/dialogs.dart';
 import 'package:todoapp/ui/shared_components/snackbar.dart';
+import 'package:todoapp/use_cases/notifications_use_cases.dart';
 import 'package:todoapp/utils/helpers.dart';
 import 'dart:async';
 
 enum PostposeEnum { fifteenMinutes, oneHour, threeHours, oneDay, personalized }
 
 class PostPosePageController extends GetxController with AdMobService, StateMixin<dynamic> {
+
+  PostPosePageController({
+    required this.notificationsUseCases,
+  });
+
+  
   @override
   void onInit() {
     getCurrentTask();
@@ -35,6 +43,10 @@ class PostPosePageController extends GetxController with AdMobService, StateMixi
     timer.cancel();
     super.onClose();
   }
+
+
+  ///// NOTIFICATIONS /////
+  final NotificationsUseCases notificationsUseCases;
 
   //// manage HIVE //////
   final tasksBox = Boxes.getTasksBox();
@@ -173,13 +185,21 @@ class PostPosePageController extends GetxController with AdMobService, StateMixi
   }
 
   Future<void> _createNotificationREFACTORIZED(Task task) async {
-    await LocalNotificationService.createNotificationScheduled(
-      time: task.notificationTime!,
+    NotificationModel notif = NotificationModel(
       id: task.notificationId!,
-      body: task.description,
+      body: 'task reminder'.tr,
+      title: task.description,
+      time: task.notificationTime!,
       payload: task.key.toString(),
-      fln: localNotifications,
     );
+    await notificationsUseCases.createNotificationScheduledUseCase(notification: notif);
+    // await LocalNotificationService.createNotificationScheduled(
+    //   time: task.notificationTime!,
+    //   id: task.notificationId!,
+    //   body: task.description,
+    //   payload: task.key.toString(),
+    //   fln: localNotifications,
+    // );
   }
 
   ///// manage CANCEL AND NAVIGATE /////

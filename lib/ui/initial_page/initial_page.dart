@@ -16,6 +16,10 @@ class InitialPage extends GetView<InitialPageController> {
     return Scaffold(
       // key
       key: controller.scaffoldKey,
+
+      floatingActionButton: FloatingActionButton(onPressed: () => controller.borrarEstoo()),
+
+
       // ad
       bottomNavigationBar: controller.obx(
         (ad) => Container(

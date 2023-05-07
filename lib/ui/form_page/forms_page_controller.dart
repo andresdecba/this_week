@@ -5,6 +5,7 @@ import 'package:todoapp/core/routes/routes.dart';
 import 'package:todoapp/data_source/db_data_source.dart';
 import 'package:todoapp/main.dart';
 import 'package:todoapp/models/my_app_config.dart';
+import 'package:todoapp/models/notification_model.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/services/ad_mob_service.dart';
 import 'package:todoapp/services/local_notifications_service.dart';
@@ -12,11 +13,17 @@ import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/ui/shared_components/dialogs.dart';
 import 'package:todoapp/ui/shared_components/snackbar.dart';
+import 'package:todoapp/use_cases/notifications_use_cases.dart';
 import 'package:todoapp/utils/helpers.dart';
 
 enum PageMode { VIEW_MODE, UPDATE_MODE, NEW_MODE }
 
 class FormsPageController extends GetxController with AdMobService, StateMixin<dynamic> {
+
+  FormsPageController({
+    required this.notificationsUseCases,
+  });
+
   //
   @override
   void onInit() {
@@ -40,6 +47,9 @@ class FormsPageController extends GetxController with AdMobService, StateMixin<d
     subTaskTitleCtrlr.dispose();
     super.onClose();
   }
+
+  ///// NOTIFICATIONS /////
+  final NotificationsUseCases notificationsUseCases;
 
   ////// manage HIVE //////
   final tasksBox = Boxes.getTasksBox();
@@ -338,16 +348,24 @@ class FormsPageController extends GetxController with AdMobService, StateMixin<d
     }
   }
 
-  Future<void> createNotification({DateTime? notif, int? id, String? payload, String? body}) async {
-    await LocalNotificationService.createNotificationScheduled(
-      time: notif ?? _task.value.notificationTime!,
+  Future<void> createNotification({DateTime? notifdt, int? id, String? payload, String? body}) async {
+    NotificationModel notif = NotificationModel(
       id: id ?? _task.value.notificationId!,
-      body: body ?? _task.value.description,
+      body: 'task reminder'.tr,
+      title: body ?? _task.value.description,
+      time: notifdt ?? _task.value.notificationTime!,
       payload: payload ?? _task.value.key.toString(),
-      fln: localNotifications,
     );
-    print('payload-1: $payload');
-    print('payload-2: ${_task.value.key.toString()}');
+
+    await notificationsUseCases.createNotificationScheduledUseCase(notification: notif);
+
+    // await LocalNotificationService.createNotificationScheduled(
+    //   id: id ?? _task.value.notificationId!,
+    //   body: body ?? _task.value.description,
+    //   time: notifdt ?? _task.value.notificationTime!,
+    //   payload: payload ?? _task.value.key.toString(),
+    //   fln: localNotifications,
+    // );
   }
 
   postposeNotification(Duration duration) {
@@ -359,14 +377,26 @@ class FormsPageController extends GetxController with AdMobService, StateMixin<d
     _createNotificationREFACTORIZED(task: _task.value);
   }
 
+  
+
   Future<void> _createNotificationREFACTORIZED({required Task task}) async {
-    await LocalNotificationService.createNotificationScheduled(
-      time: task.notificationTime!,
+
+    NotificationModel notif = NotificationModel(
       id: createNotificationId(),
-      body: task.description,
+      body: 'task reminder'.tr,
+      title: task.description,
+      time: task.notificationTime!,
       payload: task.key.toString(),
-      fln: localNotifications,
     );
+    await notificationsUseCases.createNotificationScheduledUseCase(notification: notif);
+
+    // await LocalNotificationService.createNotificationScheduled(
+    //   id: createNotificationId(),
+    //   body: task.description,
+    //   time: task.notificationTime!,
+    //   payload: task.key.toString(),
+    //   fln: localNotifications,
+    // );
   }
 
   ////// manage SAVE //////
@@ -513,7 +543,7 @@ class FormsPageController extends GetxController with AdMobService, StateMixin<d
         // crear notif
         if (enableNotificationIcon.value) {
           await createNotification(
-            notif: _task.value.notificationTime!.add(Duration(days: i)),
+            notifdt: _task.value.notificationTime!.add(Duration(days: i)),
             id: notificationId,
             payload: _task.value.notificationTime!.add(Duration(days: i)).toString(),
           );

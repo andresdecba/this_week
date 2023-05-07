@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:isoweek/isoweek.dart';
+import 'package:todoapp/borrrrar_esto/borraresto.dart';
 import 'package:todoapp/core/routes/routes.dart';
 import 'package:todoapp/data_source/db_data_source.dart';
 import 'package:todoapp/main.dart';
@@ -218,6 +219,11 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
     }
     // si quiere crear una tarea a partir de nada
     Get.offAllNamed(Routes.FORMS_PAGE);
+  }
+
+  void borrarEstoo() {
+    Get.to(BorrarEsto(), arguments: tasksBox.get(0));
+    print('argumentos ${tasksBox.keys}');
   }
 
   // LOAD GOOGLE AD //
