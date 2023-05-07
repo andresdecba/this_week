@@ -2,7 +2,8 @@ import 'package:hive/hive.dart';
 part 'task_model.g.dart';
 
 /// TO GENERATE THE REGISTER ADAPTER RUN:
-/// flutter packages pub run build_runner build
+/// 1° este:            flutter packages pub run build_runner build
+/// si sale mal, este:  flutter packages pub run build_runner build --delete-conflicting-outputs
 
 enum TaskStatus { PENDING, IN_PROGRESS, DONE }
 
@@ -20,7 +21,7 @@ extension TaskStatusExtension on TaskStatus {
 }
 
 @HiveType(typeId: 0)
-class Task extends HiveObject {
+class TaskModel extends HiveObject {
   @HiveField(1)
   String description;
   @HiveField(2)
@@ -30,13 +31,13 @@ class Task extends HiveObject {
   @HiveField(4)
   DateTime? notificationTime;
   @HiveField(5)
-  List<SubTask> subTasks;
+  List<SubTaskModel> subTasks;
   @HiveField(6)
   int? notificationId;
   @HiveField(7)
   String? repeatId; // si esta tarea se repite todos los dias o no (rutina)
 
-  Task({
+  TaskModel({
     required this.description,
     required this.taskDate,
     required this.notificationTime,
@@ -46,16 +47,16 @@ class Task extends HiveObject {
     required this.repeatId,
   });
 
-  Task copyWith({
+  TaskModel copyWith({
     required String description,
     required DateTime taskDate,
     required String status,
     required DateTime? notificationTime,
-    required List<SubTask> subTasks,
+    required List<SubTaskModel> subTasks,
     required int? notificationId,
     required String? repeatId,
   }) {
-    return Task(
+    return TaskModel(
       description: description,
       taskDate: taskDate,
       notificationTime: notificationTime,
@@ -73,22 +74,22 @@ class Task extends HiveObject {
 }
 
 @HiveType(typeId: 1)
-class SubTask {
+class SubTaskModel {
   @HiveField(0)
   String title;
   @HiveField(1)
   bool isDone;
 
-  SubTask({
+  SubTaskModel({
     required this.title,
     required this.isDone,
   });
 
-  SubTask copyWith({
+  SubTaskModel copyWith({
     required String value,
     required bool isDone,
   }) {
-    return SubTask(
+    return SubTaskModel(
       title: title,
       isDone: isDone,
     );

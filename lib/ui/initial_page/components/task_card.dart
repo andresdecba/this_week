@@ -13,7 +13,7 @@ class TaskCard extends StatefulWidget {
     this.isDisabled,
   }) : super(key: key);
 
-  final Task task;
+  final TaskModel task;
   final VoidCallback navigate;
   final VoidCallback onStatusChange;
   final bool? isDisabled;

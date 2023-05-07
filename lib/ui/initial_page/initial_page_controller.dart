@@ -8,7 +8,7 @@ import 'package:todoapp/borrrrar_esto/borraresto.dart';
 import 'package:todoapp/core/routes/routes.dart';
 import 'package:todoapp/data_source/db_data_source.dart';
 import 'package:todoapp/main.dart';
-import 'package:todoapp/models/my_app_config.dart';
+import 'package:todoapp/models/app_config_model.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/services/ad_mob_service.dart';
 import 'package:todoapp/utils/helpers.dart';
@@ -36,7 +36,7 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
   }
 
   // box de tasks
-  Box<Task> tasksBox = Boxes.getTasksBox();
+  Box<TaskModel> tasksBox = Boxes.getTasksBox();
 
   // create strings for head
   //Week showCurrenWeekInfo = Week.current();
@@ -62,7 +62,7 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
   }
 
   // INITIALIZE APP CONFIGURATIONS //
-  MyAppConfig appConfig = MyAppConfig();
+  AppConfigModel appConfig = AppConfigModel();
   Future<void> initConfig() async {
     appConfig = Boxes.getMyAppConfigBox().get('appConfig')!;
   }
@@ -87,14 +87,14 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
         0,
         0,
       );
-      var task = Task(
+      var task = TaskModel(
         description: 'sample task description'.tr,
         taskDate: today,
         notificationTime: null,
         status: TaskStatus.PENDING.toValue,
         subTasks: [
-          SubTask(title: 'sample task  subtask_1 description'.tr, isDone: false),
-          SubTask(title: 'sample task  subtask_2 description'.tr, isDone: true),
+          SubTaskModel(title: 'sample task  subtask_1 description'.tr, isDone: false),
+          SubTaskModel(title: 'sample task  subtask_2 description'.tr, isDone: true),
         ],
         notificationId: null,
         repeatId: null,
@@ -118,7 +118,7 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
   late int oldWeeks = 0;
   late int increaseDecreaseWeeks;
   Week week = Week.current();
-  Rx<Map<DateTime, List<Task>>> buildWeekInUI = Rx<Map<DateTime, List<Task>>>({});
+  Rx<Map<DateTime, List<TaskModel>>> buildWeekInUI = Rx<Map<DateTime, List<TaskModel>>>({});
 
   void increaseWeek() {
     week = week.next;

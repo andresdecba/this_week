@@ -8,7 +8,7 @@ class BorrarEsto extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Task task = Get.arguments;
+    final TaskModel task = Get.arguments;
 
     return Scaffold(
       body: Center(

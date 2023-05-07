@@ -66,7 +66,7 @@ extension TimeOfDayConverter on TimeOfDay {
 /// TASK THINGS HELPERS ///
 /////////////////////////////
 
-String setStatusLanguage(Task task) {
+String setStatusLanguage(TaskModel task) {
   switch (task.status) {
     case 'Pending':
       return 'pending'.tr;
@@ -79,7 +79,7 @@ String setStatusLanguage(Task task) {
   }
 }
 
-Color setStatusColor(Task task) {
+Color setStatusColor(TaskModel task) {
   switch (task.status) {
     case 'Pending':
       return status_task_pending;
@@ -92,7 +92,7 @@ Color setStatusColor(Task task) {
   }
 }
 
-TextStyle setStatusTextStyle(Task task) {
+TextStyle setStatusTextStyle(TaskModel task) {
   switch (task.status) {
     case 'Pending':
       return kBodyMedium;

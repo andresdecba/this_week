@@ -23,7 +23,7 @@ class TasksList extends GetView<InitialPageController> {
           itemBuilder: (context, index) {
             //
             DateTime currentDate = controller.buildWeekInUI.value.keys.toList()[index];
-            List<Task> tasks = [];
+            List<TaskModel> tasks = [];
             tasks.addAll(controller.buildWeekInUI.value[currentDate]!);
             // si es el dia de ayer y no tiene una tarea, esconder ese dia
             bool hideEmptyYesterday = (currentDate.isBefore(DateTime.now().subtract(const Duration(days: 1))) && tasks.isEmpty) ? true : false;

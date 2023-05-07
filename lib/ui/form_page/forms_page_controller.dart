@@ -4,7 +4,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:todoapp/core/routes/routes.dart';
 import 'package:todoapp/data_source/db_data_source.dart';
 import 'package:todoapp/main.dart';
-import 'package:todoapp/models/my_app_config.dart';
+import 'package:todoapp/models/app_config_model.dart';
 import 'package:todoapp/models/notification_model.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/services/ad_mob_service.dart';
@@ -58,8 +58,8 @@ class FormsPageController extends GetxController with AdMobService, StateMixin<d
   final userPrefs = Boxes.getMyAppConfigBox();
 
   ////// manage INITIAL PAGE ACTIVITY //////
-  Task get getTask => _task.value;
-  final Rx<Task> _task = Task(
+  TaskModel get getTask => _task.value;
+  final Rx<TaskModel> _task = TaskModel(
     description: '',
     taskDate: DateTime.now(),
     notificationTime: null,
@@ -197,7 +197,7 @@ class FormsPageController extends GetxController with AdMobService, StateMixin<d
     _task.update(
       (val) {
         val!.subTasks.add(
-          SubTask(title: subTaskTitleCtrlr.text, isDone: false),
+          SubTaskModel(title: subTaskTitleCtrlr.text, isDone: false),
         );
         if (currentPageMode.value == PageMode.VIEW_MODE || currentPageMode.value == PageMode.UPDATE_MODE) {
           _task.value.save();
@@ -307,7 +307,7 @@ class FormsPageController extends GetxController with AdMobService, StateMixin<d
 
   ////// manage NOTIFICATIONS //////
 
-  late Task initialTaskValues;
+  late TaskModel initialTaskValues;
 
   void updateNotificationStatus() async {
     // caso 1: si NO habia y ahora si hay, crear notificación nueva.
@@ -379,7 +379,7 @@ class FormsPageController extends GetxController with AdMobService, StateMixin<d
 
   
 
-  Future<void> _createNotificationREFACTORIZED({required Task task}) async {
+  Future<void> _createNotificationREFACTORIZED({required TaskModel task}) async {
 
     NotificationModel notif = NotificationModel(
       id: createNotificationId(),
@@ -404,13 +404,13 @@ class FormsPageController extends GetxController with AdMobService, StateMixin<d
   RxBool isChecked = false.obs;
 
   void deleteTask() {
-    MyAppConfig config = userPrefs.get('appConfig')!;
+    AppConfigModel config = userPrefs.get('appConfig')!;
     String tmp = _task.value.description;
 
     // si es tarea repetida //
     if (isChecked.value) {
       // buscar todas las tasks con el mismo repeatId
-      List<Task> tasks = [];
+      List<TaskModel> tasks = [];
       for (var element in tasksBox.values) {
         if (element.repeatId == _task.value.repeatId) {
           tasks.add(element);
@@ -518,7 +518,7 @@ class FormsPageController extends GetxController with AdMobService, StateMixin<d
 
   void generateRepeatedTasks() async {
     // list
-    List<Task> taskList = [];
+    List<TaskModel> taskList = [];
     final String repeatId = UniqueKey().toString();
 
     // agregar el repeatId a la tarea actual

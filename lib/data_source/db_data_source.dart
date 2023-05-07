@@ -1,11 +1,11 @@
 
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:todoapp/models/task_model.dart';
-import 'package:todoapp/models/my_app_config.dart';
+import 'package:todoapp/models/app_config_model.dart';
 
 abstract class Boxes {
-  static Box<Task> getTasksBox() => Hive.box<Task>('tasksBox');
-  static Box<MyAppConfig> getMyAppConfigBox() => Hive.box<MyAppConfig>('myAppConfigBox');
+  static Box<TaskModel> getTasksBox() => Hive.box<TaskModel>('tasksBox');
+  static Box<AppConfigModel> getMyAppConfigBox() => Hive.box<AppConfigModel>('myAppConfigBox');
 }
 
 ////// IMPORTANT //////

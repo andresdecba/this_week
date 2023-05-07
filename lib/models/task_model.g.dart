@@ -6,29 +6,29 @@ part of 'task_model.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class TaskAdapter extends TypeAdapter<Task> {
+class TaskModelAdapter extends TypeAdapter<TaskModel> {
   @override
   final int typeId = 0;
 
   @override
-  Task read(BinaryReader reader) {
+  TaskModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Task(
+    return TaskModel(
       description: fields[1] as String,
       taskDate: fields[2] as DateTime,
       notificationTime: fields[4] as DateTime?,
       status: fields[3] as String,
-      subTasks: (fields[5] as List).cast<SubTask>(),
+      subTasks: (fields[5] as List).cast<SubTaskModel>(),
       notificationId: fields[6] as int?,
       repeatId: fields[7] as String?,
     );
   }
 
   @override
-  void write(BinaryWriter writer, Task obj) {
+  void write(BinaryWriter writer, TaskModel obj) {
     writer
       ..writeByte(7)
       ..writeByte(1)
@@ -53,29 +53,29 @@ class TaskAdapter extends TypeAdapter<Task> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is TaskAdapter &&
+      other is TaskModelAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
 
-class SubTaskAdapter extends TypeAdapter<SubTask> {
+class SubTaskModelAdapter extends TypeAdapter<SubTaskModel> {
   @override
   final int typeId = 1;
 
   @override
-  SubTask read(BinaryReader reader) {
+  SubTaskModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return SubTask(
+    return SubTaskModel(
       title: fields[0] as String,
       isDone: fields[1] as bool,
     );
   }
 
   @override
-  void write(BinaryWriter writer, SubTask obj) {
+  void write(BinaryWriter writer, SubTaskModel obj) {
     writer
       ..writeByte(2)
       ..writeByte(0)
@@ -90,7 +90,7 @@ class SubTaskAdapter extends TypeAdapter<SubTask> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is SubTaskAdapter &&
+      other is SubTaskModelAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

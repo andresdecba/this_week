@@ -10,7 +10,7 @@ import 'package:todoapp/core/localizations/translations.dart';
 import 'package:todoapp/core/routes/routes.dart';
 import 'package:todoapp/data_source/db_data_source.dart';
 import 'package:todoapp/models/task_model.dart';
-import 'package:todoapp/models/my_app_config.dart';
+import 'package:todoapp/models/app_config_model.dart';
 import 'package:todoapp/services/local_notifications_service.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 // needed for notifications, get the local timezone of the os
@@ -22,16 +22,16 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 String? notificationPayload; //en el payload llega el task id de hive
 String initialRoute = Routes.INITIAL_PAGE;
-Box<MyAppConfig> userPrefs = Boxes.getMyAppConfigBox();
-MyAppConfig config = userPrefs.get('appConfig')!;
+Box<AppConfigModel> userPrefs = Boxes.getMyAppConfigBox();
+AppConfigModel config = userPrefs.get('appConfig')!;
 
 Future<void> initHive() async {
   await Hive.initFlutter();
-  Hive.registerAdapter(SubTaskAdapter());
-  Hive.registerAdapter(TaskAdapter());
-  await Hive.openBox<Task>('tasksBox');
-  Hive.registerAdapter(MyAppConfigAdapter());
-  await Hive.openBox<MyAppConfig>('myAppConfigBox');
+  Hive.registerAdapter(SubTaskModelAdapter());
+  Hive.registerAdapter(TaskModelAdapter());
+  await Hive.openBox<TaskModel>('tasksBox');
+  Hive.registerAdapter(AppConfigModelAdapter());
+  await Hive.openBox<AppConfigModel>('myAppConfigBox');
 }
 
 Future<void> initAdMob() async {
@@ -47,7 +47,7 @@ Future<void> initAdMob() async {
 Future<void> initAppConfig() async {
   // if config file doenst exists, creat it
   if (userPrefs.get('appConfig') == null) {
-    var value = MyAppConfig();
+    var value = AppConfigModel();
     userPrefs.put('appConfig', value);
   }
   // set language whether it is stored or not

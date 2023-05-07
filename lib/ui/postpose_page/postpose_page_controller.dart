@@ -50,7 +50,7 @@ class PostPosePageController extends GetxController with AdMobService, StateMixi
 
   //// manage HIVE //////
   final tasksBox = Boxes.getTasksBox();
-  late Task task;
+  late TaskModel task;
 
   void getCurrentTask() {
     // argumentos desde la notificacion cuando la app esta cerrada
@@ -184,7 +184,7 @@ class PostPosePageController extends GetxController with AdMobService, StateMixi
     );
   }
 
-  Future<void> _createNotificationREFACTORIZED(Task task) async {
+  Future<void> _createNotificationREFACTORIZED(TaskModel task) async {
     NotificationModel notif = NotificationModel(
       id: task.notificationId!,
       body: 'task reminder'.tr,

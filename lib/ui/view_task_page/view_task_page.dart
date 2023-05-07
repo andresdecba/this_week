@@ -6,7 +6,7 @@ import 'package:todoapp/utils/helpers.dart';
 
 class ViewTaskPage extends StatelessWidget {
   const ViewTaskPage({required this.task, Key? key}) : super(key: key);
-  final Task task;
+  final TaskModel task;
 
   @override
   Widget build(BuildContext context) {
