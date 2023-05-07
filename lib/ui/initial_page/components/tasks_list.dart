@@ -4,6 +4,8 @@ import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/ui/initial_page/components/task_card.dart';
+import 'package:todoapp/ui/postpose_page/components/view_task.dart';
+import 'package:todoapp/ui/shared_components/bottomsheet_with_scroll.dart';
 import 'package:todoapp/utils/helpers.dart';
 
 class TasksList extends GetView<InitialPageController> {
@@ -33,36 +35,6 @@ class TasksList extends GetView<InitialPageController> {
               children: [
 
                 /// THERE WHERENT TASKS
-                // Visibility(
-                //   visible: hideEmptyYesterday,
-                //   child: Padding(
-                //     padding: const EdgeInsets.only(top: 8),
-                //     child: Container(
-                //       key: UniqueKey(),
-                //       height: 50,
-                //       width: double.infinity,
-                //       decoration: BoxDecoration(
-                //         color: Colors.white.withOpacity(0.4),
-                //         borderRadius: const BorderRadius.all(Radius.circular(5)),
-                //       ),
-                //       alignment: Alignment.centerLeft,
-                //       padding: const EdgeInsets.all(16),
-                //       child: RichText(
-                //         text: TextSpan(
-                //           text: weekdayOnlyFormater(currentDate),
-                //           style: kTitleSmall.copyWith(color: disabled_grey, fontStyle: FontStyle.italic),
-                //           children: <TextSpan>[
-                //             TextSpan(
-                //               text: '  ${standardDateFormater(currentDate)}:  ${'there were no tasks'.tr}',
-                //               style: kTitleSmall.copyWith(color: disabled_grey, fontStyle: FontStyle.italic), //ktitleSmall!.copyWith(color: isDateEnabled ? text_bg : disabled_grey),
-                //             ),
-                //           ],
-                //         ),
-                //       ),
-                //     ),
-                //   ),
-                // ),
-
                 Visibility(
                   visible: hideEmptyYesterday,
                   child: Column(
@@ -91,13 +63,6 @@ class TasksList extends GetView<InitialPageController> {
                               ),
                             ),
                             const SizedBox(height: 38),
-                            // Text(
-                            //   'there were no tasks'.tr,
-                            //   style: kBodySmall.copyWith(
-                            //     fontStyle: FontStyle.italic,
-                            //     color: disabled_grey,
-                            //   ),
-                            // ),
                           ],
                         ),
                       ),
@@ -187,6 +152,11 @@ class TasksList extends GetView<InitialPageController> {
                                     key: UniqueKey(),
                                     task: e,
                                     navigate: () => controller.navigate(taskKey: e.key),
+                                    // navigate: () => openBottomSheetWithScroll(
+                                    //   context: context,
+                                    //   initialChildSize: 0.7,
+                                    //   widget: ViewTask(task: e),
+                                    // ),
                                     onStatusChange: () {
                                       e.status = changeTaskStatus(e.status);
                                       e.save();

@@ -5,6 +5,9 @@ import 'package:todoapp/ui/commons/styles.dart';
 Future<void> openBottomSheetWithScroll({
   required BuildContext context,
   required Widget widget,
+  double maxChildSize = 0.85,
+  double initialChildSize = 0.5,
+  double minChildSize = 0.35,
 }) {
   return showModalBottomSheet(
     context: context,
@@ -20,9 +23,9 @@ Future<void> openBottomSheetWithScroll({
     builder: (context) {
       return DraggableScrollableSheet(
         expand: false,
-        initialChildSize: 0.5,
-        maxChildSize: 0.9,
-        minChildSize: 0.32,
+        initialChildSize: initialChildSize,
+        maxChildSize: maxChildSize,
+        minChildSize: minChildSize,
         builder: (context, scrollController) {
           return Column(
             mainAxisSize: MainAxisSize.min,
