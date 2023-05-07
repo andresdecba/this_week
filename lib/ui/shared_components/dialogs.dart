@@ -1,6 +1,5 @@
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 
 ////// GENERAL DIALOG //////
@@ -29,7 +28,7 @@ Future<T?> myCustomDialog<T>({
           child: SvgPicture.asset(
             iconPath ?? 'assets/info.svg',
             alignment: Alignment.center,
-            color: iconColor ?? blue_primary,
+            color: iconColor ?? bluePrimary,
             height: 75,
           ),
         ),
@@ -62,11 +61,11 @@ Future<T?> myCustomDialog<T>({
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(5)),
-                    side: BorderSide(color: blue_primary),
+                    side: BorderSide(color: bluePrimary),
                   ),
                 ),
                 backgroundColor: MaterialStateProperty.all<Color>(
-                  withe_bg,
+                  witheBg,
                 ),
                 padding: MaterialStateProperty.all<EdgeInsets>(
                   const EdgeInsets.symmetric(horizontal: 30),
@@ -74,7 +73,7 @@ Future<T?> myCustomDialog<T>({
               ),
               child: Text(
                 cancelTextButton ?? 'Cancel',
-                style: const TextStyle(color: blue_primary),
+                style: const TextStyle(color: bluePrimary),
               ),
             ),
           ),
@@ -171,11 +170,11 @@ Future<T?> createSubtaskDialog<T>({
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(5)),
-                    side: BorderSide(color: blue_primary),
+                    side: BorderSide(color: bluePrimary),
                   ),
                 ),
                 backgroundColor: MaterialStateProperty.all<Color>(
-                  withe_bg,
+                  witheBg,
                 ),
                 padding: MaterialStateProperty.all<EdgeInsets>(
                   const EdgeInsets.symmetric(horizontal: 30),
@@ -183,7 +182,7 @@ Future<T?> createSubtaskDialog<T>({
               ),
               child: Text(
                 cancelTextButton ?? 'Cancel',
-                style: const TextStyle(color: blue_primary),
+                style: const TextStyle(color: bluePrimary),
               ),
             ),
           ),

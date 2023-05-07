@@ -26,7 +26,7 @@ class FormPage extends GetView<FormsPageController> {
             (ad) => Container(
               height: ad.size.height.toDouble(),
               width: ad.size.height.toDouble(),
-              color: enabled_grey,
+              color: enabledGrey,
               child: Align(
                 alignment: Alignment.center,
                 child: AdWidget(ad: ad),
@@ -35,7 +35,7 @@ class FormPage extends GetView<FormsPageController> {
             onLoading: Container(
               height: 60.0,
               width: double.infinity,
-              color: enabled_grey,
+              color: enabledGrey,
               child: const Align(
                 alignment: Alignment.center,
                 child: CircularProgressIndicator(),
@@ -44,12 +44,12 @@ class FormPage extends GetView<FormsPageController> {
             onError: (error) => Container(
               height: 60.0,
               width: double.infinity,
-              color: enabled_grey,
+              color: enabledGrey,
               child: Align(
                 alignment: Alignment.center,
                 child: Text(
                   error!,
-                  style: kTitleMedium.copyWith(color: withe_bg),
+                  style: kTitleMedium.copyWith(color: witheBg),
                 ),
               ),
             ),
@@ -60,12 +60,12 @@ class FormPage extends GetView<FormsPageController> {
             () => Visibility(
               visible: controller.isNewMode.value || controller.isUpdateMode.value,
               replacement: FloatingActionButton(
-                backgroundColor: yellow_primary,
+                backgroundColor: yellowPrimary,
                 onPressed: () => controller.cancelAndNavigate(context),
-                child: const Icon(Icons.home, color: text_bg),
+                child: const Icon(Icons.home, color: textBg),
               ),
               child: FloatingActionButton(
-                backgroundColor: controller.hasUserInteraction.value ? blue_primary : disabled_grey,
+                backgroundColor: controller.hasUserInteraction.value ? bluePrimary : disabledGrey,
                 onPressed: controller.hasUserInteraction.value ? () => controller.saveOrUpdateTask(context) : null,
                 child: const Icon(Icons.check_rounded),
               ),

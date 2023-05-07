@@ -33,7 +33,7 @@ class NotificationsUseCasesImpl extends NotificationsUseCases {
           AndroidNotificationAction(
             'notificationPostponeACTION', //action id
             'postpone'.tr, //action title
-            titleColor: blue_primary,
+            titleColor: bluePrimary,
             showsUserInterface: true,
             cancelNotification: true,
           ),

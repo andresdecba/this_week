@@ -7,7 +7,6 @@ import 'package:todoapp/main.dart';
 import 'package:todoapp/models/notification_model.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/services/ad_mob_service.dart';
-import 'package:todoapp/services/local_notifications_service.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/ui/shared_components/dialogs.dart';
 import 'package:todoapp/ui/shared_components/snackbar.dart';
@@ -225,6 +224,7 @@ class PostPosePageController extends GetxController with AdMobService, StateMixi
       personalizedTaskDate = picked;
       await timePicker();
     } else {
+      // ignore: avoid_print
       print('picking cancelled');
     }
   }
@@ -244,6 +244,7 @@ class PostPosePageController extends GetxController with AdMobService, StateMixi
         picked.minute, // minuto
       );
     } else {
+      // ignore: avoid_print
       print('picking cancelled');
     }
   }

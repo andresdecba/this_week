@@ -25,7 +25,7 @@ class InitialPage extends GetView<InitialPageController> {
         (ad) => Container(
           height: ad.size.height.toDouble(),
           width: ad.size.height.toDouble(),
-          color: enabled_grey,
+          color: enabledGrey,
           child: Align(
             alignment: Alignment.center,
             child: AdWidget(ad: ad),
@@ -34,7 +34,7 @@ class InitialPage extends GetView<InitialPageController> {
         onLoading: Container(
           height: 60.0,
           width: double.infinity,
-          color: enabled_grey,
+          color: enabledGrey,
           child: const Align(
             alignment: Alignment.center,
             child: CircularProgressIndicator(),
@@ -43,12 +43,12 @@ class InitialPage extends GetView<InitialPageController> {
         onError: (error) => Container(
           height: 60.0,
           width: double.infinity,
-          color: enabled_grey,
+          color: enabledGrey,
           child: Align(
             alignment: Alignment.center,
             child: Text(
               error!,
-              style: kTitleMedium.copyWith(color: withe_bg),
+              style: kTitleMedium.copyWith(color: witheBg),
             ),
           ),
         ),
@@ -61,7 +61,7 @@ class InitialPage extends GetView<InitialPageController> {
         title: SvgPicture.asset(
           'assets/appbar_logo.svg',
           alignment: Alignment.center,
-          color: appBar_logo,
+          color: appBarLogo,
           fit: BoxFit.contain,
           height: 21,
         ),

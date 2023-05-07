@@ -9,7 +9,7 @@ void postposeModalBottomSheet({required BuildContext context}) {
 
   showModalBottomSheet(
     context: context,
-    backgroundColor: blue_primary,
+    backgroundColor: bluePrimary,
     enableDrag: false,
     isDismissible: false,
     useSafeArea: true,
@@ -133,7 +133,7 @@ void snackbarNativo(BuildContext context) {
   // show
   final snackBar = SnackBar(
     padding: const EdgeInsets.only(left: 20, top: 20, right: 20, bottom: 60),
-    backgroundColor: blue_primary.withOpacity(0.50),
+    backgroundColor: bluePrimary.withOpacity(0.50),
     onVisible: () {},
     duration: const Duration(seconds: 60),
     elevation: 0,

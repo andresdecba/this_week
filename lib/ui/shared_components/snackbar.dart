@@ -15,7 +15,7 @@ void showSnackBar({
     snackPosition: SnackPosition.BOTTOM,
     animationDuration: const Duration(milliseconds: 500),
     duration: const Duration(seconds: 3),
-    backgroundColor: color ?? blue_primary.withOpacity(0.5),
+    backgroundColor: color ?? bluePrimary.withOpacity(0.5),
     padding: const EdgeInsets.all(20),
     snackStyle: SnackStyle.FLOATING,
     margin: const EdgeInsets.only(bottom: 0, left: 0, right: 0, top: 0),

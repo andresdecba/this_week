@@ -4,22 +4,22 @@ import 'package:get/get.dart';
 // colors
 // ignore: constant_identifier_names
 const grey_bg = Color(0xFFE8E8E8);
-const disabled_task_bg = Color.fromARGB(255, 206, 206, 206);
-const enabled_grey = Color(0xFF626262);
-const disabled_grey = Color(0xFFA6A6A6);
-const status_task_pending = Color.fromARGB(255, 248, 228, 125);
-const status_task_in_progress = Color.fromARGB(255, 56, 149, 255);
-const status_task_done = Color.fromARGB(255, 138, 173, 131);
-const yellow_primary = Color(0xFFFFC700);
+const disabledTaskBg = Color.fromARGB(255, 206, 206, 206);
+const enabledGrey = Color(0xFF626262);
+const disabledGrey = Color(0xFFA6A6A6);
+const statusTaskPending = Color.fromARGB(255, 248, 228, 125);
+const statusTaskInProgress = Color.fromARGB(255, 56, 149, 255);
+const statusTaskDone = Color.fromARGB(255, 138, 173, 131);
+const yellowPrimary = Color(0xFFFFC700);
 const header = Color.fromARGB(255, 201, 241, 253);
-const withe_bg = Color(0xFFFFFFFF);
-const black_bg = Color(0xFF000000);
-const appBar_logo = Color(0xFF000000);
-const text_bg = Color(0xFF000000);
+const witheBg = Color(0xFFFFFFFF);
+const blackBg = Color(0xFF000000);
+const appBarLogo = Color(0xFF000000);
+const textBg = Color(0xFF000000);
 const warning = Color(0xFFD30000);
-const blue_primary = Color(0xFF0075FF);
-const icons_bg = Color(0xFF262626);
-const green_info = Color.fromARGB(255, 125, 252, 103);
+const bluePrimary = Color(0xFF0075FF);
+const iconsBg = Color(0xFF262626);
+const greenInfo = Color.fromARGB(255, 125, 252, 103);
 
 
 // titles
@@ -35,9 +35,9 @@ final kBodyLarge = Theme.of(Get.context!).textTheme.bodyLarge!;
 final kLabelMedium = Theme.of(Get.context!).textTheme.labelMedium!;
 final kLabelLarge = Theme.of(Get.context!).textTheme.labelLarge!;
 // notification bar
-final TextStyle noDateTxtStyle = kTitleSmall.copyWith(color: disabled_grey, fontStyle: FontStyle.italic);
-final TextStyle dateTxtStyle = kTitleMedium.copyWith(color: enabled_grey);
-final TextStyle newDateTxtStyle = kTitleMedium.copyWith(color: blue_primary);
+final TextStyle noDateTxtStyle = kTitleSmall.copyWith(color: disabledGrey, fontStyle: FontStyle.italic);
+final TextStyle dateTxtStyle = kTitleMedium.copyWith(color: enabledGrey);
+final TextStyle newDateTxtStyle = kTitleMedium.copyWith(color: bluePrimary);
 
 // textfield style
 InputDecoration customInputDecoration({
@@ -53,17 +53,17 @@ InputDecoration customInputDecoration({
     contentPadding: isEnabled ? const EdgeInsets.all(10) : EdgeInsets.zero,
     isDense: true,
     border: hasBorder == true ? const OutlineInputBorder() : InputBorder.none,
-    labelStyle: const TextStyle(color: disabled_grey),
+    labelStyle: const TextStyle(color: disabledGrey),
     alignLabelWithHint: true,
     hintText: hintText,
-    hintStyle: kBodyMedium.copyWith(fontStyle: FontStyle.italic, color: disabled_grey),
+    hintStyle: kBodyMedium.copyWith(fontStyle: FontStyle.italic, color: disabledGrey),
     filled: isEnabled,
-    fillColor: withe_bg.withOpacity(0.4),
+    fillColor: witheBg.withOpacity(0.4),
     suffixIcon: hasBorder == true
         ? IconButton(
             icon: const Icon(
               Icons.clear,
-              color: enabled_grey,
+              color: enabledGrey,
             ), // clear text
             onPressed: clearText,
           )
@@ -75,12 +75,12 @@ InputDecoration customInputDecoration({
     ),
     enabledBorder: OutlineInputBorder(
       borderSide: BorderSide(
-        color: borderColor ?? blue_primary,
+        color: borderColor ?? bluePrimary,
       ),
     ),
     focusedBorder: OutlineInputBorder(
       borderSide: BorderSide(
-        color: borderColor ?? status_task_in_progress,
+        color: borderColor ?? statusTaskInProgress,
       ),
     ),
   );

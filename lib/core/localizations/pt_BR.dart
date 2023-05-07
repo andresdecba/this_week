@@ -1,5 +1,4 @@
-// ignore: constant_identifier_names
-const Map<String, String> pt_BR = {
+Map<String, String> pt_BR = {
     //header
   'week': 'Semana',
   'current week': 'SEMANA ATUAL:',

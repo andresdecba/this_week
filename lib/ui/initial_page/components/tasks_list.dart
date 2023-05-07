@@ -4,8 +4,6 @@ import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/ui/initial_page/components/task_card.dart';
-import 'package:todoapp/ui/postpose_page/components/view_task.dart';
-import 'package:todoapp/ui/shared_components/bottomsheet_with_scroll.dart';
 import 'package:todoapp/utils/helpers.dart';
 
 class TasksList extends GetView<InitialPageController> {
@@ -48,7 +46,7 @@ class TasksList extends GetView<InitialPageController> {
                               text: TextSpan(
                                 text: weekdayOnlyFormater(currentDate),
                                 style: kTitleMedium.copyWith(
-                                  color: disabled_grey,
+                                  color: disabledGrey,
                                   fontSize: 17,
                                 ),
                                 children: <TextSpan>[
@@ -56,7 +54,7 @@ class TasksList extends GetView<InitialPageController> {
                                     text: '  ${standardDateFormater(currentDate)}: ${'there were no tasks'.tr}',
                                     style: kBodySmall.copyWith(
                                       fontStyle: FontStyle.italic,
-                                      color: disabled_grey,
+                                      color: disabledGrey,
                                     ),
                                   ),
                                 ],
@@ -82,13 +80,13 @@ class TasksList extends GetView<InitialPageController> {
                         RichText(
                           text: TextSpan(
                             text: weekdayOnlyFormater(currentDate),
-                            style: kTitleMedium.copyWith(color: disableYesterday ? disabled_grey : text_bg, fontSize: 17),
+                            style: kTitleMedium.copyWith(color: disableYesterday ? disabledGrey : textBg, fontSize: 17),
                             children: <TextSpan>[
                               TextSpan(
                                 text: '   ${standardDateFormater(currentDate)}',
                                 style: kBodySmall.copyWith(
                                   fontStyle: FontStyle.italic,
-                                  color: disableYesterday ? disabled_grey : text_bg,
+                                  color: disableYesterday ? disabledGrey : textBg,
                                 ), 
                               ),
                             ],
@@ -98,7 +96,7 @@ class TasksList extends GetView<InitialPageController> {
                             ? const IconButton(
                                 onPressed: null,
                                 visualDensity: VisualDensity.compact,
-                                disabledColor: disabled_grey,
+                                disabledColor: disabledGrey,
                                 icon: Icon(Icons.add),
                               )
                             : IconButton(
@@ -131,7 +129,7 @@ class TasksList extends GetView<InitialPageController> {
                           padding: const EdgeInsets.all(16),
                           child: Text(
                             'no tasks'.tr,
-                            style: kTitleSmall.copyWith(color: disabled_grey, fontStyle: FontStyle.italic),
+                            style: kTitleSmall.copyWith(color: disabledGrey, fontStyle: FontStyle.italic),
                           ),
                         ),
                       ),

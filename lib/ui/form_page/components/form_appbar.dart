@@ -36,7 +36,7 @@ class FormAppbar extends GetView<FormsPageController> implements PreferredSizeWi
                           //subtitle: controller.getTask.repeatId != null ? 'Esta es una tarea periódica' : null,
                         );
                       },
-                      icon: const Icon(Icons.delete_forever, color: text_bg),
+                      icon: const Icon(Icons.delete_forever, color: textBg),
                     ),
                     IconButton(
                       onPressed: () {

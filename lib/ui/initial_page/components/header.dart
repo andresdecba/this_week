@@ -18,7 +18,7 @@ class Header extends GetView<InitialPageController> {
           color: grey_bg,
           boxShadow: [
             BoxShadow(
-              color: disabled_grey,
+              color: disabledGrey,
               offset: Offset(0.0, 1.0), //(x,y)
               blurRadius: 6.0,
             ),
@@ -39,11 +39,11 @@ class Header extends GetView<InitialPageController> {
               children: [
                 Text(
                   controller.weekDaysFromTo.value,
-                  style: controller.week == Week.current() ? kTitleMedium.copyWith(fontWeight: FontWeight.bold, color: blue_primary) : kTitleMedium.copyWith(fontWeight: FontWeight.bold),
+                  style: controller.week == Week.current() ? kTitleMedium.copyWith(fontWeight: FontWeight.bold, color: bluePrimary) : kTitleMedium.copyWith(fontWeight: FontWeight.bold),
                 ),
                 Text(
                   controller.tasksPercentageCompleted.value,
-                  style: controller.week == Week.current() ? kTitleSmall.copyWith(height: 1.5, color: blue_primary) : kTitleMedium,
+                  style: controller.week == Week.current() ? kTitleSmall.copyWith(height: 1.5, color: bluePrimary) : kTitleMedium,
                 ),
               ],
             ),

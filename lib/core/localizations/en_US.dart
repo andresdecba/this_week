@@ -1,5 +1,4 @@
-// ignore: constant_identifier_names
-const Map<String, String> en_US = {
+Map<String, String> en_US = {
   //header
   'week': 'Week',
   'current week': 'CURRENT WEEK:',

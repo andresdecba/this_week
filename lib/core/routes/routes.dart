@@ -6,7 +6,6 @@ import 'package:todoapp/ui/form_page/form_page.dart';
 import 'package:todoapp/ui/initial_page/initial_page.dart';
 import 'package:todoapp/ui/postpose_page/postpose_page.dart';
 import 'package:todoapp/ui/shared_components/onborading.dart';
-import 'package:todoapp/ui/view_task_page/view_task_page.dart';
 
 abstract class Routes {
   static const FORMS_PAGE = '/formularios_page';

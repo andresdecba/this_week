@@ -31,6 +31,7 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
   }
 
   @override
+  // ignore: unnecessary_overrides
   void onClose() {
     super.onClose();
   }
@@ -126,7 +127,6 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
     //   increaseDecreaseWeeks++;
     // }
     increaseDecreaseWeeks++;
-    print('averga increase $increaseDecreaseWeeks');
     buildInfo();
   }
 
@@ -135,7 +135,6 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
       week = week.previous;
       increaseDecreaseWeeks--;
     }
-    print('averga decrease $increaseDecreaseWeeks');
     buildInfo();
   }
 
@@ -146,7 +145,6 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
       oldWeeks = currentWeek.weekNumber - firstTaskWeek.weekNumber;
       increaseDecreaseWeeks = oldWeeks;
     }
-    print('averga increaseDecreaseWeeks $increaseDecreaseWeeks / oldWeeks $oldWeeks');
   }
 
   void buildInfo() {
@@ -222,8 +220,7 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
   }
 
   void borrarEstoo() {
-    Get.to(BorrarEsto(), arguments: tasksBox.get(0));
-    print('argumentos ${tasksBox.keys}');
+    Get.to(const BorrarEsto(), arguments: tasksBox.get(0));
   }
 
   // LOAD GOOGLE AD //

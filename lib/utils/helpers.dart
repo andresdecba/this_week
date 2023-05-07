@@ -57,7 +57,7 @@ int createNotificationId() {
 extension TimeOfDayConverter on TimeOfDay {
   String to24hours() {
     final hour = this.hour.toString().padLeft(2, "0");
-    final min = this.minute.toString().padLeft(2, "0");
+    final min = minute.toString().padLeft(2, "0");
     return "$hour:$min";
   }
 }
@@ -82,13 +82,13 @@ String setStatusLanguage(TaskModel task) {
 Color setStatusColor(TaskModel task) {
   switch (task.status) {
     case 'Pending':
-      return status_task_pending;
+      return statusTaskPending;
     case 'In progress':
-      return status_task_in_progress;
+      return statusTaskInProgress;
     case 'Done':
-      return status_task_done;
+      return statusTaskDone;
     default:
-      return status_task_pending;
+      return statusTaskPending;
   }
 }
 
@@ -99,7 +99,7 @@ TextStyle setStatusTextStyle(TaskModel task) {
     case 'In progress':
       return kBodyMedium;
     case 'Done':
-      return kBodyMedium.copyWith(fontStyle: FontStyle.italic, decoration: TextDecoration.lineThrough, color: disabled_grey);
+      return kBodyMedium.copyWith(fontStyle: FontStyle.italic, decoration: TextDecoration.lineThrough, color: disabledGrey);
     default:
       return kBodyMedium;
   }

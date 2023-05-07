@@ -52,7 +52,7 @@ class TodoList extends GetView<FormsPageController> {
                   padding: const EdgeInsets.all(16),
                   child: Text(
                     'here you can add a sub task list'.tr,
-                    style: kBodyMedium.copyWith(color: disabled_grey, fontStyle: FontStyle.italic),
+                    style: kBodyMedium.copyWith(color: disabledGrey, fontStyle: FontStyle.italic),
                   ),
                 )
               // SHOW TASKS
@@ -143,7 +143,7 @@ class _TodoListState extends State<_TodoList> {
               color: warning,
               child: const Icon(
                 Icons.delete_forever_rounded,
-                color: withe_bg,
+                color: witheBg,
               ),
             ),
 
@@ -174,7 +174,7 @@ class _TodoListState extends State<_TodoList> {
               },
               leading: Checkbox(
                 shape: const CircleBorder(),
-                activeColor: status_task_done,
+                activeColor: statusTaskDone,
                 value: widget.controller.getTask.subTasks[i].isDone,
                 visualDensity: VisualDensity.compact,
                 onChanged: (value) {
@@ -187,10 +187,10 @@ class _TodoListState extends State<_TodoList> {
                     ? kBodyMedium.copyWith(
                         decoration: TextDecoration.lineThrough,
                         fontStyle: FontStyle.italic,
-                        color: disabled_grey,
+                        color: disabledGrey,
                       )
                     : kBodyMedium.copyWith(
-                        color: enabled_grey,
+                        color: enabledGrey,
                       ),
               ),
             ),

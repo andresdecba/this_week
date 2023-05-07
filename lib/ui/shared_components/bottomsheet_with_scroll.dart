@@ -47,7 +47,7 @@ Future<void> openBottomSheetWithScroll({
                       width: 50,
                       alignment: Alignment.center,
                       decoration: const BoxDecoration(
-                        color: disabled_grey,
+                        color: disabledGrey,
                         borderRadius: BorderRadius.all(Radius.circular(50)),
                       ),
                     ),

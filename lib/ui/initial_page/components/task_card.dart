@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/utils/helpers.dart';
@@ -57,7 +56,7 @@ class _TaskCardState extends State<TaskCard> {
                       child: Icon(
                         Icons.push_pin_rounded,
                         size: 20,
-                        color: enabled_grey,
+                        color: enabledGrey,
                       ),
                     ),
                   ),
@@ -108,12 +107,12 @@ class _TaskCardState extends State<TaskCard> {
                             Icon(
                               widget.task.notificationTime != null ? Icons.notifications_active_rounded : Icons.notifications_none_rounded,
                               size: 20,
-                              color: widget.task.notificationTime != null ? enabled_grey : disabled_grey,
+                              color: widget.task.notificationTime != null ? enabledGrey : disabledGrey,
                             ),
                             const SizedBox(width: 8),
                             Text(
-                              widget.task.notificationTime != null ? timeFormater(widget.task.notificationTime!) : '-- : --', // TODO
-                              style: kLabelMedium.copyWith(color: widget.task.notificationTime != null ? enabled_grey : disabled_grey),
+                              widget.task.notificationTime != null ? timeFormater(widget.task.notificationTime!) : '-- : --',
+                              style: kLabelMedium.copyWith(color: widget.task.notificationTime != null ? enabledGrey : disabledGrey),
                             ),
                           ],
                         ),
@@ -126,12 +125,12 @@ class _TaskCardState extends State<TaskCard> {
                             Icon(
                               Icons.checklist_rounded,
                               size: 20,
-                              color: widget.task.subTasks.isEmpty ? disabled_grey : enabled_grey,
+                              color: widget.task.subTasks.isEmpty ? disabledGrey : enabledGrey,
                             ),
                             const SizedBox(width: 8),
                             Text(
                               calculateSubtasksDone(),
-                              style: kLabelMedium.copyWith(color: widget.task.subTasks.isEmpty ? disabled_grey : enabled_grey),
+                              style: kLabelMedium.copyWith(color: widget.task.subTasks.isEmpty ? disabledGrey : enabledGrey),
                             ),
                           ],
                         ),

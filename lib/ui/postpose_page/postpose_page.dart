@@ -20,7 +20,7 @@ class PostPosePage extends GetView<PostPosePageController> {
         title: SvgPicture.asset(
           'assets/appbar_logo.svg',
           alignment: Alignment.center,
-          color: black_bg,
+          color: blackBg,
           fit: BoxFit.contain,
           height: 21,
         ),
@@ -38,7 +38,7 @@ class PostPosePage extends GetView<PostPosePageController> {
                 child: OutlinedButton(
                   onPressed: () => controller.cancelPostpose(),
                   style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: blue_primary),
+                    side: const BorderSide(color: bluePrimary),
                   ),
                   child: Text('cancel'.tr),
                 ),
@@ -61,7 +61,7 @@ class PostPosePage extends GetView<PostPosePageController> {
         (ad) => Container(
           height: ad.size.height.toDouble(),
           width: ad.size.height.toDouble(),
-          color: enabled_grey,
+          color: enabledGrey,
           child: Align(
             alignment: Alignment.center,
             child: AdWidget(ad: ad),
@@ -70,7 +70,7 @@ class PostPosePage extends GetView<PostPosePageController> {
         onLoading: Container(
           height: 60.0,
           width: double.infinity,
-          color: enabled_grey,
+          color: enabledGrey,
           child: const Align(
             alignment: Alignment.center,
             child: CircularProgressIndicator(),
@@ -79,12 +79,12 @@ class PostPosePage extends GetView<PostPosePageController> {
         onError: (error) => Container(
           height: 60.0,
           width: double.infinity,
-          color: enabled_grey,
+          color: enabledGrey,
           child: Align(
             alignment: Alignment.center,
             child: Text(
               error!,
-              style: kTitleMedium.copyWith(color: withe_bg),
+              style: kTitleMedium.copyWith(color: witheBg),
             ),
           ),
         ),
@@ -124,7 +124,7 @@ class PostPosePage extends GetView<PostPosePageController> {
                       RadioListTile(
                         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
                         visualDensity: VisualDensity.compact,
-                        activeColor: blue_primary,
+                        activeColor: bluePrimary,
                         contentPadding: EdgeInsets.zero,
                         title: Text(
                           controller.setTitle(e),
@@ -164,7 +164,7 @@ class _Divider extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Divider(
       height: 0,
-      color: disabled_grey,
+      color: disabledGrey,
       // indent: 10,
       // endIndent: 10,
     );

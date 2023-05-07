@@ -32,7 +32,7 @@ class NotificationsAndDate extends GetView<FormsPageController> {
                   child: controller.notificationText.value,
                 ),
                 IconButton(
-                  disabledColor: black_bg,
+                  disabledColor: blackBg,
                   icon: controller.notificationIcon.value,
                   color: controller.notificationColor.value,
                   visualDensity: VisualDensity.compact,
@@ -59,13 +59,13 @@ class NotificationsAndDate extends GetView<FormsPageController> {
                         },
                   child: Text(
                     longDateFormater(controller.taskDate.value),
-                    style: controller.isViewMode.value ? kBodyMedium : kBodyMedium.copyWith(color: blue_primary),
+                    style: controller.isViewMode.value ? kBodyMedium : kBodyMedium.copyWith(color: bluePrimary),
                   ),
                 ),
                 const IconButton(
                   icon: Icon(Icons.date_range_rounded),
                   visualDensity: VisualDensity.compact,
-                  disabledColor: black_bg,
+                  disabledColor: blackBg,
                   onPressed: null,
                 ),
               ],

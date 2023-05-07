@@ -85,7 +85,7 @@ class FormsPageController extends GetxController with AdMobService, StateMixin<d
     );
   }
 
-  // TODO: cuando refactoricemos, hacer algo mas pro con el tema de los argumentos
+  // Cuando refactoricemos, hacer algo mas pro con el tema de los argumentos
   void setInitialConfig() {
     // desde la notificacion con la app cerrada
     if (notificationPayload != null) {
@@ -259,7 +259,7 @@ class FormsPageController extends GetxController with AdMobService, StateMixin<d
   RxBool enableNotificationIcon = false.obs;
 
   Rx<Icon> notificationIcon = const Icon(Icons.notifications_off_rounded).obs;
-  Rx<Color> notificationColor = blue_primary.obs;
+  Rx<Color> notificationColor = bluePrimary.obs;
   Rx<Text> notificationText = const Text('').obs;
 
   void enableDisableNotificationStyles() {
@@ -272,36 +272,36 @@ class FormsPageController extends GetxController with AdMobService, StateMixin<d
     final String dateTxt = '${'notify me at:'.tr} ${setNotificationTime.to24hours()}';
 
     if (isViewMode.value && !enableNotificationIcon.value) {
-      notificationColor.value = black_bg;
+      notificationColor.value = blackBg;
       notificationIcon.value = const Icon(Icons.notifications_off_rounded);
       notificationText.value = Text(noDateTxt, style: kBodyMedium);
     }
     if (isViewMode.value && enableNotificationIcon.value) {
-      notificationColor.value = black_bg;
+      notificationColor.value = blackBg;
       notificationIcon.value = const Icon(Icons.notifications_active_rounded);
       notificationText.value = Text(dateTxt, style: kBodyMedium);
     }
 
     if (isNewMode.value && !enableNotificationIcon.value) {
-      notificationColor.value = blue_primary;
+      notificationColor.value = bluePrimary;
       notificationIcon.value = const Icon(Icons.notifications_off_rounded);
       notificationText.value = Text(noDateTxt, style: kBodyMedium);
     }
     if (isNewMode.value && enableNotificationIcon.value) {
-      notificationColor.value = blue_primary;
+      notificationColor.value = bluePrimary;
       notificationIcon.value = const Icon(Icons.notifications_active_rounded);
-      notificationText.value = Text(dateTxt, style: kBodyMedium.copyWith(color: blue_primary));
+      notificationText.value = Text(dateTxt, style: kBodyMedium.copyWith(color: bluePrimary));
     }
 
     if (isUpdateMode.value && !enableNotificationIcon.value) {
-      notificationColor.value = blue_primary;
+      notificationColor.value = bluePrimary;
       notificationIcon.value = const Icon(Icons.notifications_off_rounded);
-      notificationText.value = Text(noDateTxt, style: kBodyMedium.copyWith(color: disabled_grey));
+      notificationText.value = Text(noDateTxt, style: kBodyMedium.copyWith(color: disabledGrey));
     }
     if (isUpdateMode.value && enableNotificationIcon.value) {
-      notificationColor.value = blue_primary;
+      notificationColor.value = bluePrimary;
       notificationIcon.value = const Icon(Icons.notifications_active_rounded);
-      notificationText.value = Text(dateTxt, style: kBodyMedium.copyWith(color: blue_primary));
+      notificationText.value = Text(dateTxt, style: kBodyMedium.copyWith(color: bluePrimary));
     }
   }
 
@@ -469,7 +469,7 @@ class FormsPageController extends GetxController with AdMobService, StateMixin<d
         subtitle: 'You cant create a...'.tr,
         okTextButton: 'ok'.tr,
         iconPath: 'assets/info.svg',
-        iconColor: blue_primary,
+        iconColor: bluePrimary,
         onPressOk: () => Navigator.of(context).pop(),
       );
     } else {

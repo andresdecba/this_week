@@ -56,7 +56,7 @@ class ViewTaskPage extends StatelessWidget {
               const SizedBox(height: 20),
 
               const Text('Descripción'),
-              const Divider(color: black_bg),
+              const Divider(color: blackBg),
               Text(
                 task.description,
                 style: kBodyMedium,
@@ -64,7 +64,7 @@ class ViewTaskPage extends StatelessWidget {
               const SizedBox(height: 30),
 
               const Text('Subtareas'),
-              const Divider(color: black_bg),
+              const Divider(color: blackBg),
               ...task.subTasks.map((e) {
                 return ListTile(
                   contentPadding: EdgeInsets.zero,
@@ -97,14 +97,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: SvgPicture.asset(
         'assets/appbar_logo.svg',
         alignment: Alignment.center,
-        color: appBar_logo,
+        color: appBarLogo,
         fit: BoxFit.contain,
         height: 21,
       ),
-      backgroundColor: yellow_primary,
-      iconTheme: IconThemeData(color: black_bg),
-      toolbarTextStyle: TextStyle(color: black_bg),
-      titleTextStyle: TextStyle(color: black_bg, fontSize: 16),
+      backgroundColor: yellowPrimary,
+      iconTheme: const IconThemeData(color: blackBg),
+      toolbarTextStyle: const TextStyle(color: blackBg),
+      titleTextStyle: const TextStyle(color: blackBg, fontSize: 16),
       elevation: 0,
       //titleSpacing: 24,
     );

@@ -68,7 +68,7 @@ class ViewTask extends StatelessWidget {
 
         // divisor
         const Divider(
-          color: black_bg,
+          color: blackBg,
           height: 0,
         ),
 
