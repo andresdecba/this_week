@@ -1,22 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:intl/intl.dart';
 import 'package:todoapp/core/bindings/initial_page_binding.dart';
+import 'package:todoapp/core/init_main.dart';
 import 'package:todoapp/core/localizations/translations.dart';
 import 'package:todoapp/core/routes/routes.dart';
 import 'package:todoapp/data_source/db_data_source.dart';
-import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/models/app_config_model.dart';
-import 'package:todoapp/services/local_notifications_service.dart';
 import 'package:todoapp/ui/commons/styles.dart';
-// needed for notifications, get the local timezone of the os
-import 'package:flutter_native_timezone/flutter_native_timezone.dart';
-import 'package:timezone/data/latest_all.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
 // ignore: depend_on_referenced_packages, NOOO BORRAR aunuqe salga que no se usa x sí se usa
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -25,94 +17,21 @@ String initialRoute = Routes.INITIAL_PAGE;
 Box<AppConfigModel> userPrefs = Boxes.getMyAppConfigBox();
 AppConfigModel config = userPrefs.get('appConfig')!;
 
-Future<void> initHive() async {
-  await Hive.initFlutter();
-  Hive.registerAdapter(SubTaskModelAdapter());
-  Hive.registerAdapter(TaskModelAdapter());
-  await Hive.openBox<TaskModel>('tasksBox');
-  Hive.registerAdapter(AppConfigModelAdapter());
-  await Hive.openBox<AppConfigModel>('myAppConfigBox');
-}
-
-Future<void> initAdMob() async {
-  // initializa
-  await MobileAds.instance.initialize();
-
-  // TODO antes de publicar: cometar las siguientes lineas (dispositivos de prueba):
-  var devices = ["4C456C78BB5CAFE90286C23C5EA6A3CC"];
-  RequestConfiguration requestConfiguration = RequestConfiguration(testDeviceIds: devices);
-  MobileAds.instance.updateRequestConfiguration(requestConfiguration);
-}
-
-Future<void> initAppConfig() async {
-  // if config file doenst exists, creat it
-  if (userPrefs.get('appConfig') == null) {
-    var value = AppConfigModel();
-    userPrefs.put('appConfig', value);
-  }
-  // set language whether it is stored or not
-
-  Get.locale = config.language == null ? Get.deviceLocale : Locale(config.language!, '');
-  Intl.defaultLocale = Get.locale!.languageCode;
-}
-
-//ini tnotifications
-Future<void> initNotifications() async {
-
-  // inicializar las notificaciones
-  tz.initializeTimeZones();
-  tz.setLocalLocation(
-    tz.getLocation(
-      await FlutterNativeTimezone.getLocalTimezone(),
-    ),
-  );
-  LocalNotificationService.initializePlatformNotifications();
-
-  // navegar cuando esta cerrada la app
-  final notificationLaunchDetails = await localNotifications.getNotificationAppLaunchDetails();
-
-  // si la app esta CERRADA y fue lanzada via la notificacion, entra acá:
-  if (notificationLaunchDetails?.didNotificationLaunchApp ?? false) {
-    
-    final details = notificationLaunchDetails!.notificationResponse!;
-    // llega payload
-    if (details.payload != null) {
-      notificationPayload = details.payload!;
-    }
-    // si tocaron el action de la notificacion
-    if (details.notificationResponseType == NotificationResponseType.selectedNotificationAction) {
-      // si tocaron el action de posponer
-      if (details.actionId.toString() == 'notificationPostponeACTION' && notificationPayload != null) {
-        initialRoute = Routes.POSTPOSE_PAGE;
-      }
-    }
-    // si tocaron el body de la notificacion
-    if (details.notificationResponseType == NotificationResponseType.selectedNotification) {
-      if (notificationPayload != null) {
-        initialRoute = Routes.FORMS_PAGE;
-      }
-      if (notificationPayload == null) {
-        initialRoute = Routes.INITIAL_PAGE;
-      }
-    }
-    // borrar la notificacion de la barra de notificaciones
-    localNotifications.cancel(details.id!);
-  }
-}
-
 void main() async {
   // flutter
   WidgetsFlutterBinding.ensureInitialized();
   // Hive
-  await initHive();
+  await InitMain.initHive();
   // google ads
-  await initAdMob();
+  await InitMain.initAdMob();
   // language must be init AFTER hive!
-  await initAppConfig();
+  await InitMain.initAppConfig();
   // needed for local notifications
-  await initNotifications();
+  await InitMain.initNotifications();
   // prevent portrait orientation and then run app
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((value) => runApp(const MyApp()));
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
+    (value) => runApp(const MyApp()),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -120,7 +39,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('rutaaa $initialRoute');
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'This Week Calendar',
