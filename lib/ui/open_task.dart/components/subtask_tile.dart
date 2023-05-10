@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todoapp/ui/shared_components/custom_text_field.dart';
 
 class SubtaskTile extends StatelessWidget {
   const SubtaskTile({
@@ -14,23 +15,29 @@ class SubtaskTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 6),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(
-              icon,
-              size: 20,
-            ),
-            const SizedBox(width: 20),
-            Expanded(child: Text(title)),
-          ],
-        ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(
+            icon,
+            size: 20,
+          ),
+          const SizedBox(width: 20),
+          Expanded(child: Text(title)),
+          // CustomTextField(
+          //   textValue: title,
+          //   myFunction: (value) {
+          //     // task.value.description = value;
+          //     // task.refresh();
+          //   },
+          // ),
+        ],
       ),
     );
   }
 }
+
+

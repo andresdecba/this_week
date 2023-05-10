@@ -5,7 +5,7 @@ import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/ui/open_task.dart/components/subtask_tile.dart';
 import 'package:todoapp/ui/shared_components/dialogs.dart';
-
+import 'package:todoapp/ui/shared_components/custom_text_field.dart';
 
 class Subtasks extends GetView<InitialPageController> {
   const Subtasks({required this.task, Key? key}) : super(key: key);
@@ -14,16 +14,53 @@ class Subtasks extends GetView<InitialPageController> {
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      children: [
-        ...task.value.subTasks.map((e) {
-          return SubtaskTile(
-            title: e.title,
-            icon: e.isDone ? Icons.check_circle_outline_rounded : Icons.circle_outlined,
-            onTap: () {},
-          );
-        }),
-      ],
+    return Obx(
+      () => Wrap(
+        children: [
+          ...task.value.subTasks.map((e) {
+            return Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Expanded(
+                  child: InkWell(
+                    onTap: () {},
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: Expanded(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.circle_outlined, size: 20),
+                            const SizedBox(
+                              width: 8,
+                            ),
+                            Expanded(
+                              child: CustomTextField(
+                                textValue: e.title,
+                                myFunction: (value) {
+                                  e.title = value;
+                                  task.refresh();
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const Icon(Icons.close, size: 20),
+              ],
+            );
+
+            // return SubtaskTile(
+            //   title: e.title,
+            //   icon: e.isDone ? Icons.check_circle_outline_rounded : Icons.circle_outlined,
+            //   onTap: () {},
+            // );
+          }),
+        ],
+      ),
     );
   }
 }

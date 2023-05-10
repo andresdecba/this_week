@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/ui/commons/styles.dart';
-import 'package:todoapp/ui/form_page/components/todo_list.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/ui/open_task.dart/components/description.dart';
 import 'package:todoapp/ui/open_task.dart/components/info.dart';
