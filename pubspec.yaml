@@ -30,6 +30,7 @@ dependencies:
   timezone: ^0.9.1
   url_launcher: ^6.1.10
   introduction_screen: ^3.1.8
+  day_night_time_picker: ^1.2.0+2
 
 dev_dependencies:
   build_runner: ^2.3.0

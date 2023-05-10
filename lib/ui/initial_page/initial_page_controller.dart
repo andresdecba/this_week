@@ -4,16 +4,16 @@ import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:isoweek/isoweek.dart';
-import 'package:todoapp/borrrrar_esto/borraresto.dart';
 import 'package:todoapp/core/routes/routes.dart';
 import 'package:todoapp/data_source/db_data_source.dart';
 import 'package:todoapp/main.dart';
 import 'package:todoapp/models/app_config_model.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/services/ad_mob_service.dart';
+import 'package:todoapp/ui/open_task.dart/open_task_controller.dart';
 import 'package:todoapp/utils/helpers.dart';
 
-class InitialPageController extends GetxController with AdMobService, StateMixin<dynamic> {
+class InitialPageController extends GetxController with AdMobService, StateMixin<dynamic>, OpenTaskController {
   @override
   void onInit() async {
     initSampleTask();
@@ -28,12 +28,6 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
     loadBannerAd(bannerListener: initialPageBannerListener());
     //loadBannerAd(bannerListener: initialPageBannerListener(), adUnitId: AdMobService.initialPageBanner!);
     super.onReady();
-  }
-
-  @override
-  // ignore: unnecessary_overrides
-  void onClose() {
-    super.onClose();
   }
 
   // box de tasks
@@ -51,16 +45,7 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
   // scaffold key
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
-  // CHANGE LANGUAGE DIALOG on drawer //
-  List<Locale> langsCodes = [const Locale('en', ''), const Locale('es', ''), const Locale('pt', '')];
-  List<String> langs = ['English', 'Español', 'Português'];
-  Rx<Locale> currentLang = (Get.locale!).obs;
-  void saveLocale(String langCode) {
-    //currentLang.value = data;
-    //Get.updateLocale(data);
-    appConfig.language = langCode;
-    appConfig.save();
-  }
+ 
 
   // INITIALIZE APP CONFIGURATIONS //
   AppConfigModel appConfig = AppConfigModel();
@@ -119,13 +104,11 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
   late int oldWeeks = 0;
   late int increaseDecreaseWeeks;
   Week week = Week.current();
-  Rx<Map<DateTime, List<TaskModel>>> buildWeekInUI = Rx<Map<DateTime, List<TaskModel>>>({});
+  //Rx<Map<DateTime, List<TaskModel>>> tasksMap = Rx<Map<DateTime, List<TaskModel>>>({});
+  RxMap<DateTime, List<Rx<TaskModel>>> tasksMap = RxMap<DateTime, List<Rx<TaskModel>>>({}); // map and task
 
   void increaseWeek() {
     week = week.next;
-    // if (increaseDecreaseWeeks < oldWeeks) {
-    //   increaseDecreaseWeeks++;
-    // }
     increaseDecreaseWeeks++;
     buildInfo();
   }
@@ -149,26 +132,27 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
 
   void buildInfo() {
     // limpiar lista para evitar duplicados
-    buildWeekInUI.value.clear();
+    tasksMap.clear();
 
     // agregar el dia como key al mapa de la semana
-    // ej: 20/03/2023: []
+    // ej: tasksMap = {20/03/2023: []}
     for (var day in week.days) {
-      buildWeekInUI.value.addAll({day: []});
+      tasksMap.addAll({day: []});
     }
 
     // si hay tareas guardadas, agregarlas al dia correspondinete
-    // ej: 20/03/2023: [Task_1{}, task_2{}]
-    for (var element in buildWeekInUI.value.entries) {
+    // ej: tasksMap = {20/03/2023: [Task_1{}, task_2{}]}
+    for (var element in tasksMap.entries) {
       for (var task in tasksBox.values) {
         if (task.taskDate == element.key) {
-          element.value.add(task);
+          Rx<TaskModel> taskObs = task.obs;
+          element.value.add(taskObs);
         }
       }
     }
     setInitialAndFinalWeekDays();
     createCompletedTasksPercentage();
-    buildWeekInUI.refresh();
+    tasksMap.refresh();
   }
 
   /// create head info
@@ -182,10 +166,10 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
     int completedTotalTasks = 0;
     int completedTasksPercent = 0;
 
-    for (List value in buildWeekInUI.value.values) {
+    for (List value in tasksMap.values) {
       totalTasks += value.length;
       for (var element in value) {
-        if (element.status == TaskStatus.DONE.toValue) {
+        if (element.value.status == TaskStatus.DONE.toValue) {
           completedTotalTasks += 1;
         }
       }
@@ -219,11 +203,33 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
     Get.offAllNamed(Routes.FORMS_PAGE);
   }
 
-  void borrarEstoo() {
-    Get.to(const BorrarEsto(), arguments: tasksBox.get(0));
+
+  String changeTaskStatus(String value) {
+    switch (value) {
+      case 'Pending':
+        return TaskStatus.IN_PROGRESS.toValue;
+      case 'In progress':
+        return TaskStatus.DONE.toValue;
+      case 'Done':
+        return TaskStatus.PENDING.toValue;
+      default:
+        return TaskStatus.IN_PROGRESS.toValue;
+    }
   }
 
-  // LOAD GOOGLE AD //
+  ///// SIDE BAR /////
+  // CHANGE LANGUAGE DIALOG on drawer //
+  List<Locale> langsCodes = [const Locale('en', ''), const Locale('es', ''), const Locale('pt', '')];
+  List<String> langs = ['English', 'Español', 'Português'];
+  Rx<Locale> currentLang = (Get.locale!).obs;
+  void saveLocale(String langCode) {
+    //currentLang.value = data;
+    //Get.updateLocale(data);
+    appConfig.language = langCode;
+    appConfig.save();
+  }
+
+  ///// LOAD GOOGLE AD /////
   BannerAdListener initialPageBannerListener() {
     change(Null, status: RxStatus.loading());
     return BannerAdListener(

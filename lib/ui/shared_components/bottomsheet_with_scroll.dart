@@ -5,7 +5,7 @@ import 'package:todoapp/ui/commons/styles.dart';
 Future<void> openBottomSheetWithScroll({
   required BuildContext context,
   required Widget widget,
-  double maxChildSize = 0.85,
+  double maxChildSize = 0.9,
   double initialChildSize = 0.5,
   double minChildSize = 0.35,
 }) {

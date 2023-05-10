@@ -4,6 +4,8 @@ import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/ui/initial_page/components/task_card.dart';
+import 'package:todoapp/ui/open_task.dart/open_task.dart';
+import 'package:todoapp/ui/shared_components/bottomsheet_with_scroll.dart';
 import 'package:todoapp/utils/helpers.dart';
 
 class TasksList extends GetView<InitialPageController> {
@@ -17,12 +19,14 @@ class TasksList extends GetView<InitialPageController> {
           physics: const NeverScrollableScrollPhysics(),
           key: controller.keyScroll,
           shrinkWrap: true,
-          itemCount: controller.buildWeekInUI.value.length,
+          itemCount: controller.tasksMap.length,
           itemBuilder: (context, index) {
             //
-            DateTime currentDate = controller.buildWeekInUI.value.keys.toList()[index];
-            List<TaskModel> tasks = [];
-            tasks.addAll(controller.buildWeekInUI.value[currentDate]!);
+            DateTime currentDate = controller.tasksMap.keys.toList()[index];
+            List<Rx<TaskModel>> tasks = [];
+            //tasks.addAll(controller.tasksMap.value[currentDate]!);
+            tasks.addAll(controller.tasksMap[currentDate]!);
+
             // si es el dia de ayer y no tiene una tarea, esconder ese dia
             bool hideEmptyYesterday = (currentDate.isBefore(DateTime.now().subtract(const Duration(days: 1))) && tasks.isEmpty) ? true : false;
             // si es el dia de ayer pero si tiene tareas, deshabilitar el dia
@@ -148,16 +152,16 @@ class TasksList extends GetView<InitialPageController> {
                                   child: TaskCard(
                                     //isDisabled: disableYesterday,
                                     key: UniqueKey(),
-                                    task: e,
-                                    navigate: () => controller.navigate(taskKey: e.key),
-                                    // navigate: () => openBottomSheetWithScroll(
-                                    //   context: context,
-                                    //   initialChildSize: 0.7,
-                                    //   widget: ViewTask(task: e),
-                                    // ),
+                                    task: e.value,
+                                    //navigate: () => controller.navigate(taskKey: e.value.key),
+                                    navigate: () => openBottomSheetWithScroll(
+                                      context: context,
+                                      initialChildSize: 0.7,
+                                      widget: OpenTask(task: e),
+                                    ),
                                     onStatusChange: () {
-                                      e.status = changeTaskStatus(e.status);
-                                      e.save();
+                                      e.value.status = controller.changeTaskStatus(e.value.status);
+                                      e.value.save();
                                       controller.createCompletedTasksPercentage();
                                     },
                                   ),
@@ -176,16 +180,5 @@ class TasksList extends GetView<InitialPageController> {
     );
   }
 
-  String changeTaskStatus(String value) {
-    switch (value) {
-      case 'Pending':
-        return TaskStatus.IN_PROGRESS.toValue;
-      case 'In progress':
-        return TaskStatus.DONE.toValue;
-      case 'Done':
-        return TaskStatus.PENDING.toValue;
-      default:
-        return TaskStatus.IN_PROGRESS.toValue;
-    }
-  }
+ 
 }

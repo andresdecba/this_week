@@ -70,6 +70,9 @@ class MyApp extends StatelessWidget {
           titleTextStyle: TextStyle(color: blackBg, fontSize: 16),
           elevation: 0,
         ),
+        dialogTheme: const DialogTheme(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
+        ),
       ),
       initialRoute: !config.isOnboardingDone ? Routes.ONBOARDING_PAGE : initialRoute,
     );
