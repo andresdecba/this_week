@@ -48,18 +48,17 @@ InputDecoration customInputDecoration({
   required bool isEnabled,
   Color? borderColor,
 }) {
-  return InputDecoration(
-    //label: Text(label),
+  return InputDecoration(  
     contentPadding: isEnabled ? const EdgeInsets.all(10) : EdgeInsets.zero,
     isDense: true,
-    border: hasBorder == true ? const OutlineInputBorder() : InputBorder.none,
-    labelStyle: const TextStyle(color: disabledGrey),
+    border: isEnabled == true ? const OutlineInputBorder() : InputBorder.none,
+    labelStyle: const TextStyle(color: bluePrimary),
     alignLabelWithHint: true,
     hintText: hintText,
     hintStyle: kBodyMedium.copyWith(fontStyle: FontStyle.italic, color: disabledGrey),
     filled: isEnabled,
     fillColor: witheBg.withOpacity(0.4),
-    suffixIcon: hasBorder == true
+    suffixIcon: isEnabled == true
         ? IconButton(
             icon: const Icon(
               Icons.clear,
@@ -68,20 +67,21 @@ InputDecoration customInputDecoration({
             onPressed: clearText,
           )
         : null,
+    counterText: isEnabled ? null : "",
     counterStyle: const TextStyle(
       fontStyle: FontStyle.italic,
       fontSize: 10,
       height: double.minPositive,
     ),
-    enabledBorder: OutlineInputBorder(
-      borderSide: BorderSide(
-        color: borderColor ?? bluePrimary,
-      ),
-    ),
-    focusedBorder: OutlineInputBorder(
-      borderSide: BorderSide(
-        color: borderColor ?? statusTaskInProgress,
-      ),
-    ),
+    enabledBorder: isEnabled == true
+        ? const OutlineInputBorder(
+            borderSide: BorderSide(color: bluePrimary),
+          )
+        : null,
+    focusedBorder: isEnabled == true
+        ? const OutlineInputBorder(
+            borderSide: BorderSide(color: bluePrimary),
+          )
+        : null,
   );
 }

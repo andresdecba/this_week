@@ -1,4 +1,3 @@
-import 'package:day_night_time_picker/day_night_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todoapp/models/task_model.dart';
@@ -23,7 +22,7 @@ class Info extends GetView<InitialPageController> {
             InfoItemTile(
               title: longDateFormaterWithoutYear(task.value.taskDate),
               icon: Icons.calendar_today_rounded,
-              onTap: () => datePicker(context),
+              onTap: () => controller.datePicker(context, task),
             ),
             const Divider(color: disabledGrey, height: 0),
 
@@ -38,7 +37,7 @@ class Info extends GetView<InitialPageController> {
                   controller.isNotificationActive.value = value;
                 },
               ),
-              onTap: () => timePicker(context),
+              onTap: () => controller.timePicker(context, task),
             ),
             const Divider(color: disabledGrey, height: 0),
 
@@ -64,70 +63,6 @@ class Info extends GetView<InitialPageController> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Future<void> datePicker(BuildContext context) async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: task.value.taskDate, // dia seleccionado
-      firstDate: DateTime.now(), // primer dia habilitado
-      lastDate: DateTime(2050),
-      builder: (context, child) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              height: 500,
-              width: 350,
-              child: child,
-            ),
-          ],
-        );
-      },
-    );
-    if (pickedDate == null) {
-      return;
-    } else {
-      task.value.taskDate = pickedDate;
-      task.refresh();
-    }
-  }
-
-  Future<void> timePicker(BuildContext context) async {
-    Time value = Time(
-      hour: task.value.notificationTime?.hour ?? DateTime.now().hour,
-      minute: task.value.notificationTime?.minute ?? DateTime.now().minute,
-    );
-
-    bool isTaskToday = task.value.taskDate.isAfter(DateTime.now());
-
-    Navigator.of(context).push(
-      showPicker(
-        //accentColor: bluePrimary,
-        borderRadius: 20,
-        context: context,
-        value: value,
-        iosStylePicker: true,
-        hourLabel: 'Hrs.',
-        minuteLabel: 'Mins.',
-        okStyle: kTitleLarge,
-        cancelStyle: kTitleLarge,
-        minHour: !isTaskToday ? DateTime.now().hour.toDouble() : 0,
-        minMinute: !isTaskToday ? DateTime.now().minute.toDouble() + 5 : 0,
-        onChange: (time) {
-          var value = DateTime(
-            task.value.notificationTime?.year ?? DateTime.now().year,
-            task.value.notificationTime?.month ?? DateTime.now().month,
-            task.value.notificationTime?.day ?? DateTime.now().day,
-            time.hour,
-            time.minute,
-          );
-          task.value.notificationTime = value;
-          task.refresh();
-        },
       ),
     );
   }

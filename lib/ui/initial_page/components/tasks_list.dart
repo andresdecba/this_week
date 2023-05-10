@@ -156,7 +156,7 @@ class TasksList extends GetView<InitialPageController> {
                                     //navigate: () => controller.navigate(taskKey: e.value.key),
                                     navigate: () => openBottomSheetWithScroll(
                                       context: context,
-                                      initialChildSize: 0.7,
+                                      initialChildSize: 0.9,
                                       widget: OpenTask(task: e),
                                     ),
                                     onStatusChange: () {

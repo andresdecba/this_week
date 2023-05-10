@@ -10,7 +10,8 @@ abstract class NotificationsUseCases {
   Future<void> updateNotificationUseCase({required NotificationModel notification});
 }
 
-class NotificationsUseCasesImpl extends NotificationsUseCases {
+
+class NotificationsUseCasesImpl implements NotificationsUseCases {
   // plugin
   final FlutterLocalNotificationsPlugin fln = FlutterLocalNotificationsPlugin();
 

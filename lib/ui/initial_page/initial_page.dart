@@ -14,6 +14,7 @@ class InitialPage extends GetView<InitialPageController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       // key
       key: controller.scaffoldKey,
       // ad

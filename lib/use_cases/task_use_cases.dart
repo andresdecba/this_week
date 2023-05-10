@@ -6,7 +6,8 @@ abstract class TaskUseCases {
   void updateTaskUseCase(TaskModel task);
 }
 
-class TaskUseCasesImpl extends TaskUseCases {
+
+class TaskUseCasesImpl implements TaskUseCases {
   @override
   void createTaskUseCase(TaskModel task) {
     // implement createTask
