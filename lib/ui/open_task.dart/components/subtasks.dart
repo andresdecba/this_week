@@ -19,45 +19,37 @@ class Subtasks extends GetView<InitialPageController> {
         children: [
           ...task.value.subTasks.map((e) {
             return Row(
-              mainAxisSize: MainAxisSize.min,
+              
               children: [
-                Expanded(
-                  child: InkWell(
-                    onTap: () {},
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: Expanded(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.circle_outlined, size: 20),
-                            const SizedBox(
-                              width: 8,
-                            ),
-                            Expanded(
-                              child: CustomTextField(
-                                textValue: e.title,
-                                myFunction: (value) {
-                                  e.title = value;
-                                  task.refresh();
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                InkWell(
+                  onTap: () {
+                    print('hahaha check');
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.fromLTRB(0, 10, 12, 10),
+                    child: Icon(Icons.circle_outlined, size: 20),
                   ),
                 ),
-                const Icon(Icons.close, size: 20),
+                Flexible(
+                  child: CustomTextField(
+                    textValue: e.title,
+                    myFunction: (value) {
+                      e.title = value;
+                      task.refresh();
+                    },
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    print('hahaha close');
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.fromLTRB(12, 10, 0, 10),
+                    child: Icon(Icons.close_rounded, size: 20),
+                  ),
+                ),
               ],
             );
-
-            // return SubtaskTile(
-            //   title: e.title,
-            //   icon: e.isDone ? Icons.check_circle_outline_rounded : Icons.circle_outlined,
-            //   onTap: () {},
-            // );
           }),
         ],
       ),

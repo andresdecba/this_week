@@ -38,8 +38,22 @@ class OpenTask extends GetView<InitialPageController> {
                       const SizedBox(height: 24),
 
                       // subtasks
-                      const Text('Subtareas'),
-                      const SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text('Subtareas'),
+                          InkWell(
+                            onTap: () {
+                              print('hahaha check');
+                            },
+                            child: const Padding(
+                              padding: EdgeInsets.fromLTRB(12, 10, 0, 10),
+                              child: Icon(Icons.add_circle, size: 20),
+                            ),
+                          ),
+                        ],
+                      ),
+                      //const SizedBox(height: 8),
                       Subtasks(task: task),
                       const SizedBox(height: 20),
                     ],

@@ -16,14 +16,12 @@ CustomTextField(
 
 class CustomTextField extends StatefulWidget {
   const CustomTextField({
-    //required this.task,
     required this.myFunction,
     required this.textValue,
     this.textStyle,
     Key? key,
   }) : super(key: key);
 
-  //final Rx<TaskModel> task;
   final String textValue;
   final MyFunction myFunction;
   final TextStyle? textStyle;
@@ -58,24 +56,26 @@ class _CustomTextFieldState extends State<CustomTextField> {
             isReadOnly = false;
             focusNode1.requestFocus();
           });
-        },
+        }, //widget.onTap != null ? () => widget.onTap!() : null,
+
         child: TextFormField(
           controller: taskDescriptionCtrlr,
           autofocus: !isReadOnly,
           focusNode: focusNode1,
           readOnly: isReadOnly,
-          decoration: _customInputDecoration(
-            isEnabled: !isReadOnly,
-            label: 'task description'.tr,
-            hintText: 'task description_description'.tr,
-            clearText: () => taskDescriptionCtrlr.clear(),
-          ),
           maxLines: null,
           maxLength: 200,
           keyboardType: TextInputType.text,
           textCapitalization: TextCapitalization.sentences,
           textInputAction: TextInputAction.done,
           style: widget.textStyle,
+          
+          decoration: _customInputDecoration(
+            isEnabled: !isReadOnly,
+            label: 'task description'.tr,
+            hintText: 'task description_description'.tr,
+            clearText: () => taskDescriptionCtrlr.clear(),
+          ),
           validator: (value) {
             if (value != null && value.length < 7) {
               return 'task description error'.tr;
@@ -107,7 +107,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
     required bool isEnabled,
   }) {
     return InputDecoration(
-      contentPadding: isEnabled ? const EdgeInsets.all(10) : EdgeInsets.zero,
+      contentPadding: const EdgeInsets.fromLTRB(8, 8, 0, 8),
       isDense: true,
       border: isEnabled == true ? const OutlineInputBorder() : InputBorder.none,
       labelStyle: const TextStyle(color: bluePrimary),
@@ -116,16 +116,17 @@ class _CustomTextFieldState extends State<CustomTextField> {
       hintStyle: kBodyMedium.copyWith(fontStyle: FontStyle.italic, color: disabledGrey),
       filled: isEnabled,
       fillColor: witheBg.withOpacity(0.4),
+      counterText: "",
+      suffixIconConstraints: const BoxConstraints(maxHeight: 100),
       suffixIcon: isEnabled == true
-          ? IconButton(
-              icon: const Icon(
-                Icons.clear,
-                color: enabledGrey,
-              ), // clear text
-              onPressed: clearText,
+          ? InkWell(
+              onTap: () => clearText(),
+              child: const Padding(
+                padding: EdgeInsets.fromLTRB(8, 8, 8, 8),
+                child: Icon(Icons.close_rounded, size: 20),
+              ),
             )
           : null,
-      counterText: isEnabled ? null : "",
       counterStyle: const TextStyle(
         fontStyle: FontStyle.italic,
         fontSize: 10,

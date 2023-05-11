@@ -15,7 +15,7 @@ class Info extends GetView<InitialPageController> {
   Widget build(BuildContext context) {
     return Obx(
       () => Padding(
-        padding: const EdgeInsets.fromLTRB(24, 8, 24, 12),
+        padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
         child: Wrap(
           children: [
             // CAMBIAR LA FECHA
