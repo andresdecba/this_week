@@ -1,59 +1,134 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
-import 'package:todoapp/ui/open_task.dart/components/subtask_tile.dart';
-import 'package:todoapp/ui/shared_components/dialogs.dart';
+import 'package:todoapp/ui/open_task.dart/components/small_button.dart';
+import 'package:todoapp/ui/open_task.dart/components/subtitle_item_tile.dart';
 import 'package:todoapp/ui/shared_components/custom_text_field.dart';
 
 class Subtasks extends GetView<InitialPageController> {
   const Subtasks({required this.task, Key? key}) : super(key: key);
-
   final Rx<TaskModel> task;
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => Wrap(
+    final doneTxtStyle = kTitleMedium.copyWith(
+      decoration: TextDecoration.lineThrough,
+      fontStyle: FontStyle.italic,
+      color: disabledGrey,
+    );
+
+    return Obx(() {
+      return AnimatedList(
+        physics: const BouncingScrollPhysics(),
+        shrinkWrap: true,
+        initialItemCount: task.value.subTasks.length,
+        key: controller.animatedListKey,
+        itemBuilder: (context, index, animation) {
+          //
+          SubTaskModel e = task.value.subTasks[index];
+
+          return FadeTransition(
+            key: UniqueKey(),
+            opacity: animation,
+            child: SizeTransition(
+              key: UniqueKey(),
+              sizeFactor: animation,
+              child: Row(
+                key: UniqueKey(),
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // leading
+                  SmallButton(
+                    onTap: () {
+                      e.isDone = !e.isDone;
+                      task.refresh();
+                    },
+                    icon: e.isDone ? Icons.check_circle_outline_rounded : Icons.circle_outlined,
+                    iconColor: e.isDone ? disabledGrey : null,
+                  ),
+                  // descripcion
+                  Flexible(
+                    child: CustomTextField(
+                      textValue: e.title,
+                      textStyle: e.isDone ? doneTxtStyle : kTitleMedium,
+                      myFunction: (value) {
+                        e.title = value;
+                        task.refresh();
+                      },
+                    ),
+                  ),
+                  // trailing
+                  Visibility(
+                    visible: e.isDone,
+                    child: SmallButton(
+                      icon: Icons.close_rounded,
+                      iconColor: disabledGrey,
+                      onTap: () {
+                        task.value.subTasks.removeAt(index);
+                        task.refresh();
+                        controller.removeSubtask(
+                          index: index,
+                          child: Container(height: 30, width: double.infinity, color: yellowPrimary),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      );
+
+      Wrap(
         children: [
           ...task.value.subTasks.map((e) {
             return Row(
-              
+              key: UniqueKey(),
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                InkWell(
+                // leading
+                SmallButton(
                   onTap: () {
-                    print('hahaha check');
+                    e.isDone = !e.isDone;
+                    task.refresh();
                   },
-                  child: const Padding(
-                    padding: EdgeInsets.fromLTRB(0, 10, 12, 10),
-                    child: Icon(Icons.circle_outlined, size: 20),
-                  ),
+                  icon: e.isDone ? Icons.check_circle_outline_rounded : Icons.circle_outlined,
+                  iconColor: e.isDone ? disabledGrey : null,
                 ),
+                // descripcion
                 Flexible(
                   child: CustomTextField(
                     textValue: e.title,
+                    textStyle: e.isDone ? doneTxtStyle : kTitleMedium,
                     myFunction: (value) {
                       e.title = value;
                       task.refresh();
                     },
                   ),
                 ),
-                InkWell(
-                  onTap: () {
-                    print('hahaha close');
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.fromLTRB(12, 10, 0, 10),
-                    child: Icon(Icons.close_rounded, size: 20),
+                // trailing
+                Visibility(
+                  visible: e.isDone,
+                  child: SmallButton(
+                    onTap: () {
+                      task.value.subTasks.remove(e);
+                      task.refresh();
+                    },
+                    icon: Icons.close_rounded,
+                    iconColor: disabledGrey,
                   ),
                 ),
               ],
             );
+            //
           }),
         ],
-      ),
-    );
+      );
+    });
   }
 }
 
@@ -163,8 +238,6 @@ class Subtasks extends GetView<InitialPageController> {
 //     );
 //   }
 // }
-
-
 
 /*
 class Subtasks extends GetView<InitialPageController> {

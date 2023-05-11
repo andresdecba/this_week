@@ -27,35 +27,36 @@ class OpenTask extends GetView<InitialPageController> {
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(24, 24, 24, 12),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // desxription
-                      const Text('Descripción'),
-                      const SizedBox(height: 8),
-                      Description(task: task),
-                      const SizedBox(height: 24),
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+                        child: Text('Descripción'),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 0, 10, 20),
+                        child: Description(task: task),
+                      ),
+
+                      SizedBox(width: 20),
+                      IconButton(
+                        onPressed: () => controller.createSubtask(task.value),
+                        icon: Icon(Icons.ac_unit_outlined),
+                      ),
 
                       // subtasks
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text('Subtareas'),
-                          InkWell(
-                            onTap: () {
-                              print('hahaha check');
-                            },
-                            child: const Padding(
-                              padding: EdgeInsets.fromLTRB(12, 10, 0, 10),
-                              child: Icon(Icons.add_circle, size: 20),
-                            ),
-                          ),
-                        ],
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+                        child: Text('Subtareas'),
                       ),
-                      //const SizedBox(height: 8),
-                      Subtasks(task: task),
-                      const SizedBox(height: 20),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+                        child: Subtasks(task: task),
+                      ),
+                     
                     ],
                   ),
                 ),
@@ -65,13 +66,13 @@ class OpenTask extends GetView<InitialPageController> {
         ),
 
         // info de la task
-
         const Divider(color: blackBg, height: 0),
         Info(task: task),
 
         // opciones del widget
-        const Divider(color: disabledGrey, height: 0),
-        TaskOptions(task: task),
+        // const Divider(color: disabledGrey, height: 0),
+        // TaskOptions(task: task),
+        const SizedBox(height: 8),
       ],
     );
   }

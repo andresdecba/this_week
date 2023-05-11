@@ -93,7 +93,10 @@ mixin OpenTaskController {
   }
 
   ////// manage SUBTASKS //////
+  ///// subtasks //////
+  final GlobalKey<AnimatedListState> animatedListKey = GlobalKey();
   final subTaskTitleCtrlr = TextEditingController();
+  final Duration listDuration = const Duration(milliseconds: 500);
 
   // void reorderSubtasks({required int oldIndex, required int newIndex}) {
   //   final item = _task.value.subTasks.removeAt(oldIndex);
@@ -102,21 +105,34 @@ mixin OpenTaskController {
   //   if (currentPageMode.value == PageMode.VIEW_MODE || currentPageMode.value == PageMode.UPDATE_MODE) {
   //     _task.value.save();
   //   }
-  // }
+  // }SubTaskModel subTask
 
-  // void createSubtask() {
-  //   _task.update(
-  //     (val) {
-  //       val!.subTasks.add(
-  //         SubTaskModel(title: subTaskTitleCtrlr.text, isDone: false),
-  //       );
-  //       if (currentPageMode.value == PageMode.VIEW_MODE || currentPageMode.value == PageMode.UPDATE_MODE) {
-  //         _task.value.save();
-  //       }
-  //       subTaskTitleCtrlr.clear();
-  //     },
-  //   );
-  // }
+  void createSubtask(TaskModel task) {
+    animatedListKey.currentState!.insertItem(
+      0,
+      duration: listDuration,
+    );
+    task.subTasks.add(
+      SubTaskModel(title: 'nueva subtarea', isDone: false),
+    );
+  }
+
+  void removeSubtask({required int index, required Widget child}) {
+    animatedListKey.currentState!.removeItem(
+      index,
+      duration: listDuration,
+      (context, animation) {
+        return FadeTransition(
+          opacity: animation,
+          child: SizeTransition(
+            sizeFactor: animation,
+            child: child,
+          ),
+        ); //;
+      },
+    );
+    //task.subTasks.remove(task.subTasks[index]);
+  }
 
   // void updateTextSubtask(int index) {
   //   _task.update(

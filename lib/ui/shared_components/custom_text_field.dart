@@ -107,7 +107,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
     required bool isEnabled,
   }) {
     return InputDecoration(
-      contentPadding: const EdgeInsets.fromLTRB(8, 8, 0, 8),
+      contentPadding: isEnabled ? const EdgeInsets.fromLTRB(8, 8, 8, 8) : EdgeInsets.zero,
       isDense: true,
       border: isEnabled == true ? const OutlineInputBorder() : InputBorder.none,
       labelStyle: const TextStyle(color: bluePrimary),
