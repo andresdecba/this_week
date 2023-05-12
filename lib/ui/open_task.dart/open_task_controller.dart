@@ -8,12 +8,7 @@ mixin OpenTaskController {
   //
   RxBool isNotificationActive = true.obs;
 
-  ////// manage TASK FORM //////
-  final taskDescriptionCtrlr = TextEditingController();
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final focusNode1 = FocusNode();
-  RxBool isReadOnly = true.obs;
-
+ 
   ////// manage DATE AND TIME PICKERS //////
   Future<void> datePicker(BuildContext context, Rx<TaskModel> task) async {
     final DateTime? pickedDate = await showDatePicker(
@@ -92,32 +87,26 @@ mixin OpenTaskController {
     );
   }
 
-  ////// manage SUBTASKS //////
-  ///// subtasks //////
+  ////// manage FORMS //////
+
+  // propiedades para el formulario
+  final GlobalKey<FormState> newFormKey = GlobalKey<FormState>();
+  final focusNode = FocusNode();
+  RxBool isReadOnly = true.obs;
+
+  // lista animada de las subtareas
   final GlobalKey<AnimatedListState> animatedListKey = GlobalKey();
-  final subTaskTitleCtrlr = TextEditingController();
   final Duration listDuration = const Duration(milliseconds: 500);
 
-  // void reorderSubtasks({required int oldIndex, required int newIndex}) {
-  //   final item = _task.value.subTasks.removeAt(oldIndex);
-  //   _task.value.subTasks.insert(newIndex, item);
-
-  //   if (currentPageMode.value == PageMode.VIEW_MODE || currentPageMode.value == PageMode.UPDATE_MODE) {
-  //     _task.value.save();
-  //   }
-  // }SubTaskModel subTask
-
-  void createSubtask(TaskModel task) {
+  void createSubtask({required TaskModel task, required String textValue}) {
     animatedListKey.currentState!.insertItem(
       0,
       duration: listDuration,
     );
-    task.subTasks.add(
-      SubTaskModel(title: 'nueva subtarea', isDone: false),
-    );
+    task.subTasks.insert(0, SubTaskModel(title: textValue, isDone: false));
   }
 
-  void removeSubtask({required int index, required Widget child}) {
+  void removeSubtask({required int index, required Widget child, required TaskModel task}) {
     animatedListKey.currentState!.removeItem(
       index,
       duration: listDuration,
@@ -131,7 +120,7 @@ mixin OpenTaskController {
         ); //;
       },
     );
-    //task.subTasks.remove(task.subTasks[index]);
+    task.subTasks.remove(task.subTasks[index]);
   }
 
   // void updateTextSubtask(int index) {
