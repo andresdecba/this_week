@@ -4,7 +4,6 @@ import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/open_task.dart/components/small_button.dart';
 import 'package:todoapp/ui/open_task.dart/nueva_controller.dart';
-import 'package:todoapp/ui/open_task.dart/open_task_controller.dart';
 
 class NuevaWithGetView extends GetView<NuevaController> {
   const NuevaWithGetView({
@@ -29,22 +28,15 @@ class NuevaWithGetView extends GetView<NuevaController> {
         },
         child: Column(
           children: [
+            
             //// DESCRIPCION DE LA TAREA ////
             Padding(
               padding: const EdgeInsets.all(20),
               child: MyEditableTextForm(
                 key: UniqueKey(),
                 texto: task.value.description,
-
-                /*****/
-                textStyle: kTitleLarge.copyWith(
-                  color: blackBg,
-                  backgroundColor: bluePrimary.withOpacity(0.15),
-                  fontStyle: FontStyle.italic,
-                  fontWeight: FontWeight.normal,
-                ),
-                /*****/
-
+                onTap: () {},
+                textStyle: kTitleLarge.copyWith(color: bluePrimary),
                 returnText: (value) {
                   task.value.description = value;
                   task.value.save();
@@ -71,8 +63,8 @@ class NuevaWithGetView extends GetView<NuevaController> {
               initialItemCount: task.value.subTasks.length,
               key: controller.animatedListKey,
               itemBuilder: (context, index, animation) {
-
                 SubTaskModel e = task.value.subTasks[index];
+
                 Widget removeChild = Container(
                   width: double.infinity,
                   height: 50,
@@ -104,16 +96,13 @@ class NuevaWithGetView extends GetView<NuevaController> {
                           child: MyEditableTextForm(
                             key: UniqueKey(),
                             texto: e.title,
-
-                            /*****/
+                            onTap: () {},
                             textStyle: kBodyMedium.copyWith(
                               color: blackBg,
                               backgroundColor: bluePrimary.withOpacity(0.15),
                               fontStyle: FontStyle.italic,
                               fontWeight: FontWeight.normal,
                             ),
-                            /*****/
-
                             returnText: (value) {
                               e.title = value;
                               task.value.save();
@@ -152,12 +141,14 @@ class MyEditableTextForm extends StatefulWidget {
     required this.texto,
     required this.returnText,
     required this.textStyle,
+    required this.onTap,
     Key? key,
   }) : super(key: key);
 
   final String texto;
   final ReturnText returnText;
   final TextStyle textStyle;
+  final VoidCallback onTap;
 
   @override
   State<MyEditableTextForm> createState() => _MyEditableTextFormState();
@@ -198,6 +189,7 @@ class _MyEditableTextFormState extends State<MyEditableTextForm> {
       ),
       onTap: () {
         // no usar setState por que cierra el teclado
+        widget.onTap();
       },
       onChanged: (value) {
         // no usar setState por que cierra el teclado

@@ -45,9 +45,49 @@ class NuevaController extends GetxController {
     task.refresh();
   }
 
-  void selector({
-    required String value, //The value represented by this radio button.
-    required String groupValue, //The currently selected value for this group of radio buttons.
-    required Function onChange, //Called when the user selects this radio button.
-  }) {}
+
+  // RxInt groupValueObs = 0.obs;
+
+  // void selector({
+  //   required dynamic value, //The value represented by this radio button.
+  //   required dynamic groupValue, //The currently selected value for this group of radio buttons.
+  //   required SelectedValueTypedef? onChanged, //Called when the user selects this radio button.
+  // }) {
+  //   if (value == groupValue) {
+  //     onChanged!(0); //null
+  //     return;
+  //   }
+  //   if (value != groupValue) {
+  //     onChanged!(value); //value
+  //   }
+  //   update();
+  // }
+
+  //  //// DESCRIPCION DE LA TAREA ////
+  //           Padding(
+  //             padding: const EdgeInsets.all(20),
+  //             child: MyEditableTextForm(
+  //               key: UniqueKey(),
+  //               texto: task.value.description,
+  //               onTap: () {
+  //                 controller.selector(
+  //                   value: task.hashCode,
+  //                   groupValue: controller.groupValueObs.value, //task.value.subTasks[1],
+  //                   onChanged: (value) {
+  //                     controller.groupValueObs.value = value;
+  //                   },
+  //                 );
+  //               },
+  //               textStyle: controller.groupValueObs.value == task.hashCode ? kTitleLarge.copyWith(color: bluePrimary) : kTitleLarge,
+  //               returnText: (value) {
+  //                 task.value.description = value;
+  //                 task.value.save();
+  //               },
+  //             ),
+  //           );
 }
+
+typedef SelectedValueTypedef<T> = void Function(T value);
+//typedef ValueChanged<T> = void Function(T value);
+
+
