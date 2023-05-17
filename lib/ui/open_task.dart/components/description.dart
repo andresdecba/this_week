@@ -15,6 +15,7 @@ class Description extends GetView<InitialPageController> {
 
     return Obx(
       () => CustomTextField(
+        
         key: UniqueKey(),
         focusNode: controller.focusNode,
         getValue: (value) {
@@ -22,7 +23,7 @@ class Description extends GetView<InitialPageController> {
           task.refresh();
         },
         initialValue: task.value.description,
-        enableReadMode: true,
+        convertToText: true,
         textStyle: kTitleLarge.copyWith(fontSize: 22),
       ),
     );

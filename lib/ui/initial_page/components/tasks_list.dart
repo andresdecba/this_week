@@ -4,6 +4,7 @@ import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/ui/initial_page/components/task_card.dart';
+import 'package:todoapp/ui/open_task.dart/nueva.dart';
 import 'package:todoapp/ui/open_task.dart/open_task.dart';
 import 'package:todoapp/ui/shared_components/bottomsheet_with_scroll.dart';
 import 'package:todoapp/utils/helpers.dart';
@@ -157,8 +158,9 @@ class TasksList extends GetView<InitialPageController> {
                                     navigate: () => openBottomSheetWithScroll(
                                       context: context,
                                       initialChildSize: 0.9,
-                                      widget: OpenTask(task: e),
+                                      widget: Nueva(task: e),
                                     ),
+                                    
                                     onStatusChange: () {
                                       e.value.status = controller.changeTaskStatus(e.value.status);
                                       e.value.save();

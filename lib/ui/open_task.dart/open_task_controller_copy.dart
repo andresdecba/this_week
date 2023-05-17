@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 
-class OpenTaskController extends GetxController {
+mixin OpenTaskController {
   //
   RxBool isNotificationActive = true.obs;
 
@@ -88,16 +88,7 @@ class OpenTaskController extends GetxController {
 
   ////// manage FORMS //////
   ///;
-  List<FocusNode> focusNodeList = [];
-  List<TextEditingController> textEditingControllerList = [];
-
-  @override
-  void onClose() {
-    textEditingControllerList.map((e) => e.dispose());
-    focusNodeList.map((e) => e.dispose());
-    debugPrint('aver: dispose controller');
-    super.onClose();
-  }
+  List<FocusNode> focusList = [];
 
   // propiedades para el formulario
   final GlobalKey<FormState> newFormKey = GlobalKey<FormState>();

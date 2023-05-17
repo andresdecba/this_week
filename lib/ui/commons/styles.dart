@@ -18,6 +18,7 @@ const appBarLogo = Color(0xFF000000);
 const textBg = Color(0xFF000000);
 const warning = Color(0xFFD30000);
 const bluePrimary = Color(0xFF0075FF);
+
 const iconsBg = Color(0xFF262626);
 const greenInfo = Color.fromARGB(255, 125, 252, 103);
 

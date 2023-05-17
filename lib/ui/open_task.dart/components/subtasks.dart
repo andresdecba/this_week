@@ -13,6 +13,7 @@ class Subtasks extends GetView<InitialPageController> {
 
   @override
   Widget build(BuildContext context) {
+
     final doneTxtStyle = kTitleMedium.copyWith(
       decoration: TextDecoration.lineThrough,
       fontStyle: FontStyle.italic,
@@ -42,6 +43,7 @@ class Subtasks extends GetView<InitialPageController> {
               // descripcion
               Flexible(
                 child: CustomTextField(
+                
                   focusNode: controller.focusNode,
                   initialValue: e.title,
                   textStyle: e.isDone ? doneTxtStyle : kTitleMedium,
@@ -82,9 +84,10 @@ class Subtasks extends GetView<InitialPageController> {
                   // descripcion
                   Flexible(
                     child: CustomTextField(
+                    
                       key: UniqueKey(),
                       focusNode: controller.focusNode,
-                      enableReadMode: true,
+                      convertToText: true,
                       initialValue: e.title,
                       textStyle: e.isDone ? doneTxtStyle : kTitleMedium,
                       getValue: (value) {

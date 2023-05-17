@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 
-class CustomTextField extends StatefulWidget {
-  const CustomTextField({
+class CustomTextFieldBU extends StatefulWidget {
+  const CustomTextFieldBU({
     this.hintText = 'hint_text',
     this.initialValue = 'initialValue',
     this.borderSideColor = bluePrimary,
@@ -23,10 +23,10 @@ class CustomTextField extends StatefulWidget {
   final FocusNode focusNode;
 
   @override
-  State<CustomTextField> createState() => _CustomTextFieldState();
+  State<CustomTextFieldBU> createState() => _CustomTextFieldBUState();
 }
 
-class _CustomTextFieldState extends State<CustomTextField> {
+class _CustomTextFieldBUState extends State<CustomTextFieldBU> {
   final TextEditingController taskDescriptionCtrlr = TextEditingController();
 
   bool readOnly = false;
@@ -50,11 +50,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onDoubleTap: () {
-       
         debugPrint('aver: custom_text_field');
         if (widget.convertToText) {
           setState(() {
-            readOnly = false;            
+            readOnly = false;
           });
         }
       },
@@ -102,7 +101,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
             setState(() => readOnly = true);
           }
         },
-
       ),
     );
   }
