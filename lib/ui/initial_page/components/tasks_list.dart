@@ -158,7 +158,7 @@ class TasksList extends GetView<InitialPageController> {
                                     navigate: () => openBottomSheetWithScroll(
                                       context: context,
                                       initialChildSize: 0.9,
-                                      widget: Nueva(task: e),
+                                      widget: NuevaWithGetView(task: e),
                                     ),
                                     
                                     onStatusChange: () {
