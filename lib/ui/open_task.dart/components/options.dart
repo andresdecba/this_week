@@ -3,11 +3,12 @@ import 'package:get/get.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
-import 'package:todoapp/ui/open_task.dart/components/info_item_tile.dart';
+import 'package:todoapp/ui/open_task.dart/components/options_item_tile.dart';
+import 'package:todoapp/ui/open_task.dart/view_task_controller.dart';
 import 'package:todoapp/utils/helpers.dart';
 
-class Info extends GetView<InitialPageController> {
-  Info({required this.task, Key? key}) : super(key: key);
+class Options extends GetView<ViewTaskController> {
+  const Options({required this.task, Key? key}) : super(key: key);
 
   final Rx<TaskModel> task;
 
@@ -19,7 +20,7 @@ class Info extends GetView<InitialPageController> {
         child: Wrap(
           children: [
             // CAMBIAR LA FECHA
-            InfoItemTile(
+            OptionsItemTile(
               title: longDateFormaterWithoutYear(task.value.taskDate),
               icon: Icons.calendar_today_rounded,
               onTap: () => controller.datePicker(context, task),
@@ -27,7 +28,7 @@ class Info extends GetView<InitialPageController> {
             const Divider(color: disabledGrey, height: 0),
 
             // CAMBIAR HORA DE LA NOTIFICACION
-            InfoItemTile(
+            OptionsItemTile(
               title: task.value.notificationTime != null ? timeFormater(task.value.notificationTime!) : 'no hay',
               icon: controller.isNotificationActive.value ? Icons.notifications_active_rounded : Icons.notifications_off_rounded,
               trailing: Switch(
@@ -42,7 +43,7 @@ class Info extends GetView<InitialPageController> {
             const Divider(color: disabledGrey, height: 0),
 
             // CAMBIAR EL STATUS
-            InfoItemTile(
+            OptionsItemTile(
               title: task.value.status,
               icon: Icons.keyboard_double_arrow_right_rounded,
             ),
@@ -53,7 +54,7 @@ class Info extends GetView<InitialPageController> {
               child: Wrap(
                 children: [
                   const Divider(color: disabledGrey, height: 0),
-                  InfoItemTile(
+                  OptionsItemTile(
                     title: 'Rutina',
                     icon: Icons.push_pin_rounded,
                     onTap: () {},

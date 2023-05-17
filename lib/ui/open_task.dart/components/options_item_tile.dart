@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class InfoItemTile extends StatelessWidget {
-  const InfoItemTile({
+class OptionsItemTile extends StatelessWidget {
+  const OptionsItemTile({
     required this.icon,
     required this.title,
     this.onTap,

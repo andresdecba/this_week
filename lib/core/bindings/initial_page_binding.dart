@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
-import 'package:todoapp/ui/open_task.dart/nueva_controller.dart';
+import 'package:todoapp/ui/open_task.dart/view_task_controller.dart';
 
 class InitialPageBinding implements Bindings {
   @override
@@ -10,8 +10,8 @@ class InitialPageBinding implements Bindings {
       InitialPageController(),
     );
 
-    Get.put<NuevaController>(
-      NuevaController(),
+    Get.put<ViewTaskController>(
+      ViewTaskController(),
     );
   }
 }

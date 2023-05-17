@@ -10,10 +10,9 @@ import 'package:todoapp/main.dart';
 import 'package:todoapp/models/app_config_model.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/services/ad_mob_service.dart';
-import 'package:todoapp/ui/open_task.dart/open_task_controller_copy.dart';
 import 'package:todoapp/utils/helpers.dart';
 
-class InitialPageController extends GetxController with AdMobService, StateMixin<dynamic>, OpenTaskController {
+class InitialPageController extends GetxController with AdMobService, StateMixin<dynamic> {
   //,OpenTaskController
   @override
   void onInit() async {

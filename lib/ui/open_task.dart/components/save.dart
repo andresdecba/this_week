@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 
-class TaskOptions extends GetView<InitialPageController> {
-  const TaskOptions({required this.task, Key? key}) : super(key: key);
+class Save extends GetView<InitialPageController> {
+  const Save({required this.task, Key? key}) : super(key: key);
 
   final Rx<TaskModel> task;
 
