@@ -59,9 +59,9 @@ class _MyEditableTextFormState extends State<MyEditableTextForm> {
       onChanged: (value) {
         // no usar setState por que cierra el teclado
       },
-      validator: (value) {
-        // no usar setState por que cierra el teclado
-      },
+      // validator: (value) {
+      //   // no usar setState por que cierra el teclado
+      // },
       onEditingComplete: () {
         // no usar setState por que cierra el teclado
         _focusNode.unfocus();

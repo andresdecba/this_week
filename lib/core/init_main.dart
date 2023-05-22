@@ -6,6 +6,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:todoapp/core/routes/routes.dart';
 import 'package:todoapp/main.dart';
+import 'package:todoapp/models/notification_model.dart';
+import 'package:todoapp/models/subtask_model.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/models/app_config_model.dart';
 import 'package:todoapp/services/local_notifications_service.dart';
@@ -18,8 +20,9 @@ class InitMain {
   ///// HIVE /////
   static Future<void> initHive() async {
     await Hive.initFlutter();
-    Hive.registerAdapter(SubTaskModelAdapter());
     Hive.registerAdapter(TaskModelAdapter());
+    Hive.registerAdapter(SubTaskModelAdapter());
+    Hive.registerAdapter(NotificationModelAdapter());
     await Hive.openBox<TaskModel>('tasksBox');
     Hive.registerAdapter(AppConfigModelAdapter());
     await Hive.openBox<AppConfigModel>('myAppConfigBox');

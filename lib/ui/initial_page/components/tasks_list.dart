@@ -5,6 +5,7 @@ import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/ui/initial_page/components/task_card.dart';
 import 'package:todoapp/ui/open_task.dart/view_task.dart';
+import 'package:todoapp/ui/open_task.dart/view_task_controller.dart';
 import 'package:todoapp/ui/shared_components/bottomsheet_with_scroll.dart';
 import 'package:todoapp/utils/helpers.dart';
 
@@ -35,7 +36,6 @@ class TasksList extends GetView<InitialPageController> {
             // crear en una columna todos los dias con sus respectivas tareas
             return Column(
               children: [
-
                 /// THERE WHERENT TASKS
                 Visibility(
                   visible: hideEmptyYesterday,
@@ -91,7 +91,7 @@ class TasksList extends GetView<InitialPageController> {
                                 style: kBodySmall.copyWith(
                                   fontStyle: FontStyle.italic,
                                   color: disableYesterday ? disabledGrey : textBg,
-                                ), 
+                                ),
                               ),
                             ],
                           ),
@@ -112,7 +112,7 @@ class TasksList extends GetView<InitialPageController> {
                     ),
                   ),
                 ),
-            
+
                 Stack(
                   alignment: Alignment.topCenter,
                   children: [
@@ -138,7 +138,7 @@ class TasksList extends GetView<InitialPageController> {
                         ),
                       ),
                     ),
-            
+
                     /// SHOW TASKS IF EXISTS
                     tasks.isNotEmpty
                         ? ListView(
@@ -148,18 +148,25 @@ class TasksList extends GetView<InitialPageController> {
                               ...tasks.map(
                                 (e) => Padding(
                                   padding: const EdgeInsets.only(bottom: 8),
-
                                   child: TaskCard(
                                     //isDisabled: disableYesterday,
                                     key: UniqueKey(),
                                     task: e.value,
                                     //navigate: () => controller.navigate(taskKey: e.value.key),
-                                    navigate: () => openBottomSheetWithScroll(
-                                      context: context,
-                                      initialChildSize: 0.9,
-                                      widget: ViewTask(task: e),
-                                    ),
-                                    
+                                    navigate: () {
+                                      //ViewTaskController(task: e);
+                                      // TODO: HACER ALGO MAS PRO PARA LEVANTAR EL CONTROLLER
+                                      Get.put<ViewTaskController>(
+                                        ViewTaskController(task: e),
+                                      );
+                                      openBottomSheetWithScroll(
+                                        context: context,
+                                        initialChildSize: 0.9,
+                                        widget: const ViewTask(),
+                                      );
+                                      print('task: $e');
+                                    },
+
                                     onStatusChange: () {
                                       e.value.status = controller.changeTaskStatus(e.value.status);
                                       e.value.save();

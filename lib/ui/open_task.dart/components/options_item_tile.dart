@@ -18,12 +18,15 @@ class OptionsItemTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.max,
-      children: [
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [        
+
         Expanded(
           child: InkWell(
             onTap: onTap != null ? () => onTap!() : null,
-            child: Padding(
+            child: Container(
               padding: const EdgeInsets.all(8.0),
+              width: double.infinity,
               child: Wrap(
                 children: [
                   Icon(icon, size: 20),

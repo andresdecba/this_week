@@ -1,77 +1,76 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:todoapp/ui/commons/styles.dart';
-import 'package:todoapp/ui/form_page/forms_page_controller.dart';
 
-void postposeModalBottomSheet({required BuildContext context}) {
-  // controller
-  final controller = Get.find<FormsPageController>();
 
-  showModalBottomSheet(
-    context: context,
-    backgroundColor: bluePrimary,
-    enableDrag: false,
-    isDismissible: false,
-    useSafeArea: true,
-    useRootNavigator: true,
-    isScrollControlled: true,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-    ),
-    builder: (context) {
-      return Padding(
-        padding: const EdgeInsets.fromLTRB(20, 20, 20, 60),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Posponer tarea', style: kTitleLarge),
-                const Icon(Icons.notifications_active_rounded),
-              ],
-            ),
-            const SizedBox(height: 30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _Item(
-                  title: '15 Min',
-                  icon: const Icon(Icons.keyboard_arrow_right_rounded),
-                  onTap: () => controller.postposeNotification(const Duration(minutes: 1)),
-                ),
-                _Item(
-                  title: '1 Hora',
-                  icon: const Icon(Icons.keyboard_double_arrow_right_rounded),
-                  onTap: () => controller.postposeNotification(const Duration(hours: 1)),
-                ),
-                _Item(
-                  title: '3 Horas',
-                  icon: const Icon(Icons.keyboard_double_arrow_right_rounded),
-                  onTap: () => controller.postposeNotification(const Duration(hours: 3)),
-                ),
-                _Item(
-                  title: 'Mañana',
-                  icon: const Icon(Icons.keyboard_arrow_up_rounded),
-                  onTap: () => controller.postposeNotification(const Duration(days: 1)),
-                ),
-                _Item(
-                  title: 'Otro',
-                  icon: const Icon(Icons.keyboard_control),
-                  onTap: () {
-                    controller.floatingActionButtonChangeMode();
-                    controller.enableDisableNotificationStyles();
-                  },
-                ),
-              ],
-            ),
-          ],
-        ),
-      );
-    },
-  );
-}
+// void postposeModalBottomSheet({required BuildContext context}) {
+//   // controller
+//   final controller = Get.find<FormsPageController>();
+
+//   showModalBottomSheet(
+//     context: context,
+//     backgroundColor: bluePrimary,
+//     enableDrag: false,
+//     isDismissible: false,
+//     useSafeArea: true,
+//     useRootNavigator: true,
+//     isScrollControlled: true,
+//     shape: const RoundedRectangleBorder(
+//       borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+//     ),
+//     builder: (context) {
+//       return Padding(
+//         padding: const EdgeInsets.fromLTRB(20, 20, 20, 60),
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           mainAxisSize: MainAxisSize.min,
+//           children: [
+//             Row(
+//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//               children: [
+//                 Text('Posponer tarea', style: kTitleLarge),
+//                 const Icon(Icons.notifications_active_rounded),
+//               ],
+//             ),
+//             const SizedBox(height: 30),
+//             Row(
+//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//               children: [
+//                 _Item(
+//                   title: '15 Min',
+//                   icon: const Icon(Icons.keyboard_arrow_right_rounded),
+//                   onTap: () => controller.postposeNotification(const Duration(minutes: 1)),
+//                 ),
+//                 _Item(
+//                   title: '1 Hora',
+//                   icon: const Icon(Icons.keyboard_double_arrow_right_rounded),
+//                   onTap: () => controller.postposeNotification(const Duration(hours: 1)),
+//                 ),
+//                 _Item(
+//                   title: '3 Horas',
+//                   icon: const Icon(Icons.keyboard_double_arrow_right_rounded),
+//                   onTap: () => controller.postposeNotification(const Duration(hours: 3)),
+//                 ),
+//                 _Item(
+//                   title: 'Mañana',
+//                   icon: const Icon(Icons.keyboard_arrow_up_rounded),
+//                   onTap: () => controller.postposeNotification(const Duration(days: 1)),
+//                 ),
+//                 _Item(
+//                   title: 'Otro',
+//                   icon: const Icon(Icons.keyboard_control),
+//                   onTap: () {
+//                     controller.floatingActionButtonChangeMode();
+//                     controller.enableDisableNotificationStyles();
+//                   },
+//                 ),
+//               ],
+//             ),
+//           ],
+//         ),
+//       );
+//     },
+//   );
+// }
 
 void postposeBottomSheet() {
   BottomSheet(

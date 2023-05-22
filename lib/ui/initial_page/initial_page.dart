@@ -8,6 +8,8 @@ import 'package:todoapp/ui/initial_page/components/tasks_list.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/ui/shared_components/side_bar.dart';
 
+
+
 class InitialPage extends GetView<InitialPageController> {
   const InitialPage({Key? key}) : super(key: key);
 
@@ -89,6 +91,7 @@ class InitialPage extends GetView<InitialPageController> {
                           padding: EdgeInsets.only(bottom: 20, left: 20, right: 20),
                           child: TasksList(),
                         ),
+                        
                       ],
                     ),
                   ),

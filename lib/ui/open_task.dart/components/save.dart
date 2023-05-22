@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todoapp/models/task_model.dart';
-import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
+import 'package:todoapp/ui/open_task.dart/view_task_controller.dart';
 
-class Save extends GetView<InitialPageController> {
-  const Save({required this.task, Key? key}) : super(key: key);
+class SaveChanges extends GetView<ViewTaskController> {
+  const SaveChanges({required this.task, Key? key}) : super(key: key);
 
   final Rx<TaskModel> task;
 
@@ -15,17 +15,13 @@ class Save extends GetView<InitialPageController> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          // IconButton(
-          //   onPressed: () {},
-          //   icon: Icon(Icons.save),
-          // ),
-
           TextButton(
             onPressed: () {
-              task.value.save();
-              controller.tasksMap.refresh();
-              controller.buildInfo();
-              Get.back();
+              //task.value.save();
+              //controller.tasksMap.refresh();
+              //controller.buildInfo();
+              //Get.back();
+              controller.saveTaskandNavigate();
             },
             child: Text('Guargar'),
           ),

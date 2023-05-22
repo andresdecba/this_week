@@ -47,9 +47,9 @@ class _MyTextFormState extends State<MyTextForm> {
       onChanged: (value) {
         // no usar setState por que cierra el teclado
       },
-      validator: (value) {
-        // no usar setState por que cierra el teclado
-      },
+      // validator: (value) {
+      //   // no usar setState por que cierra el teclado
+      // },
       onEditingComplete: () {
         // usar setState cierra el teclado
         setState(() {

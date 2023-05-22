@@ -105,14 +105,14 @@ class _TaskCardState extends State<TaskCard> {
                           crossAxisAlignment: WrapCrossAlignment.center,
                           children: [
                             Icon(
-                              widget.task.notificationTime != null ? Icons.notifications_active_rounded : Icons.notifications_none_rounded,
+                              widget.task.notificationData != null ? Icons.notifications_active_rounded : Icons.notifications_none_rounded,
                               size: 20,
-                              color: widget.task.notificationTime != null ? enabledGrey : disabledGrey,
+                              color: widget.task.notificationData != null ? enabledGrey : disabledGrey,
                             ),
                             const SizedBox(width: 8),
                             Text(
-                              widget.task.notificationTime != null ? timeFormater(widget.task.notificationTime!) : '-- : --',
-                              style: kLabelMedium.copyWith(color: widget.task.notificationTime != null ? enabledGrey : disabledGrey),
+                              widget.task.notificationData != null ? timeFormater(widget.task.notificationData!.time) : '-- : --',
+                              style: kLabelMedium.copyWith(color: widget.task.notificationData != null ? enabledGrey : disabledGrey),
                             ),
                           ],
                         ),

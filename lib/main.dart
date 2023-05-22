@@ -71,7 +71,7 @@ class MyApp extends StatelessWidget {
           elevation: 0,
         ),
         dialogTheme: const DialogTheme(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
         ),
       ),
       initialRoute: !config.isOnboardingDone ? Routes.ONBOARDING_PAGE : initialRoute,

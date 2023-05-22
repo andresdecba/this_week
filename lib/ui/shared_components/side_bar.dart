@@ -7,7 +7,6 @@ import 'package:todoapp/services/local_notifications_service.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/ui/shared_components/dialogs.dart';
-import 'package:todoapp/ui/shared_components/side_bar_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SideBar extends GetView<InitialPageController> {
