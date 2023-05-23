@@ -4,13 +4,12 @@ import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/open_task.dart/components/options_item_tile.dart';
 import 'package:todoapp/ui/open_task.dart/view_task_controller.dart';
-import 'package:todoapp/utils/helpers.dart';
+import 'package:todoapp/ui/shared_components/dialogs.dart';
 
 enum _MenuItem {
-  item1,
-  item2,
-  item3,
-  item4,
+  date,
+  status,
+  delete,
 }
 
 class ExpandibleOptions extends GetView<ViewTaskController> {
@@ -26,124 +25,111 @@ class ExpandibleOptions extends GetView<ViewTaskController> {
     return PopupMenuButton(
       position: PopupMenuPosition.under,
       padding: const EdgeInsets.symmetric(horizontal: 16),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(20.0),
+        ),
+      ),
+
+      // ejecutar
+      onSelected: (value) {
+        switch (value) {
+          case _MenuItem.date:
+            controller.updateTaskDate(context, task);
+            break;
+          case _MenuItem.status:
+            debugPrint('statusss...');
+            break;
+          case _MenuItem.delete:
+            myCustomDialog(
+              context: context,
+              title: 'this action will delete...'.tr,
+              cancelTextButton: 'cancel'.tr,
+              okTextButton: 'delete'.tr,
+              iconPath: 'assets/warning.svg',
+              iconColor: warning,
+              content: task.value.repeatId != null ? const _BuildCheckBox() : null,
+              onPressOk: () {
+                controller.deleteTask();
+              },
+            );
+            break;
+        }
+      },
+
+      // items
       itemBuilder: (context) {
         return [
           // CAMBIAR LA FECHA
           PopupMenuItem(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            value: _MenuItem.item1,
+            value: _MenuItem.date,
             child: OptionsItemTile(
-              title: longDateFormaterWithoutYear(task.value.taskDate),
-              icon: Icons.calendar_today_rounded,
-              onTap: () {
-                controller.datePicker(context, task);
-              },
-            ),
-          ),
-
-          // CAMBIAR HORA DE LA NOTIFICACION
-          PopupMenuItem(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            value: _MenuItem.item1,
-            child: Wrap(
-              alignment: WrapAlignment.center,
-              children: [
-                const Divider(color: disabledGrey, height: 0),
-                Obx(
-                  () => OptionsItemTile(
-                    title: task.value.notificationData?.time != null ? timeFormater(task.value.notificationData!.time) : 'Seleccionar...',
-                    icon: controller.isNotificationActive.value ? Icons.notifications_active_rounded : Icons.notifications_off_rounded,
-                    trailing: Switch(
-                      value: controller.isNotificationActive.value,
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      // disable notifications
-                      onChanged: (value) {
-                        controller.isNotificationActive.value = value;
-                      },
-                    ),
-                    // open time picker
-                    onTap: controller.isNotificationActive.value ? () => controller.timePicker(context) : null,
-                  ),
-                ),
-              ],
+              title: 'Cambiar fecha'.tr, //longDateFormaterWithoutYear(task.value.taskDate),
+              leading: Icons.calendar_today_rounded,
             ),
           ),
 
           // CAMBIAR EL STATUS
-          PopupMenuItem(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            value: _MenuItem.item1,
-            child: Wrap(
-              alignment: WrapAlignment.center,
-              children: [
-                const Divider(color: disabledGrey, height: 0),
-                OptionsItemTile(
-                  title: task.value.status,
-                  icon: Icons.keyboard_double_arrow_right_rounded,
-                ),
-              ],
-            ),
-          ),
+          // PopupMenuItem(
+          //   padding: const EdgeInsets.symmetric(horizontal: 16),
+          //   value: _MenuItem.status,
+          //   child: OptionsItemTile(
+          //     title: task.value.status,
+          //     leading: Icons.keyboard_double_arrow_right_rounded,
+          //   ),
+          // ),
 
-          // SI ES RUTINA
+          // ELIMINAR TAREA
           PopupMenuItem(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            value: _MenuItem.item1,
-            child: Visibility(
-              visible: task.value.repeatId != null ? true : false,
-              child: Wrap(
-                alignment: WrapAlignment.center,
-                children: [
-                  const Divider(color: disabledGrey, height: 0),
-                  OptionsItemTile(
-                    title: 'Rutina',
-                    icon: Icons.push_pin_rounded,
-                    onTap: () {},
-                  ),
-                ],
-              ),
+            value: _MenuItem.delete,
+            child: OptionsItemTile(
+              title: 'Eliminar tarea'.tr,
+              leading: Icons.delete_forever_outlined,
             ),
           ),
         ];
-      },
-      onSelected: (value) {
-        switch (value) {
-          case _MenuItem.item1:
-            debugPrint('MenuItem.item1');
-            break;
-          case _MenuItem.item2:
-            debugPrint('MenuItem.item2');
-            break;
-          case _MenuItem.item3:
-            debugPrint('MenuItem.item3');
-            break;
-          case _MenuItem.item4:
-            debugPrint('MenuItem.item4');
-            break;
-        }
       },
     );
   }
 }
 
-
-
-/*
- //var _value = 'hola1';
-Expanded(
-      child: DropdownButton(
-        items: const [
-          DropdownMenuItem(child: Text('data1'), value: 'hola1'),
-          DropdownMenuItem(child: Text('data2'), value: 'hola2'),
-          DropdownMenuItem(child: Text('data3'), value: 'hola3'),
+class _BuildCheckBox extends GetView<ViewTaskController> {
+  const _BuildCheckBox({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Obx(
+      () => Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            'this is a periodic task'.tr,
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Checkbox(
+                value: controller.isChecked.value,
+                onChanged: (value) => controller.isChecked.value = !controller.isChecked.value,
+              ),
+              Expanded(child: Text('delete current task and subsequent...'.tr)),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Checkbox(
+                value: !controller.isChecked.value,
+                onChanged: (value) => controller.isChecked.value = !controller.isChecked.value,
+              ),
+              Expanded(child: Text('delete current task'.tr)),
+            ],
+          ),
         ],
-        onChanged: (value) {
-          _value = value!;
-        },
-        value: _value,
-        isExpanded: true,
-        icon: const Icon(Icons.more_vert_rounded),
       ),
     );
-
-**/
+  }
+}

@@ -47,7 +47,7 @@ class PostPosePage extends GetView<PostPosePageController> {
               Expanded(
                 flex: 1,
                 child: ElevatedButton(
-                  onPressed: () => controller.savePostpose(controller.selectedItem.value),
+                  onPressed: () => controller.savePostpose(controller.selectedItem.value, context),
                   child: Text('ok'.tr),
                 ),
               ),

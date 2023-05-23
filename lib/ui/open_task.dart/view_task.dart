@@ -5,13 +5,13 @@ import 'package:todoapp/models/subtask_model.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/open_task.dart/components/editable_text_form.dart';
 import 'package:todoapp/ui/open_task.dart/components/expandible_options.dart';
+import 'package:todoapp/ui/open_task.dart/components/notification_details.dart';
 import 'package:todoapp/ui/open_task.dart/components/small_button.dart';
-import 'package:todoapp/ui/open_task.dart/components/save.dart';
+
 import 'package:todoapp/ui/open_task.dart/components/text_form.dart';
 import 'package:todoapp/ui/open_task.dart/view_task_controller.dart';
 
 class ViewTask extends GetView<ViewTaskController> {
-
   const ViewTask({
     //required this.task,
     Key? key,
@@ -21,7 +21,6 @@ class ViewTask extends GetView<ViewTaskController> {
 
   @override
   Widget build(BuildContext context) {
-
     return Obx(() {
       return Stack(
         children: [
@@ -59,10 +58,7 @@ class ViewTask extends GetView<ViewTaskController> {
                               texto: controller.task.value.description,
                               onTap: () {},
                               textStyle: kTitleLarge,
-                              returnText: (value) {
-                                controller.task.value.description = value;
-                                controller.task.value.save();
-                              },
+                              returnText: (value) => controller.saveDescriptionUpdate(value),
                             ),
                           ),
 
@@ -74,13 +70,10 @@ class ViewTask extends GetView<ViewTaskController> {
 
                           //// CREAR NUEVA SUBTAREA ////
                           Padding(
-                            padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+                            padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
                             child: MyTextForm(
                               key: UniqueKey(),
-                              returnText: (value) => controller.createSubtask(
-                                task: controller.task,
-                                value: value,
-                              ),
+                              returnText: (value) => controller.createSubtask(value),
                             ),
                           ),
 
@@ -95,10 +88,47 @@ class ViewTask extends GetView<ViewTaskController> {
                               itemBuilder: (context, index, animation) {
                                 SubTaskModel e = controller.task.value.subTasks[index];
 
-                                Widget removeChild = Container(
-                                  width: double.infinity,
-                                  height: 50,
-                                  color: Colors.yellow,
+                                // Widget removeChild = Container(
+                                //   width: double.infinity,
+                                //   height: 50,
+                                //   color: Colors.yellow,
+                                // );
+
+                                Widget removeChild = Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 4.0),
+                                  child: Row(
+                                    key: UniqueKey(),
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      // marcar subtarea //
+                                      SmallButton(
+                                        onTap: () {},
+                                        icon: e.isDone ? Icons.check_circle_outline_rounded : Icons.circle_outlined,
+                                        iconColor: e.isDone ? disabledGrey : null,
+                                      ),
+
+                                      // descripcion de la subtarea //
+                                      Expanded(
+                                        child: MyEditableTextForm(
+                                          key: UniqueKey(),
+                                          texto: e.title,
+                                          onTap: () {},
+                                          textStyle: e.isDone ? doneTxtStyle : kBodyMedium,
+                                          returnText: (value) {},
+                                        ),
+                                      ),
+
+                                      // eliminar subtarea //
+                                      Visibility(
+                                        visible: e.isDone,
+                                        child: SmallButton(
+                                          icon: Icons.close_rounded,
+                                          iconColor: disabledGrey,
+                                          onTap: () {},
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 );
 
                                 return FadeTransition(
@@ -107,48 +137,41 @@ class ViewTask extends GetView<ViewTaskController> {
                                   child: SizeTransition(
                                     key: UniqueKey(),
                                     sizeFactor: animation,
-                                    child: Row(
-                                      key: UniqueKey(),
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        // marcar subtarea //
-                                        SmallButton(
-                                          onTap: () {
-                                            e.isDone = !e.isDone;
-                                            controller.task.refresh();
-                                          },
-                                          icon: e.isDone ? Icons.check_circle_outline_rounded : Icons.circle_outlined,
-                                          iconColor: e.isDone ? disabledGrey : null,
-                                        ),
-
-                                        // descripcion de la subtarea //
-                                        Expanded(
-                                          child: MyEditableTextForm(
-                                            key: UniqueKey(),
-                                            texto: e.title,
-                                            onTap: () {},
-                                            textStyle: e.isDone ? doneTxtStyle : kBodyMedium,
-                                            returnText: (value) {
-                                              e.title = value;
-                                              controller.task.value.save();
-                                            },
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                                      child: Row(
+                                        key: UniqueKey(),
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          // marcar subtarea //
+                                          SmallButton(
+                                            onTap: () => controller.updateStatusSubtask(e),
+                                            icon: e.isDone ? Icons.check_circle_outline_rounded : Icons.circle_outlined,
+                                            iconColor: e.isDone ? disabledGrey : null,
                                           ),
-                                        ),
 
-                                        // eliminar subtarea //
-                                        Visibility(
-                                          visible: e.isDone,
-                                          child: SmallButton(
-                                            icon: Icons.close_rounded,
-                                            iconColor: disabledGrey,
-                                            onTap: () => controller.removeSubtask(
-                                              index: index,
-                                              task: controller.task,
-                                              child: removeChild,
+                                          // descripcion de la subtarea //
+                                          Expanded(
+                                            child: MyEditableTextForm(
+                                              key: UniqueKey(),
+                                              texto: e.title,
+                                              onTap: () {},
+                                              textStyle: e.isDone ? doneTxtStyle : kBodyMedium,
+                                              returnText: (value) => controller.updateTitleSubtask(e, value),
                                             ),
                                           ),
-                                        ),
-                                      ],
+
+                                          // eliminar subtarea //
+                                          Visibility(
+                                            visible: e.isDone,
+                                            child: SmallButton(
+                                              icon: Icons.close_rounded,
+                                              iconColor: disabledGrey,
+                                              onTap: () => controller.removeSubtask(index: index, task: controller.task, child: removeChild),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 );
@@ -162,11 +185,10 @@ class ViewTask extends GetView<ViewTaskController> {
                 ),
               ),
 
-              const Divider(color: disabledGrey, height: 0),
-              //opciones del widget
-              const Divider(color: disabledGrey, height: 0),
-              SaveChanges(task: controller.task),
-              const SizedBox(height: 8),
+              // notificaciones opt //
+              const Divider(color: enabledGrey, height: 0),
+              const NotificationDetails(),
+              //const SizedBox(height: 8),
             ],
           ),
 
@@ -186,5 +208,5 @@ class ViewTask extends GetView<ViewTaskController> {
 final doneTxtStyle = kTitleMedium.copyWith(
   decoration: TextDecoration.lineThrough,
   fontStyle: FontStyle.italic,
-  color: disabledGrey,
+  color: enabledGrey.withOpacity(0.5),
 );

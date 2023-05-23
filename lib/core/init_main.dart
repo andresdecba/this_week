@@ -61,7 +61,7 @@ class InitMain {
         await FlutterNativeTimezone.getLocalTimezone(),
       ),
     );
-    LocalNotificationService.initializePlatformNotifications();
+    InitializeLocalNotificationsService.initializePlatformNotifications();
 
     // navegar cuando esta cerrada la app
     final notificationLaunchDetails = await localNotifications.getNotificationAppLaunchDetails();

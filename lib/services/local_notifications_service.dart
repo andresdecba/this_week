@@ -35,7 +35,7 @@ void onSelectNotification(NotificationResponse details) {
   }
 }
 
-class LocalNotificationService {
+class InitializeLocalNotificationsService {
   // inicializar el servicio
   static Future<void> initializePlatformNotifications() async {
     const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('ic_notification');
@@ -62,61 +62,6 @@ class LocalNotificationService {
     );
     
   }
-
-  // borrar una notificacion
-  static Future deleteNotification(int id) async {
-    await localNotifications.cancel(id);
-  }
-
-  // borrar una notificacion
-  static Future deleteAllNotifications() async {
-    await localNotifications.cancelAll();
-  }
-
-  // // crear notificacion programada
-  // static Future createNotificationScheduled({
-  //   required String payload,
-  //   required int id,
-  //   required String body,
-  //   required FlutterLocalNotificationsPlugin fln,
-  //   required DateTime time,
-  // }) async {
-  //   // crear notificacion
-  //   final notificationDetails = NotificationDetails(
-  //     iOS: const DarwinNotificationDetails(),
-  //     android: AndroidNotificationDetails(
-  //       'my_channel_id',
-  //       'my_channel_name',
-  //       playSound: true,
-  //       importance: Importance.max,
-  //       priority: Priority.high,
-  //       autoCancel: true,
-  //       enableVibration: true,
-  //       visibility: NotificationVisibility.public,
-  //       actions: <AndroidNotificationAction>[
-  //         AndroidNotificationAction(
-  //           'notificationPostponeACTION', //action id
-  //           'postpone'.tr, //action title
-  //           titleColor: Colors.blue,
-  //           showsUserInterface: true,
-  //           cancelNotification: true,
-  //         ),
-  //       ],
-  //     ),
-  //   );
-
-  //   // programar lanzamiento
-  //   await fln.zonedSchedule(
-  //     id,
-  //     body, // titulo
-  //     'task reminder'.tr, // body
-  //     tz.TZDateTime.from(time, tz.local),
-  //     notificationDetails,
-  //     payload: payload,
-  //     uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
-  //     androidScheduleMode: AndroidScheduleMode.exact,
-  //   );
-  // }
 }
 
 /*

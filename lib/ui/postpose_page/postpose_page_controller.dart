@@ -145,7 +145,7 @@ class PostPosePageController extends GetxController with AdMobService, StateMixi
   ///// manage SAVE /////
   final InitialPageController _initialPageController = Get.put(InitialPageController());
 
-  void savePostpose(PostposeEnum data) {
+  void savePostpose(PostposeEnum data, BuildContext context) {
     switch (data) {
       // si pospone para HOY: DateTime.now() + el tiempo a posponer.
       case PostposeEnum.fifteenMinutes:
@@ -176,17 +176,15 @@ class PostPosePageController extends GetxController with AdMobService, StateMixi
           return;
         }
     }
-    saveAndNavigate();
+    saveAndNavigate(context);
   }
 
-  void saveAndNavigate() async {
+  void saveAndNavigate(BuildContext context) async {
     // crear la notificacion
-    await notificationsUseCases.createNotificationScheduledUseCase(
-      notification: _newNotification,
-      task: task,
-    );
-    // guardar la tarea
-    task.save();
+    // notificationsUseCases.createNotificationUseCase( //TODO: activarrr estoo
+    //   context: context,
+    //   task: task,
+    // );
     // otras cosas
     _initialPageController.buildInfo();
     Get.offAllNamed(Routes.INITIAL_PAGE);

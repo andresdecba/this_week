@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 class OptionsItemTile extends StatelessWidget {
   const OptionsItemTile({
-    required this.icon,
+    required this.leading,
     required this.title,
     this.onTap,
     this.trailing,
     Key? key,
   }) : super(key: key);
 
-  final IconData icon;
+  final IconData leading;
   final String title;
   final VoidCallback? onTap;
   final Widget? trailing;
@@ -29,7 +29,7 @@ class OptionsItemTile extends StatelessWidget {
               width: double.infinity,
               child: Wrap(
                 children: [
-                  Icon(icon, size: 20),
+                  Icon(leading, size: 20),
                   const SizedBox(width: 20),
                   Text(title),
                 ],

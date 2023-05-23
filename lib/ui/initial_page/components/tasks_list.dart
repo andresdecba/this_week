@@ -7,6 +7,8 @@ import 'package:todoapp/ui/initial_page/components/task_card.dart';
 import 'package:todoapp/ui/open_task.dart/view_task.dart';
 import 'package:todoapp/ui/open_task.dart/view_task_controller.dart';
 import 'package:todoapp/ui/shared_components/bottomsheet_with_scroll.dart';
+import 'package:todoapp/use_cases/notifications_use_cases.dart';
+import 'package:todoapp/use_cases/tasks_use_cases.dart';
 import 'package:todoapp/utils/helpers.dart';
 
 class TasksList extends GetView<InitialPageController> {
@@ -157,7 +159,11 @@ class TasksList extends GetView<InitialPageController> {
                                       //ViewTaskController(task: e);
                                       // TODO: HACER ALGO MAS PRO PARA LEVANTAR EL CONTROLLER
                                       Get.put<ViewTaskController>(
-                                        ViewTaskController(task: e),
+                                        ViewTaskController(
+                                          task: e,
+                                          notificationsUseCases: NotificationsUseCasesImpl(),
+                                          tasksUseCases: TaskUseCasesImpl(),
+                                        ),
                                       );
                                       openBottomSheetWithScroll(
                                         context: context,

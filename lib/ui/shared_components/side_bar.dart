@@ -3,21 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:todoapp/services/local_notifications_service.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/ui/shared_components/dialogs.dart';
+import 'package:todoapp/use_cases/notifications_use_cases.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SideBar extends GetView<InitialPageController> {
-  const SideBar({super.key});
+  SideBar({super.key});
 
   //final SideBarController controller = Get.put(SideBarController());
 
+  final NotificationsUseCases notificationsUseCases = NotificationsUseCasesImpl();
+
   @override
   Widget build(BuildContext context) {
-
-
     return Drawer(
       child: SafeArea(
         child: Padding(
@@ -182,7 +182,7 @@ class SideBar extends GetView<InitialPageController> {
     Navigator.of(context).pop();
     controller.scaffoldKey.currentState!.closeEndDrawer();
     controller.simulateDeletingData();
-    LocalNotificationService.deleteAllNotifications();
+    notificationsUseCases.deleteAllNotificationsUseCase();
     await controller.tasksBox.clear();
     controller.buildInfo();
   }
