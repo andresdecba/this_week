@@ -7,15 +7,17 @@ import 'package:todoapp/use_cases/notifications_use_cases.dart';
 import 'package:todoapp/use_cases/tasks_use_cases.dart';
 
 class ViewTaskController extends GetxController {
-  Rx<TaskModel> task;
+  
   final NotificationsUseCases notificationsUseCases;
   final TasksUseCases tasksUseCases;
 
   ViewTaskController({
     required this.notificationsUseCases,
     required this.tasksUseCases,
-    required this.task,
   });
+
+  // LLENAR //
+  late Rx<TaskModel> task;
 
   ////// DATE PICKER //////
   Future<void> updateTaskDate(BuildContext context, Rx<TaskModel> task) async {

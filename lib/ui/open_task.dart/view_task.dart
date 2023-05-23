@@ -52,7 +52,7 @@ class ViewTask extends GetView<ViewTaskController> {
                           ),
 
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(10, 0, 10, 20),
+                            padding: const EdgeInsets.fromLTRB(10, 0, 10, 40),
                             child: MyEditableTextForm(
                               key: UniqueKey(),
                               texto: controller.task.value.description,
@@ -73,6 +73,7 @@ class ViewTask extends GetView<ViewTaskController> {
                             padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
                             child: MyTextForm(
                               key: UniqueKey(),
+                              hintText: 'Agregar subtarea',
                               returnText: (value) => controller.createSubtask(value),
                             ),
                           ),

@@ -4,10 +4,20 @@ import 'package:todoapp/ui/commons/styles.dart';
 class MyTextForm extends StatefulWidget {
   const MyTextForm({
     required this.returnText,
+    required this.hintText,
+    this.autofocus,
+    this.textStyle,
+    this.clearTextOnTapOutside = true,
+    this.maxLength = 100,
     Key? key,
   }) : super(key: key);
 
   final ReturnText returnText;
+  final String hintText;
+  final bool? autofocus;
+  final TextStyle? textStyle;
+  final bool clearTextOnTapOutside;
+  final int maxLength;
 
   @override
   State<MyTextForm> createState() => _MyTextFormState();
@@ -31,14 +41,15 @@ class _MyTextFormState extends State<MyTextForm> {
       key: UniqueKey(),
       focusNode: _focusNode,
       controller: _textEditingController,
+      autofocus: widget.autofocus ?? false,
       maxLines: null,
-      maxLength: 200,
+      maxLength: widget.maxLength,
       keyboardType: TextInputType.text,
       textCapitalization: TextCapitalization.sentences,
       textInputAction: TextInputAction.done,
-      style: kBodyMedium,
+      style: widget.textStyle ?? kBodyMedium,
       decoration: myInputDecoration(
-        hintText: 'Agregar nueva subtarea',
+        hintText: widget.hintText,
         clearText: () => _textEditingController.clear(),
       ),
       onTap: () {
@@ -54,12 +65,13 @@ class _MyTextFormState extends State<MyTextForm> {
         // usar setState cierra el teclado
         setState(() {
           widget.returnText(_textEditingController.text);
-          _textEditingController.clear();
+          if (widget.clearTextOnTapOutside) _textEditingController.clear();
         });
+        FocusScope.of(context).unfocus();
       },
       onTapOutside: (event) {
         // no usar setState por que cierra el teclado
-        _textEditingController.clear();
+        if (widget.clearTextOnTapOutside) _textEditingController.clear();
         if (_focusNode.hasFocus) _focusNode.unfocus();
       },
     );

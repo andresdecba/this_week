@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 
 // colors
 // ignore: constant_identifier_names
-const grey_bg = Color(0xFFE8E8E8);
+const grey_background = Color(0xFFFFFBFE); //background: Color(0xFFFFFBFE)
 const disabledTaskBg = Color.fromARGB(255, 206, 206, 206);
 const enabledGrey = Color(0xFF626262);
 const disabledGrey = Color(0xFFA6A6A6);

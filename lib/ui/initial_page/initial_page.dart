@@ -16,7 +16,8 @@ class InitialPage extends GetView<InitialPageController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
+      
       // key
       key: controller.scaffoldKey,
       // ad
@@ -68,6 +69,8 @@ class InitialPage extends GetView<InitialPageController> {
 
       // sidebar
       endDrawer: SideBar(),
+
+
 
       // content
       body: Obx(

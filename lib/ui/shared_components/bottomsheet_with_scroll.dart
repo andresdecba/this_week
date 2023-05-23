@@ -19,6 +19,7 @@ Future<void> openBottomSheetWithScroll({
       ),
     ),
     useSafeArea: true,
+    backgroundColor: grey_background,
     builder: (context) {
       return DraggableScrollableSheet(
         expand: false,

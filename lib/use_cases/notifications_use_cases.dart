@@ -9,8 +9,12 @@ import 'package:todoapp/use_cases/notifications_crud.dart';
 abstract class NotificationsUseCases {
   void deleteNotificationUseCase({required Rx<TaskModel> task});
   void deleteNotificationWithTaskUseCase({required TaskModel task});
+
   void deleteAllNotificationsUseCase();
   void createUpdateNotificationUseCase({required Rx<TaskModel> task, required BuildContext context});
+
+  void createUpdateNotificationBasicUseCase({required TaskModel task, required BuildContext context});
+
 }
 
 class NotificationsUseCasesImpl implements NotificationsUseCases {
@@ -35,6 +39,7 @@ class NotificationsUseCasesImpl implements NotificationsUseCases {
   @override
   void createUpdateNotificationUseCase({required Rx<TaskModel> task, required BuildContext context}) async {
     //
+    // abrir time picker
     TimeOfDay? newTime = await showTimePicker(
       context: context,
       initialTime: TimeOfDay(hour: TimeOfDay.now().hour, minute: TimeOfDay.now().minute),
@@ -43,7 +48,7 @@ class NotificationsUseCasesImpl implements NotificationsUseCases {
     if (newTime == null) {
       return;
     } else {
-      var notificationDateTime = DateTime(
+      var selectedDateTime = DateTime(
         task.value.taskDate.year,
         task.value.taskDate.day,
         task.value.taskDate.month,
@@ -51,7 +56,7 @@ class NotificationsUseCasesImpl implements NotificationsUseCases {
         newTime.minute,
       );
       // validar rule
-      if (notificationDateTime.isBefore(DateTime.now())) {
+      if (selectedDateTime.isBefore(DateTime.now())) {
         // si es anterior a ahora mostrar modal
         // ignore: use_build_context_synchronously
         myCustomDialog(
@@ -66,7 +71,7 @@ class NotificationsUseCasesImpl implements NotificationsUseCases {
       } else {
         // llamar a crear
         NotificationsCrud.createUpdateNotification(
-          datetime: notificationDateTime,
+          datetime: selectedDateTime,
           task: task,
           fln: fln,
         );
@@ -82,5 +87,14 @@ class NotificationsUseCasesImpl implements NotificationsUseCases {
     } else {
       return;
     }
+  }
+  
+  @override
+  void createUpdateNotificationBasicUseCase({required TaskModel task, required BuildContext context}) {
+    // NotificationsCrud.createUpdateNotification(
+    //       datetime: selectedDateTime,
+    //       task: task,
+    //       fln: fln,
+    //     );
   }
 }

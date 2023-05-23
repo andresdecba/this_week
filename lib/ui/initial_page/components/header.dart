@@ -15,7 +15,7 @@ class Header extends GetView<InitialPageController> {
         alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(horizontal: 8),
         decoration: const BoxDecoration(
-          color: grey_bg,
+          color: grey_background,
           boxShadow: [
             BoxShadow(
               color: disabledGrey,

@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/ui/commons/styles.dart';
+import 'package:todoapp/ui/create_task_page/create_task_page.dart';
+import 'package:todoapp/ui/create_task_page/create_task_page_controller.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/ui/initial_page/components/task_card.dart';
 import 'package:todoapp/ui/open_task.dart/view_task.dart';
 import 'package:todoapp/ui/open_task.dart/view_task_controller.dart';
 import 'package:todoapp/ui/shared_components/bottomsheet_with_scroll.dart';
-import 'package:todoapp/use_cases/notifications_use_cases.dart';
-import 'package:todoapp/use_cases/tasks_use_cases.dart';
+//import 'package:todoapp/use_cases/notifications_use_cases.dart';
+//import 'package:todoapp/use_cases/tasks_use_cases.dart';
 import 'package:todoapp/utils/helpers.dart';
 
 class TasksList extends GetView<InitialPageController> {
@@ -108,7 +110,14 @@ class TasksList extends GetView<InitialPageController> {
                             : IconButton(
                                 icon: const Icon(Icons.add_circle_rounded),
                                 visualDensity: VisualDensity.compact,
-                                onPressed: () => controller.navigate(date: currentDate),
+                                onPressed: () {
+                                  Get.find<CreateTaskPageController>().selectedDate = currentDate;
+                                  openBottomSheetWithScroll(
+                                    context: context,
+                                    initialChildSize: 0.6,
+                                    widget: const CreateTaskPage(),
+                                  );
+                                },
                               ),
                       ],
                     ),
@@ -154,25 +163,14 @@ class TasksList extends GetView<InitialPageController> {
                                     //isDisabled: disableYesterday,
                                     key: UniqueKey(),
                                     task: e.value,
-                                    //navigate: () => controller.navigate(taskKey: e.value.key),
                                     navigate: () {
-                                      //ViewTaskController(task: e);
-                                      // TODO: HACER ALGO MAS PRO PARA LEVANTAR EL CONTROLLER
-                                      Get.put<ViewTaskController>(
-                                        ViewTaskController(
-                                          task: e,
-                                          notificationsUseCases: NotificationsUseCasesImpl(),
-                                          tasksUseCases: TaskUseCasesImpl(),
-                                        ),
-                                      );
+                                      Get.find<ViewTaskController>().task = e;
                                       openBottomSheetWithScroll(
                                         context: context,
                                         initialChildSize: 0.9,
                                         widget: const ViewTask(),
                                       );
-                                      print('task: $e');
                                     },
-
                                     onStatusChange: () {
                                       e.value.status = controller.changeTaskStatus(e.value.status);
                                       e.value.save();

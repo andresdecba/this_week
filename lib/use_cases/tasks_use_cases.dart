@@ -6,7 +6,7 @@ import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/use_cases/notifications_use_cases.dart';
 
 abstract class TasksUseCases {
-  void createTaskUseCase({required String description, required DateTime date, required bool isRoutine});
+  TaskModel createTaskUseCase({required String description, required DateTime date, required bool isRoutine});
   void deleteTaskUseCase({required Rx<TaskModel> task, required bool deleteRoutine});
   void updateTaskUseCase({required Rx<TaskModel> task, bool? isDateUpdated});
   void readTaskUseCase({required Rx<TaskModel> task});
@@ -19,7 +19,7 @@ class TaskUseCasesImpl implements TasksUseCases {
   //AppConfigModel config = userPrefs.get('appConfig')!;
 
   @override
-  void createTaskUseCase({required String description, required DateTime date, required bool isRoutine}) {
+  TaskModel createTaskUseCase({required String description, required DateTime date, required bool isRoutine}) {
     // definir
     TaskModel newTask = TaskModel(
       description: description,
@@ -29,10 +29,15 @@ class TaskUseCasesImpl implements TasksUseCases {
       subTasks: [],
     );
 
+    // task
+    late int taskKey;
+
     // guardar
-    tasksBox.add(newTask);
+    tasksBox.add(newTask).then((value) => taskKey = value);
     Get.find<InitialPageController>().tasksMap.refresh();
     Get.find<InitialPageController>().buildInfo();
+
+    return tasksBox.get(taskKey)!;
   }
 
   @override

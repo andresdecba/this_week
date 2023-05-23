@@ -62,7 +62,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         dividerColor: Colors.transparent,
         primaryTextTheme: Typography().white,
-        scaffoldBackgroundColor: grey_bg,
+        scaffoldBackgroundColor: grey_background,
         appBarTheme: const AppBarTheme(
           backgroundColor: yellowPrimary,
           iconTheme: IconThemeData(color: blackBg),
@@ -73,6 +73,7 @@ class MyApp extends StatelessWidget {
         dialogTheme: const DialogTheme(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
         ),
+        
       ),
       initialRoute: !config.isOnboardingDone ? Routes.ONBOARDING_PAGE : initialRoute,
     );
