@@ -9,8 +9,6 @@ import 'package:todoapp/ui/initial_page/components/task_card.dart';
 import 'package:todoapp/ui/open_task.dart/view_task.dart';
 import 'package:todoapp/ui/open_task.dart/view_task_controller.dart';
 import 'package:todoapp/ui/shared_components/bottomsheet_with_scroll.dart';
-//import 'package:todoapp/use_cases/notifications_use_cases.dart';
-//import 'package:todoapp/use_cases/tasks_use_cases.dart';
 import 'package:todoapp/utils/helpers.dart';
 
 class TasksList extends GetView<InitialPageController> {
@@ -110,12 +108,46 @@ class TasksList extends GetView<InitialPageController> {
                             : IconButton(
                                 icon: const Icon(Icons.add_circle_rounded),
                                 visualDensity: VisualDensity.compact,
+
+                                /////////// ***** CREATE TRASK ****** /////////////
+
                                 onPressed: () {
+                                  // enviar el dia seleccionado
                                   Get.find<CreateTaskPageController>().selectedDate = currentDate;
-                                  openBottomSheetWithScroll(
+                                  // abrir crear bottomsheet
+                                  showModalBottomSheet<dynamic>(
+                                    isDismissible: false,
                                     context: context,
-                                    initialChildSize: 0.6,
-                                    widget: const CreateTaskPage(),
+                                    isScrollControlled: true,
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(20.0),
+                                        topRight: Radius.circular(20.0),
+                                      ),
+                                    ),
+                                    builder: (context) {
+                                      return SingleChildScrollView(
+                                        child: Container(
+                                          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                                          child: Stack(
+                                            children: [
+                                              const CreateTaskPage(),
+                                              Align(
+                                                alignment: Alignment.topRight,
+                                                child: IconButton(
+                                                  padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),
+                                                  onPressed: () => Get.find<CreateTaskPageController>().closeAndRestoreValues(),
+                                                  icon: const Icon(
+                                                    Icons.close_rounded,
+                                                    color: disabledGrey,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    },
                                   );
                                 },
                               ),
@@ -191,4 +223,38 @@ class TasksList extends GetView<InitialPageController> {
       },
     );
   }
+}
+
+InputDecoration _myInputDecoration({
+  required String hintText,
+  required VoidCallback clearText,
+}) {
+  return InputDecoration(
+    contentPadding: const EdgeInsets.all(8),
+    isDense: true,
+    border: const OutlineInputBorder(),
+    alignLabelWithHint: true,
+    hintText: hintText,
+    hintStyle: kBodyMedium.copyWith(fontStyle: FontStyle.italic, color: disabledGrey),
+    counterText: "",
+    suffixIconConstraints: const BoxConstraints(maxHeight: 100),
+    suffixIcon: InkWell(
+      onTap: () => clearText(),
+      child: const Padding(
+        padding: EdgeInsets.fromLTRB(8, 8, 8, 8),
+        child: Icon(Icons.close_rounded, size: 20),
+      ),
+    ),
+    counterStyle: const TextStyle(
+      fontStyle: FontStyle.italic,
+      fontSize: 10,
+      height: double.minPositive,
+    ),
+    enabledBorder: const OutlineInputBorder(
+      borderSide: BorderSide(color: disabledGrey),
+    ),
+    focusedBorder: const OutlineInputBorder(
+      borderSide: BorderSide(color: bluePrimary),
+    ),
+  );
 }

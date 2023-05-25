@@ -3,13 +3,27 @@ import 'package:get/get.dart';
 import 'package:todoapp/data_source/db_data_source.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
+import 'package:todoapp/use_cases/notifications_crud.dart';
 import 'package:todoapp/use_cases/notifications_use_cases.dart';
 
 abstract class TasksUseCases {
-  TaskModel createTaskUseCase({required String description, required DateTime date, required bool isRoutine});
-  void deleteTaskUseCase({required Rx<TaskModel> task, required bool deleteRoutine});
-  void updateTaskUseCase({required Rx<TaskModel> task, bool? isDateUpdated});
-  void readTaskUseCase({required Rx<TaskModel> task});
+  Future<TaskModel> createTaskUseCase({
+    required String description,
+    required DateTime date,
+    required bool isRoutine,
+    DateTime? notificationDateTime,
+  });
+  void readTaskUseCase({
+    required Rx<TaskModel> task,
+  });
+  void updateTaskUseCase({
+    required Rx<TaskModel> task,
+    bool? isDateUpdated,
+  });
+  void deleteTaskUseCase({
+    required Rx<TaskModel> task,
+    required bool deleteRoutine,
+  });
 }
 
 class TaskUseCasesImpl implements TasksUseCases {
@@ -19,25 +33,74 @@ class TaskUseCasesImpl implements TasksUseCases {
   //AppConfigModel config = userPrefs.get('appConfig')!;
 
   @override
-  TaskModel createTaskUseCase({required String description, required DateTime date, required bool isRoutine}) {
+  Future<TaskModel> createTaskUseCase({
+    required String description,
+    required DateTime date,
+    required bool isRoutine,
+    DateTime? notificationDateTime,
+  }) async {
     // definir
     TaskModel newTask = TaskModel(
       description: description,
       taskDate: date,
       repeatId: isRoutine ? UniqueKey().toString() : null,
-      status: TaskStatus.PENDING.toString(),
+      status: TaskStatus.PENDING.toValue,
       subTasks: [],
     );
 
-    // task
-    late int taskKey;
-
     // guardar
-    tasksBox.add(newTask).then((value) => taskKey = value);
-    Get.find<InitialPageController>().tasksMap.refresh();
-    Get.find<InitialPageController>().buildInfo();
+    tasksBox.add(newTask); //.then((value) => task = tasksBox.get(value)!);
 
-    return tasksBox.get(taskKey)!;
+    // crear notificacion
+    if (notificationDateTime != null) {
+      newTask.notificationData = await NotificationsCrud.createNotification(
+        datetime: notificationDateTime,
+        title: description,
+        payload: newTask.key.toString(),
+      );
+      newTask.save();
+    }
+
+    // is routine
+    if (isRoutine) {
+      for (var i = 1; i < 365; i++) {
+        var nextDate = newTask.taskDate.add(Duration(days: i));
+        if (nextDate.weekday == newTask.taskDate.weekday) {
+          // crear tarea
+          TaskModel repeatedTask = newTask.copyWith(
+            description: newTask.description,
+            taskDate: nextDate,
+            status: TaskStatus.PENDING.toValue,
+            repeatId: newTask.repeatId,
+            subTasks: [],
+          );
+          // guardar
+          tasksBox.add(repeatedTask);
+          // crear notificacion
+          if (notificationDateTime != null) {
+            var notifDateTime = DateTime(
+              repeatedTask.taskDate.year,
+              repeatedTask.taskDate.month,
+              repeatedTask.taskDate.day,
+              notificationDateTime.hour,
+              notificationDateTime.minute,
+            );
+            repeatedTask.notificationData = await NotificationsCrud.createNotification(
+              datetime: notifDateTime,
+              title: description,
+              payload: repeatedTask.key,
+            );
+            repeatedTask.save();
+          }
+        }
+      }
+    }
+    return newTask;
+  }
+
+  @override
+  void readTaskUseCase({required Rx<TaskModel> task}) {
+    // _task.value = tasksBox.get(value)!;
   }
 
   @override
@@ -78,10 +141,5 @@ class TaskUseCasesImpl implements TasksUseCases {
       task.value.delete();
       Get.find<InitialPageController>().buildInfo();
     }
-  }
-
-  @override
-  void readTaskUseCase({required Rx<TaskModel> task}) {
-    // _task.value = tasksBox.get(value)!;
   }
 }

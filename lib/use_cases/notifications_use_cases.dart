@@ -14,7 +14,6 @@ abstract class NotificationsUseCases {
   void createUpdateNotificationUseCase({required Rx<TaskModel> task, required BuildContext context});
 
   void createUpdateNotificationBasicUseCase({required TaskModel task, required BuildContext context});
-
 }
 
 class NotificationsUseCasesImpl implements NotificationsUseCases {
@@ -25,7 +24,7 @@ class NotificationsUseCasesImpl implements NotificationsUseCases {
   void deleteNotificationUseCase({required Rx<TaskModel> task}) async {
     // validar rule: si tiene y si no está vencida
     if (task.value.notificationData != null && task.value.notificationData!.time.isAfter(DateTime.now())) {
-      NotificationsCrud.deleteNotification(task: task, fln: fln);
+      NotificationsCrud.deleteNotification(notificationId: task.value.notificationData!.id!);
     } else {
       return;
     }
@@ -39,7 +38,13 @@ class NotificationsUseCasesImpl implements NotificationsUseCases {
   @override
   void createUpdateNotificationUseCase({required Rx<TaskModel> task, required BuildContext context}) async {
     //
+    // si ya tiene una notificacion borrarla (modo update)
+    if (task.value.notificationData != null) {
+      await NotificationsCrud.deleteNotification(notificationId: task.value.notificationData!.id!);
+    }
+
     // abrir time picker
+    // ignore: use_build_context_synchronously
     TimeOfDay? newTime = await showTimePicker(
       context: context,
       initialTime: TimeOfDay(hour: TimeOfDay.now().hour, minute: TimeOfDay.now().minute),
@@ -48,6 +53,7 @@ class NotificationsUseCasesImpl implements NotificationsUseCases {
     if (newTime == null) {
       return;
     } else {
+      // crear datetime
       var selectedDateTime = DateTime(
         task.value.taskDate.year,
         task.value.taskDate.day,
@@ -55,9 +61,8 @@ class NotificationsUseCasesImpl implements NotificationsUseCases {
         newTime.hour,
         newTime.minute,
       );
-      // validar rule
+      // validar rule: si es anterior a ahora mostrar modal
       if (selectedDateTime.isBefore(DateTime.now())) {
-        // si es anterior a ahora mostrar modal
         // ignore: use_build_context_synchronously
         myCustomDialog(
           context: context,
@@ -69,16 +74,60 @@ class NotificationsUseCasesImpl implements NotificationsUseCases {
           onPressOk: () => Navigator.of(context).pop(),
         );
       } else {
-        // llamar a crear
-        NotificationsCrud.createUpdateNotification(
+        // crear notificacion
+        task.value.notificationData = await NotificationsCrud.createNotification(
           datetime: selectedDateTime,
-          task: task,
-          fln: fln,
+          title: task.value.description,
+          payload: task.value.key.toString(),
         );
+        task.value.save();
       }
     }
   }
-  
+
+  // @override
+  // void createUpdateNotificationUseCase({required Rx<TaskModel> task, required BuildContext context}) async {
+  //   //
+  //   // abrir time picker
+  //   TimeOfDay? newTime = await showTimePicker(
+  //     context: context,
+  //     initialTime: TimeOfDay(hour: TimeOfDay.now().hour, minute: TimeOfDay.now().minute),
+  //   );
+
+  //   if (newTime == null) {
+  //     return;
+  //   } else {
+  //     var selectedDateTime = DateTime(
+  //       task.value.taskDate.year,
+  //       task.value.taskDate.day,
+  //       task.value.taskDate.month,
+  //       newTime.hour,
+  //       newTime.minute,
+  //     );
+  //     // validar rule
+  //     if (selectedDateTime.isBefore(DateTime.now())) {
+  //       // si es anterior a ahora mostrar modal
+  //       // ignore: use_build_context_synchronously
+  //       myCustomDialog(
+  //         context: context,
+  //         title: 'atention !'.tr,
+  //         subtitle: 'You cant create a...'.tr,
+  //         okTextButton: 'ok'.tr,
+  //         iconPath: 'assets/info.svg',
+  //         iconColor: bluePrimary,
+  //         onPressOk: () => Navigator.of(context).pop(),
+  //       );
+  //     } else {
+  //       // llamar a crear
+  //       NotificationsCrud.createUpdateNotification(
+  //         datetime: selectedDateTime,
+  //         task: task,
+  //         fln: fln,
+  //       );
+  //     }
+  //   }
+  // }
+
   @override
   void deleteNotificationWithTaskUseCase({required TaskModel task}) {
     // validar rule: si tiene y si no está vencida
@@ -88,7 +137,7 @@ class NotificationsUseCasesImpl implements NotificationsUseCases {
       return;
     }
   }
-  
+
   @override
   void createUpdateNotificationBasicUseCase({required TaskModel task, required BuildContext context}) {
     // NotificationsCrud.createUpdateNotification(

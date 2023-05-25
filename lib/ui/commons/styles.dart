@@ -7,6 +7,7 @@ const grey_background = Color(0xFFFFFBFE); //background: Color(0xFFFFFBFE)
 const disabledTaskBg = Color.fromARGB(255, 206, 206, 206);
 const enabledGrey = Color(0xFF626262);
 const disabledGrey = Color(0xFFA6A6A6);
+const softGrey = Color.fromARGB(255, 216, 216, 216);
 const statusTaskPending = Color.fromARGB(255, 248, 228, 125);
 const statusTaskInProgress = Color.fromARGB(255, 56, 149, 255);
 const statusTaskDone = Color.fromARGB(255, 138, 173, 131);
@@ -53,10 +54,10 @@ InputDecoration customInputDecoration({
     contentPadding: isEnabled ? const EdgeInsets.all(10) : EdgeInsets.zero,
     isDense: true,
     border: isEnabled == true ? const OutlineInputBorder() : InputBorder.none,
-    labelStyle: const TextStyle(color: bluePrimary),
     alignLabelWithHint: true,
     hintText: hintText,
     hintStyle: kBodyMedium.copyWith(fontStyle: FontStyle.italic, color: disabledGrey),
+    labelStyle: const TextStyle(color: bluePrimary),
     filled: isEnabled,
     fillColor: witheBg.withOpacity(0.4),
     suffixIcon: isEnabled == true

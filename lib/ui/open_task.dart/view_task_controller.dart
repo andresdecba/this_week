@@ -7,7 +7,6 @@ import 'package:todoapp/use_cases/notifications_use_cases.dart';
 import 'package:todoapp/use_cases/tasks_use_cases.dart';
 
 class ViewTaskController extends GetxController {
-  
   final NotificationsUseCases notificationsUseCases;
   final TasksUseCases tasksUseCases;
 
@@ -57,13 +56,14 @@ class ViewTaskController extends GetxController {
   //// DELETE TASK ////
   RxBool isChecked = false.obs;
   void deleteTask() {
-    tasksUseCases.deleteTaskUseCase(task: task, deleteRoutine: isChecked.value);    
+    tasksUseCases.deleteTaskUseCase(task: task, deleteRoutine: isChecked.value);
   }
 
   ////// SUBTASKS //////
   final GlobalKey<AnimatedListState> animatedListKey = GlobalKey();
   final Duration listDuration = const Duration(milliseconds: 500);
-  final GlobalKey<FormState> newFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> viewTaskFormKey = GlobalKey<FormState>();
+  final FocusNode createSubtaskFocusNode = FocusNode();
 
   void createSubtask(String value) {
     animatedListKey.currentState!.insertItem(
@@ -100,6 +100,12 @@ class ViewTaskController extends GetxController {
     );
     task.value.subTasks.remove(task.value.subTasks[index]);
     tasksUseCases.updateTaskUseCase(task: task);
+  }
+
+  @override
+  void dispose() {
+    createSubtaskFocusNode.dispose();
+    super.dispose();
   }
 }
 

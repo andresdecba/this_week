@@ -31,7 +31,7 @@ class ViewTask extends GetView<ViewTaskController> {
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
                   child: Form(
-                    key: controller.newFormKey,
+                    key: controller.viewTaskFormKey,
                     onWillPop: () async {
                       if (FocusScope.of(context).hasFocus) {
                         FocusScope.of(context).unfocus();
@@ -75,6 +75,7 @@ class ViewTask extends GetView<ViewTaskController> {
                               key: UniqueKey(),
                               hintText: 'Agregar subtarea',
                               returnText: (value) => controller.createSubtask(value),
+                              focusNode: controller.createSubtaskFocusNode,
                             ),
                           ),
 

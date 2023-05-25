@@ -13,15 +13,17 @@ import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/services/ad_mob_service.dart';
 import 'package:todoapp/utils/helpers.dart';
 
-class InitialPageController extends GetxController with AdMobService, StateMixin<dynamic> {
+class InitialPageController extends GetxController with AdMobService, StateMixin<dynamic>, WidgetsBindingObserver {
+
   //,OpenTaskController
   @override
   void onInit() async {
+    super.onInit();
     initSampleTask();
     await initConfig();
     buildInfo();
     calculateWeeksDifference();
-    super.onInit();
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
@@ -29,6 +31,33 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
     loadBannerAd(bannerListener: initialPageBannerListener());
     //loadBannerAd(bannerListener: initialPageBannerListener(), adUnitId: AdMobService.initialPageBanner!);
     super.onReady();
+  }
+  
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+  }
+
+  // conocer el estado de la app //
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // tutotial: https://stackoverflow.com/questions/51835039/how-do-i-check-if-the-flutter-application-is-in-the-foreground-or-not
+    debugPrint("app state in values ${AppLifecycleState.values}");
+    switch (state) {
+      case AppLifecycleState.resumed:
+        debugPrint("app state in resumed");
+        break;
+      case AppLifecycleState.inactive:
+        debugPrint("app state in inactive");
+        break;
+      case AppLifecycleState.paused:
+        debugPrint("app state in paused");
+        break;
+      case AppLifecycleState.detached:
+        debugPrint("app state in detached");
+        break;
+    }
   }
 
   // box de tasks

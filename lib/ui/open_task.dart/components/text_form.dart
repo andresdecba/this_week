@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 
@@ -9,6 +11,7 @@ class MyTextForm extends StatefulWidget {
     this.textStyle,
     this.clearTextOnTapOutside = true,
     this.maxLength = 100,
+    this.focusNode,
     Key? key,
   }) : super(key: key);
 
@@ -18,6 +21,7 @@ class MyTextForm extends StatefulWidget {
   final TextStyle? textStyle;
   final bool clearTextOnTapOutside;
   final int maxLength;
+  final FocusNode? focusNode;
 
   @override
   State<MyTextForm> createState() => _MyTextFormState();
@@ -25,21 +29,25 @@ class MyTextForm extends StatefulWidget {
 
 class _MyTextFormState extends State<MyTextForm> {
   // CONTROLLERS
-  final TextEditingController _textEditingController = TextEditingController();
-  final FocusNode _focusNode = FocusNode();
+  late TextEditingController _textEditingController;
+
+  @override
+  void initState() {
+    super.initState();
+    _textEditingController = TextEditingController();
+  }
 
   @override
   void dispose() {
-    _textEditingController.dispose();
-    _focusNode.dispose();
     super.dispose();
+    _textEditingController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       key: UniqueKey(),
-      focusNode: _focusNode,
+      focusNode: widget.focusNode,
       controller: _textEditingController,
       autofocus: widget.autofocus ?? false,
       maxLines: null,
@@ -65,14 +73,14 @@ class _MyTextFormState extends State<MyTextForm> {
         // usar setState cierra el teclado
         setState(() {
           widget.returnText(_textEditingController.text);
-          if (widget.clearTextOnTapOutside) _textEditingController.clear();
+          _textEditingController.clear();
         });
-        FocusScope.of(context).unfocus();
+        if (widget.focusNode != null && widget.focusNode!.hasFocus) widget.focusNode!.unfocus();
       },
       onTapOutside: (event) {
         // no usar setState por que cierra el teclado
         if (widget.clearTextOnTapOutside) _textEditingController.clear();
-        if (_focusNode.hasFocus) _focusNode.unfocus();
+        if (widget.focusNode != null && widget.focusNode!.hasFocus) widget.focusNode!.unfocus();
       },
     );
   }

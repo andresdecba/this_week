@@ -19,6 +19,7 @@ dependencies:
   flutter_localization: null
   flutter_native_splash: ^2.2.19
   flutter_native_timezone: ^2.0.0
+  flutter_persistent_keyboard_height: ^1.0.5
   flutter_svg: ^1.1.6
   get: ^4.6.5
   google_mobile_ads: ^2.3.0

@@ -9,25 +9,26 @@ class InitialPageBinding implements Bindings {
   NotificationsUseCasesImpl notificationsUseCasesImpl = NotificationsUseCasesImpl();
   TaskUseCasesImpl taskUseCasesImpl = TaskUseCasesImpl();
 
-
   @override
   void dependencies() {
     Get.put<InitialPageController>(
       InitialPageController(),
     );
 
-    Get.put<ViewTaskController>(
-      ViewTaskController(
+    Get.lazyPut(
+      () => ViewTaskController(
         notificationsUseCases: notificationsUseCasesImpl,
         tasksUseCases: taskUseCasesImpl,
       ),
+      fenix: true,
     );
 
-    Get.put<CreateTaskPageController>(
-      CreateTaskPageController(
+    Get.lazyPut(
+      () => CreateTaskPageController(
         tasksUseCases: taskUseCasesImpl,
         notificationsUseCases: notificationsUseCasesImpl,
       ),
+      fenix: true,
     );
   }
 }

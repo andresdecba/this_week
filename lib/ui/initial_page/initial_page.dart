@@ -8,16 +8,15 @@ import 'package:todoapp/ui/initial_page/components/tasks_list.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/ui/shared_components/side_bar.dart';
 
-
-
 class InitialPage extends GetView<InitialPageController> {
   const InitialPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      
+      // keyboard
+      resizeToAvoidBottomInset: false,
+
       // key
       key: controller.scaffoldKey,
       // ad
@@ -70,9 +69,8 @@ class InitialPage extends GetView<InitialPageController> {
       // sidebar
       endDrawer: SideBar(),
 
-
-
       // content
+      /*
       body: Obx(
         () => controller.simulateDeleting.value
             ? const Center(
@@ -94,17 +92,28 @@ class InitialPage extends GetView<InitialPageController> {
                           padding: EdgeInsets.only(bottom: 20, left: 20, right: 20),
                           child: TasksList(),
                         ),
-                        
                       ],
                     ),
                   ),
                 ],
               ),
       ),
+*/
+      body: Obx(() => controller.simulateDeleting.value
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : const SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
+              child: TasksList(),
+            )
+            
+            
+           
+      ),
     );
   }
 }
-
 
 class _DelegateWithHeader extends SliverPersistentHeaderDelegate {
   @override
