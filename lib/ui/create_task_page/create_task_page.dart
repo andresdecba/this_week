@@ -2,6 +2,7 @@ import 'package:chip_list/chip_list.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todoapp/ui/commons/styles.dart';
+import 'package:todoapp/ui/create_task_page/components/create_task_form.dart';
 import 'package:todoapp/ui/create_task_page/create_task_page_controller.dart';
 import 'package:todoapp/ui/open_task.dart/components/small_button.dart';
 import 'package:todoapp/utils/helpers.dart';
@@ -35,82 +36,9 @@ class CreateTaskPage extends GetView<CreateTaskPageController> {
                 ),
 
                 // FORM
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
-                  child: Form(
-                    key: controller.formStateKey,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    child: TextFormField(
-                      focusNode: controller.focusNode,
-                      autofocus: true,
-                      controller: controller.textController,
-                      textInputAction: TextInputAction.done,
-                      textCapitalization: TextCapitalization.sentences,
-                      style: kTitleLarge,
-                      maxLines: null,
-                      maxLength: 200,
-                      validator: (value) {
-                        if (value != null && value.length < 12) {
-                          return 'Between 12 and 200 characters'.tr;
-                        } else {
-                          return null;
-                        }
-                      },
-                      onEditingComplete: () {
-                        controller.saveTask();
-                      },
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.all(8),
-                        isDense: true,
-                        border: const OutlineInputBorder(),
-                        alignLabelWithHint: true,
-                        hintText: 'description'.tr,
-                        hintStyle: kBodyMedium.copyWith(fontStyle: FontStyle.italic, color: disabledGrey),
-                        labelStyle: const TextStyle(color: bluePrimary),
-                        filled: null,
-                        fillColor: null,
-                        suffixIcon: controller.counter.value == 0
-                            ? null
-                            : InkWell(
-                                onTap: () => controller.textController.clear(),
-                                child: const Padding(
-                                  padding: EdgeInsets.fromLTRB(8, 8, 8, 8),
-                                  child: Icon(
-                                    Icons.close_rounded,
-                                    size: 20,
-                                    color: disabledGrey,
-                                  ),
-                                ),
-                              ),
-                        suffixIconConstraints: const BoxConstraints(maxHeight: 100),
-                        counterText: "${controller.counter.value} ${'out of'.tr} 200",
-                        counterStyle: TextStyle(
-                          fontStyle: FontStyle.italic,
-                          fontSize: 10,
-                          height: double.minPositive,
-                          fontWeight: controller.counter.value < 12 ? FontWeight.bold : FontWeight.normal,
-                          color: controller.counter.value < 12 ? warning : enabledGrey,
-                        ),
-                        enabledBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: disabledGrey),
-                        ),
-                        focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: bluePrimary),
-                        ),
-
-                        helperText: 'between 12 and 200 characters'.tr,
-                        helperStyle: kBodySmall,
-                        //errorText: 'error texttt',
-                        errorStyle: kBodySmall,
-                        errorBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: bluePrimary, width: 1.0),
-                        ),
-                        focusedErrorBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: bluePrimary, width: 1.0),
-                        ),
-                      ),
-                    ),
-                  ),
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
+                  child: CreateTaskForm(),
                 ),
 
                 // es rutina ?
@@ -155,15 +83,19 @@ class CreateTaskPage extends GetView<CreateTaskPageController> {
                   children: [
                     ChipList(
                       shouldWrap: false,
-                      listOfChipNames: controller.listOfChipNames,
+                      listOfChipNames: controller.listOfChips,
+
                       inactiveBgColorList: const [grey_background],
-                      activeTextColorList: const [witheBg],
-                      activeBgColorList: const [bluePrimary],
                       inactiveTextColorList: const [bluePrimary],
-                      activeBorderColorList: const [bluePrimary],
                       inactiveBorderColorList: const [bluePrimary],
+                      
+
+                      activeTextColorList: const [grey_background],
+                      activeBgColorList: const [bluePrimary],
+                      activeBorderColorList: const [bluePrimary],
+                      
                       borderRadiiList: const [20],
-                      style: kLabelMedium,
+                      style: kBodySmall,
                       listOfChipIndicesCurrentlySeclected: [controller.currentIndex.value], // no modificar, ver documentación
                       extraOnToggle: (val) {
                         controller.currentIndex.value = val;
@@ -175,52 +107,9 @@ class CreateTaskPage extends GetView<CreateTaskPageController> {
                 ),
               ),
             ),
-            //SizedBox(height: kbHeight),
           ],
         ),
       );
     });
-  }
-
-  InputDecoration _myInputDecoration({
-    required String hintText,
-    required VoidCallback clearText,
-  }) {
-    return InputDecoration(
-      contentPadding: const EdgeInsets.all(8),
-      isDense: true,
-      border: const OutlineInputBorder(),
-      alignLabelWithHint: true,
-      hintText: hintText,
-      hintStyle: kBodyMedium.copyWith(fontStyle: FontStyle.italic, color: disabledGrey),
-      labelStyle: const TextStyle(color: bluePrimary),
-      filled: null,
-      fillColor: null,
-      suffixIcon: InkWell(
-        onTap: () => clearText(),
-        child: const Padding(
-          padding: EdgeInsets.fromLTRB(8, 8, 8, 8),
-          child: Icon(Icons.close_rounded, size: 20),
-        ),
-      ),
-      suffixIconConstraints: const BoxConstraints(maxHeight: 100),
-      counterText: "counterText",
-      counterStyle: const TextStyle(
-        fontStyle: FontStyle.italic,
-        fontSize: 10,
-        height: double.minPositive,
-      ),
-      enabledBorder: const OutlineInputBorder(
-        borderSide: BorderSide(color: disabledGrey),
-      ),
-      focusedBorder: const OutlineInputBorder(
-        borderSide: BorderSide(color: bluePrimary),
-      ),
-      //labelText: 'label text',
-      //counter: Text('new counter widget'),
-      //errorText: 'error texttt',
-      helperText: 'helper text',
-      helperStyle: kBodySmall,
-    );
   }
 }

@@ -4,6 +4,7 @@ import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/ui/shared_components/snackbar.dart';
 import 'package:todoapp/use_cases/notifications_use_cases.dart';
 import 'package:todoapp/use_cases/tasks_use_cases.dart';
+//import 'package:todoapp/utils/helpers.dart';
 
 enum Schedules {
   DISABLED,
@@ -14,8 +15,8 @@ enum Schedules {
   PERSONALIZED,
 }
 
-extension SchedulesExtension on Schedules {
-  String get toValue {
+extension SchedulesToString on Schedules {
+  String get toStringValue {
     switch (this) {
       case Schedules.DISABLED:
         return 'disabled'.tr;
@@ -28,13 +29,32 @@ extension SchedulesExtension on Schedules {
       case Schedules.NIGHT:
         return 'night 9:00 p.m.'.tr;
       case Schedules.PERSONALIZED:
-        return 'night 9:00 p.m.'.tr;
+        return 'Personalizado'.tr;
     }
   }
 }
 
-class CreateTaskPageController extends GetxController {
+extension SchedulesToTimeOfDay on Schedules {
+  TimeOfDay get toTimeOfDay {
+    switch (this) {
+      case Schedules.DISABLED:
+        return const TimeOfDay(hour: 0, minute: 0);
+      case Schedules.MORNING:
+        return const TimeOfDay(hour: 9, minute: 0);
+      case Schedules.NOON:
+        return const TimeOfDay(hour: 12, minute: 0);
+      case Schedules.AFTERNOON:
+        return const TimeOfDay(hour: 17, minute: 0);
+      case Schedules.NIGHT:
+        return const TimeOfDay(hour: 21, minute: 0);
+      case Schedules.PERSONALIZED:
+        return const TimeOfDay(hour: 0, minute: 0);
+    }
+  }
+}
 
+
+class CreateTaskPageController extends GetxController {
   final TasksUseCases tasksUseCases;
   final NotificationsUseCases notificationsUseCases;
 
@@ -74,17 +94,34 @@ class CreateTaskPageController extends GetxController {
   RxInt currentIndex = 1.obs;
   DateTime? notificationDateTime;
   late DateTime selectedDate;
-  List<String> listOfChipNames = [
-    Schedules.DISABLED.toValue,
-    Schedules.MORNING.toValue,
-    Schedules.NOON.toValue,
-    Schedules.AFTERNOON.toValue,
-    Schedules.NIGHT.toValue,
-    Schedules.PERSONALIZED.toValue,
+
+  List<String> listOfChips = [
+    Schedules.DISABLED.toStringValue,
+    Schedules.MORNING.toStringValue,
+    Schedules.NOON.toStringValue,
+    Schedules.AFTERNOON.toStringValue,
+    Schedules.NIGHT.toStringValue,
+    Schedules.PERSONALIZED.toStringValue,
   ];
 
+  List<TimeOfDay> listOfSchedules = [
+    Schedules.DISABLED.toTimeOfDay,
+    Schedules.MORNING.toTimeOfDay,
+    Schedules.NOON.toTimeOfDay,
+    Schedules.AFTERNOON.toTimeOfDay,
+    Schedules.NIGHT.toTimeOfDay,
+    Schedules.PERSONALIZED.toTimeOfDay,
+  ];
+
+ 
+
+  // void createListOfSchedules() {
+  //   print('holis is AFTER now ${timeOfDayIsAfter(TimeOfDay(hour: 14, minute: 00))}');
+  //   print('holis is BEFORE now ${timeOfDayIsBefore(TimeOfDay(hour: 11, minute: 00))}');
+  // }
+
   void selectedNotificationDateTime(BuildContext context, index) async {
-    switch (listOfChipNames[index]) {
+    switch (listOfChips[index]) {
       case 'Desactivado':
         notificationDateTime = null;
         break;
