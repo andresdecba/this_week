@@ -13,6 +13,8 @@ class CreateTaskForm extends GetView<CreateTaskPageController> {
         key: controller.formStateKey,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         child: TextFormField(
+          //textAlign: TextAlign.center,
+          textAlignVertical: TextAlignVertical.center,
           focusNode: controller.focusNode,
           autofocus: true,
           controller: controller.textController,
@@ -22,6 +24,7 @@ class CreateTaskForm extends GetView<CreateTaskPageController> {
           maxLines: null,
           maxLength: 200,
           validator: (value) {
+            print('hola ${value}');
             if (value != null && value.length < 12) {
               return 'Between 12 and 200 characters'.tr;
             } else {
@@ -61,7 +64,7 @@ class CreateTaskForm extends GetView<CreateTaskPageController> {
                     ),
                   ),
             suffixIconConstraints: const BoxConstraints(maxHeight: 100),
-            counterText: "${controller.counter.value} ${'out of'.tr} 200",
+            counterText: "${controller.counter.value}",
             enabledBorder: const OutlineInputBorder(
               borderSide: BorderSide(color: disabledGrey),
             ),

@@ -88,12 +88,11 @@ class CreateTaskPage extends GetView<CreateTaskPageController> {
                       inactiveBgColorList: const [grey_background],
                       inactiveTextColorList: const [bluePrimary],
                       inactiveBorderColorList: const [bluePrimary],
-                      
 
                       activeTextColorList: const [grey_background],
                       activeBgColorList: const [bluePrimary],
                       activeBorderColorList: const [bluePrimary],
-                      
+
                       borderRadiiList: const [20],
                       style: kBodySmall,
                       listOfChipIndicesCurrentlySeclected: [controller.currentIndex.value], // no modificar, ver documentación

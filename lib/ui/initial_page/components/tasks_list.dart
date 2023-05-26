@@ -114,6 +114,7 @@ class TasksList extends GetView<InitialPageController> {
                                 onPressed: () {
                                   // enviar el dia seleccionado
                                   Get.find<CreateTaskPageController>().selectedDate = currentDate;
+                                  Get.find<CreateTaskPageController>().createChipsList(currentDate);
                                   // abrir crear bottomsheet
                                   showModalBottomSheet<dynamic>(
                                     isDismissible: false,

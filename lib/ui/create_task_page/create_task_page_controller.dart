@@ -4,6 +4,7 @@ import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/ui/shared_components/snackbar.dart';
 import 'package:todoapp/use_cases/notifications_use_cases.dart';
 import 'package:todoapp/use_cases/tasks_use_cases.dart';
+import 'package:todoapp/utils/helpers.dart';
 //import 'package:todoapp/utils/helpers.dart';
 
 enum Schedules {
@@ -53,7 +54,6 @@ extension SchedulesToTimeOfDay on Schedules {
   }
 }
 
-
 class CreateTaskPageController extends GetxController {
   final TasksUseCases tasksUseCases;
   final NotificationsUseCases notificationsUseCases;
@@ -81,6 +81,9 @@ class CreateTaskPageController extends GetxController {
     focusNode.dispose();
   }
 
+  // TASK DATE //
+  late DateTime selectedDate;
+
   // RUTINA //
   RxBool isRoutine = false.obs;
 
@@ -93,32 +96,45 @@ class CreateTaskPageController extends GetxController {
   // SELECT NOTIFICATION //
   RxInt currentIndex = 1.obs;
   DateTime? notificationDateTime;
-  late DateTime selectedDate;
 
-  List<String> listOfChips = [
-    Schedules.DISABLED.toStringValue,
-    Schedules.MORNING.toStringValue,
-    Schedules.NOON.toStringValue,
-    Schedules.AFTERNOON.toStringValue,
-    Schedules.NIGHT.toStringValue,
-    Schedules.PERSONALIZED.toStringValue,
-  ];
+  List<String> listOfChips = [];
 
-  List<TimeOfDay> listOfSchedules = [
-    Schedules.DISABLED.toTimeOfDay,
-    Schedules.MORNING.toTimeOfDay,
-    Schedules.NOON.toTimeOfDay,
-    Schedules.AFTERNOON.toTimeOfDay,
-    Schedules.NIGHT.toTimeOfDay,
-    Schedules.PERSONALIZED.toTimeOfDay,
-  ];
+  void createChipsList(DateTime value) {
+    var today = DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().day,
+      0,
+      0,
+      0,
+      0,
+      0,
+    );
 
- 
+    // si la tarea es para hoy, restringir los horarios
+    if (value.isAtSameMomentAs(today)) {
+      for (var e in Schedules.values) {
+        if (e.toStringValue == Schedules.DISABLED.toStringValue || e.toStringValue == Schedules.PERSONALIZED.toStringValue) {
+          listOfChips.add(e.toStringValue);
+        }
+        if (timeOfDayIsAfterNow(e.toTimeOfDay)) {
+          listOfChips.add(e.toStringValue);
+        }
+      }
+    }
 
-  // void createListOfSchedules() {
-  //   print('holis is AFTER now ${timeOfDayIsAfter(TimeOfDay(hour: 14, minute: 00))}');
-  //   print('holis is BEFORE now ${timeOfDayIsBefore(TimeOfDay(hour: 11, minute: 00))}');
-  // }
+    // si la tarea es otro dia, mostrar todos los horarios
+    if (!value.isAtSameMomentAs(today)) {
+      listOfChips = [
+        Schedules.DISABLED.toStringValue,
+        Schedules.MORNING.toStringValue,
+        Schedules.NOON.toStringValue,
+        Schedules.AFTERNOON.toStringValue,
+        Schedules.NIGHT.toStringValue,
+        Schedules.PERSONALIZED.toStringValue,
+      ];
+    }
+  }
 
   void selectedNotificationDateTime(BuildContext context, index) async {
     switch (listOfChips[index]) {
@@ -153,21 +169,15 @@ class CreateTaskPageController extends GetxController {
     }
   }
 
-  // VALIDATE FORM //
-  //  void validateForm(BuildContext context) {
-
-  //   var isFormValid = formStateKey.currentState!.validate();
-  //   // if (isFormValid) {
-  //   //   _task.value.notificationTime != null ? validateNotification(context) : confirmAndNavigate();
-  //   // }
-  // }
-
   // CLOSE BOTTOMSHEET X //
+  // TODO: ver alguna forma mejor de no tener que llamar este metodo por todos lados para resetear las propiedades
+  // TODO: hacer algo mejor para pasar el selectedDate a este controller
   void closeAndRestoreValues() {
     textController.clear();
     isRoutine.value = false;
     notificationDateTime = null;
     currentIndex.value = 1;
+    listOfChips = [];
     Get.back();
   }
 
@@ -184,10 +194,9 @@ class CreateTaskPageController extends GetxController {
         titleText: 'new task created'.tr,
         messageText: textController.value.text,
       );
-      closeAndRestoreValues();
       Get.find<InitialPageController>().tasksMap.refresh();
       Get.find<InitialPageController>().buildInfo();
-      Get.back();
+      closeAndRestoreValues();
     }
   }
 }
