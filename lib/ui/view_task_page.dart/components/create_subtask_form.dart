@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todoapp/core/globals.dart';
 import 'package:todoapp/ui/commons/styles.dart';
-import 'package:todoapp/ui/create_task_page/create_task_page_controller.dart';
+import 'package:todoapp/ui/view_task_page.dart/view_task_page_controller.dart';
 
-class CreateTaskForm extends GetView<CreateTaskPageController> {
-  const CreateTaskForm({Key? key}) : super(key: key);
+class CreateSubtaskForm extends GetView<ViewTaskController> {
+  const CreateSubtaskForm({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,25 +14,24 @@ class CreateTaskForm extends GetView<CreateTaskPageController> {
         key: Globals.formStateKey,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         child: TextFormField(
-          //textAlign: TextAlign.center,
           textAlignVertical: TextAlignVertical.center,
-          focusNode: controller.focusNode,
-          autofocus: true,
+          //focusNode: controller.focusNode,
+          autofocus: false,
           controller: controller.textController,
           textInputAction: TextInputAction.done,
           textCapitalization: TextCapitalization.sentences,
           style: kTitleLarge,
           maxLines: null,
-          maxLength: 200,
+          maxLength: 100,
           validator: (value) {
-            if (value != null && value.length < 12) {
-              return 'Between 12 and 200 characters'.tr;
+            if (value != null && value.length < 6) {
+              return 'between 6 and 00 characters'.tr;
             } else {
               return null;
             }
           },
           onEditingComplete: () {
-            controller.saveTask();
+            controller.createSubtask();
           },
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.all(8),
@@ -45,8 +44,8 @@ class CreateTaskForm extends GetView<CreateTaskPageController> {
             errorStyle: kBodySmall.copyWith(fontStyle: FontStyle.italic, color: disabledGrey, fontWeight: FontWeight.normal),
             counterStyle: kBodySmall.copyWith(
               fontStyle: FontStyle.italic,
-              fontWeight: controller.counter.value < 12 ? FontWeight.bold : FontWeight.normal,
-              color: controller.counter.value < 12 ? warning : disabledGrey,
+              fontWeight: controller.counter.value < 6 ? FontWeight.bold : FontWeight.normal,
+              color: controller.counter.value < 6 ? warning : disabledGrey,
             ),
             // others
             filled: false,

@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/create_task_page/components/create_task_form.dart';
 import 'package:todoapp/ui/create_task_page/create_task_page_controller.dart';
-import 'package:todoapp/ui/open_task.dart/components/small_button.dart';
+import 'package:todoapp/ui/view_task_page.dart/components/small_button.dart';
 import 'package:todoapp/utils/helpers.dart';
 
 class CreateTaskPage extends GetView<CreateTaskPageController> {

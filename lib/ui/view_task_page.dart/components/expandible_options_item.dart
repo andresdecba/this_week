@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class OptionsItemTile extends StatelessWidget {
-  const OptionsItemTile({
+class ExpandibleOptionsItem extends StatelessWidget {
+  const ExpandibleOptionsItem({
     required this.leading,
     required this.title,
     this.onTap,

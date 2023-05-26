@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/ui/commons/styles.dart';
-import 'package:todoapp/ui/open_task.dart/components/options_item_tile.dart';
-import 'package:todoapp/ui/open_task.dart/view_task_controller.dart';
+import 'package:todoapp/ui/view_task_page.dart/components/expandible_options_item.dart';
+import 'package:todoapp/ui/view_task_page.dart/view_task_page_controller.dart';
 import 'package:todoapp/ui/shared_components/dialogs.dart';
 
 enum _MenuItem {
@@ -64,7 +64,7 @@ class ExpandibleOptions extends GetView<ViewTaskController> {
           PopupMenuItem(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             value: _MenuItem.date,
-            child: OptionsItemTile(
+            child: ExpandibleOptionsItem(
               title: 'Cambiar fecha'.tr, //longDateFormaterWithoutYear(task.value.taskDate),
               leading: Icons.calendar_today_rounded,
             ),
@@ -84,7 +84,7 @@ class ExpandibleOptions extends GetView<ViewTaskController> {
           PopupMenuItem(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             value: _MenuItem.delete,
-            child: OptionsItemTile(
+            child: ExpandibleOptionsItem(
               title: 'Eliminar tarea'.tr,
               leading: Icons.delete_forever_outlined,
             ),

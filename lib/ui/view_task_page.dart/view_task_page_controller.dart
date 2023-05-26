@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:todoapp/core/globals.dart';
 
 import 'package:todoapp/models/subtask_model.dart';
 import 'package:todoapp/models/task_model.dart';
@@ -14,6 +15,23 @@ class ViewTaskController extends GetxController {
     required this.notificationsUseCases,
     required this.tasksUseCases,
   });
+
+  @override
+  void onInit() {
+    super.onInit();
+    focusNode = FocusNode();
+    textController = TextEditingController();
+    textController.addListener(() {
+      counter.value = textController.text.length;
+    });
+  }
+
+  @override
+  void dispose() {
+    focusNode.dispose();
+    textController.dispose();
+    super.dispose();
+  }
 
   // LLENAR //
   late Rx<TaskModel> task;
@@ -60,18 +78,24 @@ class ViewTaskController extends GetxController {
   }
 
   ////// SUBTASKS //////
-  final GlobalKey<AnimatedListState> animatedListKey = GlobalKey();
+  
   final Duration listDuration = const Duration(milliseconds: 500);
-  final GlobalKey<FormState> viewTaskFormKey = GlobalKey<FormState>();
-  final FocusNode createSubtaskFocusNode = FocusNode();
 
-  void createSubtask(String value) {
-    animatedListKey.currentState!.insertItem(
-      0,
-      duration: listDuration,
-    );
-    task.value.subTasks.insert(0, SubTaskModel(title: value, isDone: false));
-    tasksUseCases.updateTaskUseCase(task: task);
+  // subtask form //
+  late FocusNode focusNode;
+  late TextEditingController textController;
+  RxInt counter = 0.obs;
+
+  void createSubtask() {
+    if (Globals.formStateKey.currentState!.validate()) {
+      Globals.animatedListStateKey.currentState!.insertItem(
+        0,
+        duration: listDuration,
+      );
+      task.value.subTasks.insert(0, SubTaskModel(title: textController.text, isDone: false));
+      tasksUseCases.updateTaskUseCase(task: task);
+      textController.clear();
+    }
   }
 
   void updateTitleSubtask(SubTaskModel subTask, String? title) {
@@ -85,7 +109,7 @@ class ViewTaskController extends GetxController {
   }
 
   void removeSubtask({required int index, required Widget child, required Rx<TaskModel> task}) {
-    animatedListKey.currentState!.removeItem(
+    Globals.animatedListStateKey.currentState!.removeItem(
       index,
       duration: listDuration,
       (context, animation) {
@@ -100,12 +124,6 @@ class ViewTaskController extends GetxController {
     );
     task.value.subTasks.remove(task.value.subTasks[index]);
     tasksUseCases.updateTaskUseCase(task: task);
-  }
-
-  @override
-  void dispose() {
-    createSubtaskFocusNode.dispose();
-    super.dispose();
   }
 }
 

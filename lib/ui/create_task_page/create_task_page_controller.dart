@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:todoapp/core/globals.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/ui/shared_components/snackbar.dart';
 import 'package:todoapp/use_cases/notifications_use_cases.dart';
@@ -68,7 +69,6 @@ class CreateTaskPageController extends GetxController {
     super.onInit();
     textController = TextEditingController();
     focusNode = FocusNode();
-    formStateKey = GlobalKey<FormState>();
     textController.addListener(() {
       counter.value = textController.text.length;
     });
@@ -88,7 +88,6 @@ class CreateTaskPageController extends GetxController {
   RxBool isRoutine = false.obs;
 
   // TEXTFORMFIELD //
-  late GlobalKey<FormState> formStateKey;
   late TextEditingController textController;
   late FocusNode focusNode;
   RxInt counter = 0.obs;
@@ -183,7 +182,7 @@ class CreateTaskPageController extends GetxController {
 
   // SAVE-CREATE TASK //
   void saveTask() async {
-    if (formStateKey.currentState!.validate()) {
+    if (Globals.formStateKey.currentState!.validate()) {
       await tasksUseCases.createTaskUseCase(
         description: textController.value.text,
         date: selectedDate,

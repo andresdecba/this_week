@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:todoapp/ui/open_task.dart/view_task_controller.dart';
+import 'package:todoapp/ui/view_task_page.dart/view_task_page_controller.dart';
 import 'package:todoapp/utils/helpers.dart';
 
 class NotificationDetails extends GetView<ViewTaskController> {

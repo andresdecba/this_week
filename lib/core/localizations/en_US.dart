@@ -50,6 +50,7 @@ Map<String, String> en_US = {
 
   // create task page
   'between 12 and 200 characters': 'Between 12 and 200 characters.',
+  'between 6 and 100 characters': 'Between 6 and 100 characters.',
   'description': 'Description.',
   'out of': 'out of',
   'create routine ?': 'Create routine ?',

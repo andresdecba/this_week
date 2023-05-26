@@ -50,6 +50,7 @@ Map<String, String> pt_BR = {
 
   // create tasl page
   'between 12 and 200 characters': 'Entre 12 e 200 caracteres.',
+  'between 6 and 00 characters': 'Entre 6 e 100 caracteres.',
   'description': 'Descrição.',
   'out of': 'de',
   'create routine ?': 'Criar rotina ?',

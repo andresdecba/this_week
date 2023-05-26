@@ -73,7 +73,7 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
   RxBool simulateDeleting = false.obs;
 
   // scaffold key
-  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  
 
  
 
