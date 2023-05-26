@@ -196,10 +196,10 @@ class PostPosePageController extends GetxController with AdMobService, StateMixi
 
   ///// manage CANCEL AND NAVIGATE /////
   void cancelPostpose() {
-    Map<String, String> data = {
-      "notificationPAYLOAD": task.key.toString(),
-    };
-    Get.offAllNamed(Routes.FORMS_PAGE, arguments: data);
+    //Map<String, String> data = {
+    //  "notificationPAYLOAD": task.key.toString(),
+    //};
+    //Get.offAllNamed(Routes.FORMS_PAGE, arguments: data);
   }
 
   ///// manage PERSONALIZED DATE AND TIME /////

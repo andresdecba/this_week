@@ -8,7 +8,7 @@ import 'package:todoapp/ui/shared_components/dialogs.dart';
 
 enum _MenuItem {
   date,
-  status,
+  notification,
   delete,
 }
 
@@ -23,6 +23,7 @@ class ExpandibleOptions extends GetView<ViewTaskController> {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
+
       position: PopupMenuPosition.under,
       padding: const EdgeInsets.symmetric(horizontal: 16),
       shape: const RoundedRectangleBorder(
@@ -37,8 +38,8 @@ class ExpandibleOptions extends GetView<ViewTaskController> {
           case _MenuItem.date:
             controller.updateTaskDate(context, task);
             break;
-          case _MenuItem.status:
-            debugPrint('statusss...');
+          case _MenuItem.notification:
+            controller.updateTaskDate(context, task);
             break;
           case _MenuItem.delete:
             myCustomDialog(
@@ -70,15 +71,15 @@ class ExpandibleOptions extends GetView<ViewTaskController> {
             ),
           ),
 
-          // CAMBIAR EL STATUS
-          // PopupMenuItem(
-          //   padding: const EdgeInsets.symmetric(horizontal: 16),
-          //   value: _MenuItem.status,
-          //   child: OptionsItemTile(
-          //     title: task.value.status,
-          //     leading: Icons.keyboard_double_arrow_right_rounded,
-          //   ),
-          // ),
+          // CAMBIAR LA NOTIFICACION
+          PopupMenuItem(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            value: _MenuItem.date,
+            child: ExpandibleOptionsItem(
+              title: 'Notificacion'.tr,
+              leading: Icons.notifications_active_rounded,
+            ),
+          ),
 
           // ELIMINAR TAREA
           PopupMenuItem(

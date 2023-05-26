@@ -48,10 +48,14 @@ Map<String, String> es_AR = {
   'update subtask' : 'Editar subtask',
   'repeat this task every': 'Repetir esta tarea todos los',
 
+  // view task page
+  'subtasks': 'subtareas',
+  'add a subtask': 'Agregar subtarea',
+
   // create task page
   'between 12 and 200 characters': 'Entre 12 y 200 caracteres.',
   'between 6 and 100 characters': 'Entre 6 y 100 caracteres.',
-  'description': 'Descripción.',
+  'description': 'Descripción',
   'out of': 'de',
   'create routine ?': 'Crear rutina ?',
   'activate a notification': 'Activar notificación',

@@ -172,7 +172,7 @@ class TasksList extends GetView<InitialPageController> {
                                       Get.find<ViewTaskController>().task = e;
                                       myModalBottomSheet(
                                         context: context,
-                                        child: const ViewTask2(),
+                                        child: const ViewTask(),
                                       );
                                     },
                                     onStatusChange: () {

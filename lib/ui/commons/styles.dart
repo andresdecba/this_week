@@ -23,6 +23,8 @@ const bluePrimary = Color(0xFF0075FF);
 const iconsBg = Color(0xFF262626);
 const greenInfo = Color.fromARGB(255, 125, 252, 103);
 
+// task description
+final kViewTaskDescripton = Theme.of(Get.context!).textTheme.titleLarge!.copyWith(fontSize: 26);
 
 // titles
 final kTitleLarge = Theme.of(Get.context!).textTheme.titleLarge!;
@@ -34,6 +36,7 @@ final kBodySmall = Theme.of(Get.context!).textTheme.bodySmall!;
 final kBodyMedium = Theme.of(Get.context!).textTheme.bodyMedium!;
 final kBodyLarge = Theme.of(Get.context!).textTheme.bodyLarge!;
 // labels
+final kLabelSmall = Theme.of(Get.context!).textTheme.labelSmall!;
 final kLabelMedium = Theme.of(Get.context!).textTheme.labelMedium!;
 final kLabelLarge = Theme.of(Get.context!).textTheme.labelLarge!;
 // notification bar
@@ -50,7 +53,7 @@ InputDecoration customInputDecoration({
   required bool isEnabled,
   Color? borderColor,
 }) {
-  return InputDecoration(  
+  return InputDecoration(
     contentPadding: isEnabled ? const EdgeInsets.all(10) : EdgeInsets.zero,
     isDense: true,
     border: isEnabled == true ? const OutlineInputBorder() : InputBorder.none,

@@ -48,10 +48,14 @@ Map<String, String> pt_BR = {
   'update subtask' : 'Editar subtarefa',
   'repeat this task every': 'Repetir esta tarefa toda',
 
+  // view task page
+  'subtasks': 'Subtarefas',
+  'add a subtask': 'Adicionar subtarefa',
+
   // create tasl page
   'between 12 and 200 characters': 'Entre 12 e 200 caracteres.',
   'between 6 and 00 characters': 'Entre 6 e 100 caracteres.',
-  'description': 'Descrição.',
+  'description': 'Descrição',
   'out of': 'de',
   'create routine ?': 'Criar rotina ?',
   'activate a notification': 'Ativar uma notificação',

@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:todoapp/ui/view_task_page.dart/view_task_page_controller.dart';
 import 'package:todoapp/utils/helpers.dart';
 
-class NotificationDetails extends GetView<ViewTaskController> {
-  const NotificationDetails({Key? key}) : super(key: key);
+class NotificationFoot extends GetView<ViewTaskController> {
+  const NotificationFoot({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

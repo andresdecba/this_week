@@ -83,7 +83,7 @@ class InitMain {
       // si tocaron el body de la notificacion
       if (details.notificationResponseType == NotificationResponseType.selectedNotification) {
         if (notificationPayload != null) {
-          initialRoute = Routes.FORMS_PAGE;
+          //initialRoute = Routes.FORMS_PAGE; TODO: NAVEGAR A OTRO LADO
         }
         if (notificationPayload == null) {
           initialRoute = Routes.INITIAL_PAGE;

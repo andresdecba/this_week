@@ -54,7 +54,7 @@ class SideBar extends GetView<InitialPageController> {
                   style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: disabledGrey),
                 ),
                 onTap: () {
-                  controller.navigate(date: DateTime.now());
+                  //controller.navigate(date: DateTime.now());
                 },
               ),
               const Divider(),

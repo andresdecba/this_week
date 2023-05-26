@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:isoweek/isoweek.dart';
-import 'package:todoapp/core/routes/routes.dart';
+//import 'package:todoapp/core/routes/routes.dart';
 import 'package:todoapp/data_source/db_data_source.dart';
 import 'package:todoapp/main.dart';
 import 'package:todoapp/models/app_config_model.dart';
@@ -209,27 +209,27 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
     totalTasks == 0 ? tasksPercentageCompleted.value = 'no tasks for this week'.tr : tasksPercentageCompleted.value = '$completedTasksPercent% ${'of completed tasks'.tr}';
   }
 
-  /// navegar para crear o editar
-  void navigate({int? taskKey, DateTime? date}) {
-    // si quiere abrir una tarea
-    if (taskKey != null) {
-      Map<String, String> data = {
-        "taskId": taskKey.toString(),
-      };
-      Get.offAllNamed(Routes.FORMS_PAGE, arguments: data);
-      return;
-    }
-    // si quiere crear una tarea a partir de una fecha en particular
-    if (date != null) {
-      Map<String, String> data = {
-        "date": date.toString(),
-      };
-      Get.offAllNamed(Routes.FORMS_PAGE, arguments: data);
-      return;
-    }
-    // si quiere crear una tarea a partir de nada
-    Get.offAllNamed(Routes.FORMS_PAGE);
-  }
+  // /// navegar para crear o editar
+  // void navigate({int? taskKey, DateTime? date}) {
+  //   // si quiere abrir una tarea
+  //   if (taskKey != null) {
+  //     Map<String, String> data = {
+  //       "taskId": taskKey.toString(),
+  //     };
+  //     Get.offAllNamed(Routes.FORMS_PAGE, arguments: data);
+  //     return;
+  //   }
+  //   // si quiere crear una tarea a partir de una fecha en particular
+  //   if (date != null) {
+  //     Map<String, String> data = {
+  //       "date": date.toString(),
+  //     };
+  //     Get.offAllNamed(Routes.FORMS_PAGE, arguments: data);
+  //     return;
+  //   }
+  //   // si quiere crear una tarea a partir de nada
+  //   Get.offAllNamed(Routes.FORMS_PAGE);
+  // }
 
 
   String changeTaskStatus(String value) {

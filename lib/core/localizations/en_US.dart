@@ -48,10 +48,14 @@ Map<String, String> en_US = {
   'update subtask' : 'Update subtask',
   'repeat this task every': 'Repeat this task every',
 
+  // view task page
+  'subtasks': 'Subtasks',
+  'add a subtask': 'Add a subtask',
+
   // create task page
   'between 12 and 200 characters': 'Between 12 and 200 characters.',
   'between 6 and 100 characters': 'Between 6 and 100 characters.',
-  'description': 'Description.',
+  'description': 'Description',
   'out of': 'out of',
   'create routine ?': 'Create routine ?',
   'activate a notification': 'Activate a notification',

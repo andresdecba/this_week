@@ -27,7 +27,7 @@ void onSelectNotification(NotificationResponse details) {
   // si tocaron el body
   if (details.notificationResponseType == NotificationResponseType.selectedNotification) {
     if (arguments != null) {
-      Get.offAllNamed(Routes.FORMS_PAGE, arguments: arguments);
+      //Get.offAllNamed(Routes.FORMS_PAGE, arguments: arguments);
     }
     if (arguments == null) {
       Get.offAllNamed(Routes.INITIAL_PAGE);

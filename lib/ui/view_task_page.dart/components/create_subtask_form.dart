@@ -37,7 +37,7 @@ class CreateSubtaskForm extends GetView<ViewTaskController> {
             contentPadding: const EdgeInsets.all(8),
             isDense: true,
             border: const OutlineInputBorder(),
-            hintText: 'description'.tr,
+            hintText: 'add a subtask'.tr,
             // styles
             hintStyle: kBodySmall.copyWith(fontStyle: FontStyle.italic, color: disabledGrey, fontWeight: FontWeight.normal, fontSize: 13),
             helperStyle: kBodySmall.copyWith(fontStyle: FontStyle.italic, color: disabledGrey, fontWeight: FontWeight.normal),
