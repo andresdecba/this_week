@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:introduction_screen/introduction_screen.dart';
+import 'package:todoapp/core/globals.dart';
 import 'package:todoapp/core/routes/routes.dart';
 import 'package:todoapp/data_source/db_data_source.dart';
 import 'package:todoapp/ui/commons/styles.dart';
@@ -26,9 +27,6 @@ class OnBoardingPageState extends State<OnBoardingPage> {
     //Get.offAllNamed(Routes.INITIAL_PAGE); //no usar 'Get.off' x que se clava si la saltas rapido
   }
 
-  // key
-  final introKey = GlobalKey<IntroductionScreenState>();
-
   // call image
   Widget _buildImage(String assetName, [double width = 600]) {
     return Image.asset('assets/$assetName', width: width);
@@ -53,7 +51,7 @@ class OnBoardingPageState extends State<OnBoardingPage> {
     return Scaffold(
       body: SafeArea(
         child: IntroductionScreen(
-          key: introKey,
+          key: Globals.introKey,
           globalBackgroundColor: Colors.white,
           allowImplicitScrolling: true,
           autoScrollDuration: 5000,

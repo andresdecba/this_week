@@ -31,7 +31,7 @@ Map<String, String> en_US = {
   'there were no tasks': 'there were no tasks',
 
   // form page
-  'new task_formPage': 'New task',
+  'new task': 'New task,',
   'notify me:': 'Task',
   'schedule a notification': 'No notification scheduled.',
   'notify me at:': 'Notify me at:',
@@ -47,6 +47,19 @@ Map<String, String> en_US = {
   'update task': 'Update task',
   'update subtask' : 'Update subtask',
   'repeat this task every': 'Repeat this task every',
+
+  // create task page
+  'between 12 and 200 characters': 'Between 12 and 200 characters.',
+  'between 6 and 100 characters': 'Between 6 and 100 characters.',
+  'description': 'Description.',
+  'out of': 'out of',
+  'create routine ?': 'Create routine ?',
+  'activate a notification': 'Activate a notification',
+  'disabled': 'Disabled',
+  'morning 9 a.m.': 'Morning 9 a.m.',
+  'noon 12 p.m.': 'Noon 12 p.m.',
+  'afternoon 5:00 p.m.': 'Afternoon 5:00 p.m.',
+  'night 9:00 p.m.': 'Night 9:00 p.m.',
 
   // postpose page
   '15 minutes': '15 minutes',

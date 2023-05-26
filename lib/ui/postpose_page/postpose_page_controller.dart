@@ -17,15 +17,14 @@ import 'dart:async';
 enum PostposeEnum { fifteenMinutes, oneHour, threeHours, oneDay, personalized }
 
 class PostPosePageController extends GetxController with AdMobService, StateMixin<dynamic> {
-
   PostPosePageController({
     required this.notificationsUseCases,
   });
 
-  
   @override
   void onInit() {
     getCurrentTask();
+    fillNotificationValues();
     setTimer();
     super.onInit();
   }
@@ -43,19 +42,18 @@ class PostPosePageController extends GetxController with AdMobService, StateMixi
     super.onClose();
   }
 
-
   ///// NOTIFICATIONS /////
   final NotificationsUseCases notificationsUseCases;
 
   //// manage HIVE //////
   final tasksBox = Boxes.getTasksBox();
   late TaskModel task;
+  late NotificationModel _newNotification;
 
   void getCurrentTask() {
     // argumentos desde la notificacion cuando la app esta cerrada
     if (notificationPayload != null) {
       task = tasksBox.get(int.parse(notificationPayload!))!;
-
       return;
     }
     // argumentos desde notificacion cuando la app esta abierta o en segundo plano
@@ -63,6 +61,16 @@ class PostPosePageController extends GetxController with AdMobService, StateMixi
       task = tasksBox.get(int.parse(Get.arguments['notificationPAYLOAD']!))!;
       return;
     }
+  }
+
+  void fillNotificationValues() {
+    _newNotification = NotificationModel(
+      id: createNotificationId(),
+      body: 'task reminder'.tr,
+      title: task.description,
+      time: task.notificationData!.time,
+      payload: task.key.toString(),
+    );
   }
 
   //// manage SELECT ITEM /////
@@ -90,7 +98,7 @@ class PostPosePageController extends GetxController with AdMobService, StateMixi
     final DateTime tmp1 = DateTime.now().add(const Duration(minutes: 15));
     final DateTime tmp2 = DateTime.now().add(const Duration(hours: 1));
     final DateTime tmp3 = DateTime.now().add(const Duration(hours: 3));
-    final DateTime tmp4 = task.notificationTime!.add(const Duration(days: 1));
+    final DateTime tmp4 = _newNotification.time.add(const Duration(days: 1));
     switch (data) {
       case PostposeEnum.fifteenMinutes:
         return '${'today'.tr}, ${'at'.tr} ${timeFormater(tmp1)}';
@@ -137,27 +145,27 @@ class PostPosePageController extends GetxController with AdMobService, StateMixi
   ///// manage SAVE /////
   final InitialPageController _initialPageController = Get.put(InitialPageController());
 
-  void savePostpose(PostposeEnum data) {
+  void savePostpose(PostposeEnum data, BuildContext context) {
     switch (data) {
       // si pospone para HOY: DateTime.now() + el tiempo a posponer.
       case PostposeEnum.fifteenMinutes:
-        task.notificationTime = DateTime.now().add(const Duration(minutes: 15));
+        _newNotification.time = DateTime.now().add(const Duration(minutes: 15));
         break;
       case PostposeEnum.oneHour:
-        task.notificationTime = DateTime.now().add(const Duration(hours: 1));
+        _newNotification.time = DateTime.now().add(const Duration(hours: 1));
         break;
       case PostposeEnum.threeHours:
-        task.notificationTime = DateTime.now().add(const Duration(hours: 3));
+        _newNotification.time = DateTime.now().add(const Duration(hours: 3));
         break;
       // si pospone para MAÑANA:, conservar la hora original de la notificación.
       case PostposeEnum.oneDay:
         task.taskDate = task.taskDate.add(const Duration(days: 1));
-        task.notificationTime = task.notificationTime!.add(const Duration(days: 1));
+        _newNotification.time = _newNotification.time.add(const Duration(days: 1));
         break;
       case PostposeEnum.personalized:
         if (personalizedNotificationDateTime.value != null && personalizedTaskDate != null) {
           task.taskDate = personalizedTaskDate!;
-          task.notificationTime = personalizedNotificationDateTime.value;
+          _newNotification.time = personalizedNotificationDateTime.value!;
           break;
         } else {
           myCustomDialog(
@@ -168,37 +176,22 @@ class PostPosePageController extends GetxController with AdMobService, StateMixi
           return;
         }
     }
-    saveAndNavigate();
+    saveAndNavigate(context);
   }
 
-  void saveAndNavigate() {
-    task.notificationId = createNotificationId();
-    _createNotificationREFACTORIZED(task);
-    task.save();
+  void saveAndNavigate(BuildContext context) async {
+    // crear la notificacion
+    // notificationsUseCases.createNotificationUseCase( //TODO: activarrr estoo
+    //   context: context,
+    //   task: task,
+    // );
+    // otras cosas
     _initialPageController.buildInfo();
     Get.offAllNamed(Routes.INITIAL_PAGE);
     showSnackBar(
       titleText: 'postponed task title'.tr,
-      messageText: '${'postponed task description'.tr} ${longDateFormaterWithoutYear(task.taskDate)}, ${'at'.tr} ${timeFormater(task.notificationTime!)}',
+      messageText: '${'postponed task description'.tr} ${longDateFormaterWithoutYear(task.taskDate)}, ${'at'.tr} ${timeFormater(_newNotification.time)}',
     );
-  }
-
-  Future<void> _createNotificationREFACTORIZED(TaskModel task) async {
-    NotificationModel notif = NotificationModel(
-      id: task.notificationId!,
-      body: 'task reminder'.tr,
-      title: task.description,
-      time: task.notificationTime!,
-      payload: task.key.toString(),
-    );
-    await notificationsUseCases.createNotificationScheduledUseCase(notification: notif);
-    // await LocalNotificationService.createNotificationScheduled(
-    //   time: task.notificationTime!,
-    //   id: task.notificationId!,
-    //   body: task.description,
-    //   payload: task.key.toString(),
-    //   fln: localNotifications,
-    // );
   }
 
   ///// manage CANCEL AND NAVIGATE /////
@@ -233,7 +226,7 @@ class PostPosePageController extends GetxController with AdMobService, StateMixi
     //FocusScope.of(context).unfocus(); // hide keyboard if open
     TimeOfDay? picked = await showTimePicker(
       context: Get.context!,
-      initialTime: TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().add(const Duration(minutes: 5)).minute),
+      initialTime: TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().add(const Duration(minutes: 10)).minute),
     );
     if (picked != null) {
       personalizedNotificationDateTime.value = DateTime(

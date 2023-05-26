@@ -29,12 +29,12 @@ class ViewTask extends StatelessWidget {
                 ),
               ),
               // hora notificacion
-              task.notificationTime != null
+              task.notificationData != null
                   ?
                 _CustomTile(
                       leading: const Icon(Icons.notifications_active_rounded),
                       title: Text(
-                        timeFormater(task.notificationTime!),
+                        timeFormater(task.notificationData!.time),
                         style: kBodyMedium,
                       ),
                     )

@@ -31,7 +31,7 @@ Map<String, String> es_AR = {
   'there were no tasks': 'no hubo tareas',
 
   // form page
-  'new task_formPage': 'Nueva tarea',
+  'new task': 'Nueva tarea,',
   'notify me:': 'Fecha',
   'schedule a notification': 'No hay una notificación programada.',
   'notify me at:': 'Notificarme a las:',
@@ -47,6 +47,19 @@ Map<String, String> es_AR = {
   'update task': 'Editar tarea',
   'update subtask' : 'Editar subtask',
   'repeat this task every': 'Repetir esta tarea todos los',
+
+  // create task page
+  'between 12 and 200 characters': 'Entre 12 y 200 caracteres.',
+  'between 6 and 100 characters': 'Entre 6 y 100 caracteres.',
+  'description': 'Descripción.',
+  'out of': 'de',
+  'create routine ?': 'Crear rutina ?',
+  'activate a notification': 'Activar notificación',
+  'disabled': 'Desactivado',
+  'morning 9 a.m.': 'Mañana 09 hs.',
+  'noon 12 p.m.': 'Mediodia 12 hs.',
+  'afternoon 5:00 p.m.': 'Tarde 17 hs.',
+  'night 9:00 p.m.': 'Noche 21 hs.',
 
   // postpose page
   '15 minutes': '15 minutos',

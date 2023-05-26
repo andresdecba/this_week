@@ -1,38 +1,35 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'app_config_model.dart';
+part of 'subtask_model.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class AppConfigModelAdapter extends TypeAdapter<AppConfigModel> {
+class SubTaskModelAdapter extends TypeAdapter<SubTaskModel> {
   @override
-  final int typeId = 3;
+  final int typeId = 1;
 
   @override
-  AppConfigModel read(BinaryReader reader) {
+  SubTaskModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return AppConfigModel(
-      language: fields[1] as String?,
-      createSampleTask: fields[2] as bool,
-      isOnboardingDone: fields[3] as bool,
+    return SubTaskModel(
+      title: fields[0] as String,
+      isDone: fields[1] as bool,
     );
   }
 
   @override
-  void write(BinaryWriter writer, AppConfigModel obj) {
+  void write(BinaryWriter writer, SubTaskModel obj) {
     writer
-      ..writeByte(3)
-      ..writeByte(1)
-      ..write(obj.language)
       ..writeByte(2)
-      ..write(obj.createSampleTask)
-      ..writeByte(3)
-      ..write(obj.isOnboardingDone);
+      ..writeByte(0)
+      ..write(obj.title)
+      ..writeByte(1)
+      ..write(obj.isDone);
   }
 
   @override
@@ -41,7 +38,7 @@ class AppConfigModelAdapter extends TypeAdapter<AppConfigModel> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is AppConfigModelAdapter &&
+      other is SubTaskModelAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

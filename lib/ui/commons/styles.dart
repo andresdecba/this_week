@@ -3,10 +3,11 @@ import 'package:get/get.dart';
 
 // colors
 // ignore: constant_identifier_names
-const grey_bg = Color(0xFFE8E8E8);
+const grey_background = Color(0xFFFFFBFE); //background: Color(0xFFFFFBFE)
 const disabledTaskBg = Color.fromARGB(255, 206, 206, 206);
 const enabledGrey = Color(0xFF626262);
 const disabledGrey = Color(0xFFA6A6A6);
+const softGrey = Color.fromARGB(255, 216, 216, 216);
 const statusTaskPending = Color.fromARGB(255, 248, 228, 125);
 const statusTaskInProgress = Color.fromARGB(255, 56, 149, 255);
 const statusTaskDone = Color.fromARGB(255, 138, 173, 131);
@@ -18,6 +19,7 @@ const appBarLogo = Color(0xFF000000);
 const textBg = Color(0xFF000000);
 const warning = Color(0xFFD30000);
 const bluePrimary = Color(0xFF0075FF);
+
 const iconsBg = Color(0xFF262626);
 const greenInfo = Color.fromARGB(255, 125, 252, 103);
 
@@ -48,18 +50,17 @@ InputDecoration customInputDecoration({
   required bool isEnabled,
   Color? borderColor,
 }) {
-  return InputDecoration(
-    //label: Text(label),
+  return InputDecoration(  
     contentPadding: isEnabled ? const EdgeInsets.all(10) : EdgeInsets.zero,
     isDense: true,
-    border: hasBorder == true ? const OutlineInputBorder() : InputBorder.none,
-    labelStyle: const TextStyle(color: disabledGrey),
+    border: isEnabled == true ? const OutlineInputBorder() : InputBorder.none,
     alignLabelWithHint: true,
     hintText: hintText,
     hintStyle: kBodyMedium.copyWith(fontStyle: FontStyle.italic, color: disabledGrey),
+    labelStyle: const TextStyle(color: bluePrimary),
     filled: isEnabled,
     fillColor: witheBg.withOpacity(0.4),
-    suffixIcon: hasBorder == true
+    suffixIcon: isEnabled == true
         ? IconButton(
             icon: const Icon(
               Icons.clear,
@@ -68,20 +69,21 @@ InputDecoration customInputDecoration({
             onPressed: clearText,
           )
         : null,
+    counterText: isEnabled ? null : "",
     counterStyle: const TextStyle(
       fontStyle: FontStyle.italic,
       fontSize: 10,
       height: double.minPositive,
     ),
-    enabledBorder: OutlineInputBorder(
-      borderSide: BorderSide(
-        color: borderColor ?? bluePrimary,
-      ),
-    ),
-    focusedBorder: OutlineInputBorder(
-      borderSide: BorderSide(
-        color: borderColor ?? statusTaskInProgress,
-      ),
-    ),
+    enabledBorder: isEnabled == true
+        ? const OutlineInputBorder(
+            borderSide: BorderSide(color: bluePrimary),
+          )
+        : null,
+    focusedBorder: isEnabled == true
+        ? const OutlineInputBorder(
+            borderSide: BorderSide(color: bluePrimary),
+          )
+        : null,
   );
 }

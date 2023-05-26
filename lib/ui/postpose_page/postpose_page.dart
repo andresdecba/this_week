@@ -3,9 +3,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:todoapp/ui/commons/styles.dart';
-import 'package:todoapp/ui/postpose_page/components/view_task.dart';
 import 'package:todoapp/ui/postpose_page/postpose_page_controller.dart';
-import 'package:todoapp/ui/shared_components/bottomsheet_with_scroll.dart';
+import 'package:todoapp/ui/shared_components/my_modal_bottom_sheet.dart';
+import 'package:todoapp/ui/postpose_page/components/view_task.dart';
 
 class PostPosePage extends GetView<PostPosePageController> {
   const PostPosePage({Key? key}) : super(key: key);
@@ -47,7 +47,7 @@ class PostPosePage extends GetView<PostPosePageController> {
               Expanded(
                 flex: 1,
                 child: ElevatedButton(
-                  onPressed: () => controller.savePostpose(controller.selectedItem.value),
+                  onPressed: () => controller.savePostpose(controller.selectedItem.value, context),
                   child: Text('ok'.tr),
                 ),
               ),
@@ -110,7 +110,12 @@ class PostPosePage extends GetView<PostPosePageController> {
                     ),
                     IconButton(
                       icon: const Icon(Icons.open_in_new),
-                      onPressed: () => openBottomSheetWithScroll(context: context, widget: ViewTask(task: controller.task)),
+                      onPressed: () {
+                        myModalBottomSheet(
+                          context: context,
+                          child: ViewTask(task: controller.task),
+                        );
+                      },
                     ),
                   ],
                 ),

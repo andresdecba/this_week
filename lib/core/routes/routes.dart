@@ -2,10 +2,10 @@ import 'package:get/get.dart';
 import 'package:todoapp/core/bindings/form_page_binding.dart';
 import 'package:todoapp/core/bindings/postpose_page_binding.dart';
 import 'package:todoapp/core/bindings/initial_page_binding.dart';
-import 'package:todoapp/ui/form_page/form_page.dart';
+//import 'package:todoapp/ui/form_page/form_page.dart';
 import 'package:todoapp/ui/initial_page/initial_page.dart';
 import 'package:todoapp/ui/postpose_page/postpose_page.dart';
-import 'package:todoapp/ui/shared_components/onborading.dart';
+import 'package:todoapp/ui/onboarding_page/onborading.dart';
 
 abstract class Routes {
   static const FORMS_PAGE = '/formularios_page';
@@ -19,7 +19,7 @@ class AppPages {
   static final List<GetPage> getPages = [
     GetPage(
       name: Routes.FORMS_PAGE,
-      page: () => const FormPage(),
+      page: () => const InitialPage(), //const FormPage(),
       binding: FormPageBinding(),
     ),
     GetPage(

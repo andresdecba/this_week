@@ -3,14 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:todoapp/services/local_notifications_service.dart';
+import 'package:todoapp/core/globals.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/ui/shared_components/dialogs.dart';
+import 'package:todoapp/use_cases/notifications_use_cases.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SideBar extends GetView<InitialPageController> {
-  const SideBar({super.key});
+  SideBar({super.key});
+
+  //final SideBarController controller = Get.put(SideBarController());
+
+  final NotificationsUseCases notificationsUseCases = NotificationsUseCasesImpl();
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +42,7 @@ class SideBar extends GetView<InitialPageController> {
                 onTap: () {
                   controller.oldWeeks = 0;
                   controller.buildInfo();
-                  controller.scaffoldKey.currentState!.closeEndDrawer();
+                  Globals.scaffoldKey.currentState!.closeEndDrawer();
                 },
               ),
               ListTile(
@@ -108,7 +113,7 @@ class SideBar extends GetView<InitialPageController> {
                                   title: 'you will need to restart the app...'.tr,
                                   iconPath: 'assets/warning.svg',
                                   onPressOk: () {
-                                    controller.scaffoldKey.currentState!.closeEndDrawer();
+                                    Globals.scaffoldKey.currentState!.closeEndDrawer();
                                     Navigator.of(context, rootNavigator: true).pop();
                                   },
                                 );
@@ -134,7 +139,7 @@ class SideBar extends GetView<InitialPageController> {
                   style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: disabledGrey),
                 ),
                 onTap: () {
-                  controller.scaffoldKey.currentState!.closeEndDrawer();
+                  Globals.scaffoldKey.currentState!.closeEndDrawer();
                   shareApp(context);
                 },
               ),
@@ -147,7 +152,7 @@ class SideBar extends GetView<InitialPageController> {
                   style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: disabledGrey),
                 ),
                 onTap: () {
-                  controller.scaffoldKey.currentState!.closeEndDrawer();
+                  Globals.scaffoldKey.currentState!.closeEndDrawer();
                   goToPlaystore(context);
                 },
               ),
@@ -176,9 +181,9 @@ class SideBar extends GetView<InitialPageController> {
 
   Future<void> deleteAll(BuildContext context) async {
     Navigator.of(context).pop();
-    controller.scaffoldKey.currentState!.closeEndDrawer();
+    Globals.scaffoldKey.currentState!.closeEndDrawer();
     controller.simulateDeletingData();
-    LocalNotificationService.deleteAllNotifications();
+    notificationsUseCases.deleteAllNotificationsUseCase();
     await controller.tasksBox.clear();
     controller.buildInfo();
   }

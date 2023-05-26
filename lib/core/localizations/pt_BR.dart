@@ -31,7 +31,7 @@ Map<String, String> pt_BR = {
   'there were no tasks': 'não havia tarefas',
 
   // form page
-  'new task_formPage': 'Nova tarefa',
+  'new task': 'Nova tarefa,',
   'notify me:': 'Data',
   'schedule a notification': 'Nenhuma notificação programada.',
   'notify me at:': 'Notifique-me em:',
@@ -47,6 +47,19 @@ Map<String, String> pt_BR = {
   'update task': 'Editar tarefa',
   'update subtask' : 'Editar subtarefa',
   'repeat this task every': 'Repetir esta tarefa toda',
+
+  // create tasl page
+  'between 12 and 200 characters': 'Entre 12 e 200 caracteres.',
+  'between 6 and 00 characters': 'Entre 6 e 100 caracteres.',
+  'description': 'Descrição.',
+  'out of': 'de',
+  'create routine ?': 'Criar rotina ?',
+  'activate a notification': 'Ativar uma notificação',
+  'disabled': 'Desabilitado',
+  'morning 9 a.m.': 'Manhã 9h',
+  'noon 12 p.m.': 'Meio-dia 12h',
+  'afternoon 5:00 p.m.': 'Tarde 17:00',
+  'night 9:00 p.m.': 'Noite 21:00',
 
   // postpose page
   '15 minutes': '15 minutos',

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:todoapp/core/globals.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/initial_page/components/header.dart';
 import 'package:todoapp/ui/initial_page/components/tasks_list.dart';
@@ -14,12 +15,11 @@ class InitialPage extends GetView<InitialPageController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // keyboard
+      resizeToAvoidBottomInset: false,
+
       // key
-      key: controller.scaffoldKey,
-
-      floatingActionButton: FloatingActionButton(onPressed: () => controller.borrarEstoo()),
-
-
+      key: Globals.scaffoldKey,
       // ad
       bottomNavigationBar: controller.obx(
         (ad) => Container(
@@ -68,9 +68,10 @@ class InitialPage extends GetView<InitialPageController> {
       ),
 
       // sidebar
-      endDrawer: const SideBar(),
+      endDrawer: SideBar(),
 
       // content
+      /*
       body: Obx(
         () => controller.simulateDeleting.value
             ? const Center(
@@ -98,10 +99,22 @@ class InitialPage extends GetView<InitialPageController> {
                 ],
               ),
       ),
+*/
+      body: Obx(() => controller.simulateDeleting.value
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : const SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
+              child: TasksList(),
+            )
+            
+            
+           
+      ),
     );
   }
 }
-
 
 class _DelegateWithHeader extends SliverPersistentHeaderDelegate {
   @override

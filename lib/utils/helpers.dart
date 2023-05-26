@@ -62,6 +62,20 @@ extension TimeOfDayConverter on TimeOfDay {
   }
 }
 
+bool timeOfDayIsAfterNow(TimeOfDay time) {
+  TimeOfDay current = TimeOfDay.now();
+  if (time.hour < current.hour) return false;
+  if (time.hour == current.hour) if (time.minute < current.minute) return false;
+  return true;
+}
+
+bool timeOfDayIsBeforeNow(TimeOfDay time) {
+  TimeOfDay current = TimeOfDay.now();
+  if (time.hour > current.hour) return false;
+  if (time.hour == current.hour) if (time.minute > current.minute) return false;
+  return true;
+}
+
 //////////////////////////////
 /// TASK THINGS HELPERS ///
 /////////////////////////////

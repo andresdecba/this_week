@@ -2,8 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/ui/commons/styles.dart';
+import 'package:todoapp/ui/create_task_page/create_task_page.dart';
+import 'package:todoapp/ui/create_task_page/create_task_page_controller.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/ui/initial_page/components/task_card.dart';
+import 'package:todoapp/ui/shared_components/my_modal_bottom_sheet.dart';
+import 'package:todoapp/ui/view_task_page.dart/view_task_page.dart';
+import 'package:todoapp/ui/view_task_page.dart/view_task_page_controller.dart';
+// import 'package:todoapp/ui/open_task.dart/view_task.dart';
+// import 'package:todoapp/ui/shared_components/bottomsheet_with_scroll.dart';
 import 'package:todoapp/utils/helpers.dart';
 
 class TasksList extends GetView<InitialPageController> {
@@ -17,12 +24,14 @@ class TasksList extends GetView<InitialPageController> {
           physics: const NeverScrollableScrollPhysics(),
           key: controller.keyScroll,
           shrinkWrap: true,
-          itemCount: controller.buildWeekInUI.value.length,
+          itemCount: controller.tasksMap.length,
           itemBuilder: (context, index) {
             //
-            DateTime currentDate = controller.buildWeekInUI.value.keys.toList()[index];
-            List<TaskModel> tasks = [];
-            tasks.addAll(controller.buildWeekInUI.value[currentDate]!);
+            DateTime currentDate = controller.tasksMap.keys.toList()[index];
+            List<Rx<TaskModel>> tasks = [];
+            //tasks.addAll(controller.tasksMap.value[currentDate]!);
+            tasks.addAll(controller.tasksMap[currentDate]!);
+
             // si es el dia de ayer y no tiene una tarea, esconder ese dia
             bool hideEmptyYesterday = (currentDate.isBefore(DateTime.now().subtract(const Duration(days: 1))) && tasks.isEmpty) ? true : false;
             // si es el dia de ayer pero si tiene tareas, deshabilitar el dia
@@ -31,7 +40,6 @@ class TasksList extends GetView<InitialPageController> {
             // crear en una columna todos los dias con sus respectivas tareas
             return Column(
               children: [
-
                 /// THERE WHERENT TASKS
                 Visibility(
                   visible: hideEmptyYesterday,
@@ -87,7 +95,7 @@ class TasksList extends GetView<InitialPageController> {
                                 style: kBodySmall.copyWith(
                                   fontStyle: FontStyle.italic,
                                   color: disableYesterday ? disabledGrey : textBg,
-                                ), 
+                                ),
                               ),
                             ],
                           ),
@@ -99,16 +107,28 @@ class TasksList extends GetView<InitialPageController> {
                                 disabledColor: disabledGrey,
                                 icon: Icon(Icons.add),
                               )
+
+                            /// CREATE TASK
                             : IconButton(
                                 icon: const Icon(Icons.add_circle_rounded),
                                 visualDensity: VisualDensity.compact,
-                                onPressed: () => controller.navigate(date: currentDate),
+                                onPressed: () {
+                                  Get.find<CreateTaskPageController>().selectedDate = currentDate;
+                                  Get.find<CreateTaskPageController>().createChipsList(currentDate);
+                                  myModalBottomSheet(
+                                    context: context,
+                                    child: const CreateTaskPage(),
+                                    showClose: true,
+                                    enableDrag: false,
+                                    onTapClose: () => Get.find<CreateTaskPageController>().closeAndRestoreValues(),
+                                  );
+                                },
                               ),
                       ],
                     ),
                   ),
                 ),
-            
+
                 Stack(
                   alignment: Alignment.topCenter,
                   children: [
@@ -134,7 +154,7 @@ class TasksList extends GetView<InitialPageController> {
                         ),
                       ),
                     ),
-            
+
                     /// SHOW TASKS IF EXISTS
                     tasks.isNotEmpty
                         ? ListView(
@@ -144,20 +164,20 @@ class TasksList extends GetView<InitialPageController> {
                               ...tasks.map(
                                 (e) => Padding(
                                   padding: const EdgeInsets.only(bottom: 8),
-
                                   child: TaskCard(
                                     //isDisabled: disableYesterday,
                                     key: UniqueKey(),
-                                    task: e,
-                                    navigate: () => controller.navigate(taskKey: e.key),
-                                    // navigate: () => openBottomSheetWithScroll(
-                                    //   context: context,
-                                    //   initialChildSize: 0.7,
-                                    //   widget: ViewTask(task: e),
-                                    // ),
+                                    task: e.value,
+                                    navigate: () {
+                                      Get.find<ViewTaskController>().task = e;
+                                      myModalBottomSheet(
+                                        context: context,
+                                        child: const ViewTask2(),
+                                      );
+                                    },
                                     onStatusChange: () {
-                                      e.status = changeTaskStatus(e.status);
-                                      e.save();
+                                      e.value.status = controller.changeTaskStatus(e.value.status);
+                                      e.value.save();
                                       controller.createCompletedTasksPercentage();
                                     },
                                   ),
@@ -174,18 +194,5 @@ class TasksList extends GetView<InitialPageController> {
         );
       },
     );
-  }
-
-  String changeTaskStatus(String value) {
-    switch (value) {
-      case 'Pending':
-        return TaskStatus.IN_PROGRESS.toValue;
-      case 'In progress':
-        return TaskStatus.DONE.toValue;
-      case 'Done':
-        return TaskStatus.PENDING.toValue;
-      default:
-        return TaskStatus.IN_PROGRESS.toValue;
-    }
   }
 }
