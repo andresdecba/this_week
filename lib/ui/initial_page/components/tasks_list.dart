@@ -111,14 +111,11 @@ class TasksList extends GetView<InitialPageController> {
                                 icon: const Icon(Icons.add_circle_rounded),
                                 visualDensity: VisualDensity.compact,
                                 onPressed: () {
-                                  Get.find<CreateTaskPageController>().selectedDate = currentDate;
-                                  Get.find<CreateTaskPageController>().createChipsList(currentDate);
+                                  Get.put(CreateTaskPageController(selectedDate: currentDate));
                                   myModalBottomSheet(
                                     context: context,
-                                    child: const CreateTaskPage(),
+                                    child: CreateTaskPage(),
                                     enableDrag: true,
-                                    //showClose: true,
-                                    //onTapClose: () => Get.find<CreateTaskPageController>().closeAndRestoreValues(),
                                   );
                                 },
                               ),
@@ -166,23 +163,15 @@ class TasksList extends GetView<InitialPageController> {
                                     //isDisabled: disableYesterday,
                                     key: UniqueKey(),
                                     task: e.value,
-
                                     navigate: () {
-                                      //Get.lazyPut(() => ViewTaskController(task: e), fenix: true);
                                       Get.put(ViewTaskController(task: e));
                                       myModalBottomSheet(
                                         context: context,
                                         child: const ViewTask(),
                                       );
-                                    },
 
-                                    // navigate: () {
-                                    //   Get.lazyPut(() => ViewTaskController(task: e), fenix: true);
-                                    //   myModalBottomSheet(
-                                    //     context: context,
-                                    //     child: const Borre(),
-                                    //   );
-                                    // },
+                                    
+                                    },
                                     onStatusChange: () {
                                       e.value.status = controller.changeTaskStatus(e.value.status);
                                       e.value.save();

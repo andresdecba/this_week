@@ -1,0 +1,27 @@
+
+**** CASOS DE TEST ****
+
+CREATE TASK:
+-Si se crea la tarea sin horario
+-si se crea la tarea con cada uno de los horarios predefinidos
+-si se crea la tarea con el horario Personalizado
+-Si se crea la tarea en modo rutina
+-Al crear una tarea para el dia de hoy, los chips de horarios deberían mostrar sólamente horarios a futuro.
+-El titulo debe reflejar la fecha seleecionada para crear la tarea.
+-Si llegan bien todos los casos de notificaciones
+-Si al crear una tarea y al volver al modal los valores estan reseteados
+-Si toda la informacion de la nueva tarea se ve reflejada en la taskCard del inicio
+-Si se empieza a crear una tarea pero la cancelamos (back button, close modal) y al volver al modal los valores estan reseteados
+-Al cerrar y volver a levantar la app, la tarea debe permanecer
+
+VIEW TASK:
+VIEW:
+-Mostrar titulo correctamente segun el dia 'vencido', 'hoy', 'otro dia'
+-Mostrar la descripcion correctamente
+-Mostrar fecha correctamente
+-Mostrar hora de notificacion
+-Mostrar lista subtareas correctamente
+
+EDITAR:
+-Al editar la descripcion el cambio se acepta con el 'ok' del teclado, si sale con backbutton o tocando afuera, el cambio se pierde
+-

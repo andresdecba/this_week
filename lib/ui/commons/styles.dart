@@ -26,7 +26,7 @@ const greenInfo = Color.fromARGB(255, 125, 252, 103);
 final splashColorButtons = yellowPrimary.withOpacity(0.5);
 
 // task description
-final kViewTaskDescripton = Theme.of(Get.context!).textTheme.titleLarge!.copyWith(fontSize: 26);
+final kViewTaskDescripton = Theme.of(Get.context!).textTheme.titleLarge!.copyWith(fontSize: 30);
 final myChipBg = softGrey.withOpacity(0.5);
 const myChipText = enabledGrey;
 

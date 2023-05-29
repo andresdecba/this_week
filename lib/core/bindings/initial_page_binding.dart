@@ -1,13 +1,13 @@
 import 'package:get/get.dart';
-import 'package:todoapp/ui/create_task_page/create_task_page_controller.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
-import 'package:todoapp/use_cases/local_notifications_use_cases.dart';
-import 'package:todoapp/use_cases/tasks_use_cases.dart';
+// import 'package:todoapp/ui/create_task_page/create_task_page_controller.dart';
+// import 'package:todoapp/use_cases/local_notifications_use_cases.dart';
+// import 'package:todoapp/use_cases/tasks_use_cases.dart';
 
 class InitialPageBinding implements Bindings {
 
-  TaskUseCasesImpl taskUseCasesImpl = TaskUseCasesImpl();
-  final LocalNotificationsUseCases _localNotificationsUseCases = LocalNotificationsUseCases();
+  //final TaskUseCasesImpl _taskUseCasesImpl = TaskUseCasesImpl();
+  //final LocalNotificationsUseCases _localNotificationsUseCases = LocalNotificationsUseCases();
 
   @override
   void dependencies() {
@@ -23,12 +23,12 @@ class InitialPageBinding implements Bindings {
     //   fenix: true,
     // );
 
-    Get.lazyPut(
-      () => CreateTaskPageController(
-        tasksUseCases: taskUseCasesImpl,
-        localNotificationsUseCases: _localNotificationsUseCases,
-      ),
-      fenix: true,
-    );
+    // Get.lazyPut(
+    //   () => CreateTaskPageController(
+    //     tasksUseCases: taskUseCasesImpl,
+    //     localNotificationsUseCases: _localNotificationsUseCases,
+    //   ),
+    //   fenix: true,
+    // );
   }
 }

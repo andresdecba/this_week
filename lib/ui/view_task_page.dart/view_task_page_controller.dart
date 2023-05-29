@@ -5,7 +5,6 @@ import 'package:todoapp/models/subtask_model.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
-//import 'package:todoapp/ui/shared_components/dialogs.dart';
 import 'package:todoapp/ui/shared_components/my_time_picker.dart';
 import 'package:todoapp/ui/shared_components/snackbar.dart';
 import 'package:todoapp/use_cases/local_notifications_use_cases.dart';
@@ -30,6 +29,7 @@ class ViewTaskController extends GetxController {
     textController.addListener(() {
       counter.value = textController.text.length;
     });
+    descriptionTxtCtr.text = task.value.description;
   }
 
   @override
@@ -79,9 +79,17 @@ class ViewTaskController extends GetxController {
   }
 
   //// UPDATE DESCRIPTION ////
-  void updateDescription(String value) {
-    hasUpdated.value = true;
-    updatedDescription.value = value;
+  RxBool descriptionEditMode = false.obs;
+  final FocusNode descriptionFocusNode = FocusNode();
+  final TextEditingController descriptionTxtCtr = TextEditingController();
+
+  void updateDescription() {
+    if (updatedDescription.value != descriptionTxtCtr.text) {
+      hasUpdated.value = true;
+      updatedDescription.value = descriptionTxtCtr.text;
+    }
+    descriptionEditMode.value = false;
+    descriptionFocusNode.unfocus();
   }
 
   ////// UPDATE DATE //////
@@ -252,11 +260,3 @@ class ViewTaskController extends GetxController {
 }
 
 typedef SelectedValueTypedef<T> = void Function(T value);
-
-// task.value.notificationData == null
-// task.value.notificationData != null
-
-// updatedNotification.value == null
-// updatedNotification.value != null
-
-// task.value.notificationData!.time != updatedNotification.value;

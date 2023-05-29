@@ -31,7 +31,7 @@ extension SchedulesToString on Schedules {
       case Schedules.NIGHT:
         return 'night 9:00 p.m.'.tr;
       case Schedules.PERSONALIZED:
-        return 'Personalizado'.tr;
+        return 'personalized'.tr;
     }
   }
 }
@@ -56,12 +56,12 @@ extension SchedulesToTimeOfDay on Schedules {
 }
 
 class CreateTaskPageController extends GetxController {
-  final TasksUseCases tasksUseCases;
-  final LocalNotificationsUseCases localNotificationsUseCases;
+  final DateTime selectedDate;
 
   CreateTaskPageController({
-    required this.tasksUseCases,
-    required this.localNotificationsUseCases,
+    // required this.tasksUseCases,
+    // required this.localNotificationsUseCases,
+    required this.selectedDate,
   });
 
   @override
@@ -72,6 +72,10 @@ class CreateTaskPageController extends GetxController {
     textController.addListener(() {
       counter.value = textController.text.length;
     });
+    notificationDateTime = DateTime(selectedDate.year, selectedDate.month, selectedDate.day, 9, 0);
+    tasksUseCases = TaskUseCasesImpl();
+    localNotificationsUseCases = LocalNotificationsUseCases();
+    createChipsList();
   }
 
   @override
@@ -82,7 +86,9 @@ class CreateTaskPageController extends GetxController {
   }
 
   // TASK DATE //
-  late DateTime selectedDate;
+  //late DateTime selectedDate;
+  late TasksUseCases tasksUseCases;
+  late LocalNotificationsUseCases localNotificationsUseCases;
 
   // RUTINA //
   RxBool isRoutine = false.obs;
@@ -94,11 +100,11 @@ class CreateTaskPageController extends GetxController {
 
   // SELECT NOTIFICATION //
   RxInt currentIndex = 1.obs;
-  DateTime? notificationDateTime;
+  late DateTime? notificationDateTime;
 
   List<String> listOfChips = [];
 
-  void createChipsList(DateTime value) {
+  void createChipsList() {
     var today = DateTime(
       DateTime.now().year,
       DateTime.now().month,
@@ -111,7 +117,8 @@ class CreateTaskPageController extends GetxController {
     );
 
     // si la tarea es para hoy, restringir los horarios
-    if (value.isAtSameMomentAs(today)) {
+    if (selectedDate.isAtSameMomentAs(today)) {
+
       for (var e in Schedules.values) {
         if (e.toStringValue == Schedules.DISABLED.toStringValue || e.toStringValue == Schedules.PERSONALIZED.toStringValue) {
           listOfChips.add(e.toStringValue);
@@ -123,7 +130,7 @@ class CreateTaskPageController extends GetxController {
     }
 
     // si la tarea es otro dia, mostrar todos los horarios
-    if (!value.isAtSameMomentAs(today)) {
+    if (!selectedDate.isAtSameMomentAs(today)) {
       listOfChips = [
         Schedules.DISABLED.toStringValue,
         Schedules.MORNING.toStringValue,
@@ -136,23 +143,23 @@ class CreateTaskPageController extends GetxController {
   }
 
   void selectedNotificationDateTime(BuildContext context, index) async {
-    switch (listOfChips[index]) {
-      case 'Desactivado':
+    switch (listOfChips.indexOf(listOfChips[index])) {
+      case 0:
         notificationDateTime = null;
         break;
-      case 'Mañana 09 hs.':
+      case 1:
         notificationDateTime = DateTime(selectedDate.year, selectedDate.month, selectedDate.day, 9, 0);
         break;
-      case 'Mediodia 12 hs.':
+      case 2:
         notificationDateTime = DateTime(selectedDate.year, selectedDate.month, selectedDate.day, 12, 0);
         break;
-      case 'Tarde 17 hs.':
+      case 3:
         notificationDateTime = DateTime(selectedDate.year, selectedDate.month, selectedDate.day, 17, 0);
         break;
-      case 'Noche 21 hs.':
+      case 4:
         notificationDateTime = DateTime(selectedDate.year, selectedDate.month, selectedDate.day, 21, 0);
         break;
-      case 'Personalizado':
+      case 5:
         {
           TimeOfDay? newTime = await showTimePicker(
             context: context,
