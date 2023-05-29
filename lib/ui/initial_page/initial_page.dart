@@ -48,7 +48,7 @@ class InitialPage extends GetView<InitialPageController> {
             alignment: Alignment.center,
             child: Text(
               error!,
-              style: kTitleMedium.copyWith(color: witheBg),
+              style: kTitleMedium.copyWith(color: whiteBg),
             ),
           ),
         ),
@@ -71,7 +71,7 @@ class InitialPage extends GetView<InitialPageController> {
       endDrawer: SideBar(),
 
       // content
-      /*
+
       body: Obx(
         () => controller.simulateDeleting.value
             ? const Center(
@@ -99,19 +99,20 @@ class InitialPage extends GetView<InitialPageController> {
                 ],
               ),
       ),
-*/
-      body: Obx(() => controller.simulateDeleting.value
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : const SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
-              child: TasksList(),
-            )
+
+      // body: Obx(() => controller.simulateDeleting.value
+      //     ? const Center(
+      //         child: CircularProgressIndicator(),
+      //       )
+      //     : const SingleChildScrollView(
+      //         padding: EdgeInsets.all(20),
+      //         physics: BouncingScrollPhysics(),
+      //         child: TasksList(),
+      //       )
             
             
            
-      ),
+      // ),
     );
   }
 }

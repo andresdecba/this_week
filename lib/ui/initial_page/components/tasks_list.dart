@@ -9,8 +9,6 @@ import 'package:todoapp/ui/initial_page/components/task_card.dart';
 import 'package:todoapp/ui/shared_components/my_modal_bottom_sheet.dart';
 import 'package:todoapp/ui/view_task_page.dart/view_task_page.dart';
 import 'package:todoapp/ui/view_task_page.dart/view_task_page_controller.dart';
-// import 'package:todoapp/ui/open_task.dart/view_task.dart';
-// import 'package:todoapp/ui/shared_components/bottomsheet_with_scroll.dart';
 import 'package:todoapp/utils/helpers.dart';
 
 class TasksList extends GetView<InitialPageController> {
@@ -118,9 +116,9 @@ class TasksList extends GetView<InitialPageController> {
                                   myModalBottomSheet(
                                     context: context,
                                     child: const CreateTaskPage(),
-                                    showClose: true,
-                                    enableDrag: false,
-                                    onTapClose: () => Get.find<CreateTaskPageController>().closeAndRestoreValues(),
+                                    enableDrag: true,
+                                    //showClose: true,
+                                    //onTapClose: () => Get.find<CreateTaskPageController>().closeAndRestoreValues(),
                                   );
                                 },
                               ),
@@ -168,13 +166,23 @@ class TasksList extends GetView<InitialPageController> {
                                     //isDisabled: disableYesterday,
                                     key: UniqueKey(),
                                     task: e.value,
+
                                     navigate: () {
-                                      Get.find<ViewTaskController>().task = e;
+                                      //Get.lazyPut(() => ViewTaskController(task: e), fenix: true);
+                                      Get.put(ViewTaskController(task: e));
                                       myModalBottomSheet(
                                         context: context,
                                         child: const ViewTask(),
                                       );
                                     },
+
+                                    // navigate: () {
+                                    //   Get.lazyPut(() => ViewTaskController(task: e), fenix: true);
+                                    //   myModalBottomSheet(
+                                    //     context: context,
+                                    //     child: const Borre(),
+                                    //   );
+                                    // },
                                     onStatusChange: () {
                                       e.value.status = controller.changeTaskStatus(e.value.status);
                                       e.value.save();

@@ -13,18 +13,18 @@
 // import 'package:todoapp/ui/shared_components/snackbar.dart';
 // import 'package:todoapp/utils/helpers.dart';
 
-import 'package:get/get.dart';
-import 'package:todoapp/use_cases/notifications_use_cases.dart';
-import 'package:todoapp/services/ad_mob_service.dart';
+// import 'package:get/get.dart';
+// //import 'package:todoapp/use_cases/local_notifications_use_cases.dart';
+// import 'package:todoapp/core/services/ad_mob_service.dart';
 
-enum PageMode { VIEW_MODE, UPDATE_MODE, NEW_MODE }
+// enum PageMode { VIEW_MODE, UPDATE_MODE, NEW_MODE }
 
-class FormsPageController extends GetxController with AdMobService, StateMixin<dynamic> {
+// class FormsPageController extends GetxController with AdMobService, StateMixin<dynamic> {
 
-  FormsPageController({
-    required this.notificationsUseCases,
-  });
-  final NotificationsUseCases notificationsUseCases;
+  // FormsPageController({
+  //   required this.notificationsUseCases,
+  // });
+  // final LocalNotificationsUseCases notificationsUseCases;
 
   /*
 
@@ -590,4 +590,4 @@ class FormsPageController extends GetxController with AdMobService, StateMixin<d
     );
   }
   */
-}
+//}

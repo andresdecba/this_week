@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:todoapp/core/globals.dart';
 import 'package:todoapp/core/routes/routes.dart';
-import 'package:todoapp/data_source/db_data_source.dart';
+import 'package:todoapp/data_source/hive_data_sorce/hive_data_source.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 
 class OnBoardingPage extends StatefulWidget {

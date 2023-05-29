@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:todoapp/core/globals.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/ui/shared_components/snackbar.dart';
-import 'package:todoapp/use_cases/notifications_use_cases.dart';
+import 'package:todoapp/use_cases/local_notifications_use_cases.dart';
 import 'package:todoapp/use_cases/tasks_use_cases.dart';
 import 'package:todoapp/utils/helpers.dart';
 //import 'package:todoapp/utils/helpers.dart';
@@ -57,11 +57,11 @@ extension SchedulesToTimeOfDay on Schedules {
 
 class CreateTaskPageController extends GetxController {
   final TasksUseCases tasksUseCases;
-  final NotificationsUseCases notificationsUseCases;
+  final LocalNotificationsUseCases localNotificationsUseCases;
 
   CreateTaskPageController({
     required this.tasksUseCases,
-    required this.notificationsUseCases,
+    required this.localNotificationsUseCases,
   });
 
   @override

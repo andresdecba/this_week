@@ -10,7 +10,7 @@ import 'package:todoapp/models/notification_model.dart';
 import 'package:todoapp/models/subtask_model.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/models/app_config_model.dart';
-import 'package:todoapp/services/local_notifications_service.dart';
+import 'package:todoapp/core/services/local_notifications_service.dart';
 // needed for notifications, get the local timezone of the os
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:timezone/data/latest_all.dart' as tz;

@@ -84,7 +84,7 @@ class PostPosePage extends GetView<PostPosePageController> {
             alignment: Alignment.center,
             child: Text(
               error!,
-              style: kTitleMedium.copyWith(color: witheBg),
+              style: kTitleMedium.copyWith(color: whiteBg),
             ),
           ),
         ),

@@ -5,12 +5,12 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:isoweek/isoweek.dart';
 //import 'package:todoapp/core/routes/routes.dart';
-import 'package:todoapp/data_source/db_data_source.dart';
+import 'package:todoapp/data_source/hive_data_sorce/hive_data_source.dart';
 import 'package:todoapp/main.dart';
 import 'package:todoapp/models/app_config_model.dart';
 import 'package:todoapp/models/subtask_model.dart';
 import 'package:todoapp/models/task_model.dart';
-import 'package:todoapp/services/ad_mob_service.dart';
+import 'package:todoapp/core/services/ad_mob_service.dart';
 import 'package:todoapp/utils/helpers.dart';
 
 class InitialPageController extends GetxController with AdMobService, StateMixin<dynamic>, WidgetsBindingObserver {

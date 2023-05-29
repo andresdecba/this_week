@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 
-class MyEditableTextForm extends StatefulWidget {
-  const MyEditableTextForm({
+class ShowTaskTextForm extends StatefulWidget {
+  const ShowTaskTextForm({
     required this.texto,
     required this.returnText,
     required this.textStyle,
@@ -16,10 +16,10 @@ class MyEditableTextForm extends StatefulWidget {
   final VoidCallback onTap;
 
   @override
-  State<MyEditableTextForm> createState() => _MyEditableTextFormState();
+  State<ShowTaskTextForm> createState() => _ShowTaskTextFormState();
 }
 
-class _MyEditableTextFormState extends State<MyEditableTextForm> {
+class _ShowTaskTextFormState extends State<ShowTaskTextForm> {
   // CONTROLLERS
   final TextEditingController _textEditingController = TextEditingController();
   final FocusNode _focusNode = FocusNode();

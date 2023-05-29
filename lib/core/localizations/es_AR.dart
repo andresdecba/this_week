@@ -12,7 +12,7 @@ Map<String, String> es_AR = {
   'new task_sidebar': 'Nueva tarea',
   'add a new task for any day': 'Agregar una nueva tarea para cualquier día.',
   'restore app' : 'Restablecer app',
-  'delete all tasks': 'Borrar las tareas.',
+  'delete all tasks': 'Eliminar las tareas.',
   'languages': 'Idiomas',
   'change the current language': 'Cambiar el idioma actual.',
   'share': 'Compartenos con tus amigos',
@@ -83,19 +83,19 @@ Map<String, String> es_AR = {
   'no subtasks': 'No hay subtareas.',
 
   // alerts
-  'delete task ?': '¿Borrar tarea?',
-  'this action will delete...': 'Esta acción borrará la tarea permanentemente.',
-  'delete tasks': 'Borrar todo',
-  'this action will delete all...': 'Esta acción borrará todas las tareas de forma permanente',
+  'delete task ?': '¿Eliminar tarea?',
+  'this action will delete...': 'Esta acción Eliminará la tarea permanentemente.',
+  'delete tasks': 'Eliminar todo',
+  'this action will delete all...': 'Esta acción Eliminará todas las tareas de forma permanente',
   'choose a language': 'Escoge un idioma',
   'atention !' : 'Atención !',
   'You cant create a...' : "No puedes crear una notificación antes de HOY y AHORA.",
   'this is a periodic task': 'Esta es una tarea periódica,\n¿ que desea hacer ?',
-  'delete current task': 'Borrar tarea actual.',
-  'delete current task and subsequent...': 'Borrar tarea actual y las posteriores.',
+  'delete current task': 'Eliminar tarea actual.',
+  'delete current task and subsequent...': 'Eliminar tarea actual y las posteriores.',
 
   // snackbars
-  'task deleted': 'Tarea borrada',
+  'task deleted': 'Tarea Eliminada',
   'task updated': 'Tarea actualizada',
   'new task created': 'Nueva tarea creada',
   'you will need to restart the app...': 'Necesitará reiniciar la aplicación para aplicar los cambios.',
@@ -104,8 +104,8 @@ Map<String, String> es_AR = {
   'ok': 'Aceptar',
   'cancel': 'Cancelar',
   'create': 'Crear',
-  'delete': 'Borrar',
-  'delete all': 'Borrar tareas',
+  'delete': 'Eliminar',
+  'delete all': 'Eliminar tareas',
   'update': 'Actualizar',
 
   // notifications

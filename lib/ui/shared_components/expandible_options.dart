@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/ui/commons/styles.dart';
-import 'package:todoapp/ui/view_task_page.dart/components/expandible_options_item.dart';
+import 'package:todoapp/ui/shared_components/expandible_options_item.dart';
 import 'package:todoapp/ui/view_task_page.dart/view_task_page_controller.dart';
 import 'package:todoapp/ui/shared_components/dialogs.dart';
 
@@ -23,7 +23,6 @@ class ExpandibleOptions extends GetView<ViewTaskController> {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
-
       position: PopupMenuPosition.under,
       padding: const EdgeInsets.symmetric(horizontal: 16),
       shape: const RoundedRectangleBorder(
@@ -36,10 +35,10 @@ class ExpandibleOptions extends GetView<ViewTaskController> {
       onSelected: (value) {
         switch (value) {
           case _MenuItem.date:
-            controller.updateTaskDate(context, task);
+            controller.updateDate(context, task);
             break;
           case _MenuItem.notification:
-            controller.updateTaskDate(context, task);
+            controller.updateDate(context, task);
             break;
           case _MenuItem.delete:
             myCustomDialog(

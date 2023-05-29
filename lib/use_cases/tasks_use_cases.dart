@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:todoapp/data_source/db_data_source.dart';
+import 'package:todoapp/data_source/hive_data_sorce/hive_data_source.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
-import 'package:todoapp/use_cases/notifications_crud.dart';
-import 'package:todoapp/use_cases/notifications_use_cases.dart';
+import 'package:todoapp/data_source/local_notifications_data_source/local_notifications_data_source.dart';
+import 'package:todoapp/use_cases/local_notifications_use_cases.dart';
 
 abstract class TasksUseCases {
   Future<TaskModel> createTaskUseCase({
@@ -16,7 +16,7 @@ abstract class TasksUseCases {
   void readTaskUseCase({
     required Rx<TaskModel> task,
   });
-  void updateTaskUseCase({
+  void updateTaskState({
     required Rx<TaskModel> task,
     bool? isDateUpdated,
   });
@@ -28,17 +28,12 @@ abstract class TasksUseCases {
 
 class TaskUseCasesImpl implements TasksUseCases {
   //
-  NotificationsUseCases notificationsUseCases = NotificationsUseCasesImpl();
+  final LocalNotificationsUseCases _localNotificationsUseCases = LocalNotificationsUseCases();
   final tasksBox = Boxes.getTasksBox();
   //AppConfigModel config = userPrefs.get('appConfig')!;
 
   @override
-  Future<TaskModel> createTaskUseCase({
-    required String description,
-    required DateTime date,
-    required bool isRoutine,
-    DateTime? notificationDateTime,
-  }) async {
+  Future<TaskModel> createTaskUseCase({required String description, required DateTime date, required bool isRoutine, DateTime? notificationDateTime}) async {
     // definir
     TaskModel newTask = TaskModel(
       description: description,
@@ -53,7 +48,7 @@ class TaskUseCasesImpl implements TasksUseCases {
 
     // crear notificacion
     if (notificationDateTime != null) {
-      newTask.notificationData = await NotificationsCrud.createNotification(
+      newTask.notificationData = await LocalNotificationsDataSource.createNotification(
         datetime: notificationDateTime,
         title: description,
         payload: newTask.key.toString(),
@@ -85,7 +80,7 @@ class TaskUseCasesImpl implements TasksUseCases {
               notificationDateTime.hour,
               notificationDateTime.minute,
             );
-            repeatedTask.notificationData = await NotificationsCrud.createNotification(
+            repeatedTask.notificationData = await LocalNotificationsDataSource.createNotification(
               datetime: notifDateTime,
               title: description,
               payload: repeatedTask.key,
@@ -104,7 +99,7 @@ class TaskUseCasesImpl implements TasksUseCases {
   }
 
   @override
-  void updateTaskUseCase({required Rx<TaskModel> task, bool? isDateUpdated}) {
+  void updateTaskState({required Rx<TaskModel> task, bool? isDateUpdated}) {
     task.value.save();
     task.refresh();
     Get.find<InitialPageController>().tasksMap.refresh();
@@ -120,19 +115,16 @@ class TaskUseCasesImpl implements TasksUseCases {
       for (var e in tasksBox.values) {
         if (e.repeatId == task.value.repeatId) {
           //borrar notificacion si tiene y luego tarea
-          if (e.notificationData != null && e.notificationData!.time.isAfter(DateTime.now())) {
-            notificationsUseCases.deleteNotificationWithTaskUseCase(task: e);
-          }
+          _localNotificationsUseCases.deleteNotification(task: task);
           e.delete();
         }
       }
       Get.find<InitialPageController>().buildInfo();
       return;
-    } else {
-      // si no es tarea repetida
-      if (task.value.notificationData != null) {
-        notificationsUseCases.deleteNotificationUseCase(task: task);
-      }
+    }
+    // si no es tarea repetida
+    else {
+      _localNotificationsUseCases.deleteNotification(task: task);
       // borrar tarea de muestra
       // if (task.value.key == 0) {
       //   config.createSampleTask = false;

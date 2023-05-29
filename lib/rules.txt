@@ -1,24 +1,21 @@
 
 ///// TAREAS /////
 
-IMPORTANTE:
-NO HAY FUNCIONALIDAD "GUARDAR CAMBIOS"
-Lo que se vaya tocando (cambiar descriocion, crear/editar notificacion, subtareas, etc...), se guarda en la tarea.
--NO SE PUEDEN CANCELAR LOS CAMBIOS-
-
 **** 1. CREAR TAREAS ****
 -NO se puede crear una tarea anterior a hoy
 -SOLO se pueden crear tareas al dia de hoy a dias futuros: limitar por UI desactivando los dias previos a hoy en el calendario
 -Notificaciones: mismas reglas que crear notificaciones (punto 3)
 
-**** 2. MOVER TAREAS ****
--NO se puede mover una tarea a dias anteriores a hoy.
--SÓLO se pueden mover las tareas al día de hoy y a dias futuros: limitar por UI desactivando los dias previos a hoy en el calendario
+**** 2. VER TAREA ****
+-2a: Botón guardar funciona para los cambios de descripción, cambiar fecha y cambiar notificación.
+-2b: Las subtareas se guardan sin confirmar cada vez que cambia algo.
+-2c: No se puede mover una tarea a dias anteriores a hoy (limitar x UI).
 -Notificaciones: 
-  -Tareas que se mueven posteriores a hoy: mantener notificacion con su respectiva hora.
-  -Tareas que se mueven al dia de hoy: si queda vencida: eliminar, si no queda vencida: mantener.
+  -2d: Tareas que se mueven posteriores a hoy: mantener notificacion con su respectiva hora.
+  -2e: Tareas que se mueven al dia de hoy: si hora de notificacion queda vencida: eliminar, si no queda vencida: mantener.
     *ej: si reprograma una tarea para el dia de hoy y la notificacion es para las 10 pero ahora son las 11: eliminar notificacion
     *IMPORTANTE: al reprogramar recordar eliminar la notificacion vieja y crear la nueva, ver punto 5 y 6
+-2f: las rutinas no pueden cambiar la fecha, si el usuario quiere cambiarla, debera borrarla y volverla a crear.
 
 **** 4. ELIMINAR TAREA ****
 -SE PUEDEN eliminar todas las tareas pasadas, presentes y futuras.

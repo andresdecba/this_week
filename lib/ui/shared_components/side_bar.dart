@@ -7,15 +7,13 @@ import 'package:todoapp/core/globals.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/ui/shared_components/dialogs.dart';
-import 'package:todoapp/use_cases/notifications_use_cases.dart';
+import 'package:todoapp/use_cases/local_notifications_use_cases.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SideBar extends GetView<InitialPageController> {
   SideBar({super.key});
 
-  //final SideBarController controller = Get.put(SideBarController());
-
-  final NotificationsUseCases notificationsUseCases = NotificationsUseCasesImpl();
+  final LocalNotificationsUseCases _localNotificationsUseCases = LocalNotificationsUseCases();
 
   @override
   Widget build(BuildContext context) {
@@ -183,7 +181,7 @@ class SideBar extends GetView<InitialPageController> {
     Navigator.of(context).pop();
     Globals.scaffoldKey.currentState!.closeEndDrawer();
     controller.simulateDeletingData();
-    notificationsUseCases.deleteAllNotificationsUseCase();
+    _localNotificationsUseCases.deleteAllNotifications();
     await controller.tasksBox.clear();
     controller.buildInfo();
   }

@@ -28,7 +28,7 @@ class CreateTaskPage extends GetView<CreateTaskPageController> {
               children: [
                 // titulo
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 40, 20, 5),
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 5),
                   child: Text(
                     '${"new task".tr} ${longDateFormaterWithoutYear(controller.selectedDate)}',
                     style: kBodyLarge,
@@ -85,13 +85,13 @@ class CreateTaskPage extends GetView<CreateTaskPageController> {
                       shouldWrap: false,
                       listOfChipNames: controller.listOfChips,
 
-                      inactiveBgColorList: const [grey_background],
-                      inactiveTextColorList: const [bluePrimary],
-                      inactiveBorderColorList: const [bluePrimary],
+                      inactiveBgColorList: [myChipBg],
+                      inactiveTextColorList: const [enabledGrey],
+                      //inactiveBorderColorList: const [enabledGrey],
 
-                      activeTextColorList: const [grey_background],
-                      activeBgColorList: const [bluePrimary],
-                      activeBorderColorList: const [bluePrimary],
+                      activeBgColorList: const [disabledGrey],
+                      activeTextColorList: const [whiteBg],
+                      //activeBorderColorList: const [bluePrimary],
 
                       borderRadiiList: const [20],
                       style: kBodySmall,

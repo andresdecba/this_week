@@ -1,0 +1,9 @@
+
+
+-refactorizar "NotificationsUseCases" vs "NotificationsCrud" (igual patrones con "createTaskUseCase")
+
+- ver como organizar estas instrucciones, por que estan x todos lados:
+    [ Get.find<InitialPageController>().tasksMap.refresh(); /  Get.find<InitialPageController>().buildInfo(); ]
+    [task.value.save(); /  task.refresh();]
+    crear un patrón logico para usarlas.
+    importante: a task.refresh(); hay que llamarlo si o si por que al ser una objeto custom getx no lo actualiza automaticamente.

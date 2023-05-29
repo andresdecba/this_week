@@ -20,7 +20,7 @@ Future<T?> myCustomDialog<T>({
       return AlertDialog(
         alignment: Alignment.center,
         scrollable: true,
-        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
         //insetPadding: const EdgeInsets.all(5),
         //
         icon: Align(
@@ -65,7 +65,7 @@ Future<T?> myCustomDialog<T>({
                   ),
                 ),
                 backgroundColor: MaterialStateProperty.all<Color>(
-                  witheBg,
+                  whiteBg,
                 ),
                 padding: MaterialStateProperty.all<EdgeInsets>(
                   const EdgeInsets.symmetric(horizontal: 30),
@@ -174,7 +174,7 @@ Future<T?> createSubtaskDialog<T>({
                   ),
                 ),
                 backgroundColor: MaterialStateProperty.all<Color>(
-                  witheBg,
+                  whiteBg,
                 ),
                 padding: MaterialStateProperty.all<EdgeInsets>(
                   const EdgeInsets.symmetric(horizontal: 30),

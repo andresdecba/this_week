@@ -13,7 +13,7 @@ const statusTaskInProgress = Color.fromARGB(255, 56, 149, 255);
 const statusTaskDone = Color.fromARGB(255, 138, 173, 131);
 const yellowPrimary = Color(0xFFFFC700);
 const header = Color.fromARGB(255, 201, 241, 253);
-const witheBg = Color(0xFFFFFFFF);
+const whiteBg = Color(0xFFFFFFFF);
 const blackBg = Color(0xFF000000);
 const appBarLogo = Color(0xFF000000);
 const textBg = Color(0xFF000000);
@@ -23,8 +23,12 @@ const bluePrimary = Color(0xFF0075FF);
 const iconsBg = Color(0xFF262626);
 const greenInfo = Color.fromARGB(255, 125, 252, 103);
 
+final splashColorButtons = yellowPrimary.withOpacity(0.5);
+
 // task description
 final kViewTaskDescripton = Theme.of(Get.context!).textTheme.titleLarge!.copyWith(fontSize: 26);
+final myChipBg = softGrey.withOpacity(0.5);
+const myChipText = enabledGrey;
 
 // titles
 final kTitleLarge = Theme.of(Get.context!).textTheme.titleLarge!;
@@ -62,7 +66,7 @@ InputDecoration customInputDecoration({
     hintStyle: kBodyMedium.copyWith(fontStyle: FontStyle.italic, color: disabledGrey),
     labelStyle: const TextStyle(color: bluePrimary),
     filled: isEnabled,
-    fillColor: witheBg.withOpacity(0.4),
+    fillColor: whiteBg.withOpacity(0.4),
     suffixIcon: isEnabled == true
         ? IconButton(
             icon: const Icon(

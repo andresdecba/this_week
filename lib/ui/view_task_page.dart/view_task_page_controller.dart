@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todoapp/core/globals.dart';
-
 import 'package:todoapp/models/subtask_model.dart';
 import 'package:todoapp/models/task_model.dart';
-import 'package:todoapp/use_cases/notifications_use_cases.dart';
+import 'package:todoapp/ui/commons/styles.dart';
+import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
+//import 'package:todoapp/ui/shared_components/dialogs.dart';
+import 'package:todoapp/ui/shared_components/my_time_picker.dart';
+import 'package:todoapp/ui/shared_components/snackbar.dart';
+import 'package:todoapp/use_cases/local_notifications_use_cases.dart';
 import 'package:todoapp/use_cases/tasks_use_cases.dart';
+import 'package:todoapp/utils/helpers.dart';
 
 class ViewTaskController extends GetxController {
-  final NotificationsUseCases notificationsUseCases;
-  final TasksUseCases tasksUseCases;
+  final Rx<TaskModel> task;
 
   ViewTaskController({
-    required this.notificationsUseCases,
-    required this.tasksUseCases,
+    required this.task,
   });
 
   @override
@@ -21,6 +24,9 @@ class ViewTaskController extends GetxController {
     super.onInit();
     focusNode = FocusNode();
     textController = TextEditingController();
+    localNotificationsUseCases = LocalNotificationsUseCases();
+    tasksUseCases = TaskUseCasesImpl();
+    setInitialValues();
     textController.addListener(() {
       counter.value = textController.text.length;
     });
@@ -28,64 +34,117 @@ class ViewTaskController extends GetxController {
 
   @override
   void dispose() {
+    super.dispose();
     focusNode.dispose();
     textController.dispose();
-    super.dispose();
   }
 
-  // LLENAR //
-  late Rx<TaskModel> task;
+  late LocalNotificationsUseCases localNotificationsUseCases;
+  late TaskUseCasesImpl tasksUseCases;
 
-  ////// DATE PICKER //////
-  Future<void> updateTaskDate(BuildContext context, Rx<TaskModel> task) async {
+  //// task values ////
+  // intentar pasar estas variables a late (da un error, puede ser mal declarado en getx)
+  RxString updatedDescription = ''.obs;
+  Rx<DateTime> updatedDateTime = DateTime.now().obs;
+  Rxn<TimeOfDay> updatedNotification = Rxn<TimeOfDay>();
+  RxBool isExpired = false.obs;
+
+  void setInitialValues() {
+    updatedDateTime.value = task.value.taskDate;
+    updatedDescription.value = task.value.description;
+    updatedNotification.value = task.value.notificationData != null //
+        ? TimeOfDay(hour: task.value.notificationData!.time.hour, minute: task.value.notificationData!.time.minute) //
+        : null; //
+    isExpired.value = isTaskExpired(updatedDateTime.value);
+  }
+
+  //// DATE STATUS ////
+  Widget dateStatus() {
+    if (isExpired.value) {
+      return Text(
+        '● EXPIRED',
+        style: kBodySmall.copyWith(color: Colors.orange[900], fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
+      );
+    } else if (updatedDateTime.value.day == DateTime.now().day) {
+      return Text(
+        '● TODAY',
+        style: kBodySmall.copyWith(color: Colors.green[900], fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
+      );
+    } else {
+      return Text(
+        '● ANOTHER DAY',
+        style: kBodySmall.copyWith(color: Colors.purple[900], fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
+      );
+    }
+  }
+
+  //// UPDATE DESCRIPTION ////
+  void updateDescription(String value) {
+    hasUpdated.value = true;
+    updatedDescription.value = value;
+  }
+
+  ////// UPDATE DATE //////
+  Future<void> updateDate(BuildContext context, Rx<TaskModel> task) async {
     late DateTime initialDate;
     late DateTime firstDate;
-
+    // si la tarea es vencida
     if (task.value.taskDate.isBefore(DateTime.now())) {
       initialDate = DateTime.now();
       firstDate = DateTime.now();
     }
-
+    // si la tarea esta en el futuro
     if (task.value.taskDate.isAfter(DateTime.now())) {
       initialDate = task.value.taskDate;
       firstDate = DateTime.now();
     }
-
-    final DateTime? pickedDate = await showDatePicker(
+    // pick a date
+    await showDatePicker(
       context: context,
-      initialDate: initialDate, //task.value.taskDate, // dia seleccionado del calendario (no puede ser anterior al fisrtDate)
-      firstDate: firstDate, // DateTime.now(), // primer dia habilitado del calendario (igual o anterior al initialDate)
+      initialDate: initialDate, // dia seleccionado del calendario (no puede ser anterior al fisrtDate)
+      firstDate: firstDate, // primer dia habilitado del calendario (igual o anterior al initialDate)
       lastDate: DateTime(2050),
-    );
-    if (pickedDate == null) {
-      return;
-    } else {
-      task.value.taskDate = pickedDate;
-      tasksUseCases.updateTaskUseCase(task: task, isDateUpdated: true);
-    }
+    ).then((value) {
+      if (value == null) {
+        return;
+      } else {
+        hasUpdated.value = true;
+        updatedDateTime.value = value;
+      }
+    });
   }
 
-  //// TASK DESCRIPTION ////
-  void saveDescriptionUpdate(String value) {
-    task.value.description = value;
-    tasksUseCases.updateTaskUseCase(task: task);
+  ////// UPDATE NOTIFICATION TIME //////
+  void updateNotification(BuildContext context) async {
+    await myTimePicker(context, task.value.taskDate).then((value) {
+      if (value != null) {
+        updatedNotification.value = value;
+        hasUpdated.value = true;
+      } else {
+        return;
+      }
+    });
   }
 
   //// DELETE TASK ////
   RxBool isChecked = false.obs;
   void deleteTask() {
     tasksUseCases.deleteTaskUseCase(task: task, deleteRoutine: isChecked.value);
+    Get.find<InitialPageController>().tasksMap.refresh();
+    Get.find<InitialPageController>().buildInfo();
+    showSnackBar(titleText: 'task deleted', messageText: task.value.description);
+    Get.back();
+    Get.back();
   }
 
   ////// SUBTASKS //////
-  
   final Duration listDuration = const Duration(milliseconds: 500);
 
   // subtask form //
   late FocusNode focusNode;
   late TextEditingController textController;
   RxInt counter = 0.obs;
-
+  // methods //
   void createSubtask() {
     if (Globals.formStateKey.currentState!.validate()) {
       Globals.animatedListStateKey.currentState!.insertItem(
@@ -93,19 +152,19 @@ class ViewTaskController extends GetxController {
         duration: listDuration,
       );
       task.value.subTasks.insert(0, SubTaskModel(title: textController.text, isDone: false));
-      tasksUseCases.updateTaskUseCase(task: task);
+      tasksUseCases.updateTaskState(task: task);
       textController.clear();
     }
   }
 
   void updateTitleSubtask(SubTaskModel subTask, String? title) {
     subTask.title = title ?? subTask.title;
-    tasksUseCases.updateTaskUseCase(task: task);
+    tasksUseCases.updateTaskState(task: task);
   }
 
   void updateStatusSubtask(SubTaskModel subTask) {
     subTask.isDone = !subTask.isDone;
-    tasksUseCases.updateTaskUseCase(task: task);
+    tasksUseCases.updateTaskState(task: task);
   }
 
   void removeSubtask({required int index, required Widget child, required Rx<TaskModel> task}) {
@@ -123,8 +182,81 @@ class ViewTaskController extends GetxController {
       },
     );
     task.value.subTasks.remove(task.value.subTasks[index]);
-    tasksUseCases.updateTaskUseCase(task: task);
+    tasksUseCases.updateTaskState(task: task);
+  }
+
+  ////// SAVE UPDATED TASK //////
+  // este botón solo guarda cambios en: descripción, cambio de fecha y cambio de notificación
+  // los cambios en las subtareas se guardan al momento de interactuar
+  RxBool hasUpdated = false.obs;
+  void saveUpdatedTask() {
+    // cambió la descripcion
+    if (task.value.description != updatedDescription.value) {
+      task.value.description = updatedDescription.value;
+    }
+
+    // cambió la fecha
+    if (task.value.taskDate != updatedDateTime.value) {
+      task.value.taskDate = updatedDateTime.value;
+      // -2e: Tareas que se mueven al dia de hoy:
+      // si hora de notificacion queda vencida: eliminar, si no queda vencida: mantener.
+      if (isTaskToday(updatedDateTime.value) && updatedNotification.value != null) {
+        if (timeOfDayIsBeforeNow(updatedNotification.value!)) {
+          localNotificationsUseCases.deleteNotification(task: task);
+        } else {
+          localNotificationsUseCases.createNotification(
+            task: task,
+            newTime: updatedNotification.value!,
+          );
+        }
+      }
+
+      tasksUseCases.updateTaskState(task: task, isDateUpdated: true);
+      showSnackBar(
+        titleText: 'task updated',
+        messageText: task.value.description,
+      );
+      Get.back();
+      return;
+    }
+
+    // cambió la notificacion
+    if (updatedNotification.value != null) {
+      if (task.value.notificationData != null) {
+        final TimeOfDay taskNotificationTime = TimeOfDay(
+          hour: task.value.notificationData!.time.hour,
+          minute: task.value.notificationData!.time.minute,
+        );
+        if (updatedNotification.value != taskNotificationTime) {
+          localNotificationsUseCases.createNotification(
+            task: task,
+            newTime: updatedNotification.value!,
+          );
+        }
+      } else {
+        localNotificationsUseCases.createNotification(
+          task: task,
+          newTime: updatedNotification.value!,
+        );
+      }
+    }
+    // guardar
+    tasksUseCases.updateTaskState(task: task, isDateUpdated: true);
+    showSnackBar(
+      titleText: 'task updated',
+      messageText: task.value.description,
+    );
+    Get.back();
+    return;
   }
 }
 
 typedef SelectedValueTypedef<T> = void Function(T value);
+
+// task.value.notificationData == null
+// task.value.notificationData != null
+
+// updatedNotification.value == null
+// updatedNotification.value != null
+
+// task.value.notificationData!.time != updatedNotification.value;

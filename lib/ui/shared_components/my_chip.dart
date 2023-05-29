@@ -6,18 +6,24 @@ class MyChip extends StatelessWidget {
     required this.iconData,
     required this.label,
     required this.onTap,
+    required this.isEnabled,
     super.key,
   });
 
   final IconData iconData;
   final String label;
   final VoidCallback onTap;
+  final bool isEnabled;
 
   @override
   Widget build(BuildContext context) {
+
+    var color = isEnabled ? myChipText : disabledGrey;
+
     return InkWell(
+      splashColor: splashColorButtons,
       customBorder: const CircleBorder(),
-      onTap: () => onTap(),
+      onTap: isEnabled ? () => onTap() : null,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
         decoration: BoxDecoration(
@@ -26,9 +32,9 @@ class MyChip extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(iconData, size: 16, color: enabledGrey),
+            Icon(iconData, size: 16, color: color),
             const SizedBox(width: 8),
-            Text(label, style: kLabelMedium),
+            Text(label, style: kLabelMedium.copyWith(color: color)),
           ],
         ),
       ),

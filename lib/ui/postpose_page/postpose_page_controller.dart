@@ -2,23 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:todoapp/core/routes/routes.dart';
-import 'package:todoapp/data_source/db_data_source.dart';
+import 'package:todoapp/data_source/hive_data_sorce/hive_data_source.dart';
 import 'package:todoapp/main.dart';
 import 'package:todoapp/models/notification_model.dart';
 import 'package:todoapp/models/task_model.dart';
-import 'package:todoapp/services/ad_mob_service.dart';
+import 'package:todoapp/core/services/ad_mob_service.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/ui/shared_components/dialogs.dart';
 import 'package:todoapp/ui/shared_components/snackbar.dart';
-import 'package:todoapp/use_cases/notifications_use_cases.dart';
+import 'package:todoapp/use_cases/local_notifications_use_cases.dart';
 import 'package:todoapp/utils/helpers.dart';
 import 'dart:async';
 
 enum PostposeEnum { fifteenMinutes, oneHour, threeHours, oneDay, personalized }
 
 class PostPosePageController extends GetxController with AdMobService, StateMixin<dynamic> {
+
+
+
   PostPosePageController({
-    required this.notificationsUseCases,
+    required this.localNotificationsUseCases,
   });
 
   @override
@@ -43,7 +46,7 @@ class PostPosePageController extends GetxController with AdMobService, StateMixi
   }
 
   ///// NOTIFICATIONS /////
-  final NotificationsUseCases notificationsUseCases;
+  final LocalNotificationsUseCases localNotificationsUseCases;
 
   //// manage HIVE //////
   final tasksBox = Boxes.getTasksBox();

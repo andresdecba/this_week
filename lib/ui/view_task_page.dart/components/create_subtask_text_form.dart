@@ -4,8 +4,14 @@ import 'package:todoapp/core/globals.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/view_task_page.dart/view_task_page_controller.dart';
 
-class CreateSubtaskForm extends GetView<ViewTaskController> {
-  const CreateSubtaskForm({Key? key}) : super(key: key);
+/*
+***********************************************************
+--------- este formularios es para ingresar texto ---------
+***********************************************************
+*/
+
+class CreateSubtaskTextForm extends GetView<ViewTaskController> {
+  const CreateSubtaskTextForm({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +26,7 @@ class CreateSubtaskForm extends GetView<ViewTaskController> {
           controller: controller.textController,
           textInputAction: TextInputAction.done,
           textCapitalization: TextCapitalization.sentences,
-          style: kTitleLarge,
+          style: kBodyLarge,
           maxLines: null,
           maxLength: 100,
           validator: (value) {
