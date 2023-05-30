@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/postpose_page/postpose_page_controller.dart';
-import 'package:todoapp/ui/shared_components/my_modal_bottom_sheet.dart';
-import 'package:todoapp/ui/postpose_page/components/view_task.dart';
+// import 'package:todoapp/ui/shared_components/my_modal_bottom_sheet.dart';
+// import 'package:todoapp/ui/postpose_page/components/view_task.dart';
 
 class PostPosePage extends GetView<PostPosePageController> {
   const PostPosePage({Key? key}) : super(key: key);
@@ -95,7 +95,7 @@ class PostPosePage extends GetView<PostPosePageController> {
         () => SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 10, 20, 40),
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 40),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -108,15 +108,16 @@ class PostPosePage extends GetView<PostPosePageController> {
                       'postpone task'.tr,
                       style: kTitleLarge,
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.open_in_new),
-                      onPressed: () {
-                        myModalBottomSheet(
-                          context: context,
-                          child: ViewTask(task: controller.task),
-                        );
-                      },
-                    ),
+                    /// TODO: mostrar tarea, pero rompe al abrir
+                    // IconButton(
+                    //   icon: const Icon(Icons.open_in_new),
+                    //   onPressed: () {
+                    //     myModalBottomSheet(
+                    //       context: context,
+                    //       child: ViewTask(task: controller.task),
+                    //     );
+                    //   },
+                    // ),
                   ],
                 ),
 

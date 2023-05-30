@@ -40,7 +40,7 @@ class SideBar extends GetView<InitialPageController> {
                 onTap: () {
                   controller.oldWeeks = 0;
                   controller.buildInfo();
-                  Globals.scaffoldKey.currentState!.closeEndDrawer();
+                  Globals.myScaffoldKey.currentState!.closeEndDrawer();
                 },
               ),
               ListTile(
@@ -111,7 +111,7 @@ class SideBar extends GetView<InitialPageController> {
                                   title: 'you will need to restart the app...'.tr,
                                   iconPath: 'assets/warning.svg',
                                   onPressOk: () {
-                                    Globals.scaffoldKey.currentState!.closeEndDrawer();
+                                    Globals.myScaffoldKey.currentState!.closeEndDrawer();
                                     Navigator.of(context, rootNavigator: true).pop();
                                   },
                                 );
@@ -137,7 +137,7 @@ class SideBar extends GetView<InitialPageController> {
                   style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: disabledGrey),
                 ),
                 onTap: () {
-                  Globals.scaffoldKey.currentState!.closeEndDrawer();
+                  Globals.myScaffoldKey.currentState!.closeEndDrawer();
                   shareApp(context);
                 },
               ),
@@ -150,7 +150,7 @@ class SideBar extends GetView<InitialPageController> {
                   style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: disabledGrey),
                 ),
                 onTap: () {
-                  Globals.scaffoldKey.currentState!.closeEndDrawer();
+                  Globals.myScaffoldKey.currentState!.closeEndDrawer();
                   goToPlaystore(context);
                 },
               ),
@@ -179,7 +179,7 @@ class SideBar extends GetView<InitialPageController> {
 
   Future<void> deleteAll(BuildContext context) async {
     Navigator.of(context).pop();
-    Globals.scaffoldKey.currentState!.closeEndDrawer();
+    Globals.myScaffoldKey.currentState!.closeEndDrawer();
     controller.simulateDeletingData();
     _localNotificationsUseCases.deleteAllNotifications();
     await controller.tasksBox.clear();

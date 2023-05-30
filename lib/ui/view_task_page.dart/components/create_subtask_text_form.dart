@@ -31,7 +31,7 @@ class CreateSubtaskTextForm extends GetView<ViewTaskController> {
           maxLength: 100,
           validator: (value) {
             if (value != null && value.length < 6) {
-              return 'between 6 and 00 characters'.tr;
+              return 'between 6 and 100 characters'.tr;
             } else {
               return null;
             }
@@ -45,9 +45,22 @@ class CreateSubtaskTextForm extends GetView<ViewTaskController> {
             border: const OutlineInputBorder(),
             hintText: 'add a subtask'.tr,
             // styles
-            hintStyle: kBodySmall.copyWith(fontStyle: FontStyle.italic, color: disabledGrey, fontWeight: FontWeight.normal, fontSize: 13),
-            helperStyle: kBodySmall.copyWith(fontStyle: FontStyle.italic, color: disabledGrey, fontWeight: FontWeight.normal),
-            errorStyle: kBodySmall.copyWith(fontStyle: FontStyle.italic, color: disabledGrey, fontWeight: FontWeight.normal),
+            hintStyle: kBodySmall.copyWith(
+              fontStyle: FontStyle.italic,
+              color: disabledGrey,
+              fontWeight: FontWeight.normal,
+              fontSize: 13,
+            ),
+            helperStyle: kBodySmall.copyWith(
+              fontStyle: FontStyle.italic,
+              color: disabledGrey,
+              fontWeight: FontWeight.normal,
+            ),
+            errorStyle: kBodySmall.copyWith(
+              fontStyle: FontStyle.italic,
+              color: disabledGrey,
+              fontWeight: FontWeight.normal,
+            ),
             counterStyle: kBodySmall.copyWith(
               fontStyle: FontStyle.italic,
               fontWeight: controller.counter.value < 6 ? FontWeight.bold : FontWeight.normal,
@@ -76,7 +89,7 @@ class CreateSubtaskTextForm extends GetView<ViewTaskController> {
             focusedBorder: const OutlineInputBorder(
               borderSide: BorderSide(color: bluePrimary),
             ),
-            helperText: 'between 12 and 200 characters'.tr,
+            helperText: 'between 6 and 100 characters'.tr,
             errorBorder: const OutlineInputBorder(
               borderSide: BorderSide(color: bluePrimary, width: 1.0),
             ),

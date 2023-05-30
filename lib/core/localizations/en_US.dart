@@ -51,10 +51,13 @@ Map<String, String> en_US = {
   // view task page
   'subtasks': 'Subtasks',
   'add a subtask': 'Add a subtask',
+  'expired_state': '● EXPIRED',
+  'today_state': '● TODAY',
+  'another day_state': '● ANOTHER DAY',
+  'between 6 and 100 characters': 'Between 6 and 100 characters.',
 
   // create task page
   'between 12 and 200 characters': 'Between 12 and 200 characters.',
-  'between 6 and 100 characters': 'Between 6 and 100 characters.',
   'description': 'Description',
   'out of': 'out of',
   'create routine ?': 'Create routine ?',

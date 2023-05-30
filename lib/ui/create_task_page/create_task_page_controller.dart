@@ -103,6 +103,7 @@ class CreateTaskPageController extends GetxController {
   late DateTime? notificationDateTime;
 
   List<String> listOfChips = [];
+  List<Schedules> listOfSchedules = [];
 
   void createChipsList() {
     var today = DateTime(
@@ -117,49 +118,55 @@ class CreateTaskPageController extends GetxController {
     );
 
     // si la tarea es para hoy, restringir los horarios
-    if (selectedDate.isAtSameMomentAs(today)) {
+    // siii ya séee, medio trucho pero no tenia más ganas de pensar :/
+    listOfChips.add(Schedules.DISABLED.toStringValue);
+    listOfSchedules.add(Schedules.DISABLED);
 
+    if (selectedDate.isAtSameMomentAs(today)) {
       for (var e in Schedules.values) {
-        if (e.toStringValue == Schedules.DISABLED.toStringValue || e.toStringValue == Schedules.PERSONALIZED.toStringValue) {
-          listOfChips.add(e.toStringValue);
-        }
         if (timeOfDayIsAfterNow(e.toTimeOfDay)) {
           listOfChips.add(e.toStringValue);
+          listOfSchedules.add(e);
         }
       }
     }
-
     // si la tarea es otro dia, mostrar todos los horarios
     if (!selectedDate.isAtSameMomentAs(today)) {
-      listOfChips = [
-        Schedules.DISABLED.toStringValue,
+      listOfChips.addAll([
         Schedules.MORNING.toStringValue,
         Schedules.NOON.toStringValue,
         Schedules.AFTERNOON.toStringValue,
         Schedules.NIGHT.toStringValue,
-        Schedules.PERSONALIZED.toStringValue,
-      ];
+      ]);
+      listOfSchedules.addAll([
+        Schedules.MORNING,
+        Schedules.NOON,
+        Schedules.AFTERNOON,
+        Schedules.NIGHT,
+      ]);
     }
+    listOfChips.add(Schedules.PERSONALIZED.toStringValue);
+    listOfSchedules.add(Schedules.PERSONALIZED);
   }
 
   void selectedNotificationDateTime(BuildContext context, index) async {
-    switch (listOfChips.indexOf(listOfChips[index])) {
-      case 0:
+    switch (listOfSchedules[index]) {
+      case Schedules.DISABLED:
         notificationDateTime = null;
         break;
-      case 1:
+      case Schedules.MORNING:
         notificationDateTime = DateTime(selectedDate.year, selectedDate.month, selectedDate.day, 9, 0);
         break;
-      case 2:
+      case Schedules.NOON:
         notificationDateTime = DateTime(selectedDate.year, selectedDate.month, selectedDate.day, 12, 0);
         break;
-      case 3:
+      case Schedules.AFTERNOON:
         notificationDateTime = DateTime(selectedDate.year, selectedDate.month, selectedDate.day, 17, 0);
         break;
-      case 4:
+      case Schedules.NIGHT:
         notificationDateTime = DateTime(selectedDate.year, selectedDate.month, selectedDate.day, 21, 0);
         break;
-      case 5:
+      case Schedules.PERSONALIZED:
         {
           TimeOfDay? newTime = await showTimePicker(
             context: context,
@@ -175,18 +182,6 @@ class CreateTaskPageController extends GetxController {
     }
   }
 
-  // CLOSE BOTTOMSHEET X //
-  // TODO: ver alguna forma mejor de no tener que llamar este metodo por todos lados para resetear las propiedades
-  // TODO: hacer algo mejor para pasar el selectedDate a este controller
-  void closeAndRestoreValues() {
-    textController.clear();
-    isRoutine.value = false;
-    notificationDateTime = null;
-    currentIndex.value = 1;
-    listOfChips = [];
-    Get.back();
-  }
-
   // SAVE-CREATE TASK //
   void saveTask() async {
     if (Globals.formStateKey.currentState!.validate()) {
@@ -196,13 +191,13 @@ class CreateTaskPageController extends GetxController {
         isRoutine: isRoutine.value,
         notificationDateTime: notificationDateTime,
       );
+      Get.find<InitialPageController>().tasksMap.refresh();
+      Get.find<InitialPageController>().buildInfo();
+      Get.back();
       showSnackBar(
         titleText: 'new task created'.tr,
         messageText: textController.value.text,
       );
-      Get.find<InitialPageController>().tasksMap.refresh();
-      Get.find<InitialPageController>().buildInfo();
-      closeAndRestoreValues();
     }
   }
 }

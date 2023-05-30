@@ -62,18 +62,18 @@ class ViewTaskController extends GetxController {
   Widget dateStatus() {
     if (isExpired.value) {
       return Text(
-        '● EXPIRED',
-        style: kBodySmall.copyWith(color: Colors.orange[900], fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
+        'expired_state'.tr,
+        style: kBodyMedium.copyWith(color: Colors.orange[900], fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
       );
     } else if (updatedDateTime.value.day == DateTime.now().day) {
       return Text(
-        '● TODAY',
-        style: kBodySmall.copyWith(color: Colors.green[900], fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
+        'today_state'.tr,
+        style: kBodyMedium.copyWith(color: Colors.green[900], fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
       );
     } else {
       return Text(
-        '● ANOTHER DAY',
-        style: kBodySmall.copyWith(color: Colors.purple[900], fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
+        'another day_state'.tr,
+        style: kBodyMedium.copyWith(color: Colors.purple[900], fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
       );
     }
   }

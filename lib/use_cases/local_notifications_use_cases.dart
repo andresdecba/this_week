@@ -38,31 +38,6 @@ class LocalNotificationsUseCases {
     task.value.save();
     task.refresh();
     return true;
-
-    // validar rule: si es anterior a ahora mostrar modal
-    // if (selectedDateTime.isBefore(DateTime.now())) {
-    //   myCustomDialog(
-    //     context: Get.context!,
-    //     title: 'atention !'.tr,
-    //     subtitle: 'You cant create a...'.tr,
-    //     okTextButton: 'ok'.tr,
-    //     iconPath: 'assets/info.svg',
-    //     iconColor: bluePrimary,
-    //     onPressOk: () => Get.back(),
-    //   );
-    //   return false;
-    // } else {
-    //   // crear notificacion
-    //   task.value.notificationData = await LocalNotificationsDataSource.createNotification(
-    //     datetime: selectedDateTime,
-    //     title: task.value.description,
-    //     payload: task.value.key.toString(),
-    //   );
-    //   task.value.save();
-    //   task.refresh();
-    // }
-
-    // crear notificacion
   }
 
   Future<bool> deleteNotification({required Rx<TaskModel> task}) async {

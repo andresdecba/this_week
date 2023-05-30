@@ -169,8 +169,6 @@ class TasksList extends GetView<InitialPageController> {
                                         context: context,
                                         child: const ViewTask(),
                                       );
-
-                                    
                                     },
                                     onStatusChange: () {
                                       e.value.status = controller.changeTaskStatus(e.value.status);

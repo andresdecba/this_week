@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 import 'package:todoapp/data_source/hive_data_sorce/hive_data_source.dart';
+import 'package:todoapp/models/app_config_model.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/data_source/local_notifications_data_source/local_notifications_data_source.dart';
@@ -30,7 +32,7 @@ class TaskUseCasesImpl implements TasksUseCases {
   //
   final LocalNotificationsUseCases _localNotificationsUseCases = LocalNotificationsUseCases();
   final tasksBox = Boxes.getTasksBox();
-  //AppConfigModel config = userPrefs.get('appConfig')!;
+  Box<AppConfigModel> userPrefs = Boxes.getMyAppConfigBox();  
 
   @override
   Future<TaskModel> createTaskUseCase({required String description, required DateTime date, required bool isRoutine, DateTime? notificationDateTime}) async {
@@ -110,6 +112,9 @@ class TaskUseCasesImpl implements TasksUseCases {
 
   @override
   void deleteTaskUseCase({required Rx<TaskModel> task, required bool deleteRoutine}) {
+
+      
+
     // si es tarea repetida
     if (task.value.repeatId != null && deleteRoutine) {
       for (var e in tasksBox.values) {
@@ -125,11 +130,12 @@ class TaskUseCasesImpl implements TasksUseCases {
     // si no es tarea repetida
     else {
       _localNotificationsUseCases.deleteNotification(task: task);
-      // borrar tarea de muestra
-      // if (task.value.key == 0) {
-      //   config.createSampleTask = false;
-      //   config.save();
-      // }
+      // al borrar la tarea de muestra, marcar vista
+      AppConfigModel config = userPrefs.get('appConfig')!;
+      if (task.value.key == 0) {
+        config.createSampleTask = false;
+        config.save();
+      }
       task.value.delete();
       Get.find<InitialPageController>().buildInfo();
     }

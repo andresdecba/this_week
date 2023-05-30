@@ -49,6 +49,8 @@ class _ViewTaskState extends State<ViewTask> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+
+                        /// SI ES ATER, HOY O MAÑANA ///
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 14.0),
                           child: controller.dateStatus(),

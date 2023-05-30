@@ -17,9 +17,7 @@ import 'dart:async';
 enum PostposeEnum { fifteenMinutes, oneHour, threeHours, oneDay, personalized }
 
 class PostPosePageController extends GetxController with AdMobService, StateMixin<dynamic> {
-
-
-
+  
   PostPosePageController({
     required this.localNotificationsUseCases,
   });
@@ -188,6 +186,11 @@ class PostPosePageController extends GetxController with AdMobService, StateMixi
     //   context: context,
     //   task: task,
     // );
+
+    //Rx<TaskModel> _task = task.obs;
+
+    //localNotificationsUseCases.createNotification(task: _task, newTime: newTime)
+
     // otras cosas
     _initialPageController.buildInfo();
     Get.offAllNamed(Routes.INITIAL_PAGE);
@@ -199,10 +202,7 @@ class PostPosePageController extends GetxController with AdMobService, StateMixi
 
   ///// manage CANCEL AND NAVIGATE /////
   void cancelPostpose() {
-    //Map<String, String> data = {
-    //  "notificationPAYLOAD": task.key.toString(),
-    //};
-    //Get.offAllNamed(Routes.FORMS_PAGE, arguments: data);
+    Get.offAllNamed(Routes.INITIAL_PAGE);
   }
 
   ///// manage PERSONALIZED DATE AND TIME /////

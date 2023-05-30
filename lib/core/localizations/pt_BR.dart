@@ -51,10 +51,13 @@ Map<String, String> pt_BR = {
   // view task page
   'subtasks': 'Subtarefas',
   'add a subtask': 'Adicionar subtarefa',
+  'expired_state': '● EXPIRADA',
+  'today_state': '● HOJE',
+  'another day_state': '● OUTRO DIA',
+  'between 6 and 100 characters': 'Entre 6 e 100 caracteres.',
 
   // create tasl page
   'between 12 and 200 characters': 'Entre 12 e 200 caracteres.',
-  'between 6 and 00 characters': 'Entre 6 e 100 caracteres.',
   'description': 'Descrição',
   'out of': 'de',
   'create routine ?': 'Criar rotina ?',

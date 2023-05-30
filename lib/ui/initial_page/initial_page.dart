@@ -19,7 +19,7 @@ class InitialPage extends GetView<InitialPageController> {
       resizeToAvoidBottomInset: false,
 
       // key
-      key: Globals.scaffoldKey,
+      key: Globals.myScaffoldKey,
       // ad
       bottomNavigationBar: controller.obx(
         (ad) => Container(

@@ -1,0 +1,32 @@
+
+
+{
+    "2023": [
+        {
+            "enero": [
+                {
+                    "semana 1":
+                        [
+                            {
+                                "lunes" : ["tarea", "tarea"]
+                            },
+                            {
+                                "martes" : []
+                            }
+                        ]
+                },
+                {
+                    "semana 2":
+                        [
+                            {
+                                "lunes" : ["tarea", "tarea"]
+                            },
+                            {
+                                "martes" : []
+                            }
+                        ]
+                }
+             ]
+        }
+    ]
+}

@@ -4,17 +4,19 @@ import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:isoweek/isoweek.dart';
-//import 'package:todoapp/core/routes/routes.dart';
 import 'package:todoapp/data_source/hive_data_sorce/hive_data_source.dart';
 import 'package:todoapp/main.dart';
 import 'package:todoapp/models/app_config_model.dart';
 import 'package:todoapp/models/subtask_model.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/core/services/ad_mob_service.dart';
+//import 'package:todoapp/ui/shared_components/my_modal_bottom_sheet.dart';
+//import 'package:todoapp/core/routes/routes.dart';
+// import 'package:todoapp/ui/view_task_page.dart/view_task_page.dart';
+// import 'package:todoapp/ui/view_task_page.dart/view_task_page_controller.dart';
 import 'package:todoapp/utils/helpers.dart';
 
 class InitialPageController extends GetxController with AdMobService, StateMixin<dynamic>, WidgetsBindingObserver {
-
   //,OpenTaskController
   @override
   void onInit() async {
@@ -23,7 +25,11 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
     await initConfig();
     buildInfo();
     calculateWeeksDifference();
+    openTaskFromNotification();
     WidgetsBinding.instance.addObserver(this);
+    print('aver tasksMap:::: $tasksMap ');
+    print('aver tasksBox:::: ${tasksBox.keys}: ${tasksBox.values} ');
+
   }
 
   @override
@@ -32,7 +38,7 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
     //loadBannerAd(bannerListener: initialPageBannerListener(), adUnitId: AdMobService.initialPageBanner!);
     super.onReady();
   }
-  
+
   @override
   void dispose() {
     super.dispose();
@@ -72,15 +78,40 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
   PageStorageKey keyScroll = const PageStorageKey<String>('home_page_scroll');
   RxBool simulateDeleting = false.obs;
 
-  // scaffold key
-  
-
- 
-
   // INITIALIZE APP CONFIGURATIONS //
   AppConfigModel appConfig = AppConfigModel();
   Future<void> initConfig() async {
     appConfig = Boxes.getMyAppConfigBox().get('appConfig')!;
+  }
+
+  void openTaskFromNotification() async {
+    // 'notificationPAYLOAD': details.payload!
+
+    // if (Get.arguments ['notificationPAYLOAD'] != null) {
+    //   Get.put(ViewTaskController(task: e));
+
+    //   int value = int.parse(Get.arguments['notificationPAYLOAD']!);
+    //   Rx<TaskModel> e = tasksBox.get(value)!.obs;
+    //   myModalBottomSheet(
+    //     context: Get.context!,
+    //     child: const ViewTask(),
+    //   );
+    //   return;
+    // }
+
+    //tasksMap.value.containsValue();
+
+    // print('entra initialPageController args ${Get.arguments}');
+
+    // final FlutterLocalNotificationsPlugin localNotifications = FlutterLocalNotificationsPlugin();
+    // final notificationLaunchDetails = await localNotifications.getNotificationAppLaunchDetails();
+    // if (notificationLaunchDetails?.didNotificationLaunchApp ?? false) {
+    //   print('entra initialPageController');
+    //   // myModalBottomSheet(
+    //   //   context: Get.context!,
+    //   //   child: const Text('HOLA'),
+    //   // );
+    // }
   }
 
   void simulateDeletingData() {
@@ -118,15 +149,17 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
   }
 
   /// ejemplo del modelo de datos
-  //Map<DateTime, List<Task>> buildWeekDemo = {
-  //  'Lunes 26-11-2022'    : ['task_1', 'task_2'],
-  //  'Martes 27-11-2022'   : ['task_1', 'task_2'],
-  //  'Miercoles 28-11-2022': [],
-  //  'Jueves 29-11-2022'   : ['task_1'],
-  //  'Viernes 30-11-2022'  : ['task_1', 'task_2'],
-  //  'Sabado 01-12-2022'   : [],
-  //  'Domingo 02-12-2022'  : [],
+  //Map<DateTime, List<Task>> tasksMap = {
+  //  '2023-05-29 00:00:00.000': ['task_1', 'task_2'],
+  //  '2023-05-30 00:00:00.000': ['task_1', 'task_2'],
+  //  '2023-05-31 00:00:00.000': [],
+  //  '2023-06-03 00:00:00.000': ['task_1'],
+  //  '2023-06-04 00:00:00.000': ['task_1', 'task_2'],
   //};
+
+  /// asi se guarga en hive
+  //1: { description: Nueva tarea martes, task date: 2023-05-30 00:00:00.000, status: Pending, sub tasks: [], repeat Id: null, notification data: null },
+  //2: { description: Nueva tarea Miercoles, task date: 2023-05-31 00:00:00.000, status: Pending, sub tasks: [], repeat Id: null, notification data: null },
 
   // related to buil days an weeks
   late int oldWeeks = 0;
@@ -208,29 +241,6 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
     // set message
     totalTasks == 0 ? tasksPercentageCompleted.value = 'no tasks for this week'.tr : tasksPercentageCompleted.value = '$completedTasksPercent% ${'of completed tasks'.tr}';
   }
-
-  // /// navegar para crear o editar
-  // void navigate({int? taskKey, DateTime? date}) {
-  //   // si quiere abrir una tarea
-  //   if (taskKey != null) {
-  //     Map<String, String> data = {
-  //       "taskId": taskKey.toString(),
-  //     };
-  //     Get.offAllNamed(Routes.FORMS_PAGE, arguments: data);
-  //     return;
-  //   }
-  //   // si quiere crear una tarea a partir de una fecha en particular
-  //   if (date != null) {
-  //     Map<String, String> data = {
-  //       "date": date.toString(),
-  //     };
-  //     Get.offAllNamed(Routes.FORMS_PAGE, arguments: data);
-  //     return;
-  //   }
-  //   // si quiere crear una tarea a partir de nada
-  //   Get.offAllNamed(Routes.FORMS_PAGE);
-  // }
-
 
   String changeTaskStatus(String value) {
     switch (value) {
