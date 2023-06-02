@@ -3,14 +3,14 @@ import 'package:todoapp/ui/commons/styles.dart';
 
 class MyChip extends StatelessWidget {
   const MyChip({
-    required this.iconData,
+    this.iconData,
     required this.label,
     required this.onTap,
     required this.isEnabled,
     super.key,
   });
 
-  final IconData iconData;
+  final IconData? iconData;
   final String label;
   final VoidCallback onTap;
   final bool isEnabled;

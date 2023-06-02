@@ -22,7 +22,7 @@ Map<String, String> pt_BR = {
   'rate us in playstore' : 'Avalie-nos na Play Store',
 
   // task card
-  'no tasks': 'adicionar uma tarefa.',
+  'no tasks': 'Sem tarefas.',
   'pending': 'Pendente',
   'in progress': 'Em andamento',
   'done': 'Feita',

@@ -22,7 +22,7 @@ Map<String, String> en_US = {
   'rate us in playstore' : 'Rate us on Play Strore',
 
   // task card
-  'no tasks': 'Add a task.',
+  'no tasks': 'No tasks.',
   'pending': 'Pending',
   'in progress': 'In progress',
   'done': 'Done',

@@ -41,7 +41,7 @@ class TaskUseCasesImpl implements TasksUseCases {
       description: description,
       taskDate: date,
       repeatId: isRoutine ? UniqueKey().toString() : null,
-      status: TaskStatus.PENDING.toValue,
+      status: TaskStatus.PENDING.toStringValue,
       subTasks: [],
     );
 
@@ -67,7 +67,7 @@ class TaskUseCasesImpl implements TasksUseCases {
           TaskModel repeatedTask = newTask.copyWith(
             description: newTask.description,
             taskDate: nextDate,
-            status: TaskStatus.PENDING.toValue,
+            status: TaskStatus.PENDING.toStringValue,
             repeatId: newTask.repeatId,
             subTasks: [],
           );

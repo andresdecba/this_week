@@ -62,7 +62,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         dividerColor: Colors.transparent,
         primaryTextTheme: Typography().white,
-          scaffoldBackgroundColor: disabledTaskBg,
+          scaffoldBackgroundColor: Colors.white,
         appBarTheme: const AppBarTheme(
           backgroundColor: yellowPrimary,
           iconTheme: IconThemeData(color: blackBg),

@@ -11,7 +11,7 @@ class Header extends GetView<InitialPageController> {
   Widget build(BuildContext context) {
     return Obx(
       () => Container(
-        height: 80,
+        height: 60,
         alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(horizontal: 8),
         decoration: const BoxDecoration(
@@ -39,11 +39,11 @@ class Header extends GetView<InitialPageController> {
               children: [
                 Text(
                   controller.weekDaysFromTo.value,
-                  style: controller.week == Week.current() ? kTitleMedium.copyWith(fontWeight: FontWeight.bold, color: bluePrimary) : kTitleMedium.copyWith(fontWeight: FontWeight.bold),
+                  style: controller.week == Week.current() ? kTitleSmall.copyWith(fontWeight: FontWeight.bold) : kTitleSmall.copyWith(fontWeight: FontWeight.bold),
                 ),
                 Text(
                   controller.tasksPercentageCompleted.value,
-                  style: controller.week == Week.current() ? kTitleSmall.copyWith(height: 1.5, color: bluePrimary) : kTitleMedium,
+                  style: kBodyMedium.copyWith(height: 1.5),
                 ),
               ],
             ),

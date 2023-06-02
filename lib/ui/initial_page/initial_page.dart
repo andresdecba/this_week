@@ -127,7 +127,7 @@ class _DelegateWithHeader extends SliverPersistentHeaderDelegate {
       duration: const Duration(milliseconds: 400), // no es
       curve: Curves.easeIn,
       child: Container(
-        height: 80,
+        height: 60,
         color: Colors.white,
         alignment: Alignment.center,
         child: const Header(),
@@ -136,10 +136,10 @@ class _DelegateWithHeader extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get maxExtent => 80; //no es
+  double get maxExtent => 60; //no es
 
   @override
-  double get minExtent => 80; // no es
+  double get minExtent => 60; // no es
 
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => true;

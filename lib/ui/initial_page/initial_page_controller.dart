@@ -120,7 +120,7 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
       var task = TaskModel(
         description: 'sample task description'.tr,
         taskDate: today,
-        status: TaskStatus.PENDING.toValue,
+        status: TaskStatus.PENDING.toStringValue,
         subTasks: [
           SubTaskModel(title: 'sample task  subtask_1 description'.tr, isDone: false),
           SubTaskModel(title: 'sample task  subtask_2 description'.tr, isDone: true),
@@ -213,7 +213,7 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
     for (List value in tasksMap.values) {
       totalTasks += value.length;
       for (var element in value) {
-        if (element.value.status == TaskStatus.DONE.toValue) {
+        if (element.value.status == TaskStatus.DONE.toStringValue) {
           completedTotalTasks += 1;
         }
       }
@@ -228,13 +228,13 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
   String changeTaskStatus(String value) {
     switch (value) {
       case 'Pending':
-        return TaskStatus.IN_PROGRESS.toValue;
+        return TaskStatus.IN_PROGRESS.toStringValue;
       case 'In progress':
-        return TaskStatus.DONE.toValue;
+        return TaskStatus.DONE.toStringValue;
       case 'Done':
-        return TaskStatus.PENDING.toValue;
+        return TaskStatus.PENDING.toStringValue;
       default:
-        return TaskStatus.IN_PROGRESS.toValue;
+        return TaskStatus.IN_PROGRESS.toStringValue;
     }
   }
 

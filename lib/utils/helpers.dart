@@ -147,28 +147,78 @@ String setStatusLanguage(TaskModel task) {
   }
 }
 
-Color setStatusColor(TaskModel task) {
-  switch (task.status) {
-    case 'Pending':
-      return statusTaskPending;
-    case 'In progress':
-      return statusTaskInProgress;
-    case 'Done':
-      return statusTaskDone;
-    default:
-      return statusTaskPending;
+Icon setStatusIcon(TaskModel task, bool isToday) {
+  if (!isToday) {
+    switch (task.status) {
+      case 'Pending':
+        return const Icon(
+          Icons.circle_outlined,
+          color: statusTaskDone,
+        );
+      case 'In progress':
+        return const Icon(
+          Icons.circle_rounded,
+          color: statusTaskInProgress,
+        );
+      case 'Done':
+        return const Icon(
+          Icons.circle_rounded,
+          color: statusTaskDone,
+        );
+      default:
+        return const Icon(
+          Icons.circle_outlined,
+          color: statusTaskDone,
+        );
+    }
+  } else {
+    switch (task.status) {
+      case 'Pending':
+        return Icon(
+          Icons.circle_outlined,
+          color: whiteBg.withOpacity(0.5),
+        );
+      case 'In progress':
+        return const Icon(
+          Icons.circle_rounded,
+          color: statusTaskInProgress,
+        );
+      case 'Done':
+        return Icon(
+          Icons.circle_rounded,
+          color: whiteBg.withOpacity(0.5),
+        );
+      default:
+        return const Icon(
+          Icons.circle_outlined,
+          color: statusTaskDone,
+        );
+    }
   }
 }
 
-TextStyle setStatusTextStyle(TaskModel task) {
-  switch (task.status) {
-    case 'Pending':
-      return kBodyMedium;
-    case 'In progress':
-      return kBodyMedium;
-    case 'Done':
-      return kBodyMedium.copyWith(fontStyle: FontStyle.italic, decoration: TextDecoration.lineThrough, color: disabledGrey);
-    default:
-      return kBodyMedium;
+TextStyle setStatusTextStyle(TaskModel task, bool isToday) {
+  if (!isToday) {
+    switch (task.status) {
+      case 'Pending':
+        return kBodyLarge;
+      case 'In progress':
+        return kBodyLarge;
+      case 'Done':
+        return kBodyLarge.copyWith(decoration: TextDecoration.lineThrough, color: disabledGrey);
+      default:
+        return kBodyLarge;
+    }
+  } else {
+    switch (task.status) {
+      case 'Pending':
+        return kBodyLarge.copyWith(color: whiteBg);
+      case 'In progress':
+        return kBodyLarge.copyWith(color: whiteBg);
+      case 'Done':
+        return kBodyLarge.copyWith(decoration: TextDecoration.lineThrough, color: whiteBg.withOpacity(0.5));
+      default:
+        return kBodyLarge;
+    }
   }
 }

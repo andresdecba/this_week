@@ -29,97 +29,58 @@ class TasksList extends GetView<InitialPageController> {
             List<Rx<TaskModel>> tasks = [];
             tasks.addAll(controller.tasksMap[currentDate]!);
 
-            // si es el dia de ayer y no tiene una tarea, esconder ese dia
-            bool hideEmptyYesterday = (currentDate.isBefore(DateTime.now().subtract(const Duration(days: 1))) && tasks.isEmpty) ? true : false;
-            // si es el dia de ayer pero si tiene tareas, deshabilitar el dia
-            bool disableYesterday = (currentDate.isBefore(DateTime.now().subtract(const Duration(days: 1))) && tasks.isNotEmpty) ? true : false;
+            // si es el dia de hoy
+            var today = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+            bool isToday = currentDate.isAtSameMomentAs(today);
+
+            // deshabilitar los dias anteriores a hoy
+            bool disableAddNewTask = (currentDate.isBefore(today)) ? true : false;
+
 
             // crear en una columna todos los dias con sus respectivas tareas
             return Column(
               children: [
-                /// THERE WHERENT TASKS
-                Visibility(
-                  visible: hideEmptyYesterday,
-                  child: Column(
+                /// SHOW WEEKDAY AND DATE
+                Padding(
+                  padding: const EdgeInsets.only(left: 8, top: 16),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8, bottom: 8, left: 8),
-                        child: Row(
-                          //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            RichText(
-                              text: TextSpan(
-                                text: weekdayOnlyFormater(currentDate),
-                                style: kTitleMedium.copyWith(
-                                  color: disabledGrey,
-                                  fontSize: 17,
-                                ),
-                                children: <TextSpan>[
-                                  TextSpan(
-                                    text: '  ${standardDateFormater(currentDate)}: ${'there were no tasks'.tr}',
-                                    style: kBodySmall.copyWith(
-                                      fontStyle: FontStyle.italic,
-                                      color: disabledGrey,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                      RichText(
+                        text: TextSpan(
+                          text: weekdayOnlyFormater(currentDate),
+                          style: isToday ? kTitleLarge.copyWith(color: bluePrimary) : kTitleLarge,
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: '   ${standardDateFormater(currentDate)}',
+                              style: isToday ? kBodySmall.copyWith(color: bluePrimary) : kBodySmall,
                             ),
-                            const SizedBox(height: 38),
                           ],
                         ),
                       ),
-                      const Divider(height: 0, thickness: 1),
+                      disableAddNewTask
+                          ? const IconButton(
+                              onPressed: null,
+                              visualDensity: VisualDensity.compact,
+                              disabledColor: disabledGrey,
+                              icon: Icon(Icons.add),
+                            )
+
+                          /// CREATE TASK
+                          : IconButton(
+                              icon: const Icon(Icons.add_circle_rounded),
+                              visualDensity: VisualDensity.compact,
+                              onPressed: () {
+                                Get.put(CreateTaskPageController(selectedDate: currentDate));
+                                myModalBottomSheet(
+                                  context: context,
+                                  child: CreateTaskPage(),
+                                  enableDrag: true,
+                                );
+                              },
+                            ),
                     ],
-                  ),
-                ),
-
-                /// SHOW WEEKDAY AND DATE
-                Visibility(
-                  visible: !hideEmptyYesterday,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 8, top: 8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        RichText(
-                          text: TextSpan(
-                            text: weekdayOnlyFormater(currentDate),
-                            style: kTitleMedium.copyWith(color: disableYesterday ? disabledGrey : textBg, fontSize: 17),
-                            children: <TextSpan>[
-                              TextSpan(
-                                text: '   ${standardDateFormater(currentDate)}',
-                                style: kBodySmall.copyWith(
-                                  fontStyle: FontStyle.italic,
-                                  color: disableYesterday ? disabledGrey : textBg,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        disableYesterday
-                            ? const IconButton(
-                                onPressed: null,
-                                visualDensity: VisualDensity.compact,
-                                disabledColor: disabledGrey,
-                                icon: Icon(Icons.add),
-                              )
-
-                            /// CREATE TASK
-                            : IconButton(
-                                icon: const Icon(Icons.add_circle_rounded),
-                                visualDensity: VisualDensity.compact,
-                                onPressed: () {
-                                  Get.put(CreateTaskPageController(selectedDate: currentDate));
-                                  myModalBottomSheet(
-                                    context: context,
-                                    child: CreateTaskPage(),
-                                    enableDrag: true,
-                                  );
-                                },
-                              ),
-                      ],
-                    ),
                   ),
                 ),
 
@@ -127,24 +88,21 @@ class TasksList extends GetView<InitialPageController> {
                   alignment: Alignment.topCenter,
                   children: [
                     /// SHOW NO TASKS
-                    Visibility(
-                      visible: !hideEmptyYesterday,
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
-                        child: Container(
-                          key: UniqueKey(),
-                          height: 50,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.4),
-                            borderRadius: const BorderRadius.all(Radius.circular(5)),
-                          ),
-                          alignment: Alignment.centerLeft,
-                          padding: const EdgeInsets.all(16),
-                          child: Text(
-                            'no tasks'.tr,
-                            style: kTitleSmall.copyWith(color: disabledGrey, fontStyle: FontStyle.italic),
-                          ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 4),
+                      child: Container(
+                        key: UniqueKey(),
+                        //height: 50,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: const BorderRadius.all(Radius.circular(50)),
+                        ),
+                        alignment: Alignment.centerLeft,
+                        padding: const EdgeInsets.all(12),
+                        child: Text(
+                          'no tasks'.tr,
+                          style: kBodyMedium.copyWith(color: disabledGrey),
                         ),
                       ),
                     ),
@@ -157,9 +115,9 @@ class TasksList extends GetView<InitialPageController> {
                             children: [
                               ...tasks.map(
                                 (e) => Padding(
-                                  padding: const EdgeInsets.only(bottom: 8),
+                                  padding: const EdgeInsets.only(bottom: 4),
                                   child: TaskCard(
-                                    //isDisabled: disableYesterday,
+                                    isToday: isToday,
                                     key: UniqueKey(),
                                     task: e.value,
                                     navigate: () {
@@ -182,6 +140,11 @@ class TasksList extends GetView<InitialPageController> {
                         : const SizedBox(),
                   ],
                 ),
+                // const Divider(
+                //   color: Colors.black,
+                //   height: 0,
+                //   thickness: 1,
+                // ),
               ],
             );
           },

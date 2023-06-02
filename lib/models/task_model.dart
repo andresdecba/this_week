@@ -9,15 +9,19 @@ part 'task_model.g.dart';
 
 enum TaskStatus { PENDING, IN_PROGRESS, DONE }
 
+const String pendingConst = 'Pending';
+const String inProgressConst = 'In progress';
+const String doneConst = 'Done';
+
 extension TaskStatusExtension on TaskStatus {
-  String get toValue {
+  String get toStringValue {
     switch (this) {
       case TaskStatus.PENDING:
-        return 'Pending';
+        return pendingConst;
       case TaskStatus.IN_PROGRESS:
-        return 'In progress';
+        return inProgressConst;
       case TaskStatus.DONE:
-        return 'Done';
+        return doneConst;
     }
   }
 }

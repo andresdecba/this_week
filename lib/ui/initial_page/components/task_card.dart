@@ -8,14 +8,16 @@ class TaskCard extends StatefulWidget {
     required this.task,
     required this.navigate,
     required this.onStatusChange,
-    required Key key,
+    required this.isToday,
     this.isDisabled,
+    required Key key,
   }) : super(key: key);
 
   final TaskModel task;
   final VoidCallback navigate;
   final VoidCallback onStatusChange;
   final bool? isDisabled;
+  final bool isToday;
 
   @override
   State<TaskCard> createState() => _TaskCardState();
@@ -24,136 +26,145 @@ class TaskCard extends StatefulWidget {
 class _TaskCardState extends State<TaskCard> {
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: const BorderRadius.all(Radius.circular(8)),
-      child: Container(
-        //padding: const EdgeInsets.all(16),
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border(
-            left: BorderSide(
-              color: setStatusColor(widget.task),
-              width: 4,
+    return Stack(
+      children: [
+        GestureDetector(
+          onTap: () => widget.navigate(),
+          child: Container(
+            //padding: const EdgeInsets.all(16),
+            //padding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: widget.isToday ? bluePrimary : Colors.grey[200],
+              borderRadius: const BorderRadius.all(Radius.circular(50)),
+              // boxShadow: [
+              //   BoxShadow(
+              //     color: disabledGrey.withOpacity(0.5),
+              //     offset: Offset(1, 1), //(x,y)
+              //     blurRadius: 4,
+              //   ),
+              // ],
+              // border: Border(
+              //   top: BorderSide(
+              //     color: disabledGrey, //setStatusColor(widget.task),
+              //     width: 1,
+              //   ),
+              //   right: BorderSide(
+              //     color: disabledGrey, //setStatusColor(widget.task),
+              //     width: 1,
+              //   ),
+              //   bottom: BorderSide(
+              //     color: disabledGrey, //setStatusColor(widget.task),
+              //     width: 1,
+              //   ),
+              //   left: BorderSide(
+              //     color: disabledGrey, //setStatusColor(widget.task),
+              //     width: 1,
+              //   ),
+              // ),
             ),
-          ),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            /// task DESCRIPTION
-            Padding(
-              padding: const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 12),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Visibility(
-                    visible: widget.task.repeatId != null,
-                    child: const Padding(
-                      padding: EdgeInsets.only(right: 8),
-                      child: Icon(
-                        Icons.push_pin_rounded,
-                        size: 20,
-                        color: enabledGrey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                /// task DESCRIPTION
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+
+                    // TEXTO DESCRIPCION
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 16),
+                        child: Text(
+                          widget.task.description,
+                          maxLines: 1,
+                          softWrap: false,
+                          overflow: TextOverflow.ellipsis,
+                          style: setStatusTextStyle(widget.task, widget.isToday),
+                        ),
                       ),
                     ),
-                  ),
-                  Flexible(
-                    child: Text(
-                      widget.task.description,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: setStatusTextStyle(widget.task),
+
+                    /// task SUBTASKS
+                    Visibility(
+                      visible: widget.task.subTasks.isNotEmpty,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 8),
+                        child: Icon(Icons.checklist_rounded, size: 14, color: widget.isToday ? whiteBg.withOpacity(0.6) : disabledGrey),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-            //const SizedBox(height: 12),
-            Padding(
-              padding: const EdgeInsets.only(left: 16, bottom: 8, right: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  /// task STATUS
-                  Flexible(
-                    flex: 4,
-                    child: GestureDetector(
-                      onTap: () {
+
+                    // IS ROUTINE
+                    Visibility(
+                      visible: widget.task.repeatId != null,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 8),
+                        child: Icon(
+                          Icons.push_pin_rounded,
+                          size: 14,
+                          color: widget.isToday ? whiteBg.withOpacity(0.6) : enabledGrey,
+                        ),
+                      ),
+                    ),
+
+                    // BUTTTON STATUS
+                    IconButton(
+                      onPressed: () {
                         widget.onStatusChange();
                         setState(() {});
                       },
-                      child: Text(
-                        setStatusLanguage(widget.task),
-                        style: kLabelLarge.copyWith(color: setStatusColor(widget.task)),
-                      ),
-                    ),
-                  ),
-                  Flexible(
-                    flex: 6,
-                    child: Row(
-                      //crossAxisAlignment: WrapCrossAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [                  
+                      icon: setStatusIcon(widget.task, widget.isToday),
+                      padding: const EdgeInsets.fromLTRB(8, 0, 12, 0),
+                      visualDensity: VisualDensity.compact,
+                      iconSize: 16,
+                    )
+                  ],
+                ),
+                //const SizedBox(height: 10),
 
-                        /// task NOTIFICATION TIME
-                        Wrap(
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          children: [
-                            Icon(
-                              widget.task.notificationData != null ? Icons.notifications_active_rounded : Icons.notifications_none_rounded,
-                              size: 20,
-                              color: widget.task.notificationData != null ? enabledGrey : disabledGrey,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              widget.task.notificationData != null ? timeFormater(widget.task.notificationData!.time) : '-- : --',
-                              style: kLabelMedium.copyWith(color: widget.task.notificationData != null ? enabledGrey : disabledGrey),
-                            ),
-                          ],
-                        ),
-                        //const SizedBox(width: 8),
-
-                        /// task SUBTASKS
-                        Wrap(
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.checklist_rounded,
-                              size: 20,
-                              color: widget.task.subTasks.isEmpty ? disabledGrey : enabledGrey,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              calculateSubtasksDone(),
-                              style: kLabelMedium.copyWith(color: widget.task.subTasks.isEmpty ? disabledGrey : enabledGrey),
-                            ),
-                          ],
-                        ),
-                        //const SizedBox(width: 32),
-
-                        /// task NAVIGATE
-                        IconButton(
-                          visualDensity: VisualDensity.compact,
-                          onPressed: () => widget.navigate(),
-                          icon: const Icon(
-                            Icons.arrow_forward_rounded,
-                          ),
-                        ),
-                        //const SizedBox(width: 12),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            )
-          ],
+                /// task SUBTASKS
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.start,
+                //   crossAxisAlignment: CrossAxisAlignment.center,
+                //   children: [
+                //     Icon(
+                //       Icons.checklist_rounded,
+                //       size: 20,
+                //       color: widget.isToday ? blackBg : disabledGrey,
+                //     ),
+                //     const SizedBox(width: 8),
+                //     Text(
+                //       calculateSubtasksDone(),
+                //       style: kLabelMedium.copyWith(
+                //         color: widget.isToday ? blackBg : disabledGrey,
+                //       ),
+                //     ),
+                //   ],
+                // )
+              ],
+            ),
+          ),
         ),
-      ),
+        // Positioned.fill(
+        //   child: Align(
+        //     alignment: Alignment.bottomRight,
+        //     child: Padding(
+        //       padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
+        //       child: GestureDetector(
+        //         onTap: () {
+        //           widget.onStatusChange();
+        //           setState(() {});
+        //         },
+        //         child: Text(
+        //           setStatusLanguage(widget.task),
+        //           style: kLabelMedium.copyWith(color: widget.isToday ? blackBg : disabledGrey, fontStyle: FontStyle.italic), //setStatusColor(widget.task)
+        //         ),
+        //       ),
+        //     ),
+        //   ),
+        // ),
+      ],
     );
   }
 
@@ -167,3 +178,23 @@ class _TaskCardState extends State<TaskCard> {
     return '$value of ${widget.task.subTasks.length}';
   }
 }
+
+
+  // Positioned.fill(
+        //   child: Align(
+        //     alignment: Alignment.bottomRight,
+        //     child: Padding(
+        //       padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
+        //       child: GestureDetector(
+        //         onTap: () {
+        //           widget.onStatusChange();
+        //           setState(() {});
+        //         },
+        //         child: Text(
+        //           setStatusLanguage(widget.task),
+        //           style: kLabelMedium.copyWith(color: widget.isToday ? blackBg : disabledGrey, fontStyle: FontStyle.italic), //setStatusColor(widget.task)
+        //         ),
+        //       ),
+        //     ),
+        //   ),
+        // ),

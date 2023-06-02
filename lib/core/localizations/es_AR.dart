@@ -22,7 +22,7 @@ Map<String, String> es_AR = {
   'rate us in playstore' : 'Califícanos en Play Strore.',
 
   // task card
-  'no tasks': 'Agregue una tarea.',
+  'no tasks': 'Sin tareas',
   'pending': 'Pendiente',
   'in progress': 'En progreso',
   'done': 'Finalizada',
