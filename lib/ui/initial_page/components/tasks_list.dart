@@ -27,7 +27,6 @@ class TasksList extends GetView<InitialPageController> {
             //
             DateTime currentDate = controller.tasksMap.keys.toList()[index];
             List<Rx<TaskModel>> tasks = [];
-            //tasks.addAll(controller.tasksMap.value[currentDate]!);
             tasks.addAll(controller.tasksMap[currentDate]!);
 
             // si es el dia de ayer y no tiene una tarea, esconder ese dia

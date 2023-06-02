@@ -115,6 +115,7 @@ bool isTaskExpired(DateTime taskDate) {
 }
 
 // TODO: CREAR STRING FUNC
+// ver: https://pub.dev/packages/quiver#quivertime
 void taskDateHumanRead() {
   // si estuvo en otro mes que no es el mes pasado: 'nombre del mes'
   // si estuvo el mes que pasado: 'el mes pasado'

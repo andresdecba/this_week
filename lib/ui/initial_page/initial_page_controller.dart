@@ -10,6 +10,9 @@ import 'package:todoapp/models/app_config_model.dart';
 import 'package:todoapp/models/subtask_model.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/core/services/ad_mob_service.dart';
+import 'package:todoapp/ui/shared_components/my_modal_bottom_sheet.dart';
+import 'package:todoapp/ui/view_task_page.dart/view_task_page.dart';
+import 'package:todoapp/ui/view_task_page.dart/view_task_page_controller.dart';
 //import 'package:todoapp/ui/shared_components/my_modal_bottom_sheet.dart';
 //import 'package:todoapp/core/routes/routes.dart';
 // import 'package:todoapp/ui/view_task_page.dart/view_task_page.dart';
@@ -25,17 +28,14 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
     await initConfig();
     buildInfo();
     calculateWeeksDifference();
-    openTaskFromNotification();
     WidgetsBinding.instance.addObserver(this);
-    print('aver tasksMap:::: $tasksMap ');
-    print('aver tasksBox:::: ${tasksBox.keys}: ${tasksBox.values} ');
-
   }
 
   @override
   void onReady() {
     loadBannerAd(bannerListener: initialPageBannerListener());
     //loadBannerAd(bannerListener: initialPageBannerListener(), adUnitId: AdMobService.initialPageBanner!);
+    openTaskFromNotification();
     super.onReady();
   }
 
@@ -45,7 +45,7 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
     WidgetsBinding.instance.removeObserver(this);
   }
 
-  // conocer el estado de la app //
+  // conocer el estado de la app NO USADO DE MOMENTO //
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     // tutotial: https://stackoverflow.com/questions/51835039/how-do-i-check-if-the-flutter-application-is-in-the-foreground-or-not
@@ -85,33 +85,16 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
   }
 
   void openTaskFromNotification() async {
-    // 'notificationPAYLOAD': details.payload!
-
-    // if (Get.arguments ['notificationPAYLOAD'] != null) {
-    //   Get.put(ViewTaskController(task: e));
-
-    //   int value = int.parse(Get.arguments['notificationPAYLOAD']!);
-    //   Rx<TaskModel> e = tasksBox.get(value)!.obs;
-    //   myModalBottomSheet(
-    //     context: Get.context!,
-    //     child: const ViewTask(),
-    //   );
-    //   return;
-    // }
-
-    //tasksMap.value.containsValue();
-
-    // print('entra initialPageController args ${Get.arguments}');
-
-    // final FlutterLocalNotificationsPlugin localNotifications = FlutterLocalNotificationsPlugin();
-    // final notificationLaunchDetails = await localNotifications.getNotificationAppLaunchDetails();
-    // if (notificationLaunchDetails?.didNotificationLaunchApp ?? false) {
-    //   print('entra initialPageController');
-    //   // myModalBottomSheet(
-    //   //   context: Get.context!,
-    //   //   child: const Text('HOLA'),
-    //   // );
-    // }
+    // desde la notificacion con la app cerrada
+    if (notificationPayload != null) {
+      Rx<TaskModel> e = tasksBox.get(int.parse(notificationPayload!))!.obs;
+      Get.put(ViewTaskController(task: e));
+      myModalBottomSheet(
+        context: Get.context!,
+        child: const ViewTask(),
+      );
+      notificationPayload = null;
+    }
   }
 
   void simulateDeletingData() {

@@ -1,6 +1,12 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:todoapp/core/routes/routes.dart';
+import 'package:todoapp/data_source/hive_data_sorce/hive_data_source.dart';
+import 'package:todoapp/models/task_model.dart';
+import 'package:todoapp/ui/shared_components/my_modal_bottom_sheet.dart';
+import 'package:todoapp/ui/view_task_page.dart/view_task_page.dart';
+import 'package:todoapp/ui/view_task_page.dart/view_task_page_controller.dart';
 
 // instanciar
 final FlutterLocalNotificationsPlugin localNotifications = FlutterLocalNotificationsPlugin();
@@ -12,7 +18,7 @@ void onSelectNotificationBackground(NotificationResponse notificationResponse) {
 }
 
 // si la notificacion entra estando en primer plano o segundo plano
-void onSelectNotification(NotificationResponse details) {
+void onSelectNotification(NotificationResponse details) async {
   //set args
   Map<String, String>? arguments;
   if (details.payload != null) {
@@ -27,10 +33,20 @@ void onSelectNotification(NotificationResponse details) {
   // si tocaron el body
   if (details.notificationResponseType == NotificationResponseType.selectedNotification) {
     if (arguments != null) {
-      //Get.offAllNamed(Routes.FORMS_PAGE, arguments: arguments);
+      // abrir el  bottom sheet //
+      Box<TaskModel> tasksBox = Boxes.getTasksBox();
+      var task = tasksBox.get(int.parse(details.payload!));
+      Rx<TaskModel> e = task!.obs;
+      Get.put(ViewTaskController(task: e));
+      myModalBottomSheet(
+        context: Get.context!,
+        child: const ViewTask(),
+      );
+      Get.toNamed(Routes.INITIAL_PAGE);
+      // abrir el  bottom sheet //
     }
     if (arguments == null) {
-      Get.offAllNamed(Routes.INITIAL_PAGE);
+      Get.toNamed(Routes.INITIAL_PAGE);
     }
   }
 }
@@ -60,7 +76,6 @@ class InitializeLocalNotificationsService {
       onDidReceiveBackgroundNotificationResponse: onSelectNotificationBackground,
       /* FROM DOCS: The [onDidReceiveNotificationResponse] callback is fired when the user selects a notification or notification action that should show the application/user interface. application was running. To handle when a notification launched an application, use [getNotificationAppLaunchDetails]. For notification actions that don't show the application/user interface, the [onDidReceiveBackgroundNotificationResponse] callback is invoked on a background isolate. Functions passed to the [onDidReceiveBackgroundNotificationResponse] callback need to be annotated with the @pragma('vm:entry-point') annotation to ensure they are not stripped out by the Dart compiler.*/
     );
-    
   }
 }
 
