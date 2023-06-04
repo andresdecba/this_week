@@ -134,7 +134,7 @@ class TasksList extends GetView<InitialPageController> {
                                     onStatusChange: () {
                                       e.value.status = controller.changeTaskStatus(e.value.status);
                                       e.value.save();
-                                      controller.createCompletedTasksPercentage();
+                                      /// TODO controller.createCompletedTasksPercentage();
                                     },
                                   ),
                                 ),

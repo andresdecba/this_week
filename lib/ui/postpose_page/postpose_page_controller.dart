@@ -7,7 +7,6 @@ import 'package:todoapp/main.dart';
 import 'package:todoapp/models/notification_model.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/core/services/ad_mob_service.dart';
-import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/ui/shared_components/dialogs.dart';
 import 'package:todoapp/ui/shared_components/snackbar.dart';
 import 'package:todoapp/use_cases/local_notifications_use_cases.dart';
@@ -144,7 +143,7 @@ class PostPosePageController extends GetxController with AdMobService, StateMixi
   }
 
   ///// manage SAVE /////
-  final InitialPageController _initialPageController = Get.put(InitialPageController());
+  /// TODO final InitialPageController _initialPageController = Get.put(InitialPageController());
 
   void savePostpose(PostposeEnum data, BuildContext context) {
     switch (data) {
@@ -192,7 +191,7 @@ class PostPosePageController extends GetxController with AdMobService, StateMixi
     //localNotificationsUseCases.createNotification(task: _task, newTime: newTime)
 
     // otras cosas
-    _initialPageController.buildInfo();
+    /// TODO _initialPageController.buildInfo();
     Get.offAllNamed(Routes.INITIAL_PAGE);
     showSnackBar(
       titleText: 'postponed task title'.tr,

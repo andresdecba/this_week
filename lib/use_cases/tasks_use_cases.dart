@@ -4,7 +4,6 @@ import 'package:hive/hive.dart';
 import 'package:todoapp/data_source/hive_data_sorce/hive_data_source.dart';
 import 'package:todoapp/models/app_config_model.dart';
 import 'package:todoapp/models/task_model.dart';
-import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/data_source/local_notifications_data_source/local_notifications_data_source.dart';
 import 'package:todoapp/use_cases/local_notifications_use_cases.dart';
 
@@ -104,10 +103,11 @@ class TaskUseCasesImpl implements TasksUseCases {
   void updateTaskState({required Rx<TaskModel> task, bool? isDateUpdated}) {
     task.value.save();
     task.refresh();
-    Get.find<InitialPageController>().tasksMap.refresh();
-    if (isDateUpdated != null && isDateUpdated == true) {
-      Get.find<InitialPageController>().buildInfo();
-    }
+    /// TODO
+    // Get.find<InitialPageController>().tasksMap.refresh();
+    // if (isDateUpdated != null && isDateUpdated == true) {
+    //   Get.find<InitialPageController>().buildInfo();
+    // }
   }
 
   @override
@@ -124,7 +124,7 @@ class TaskUseCasesImpl implements TasksUseCases {
           e.delete();
         }
       }
-      Get.find<InitialPageController>().buildInfo();
+      /// TODO Get.find<InitialPageController>().buildInfo();
       return;
     }
     // si no es tarea repetida
@@ -137,7 +137,7 @@ class TaskUseCasesImpl implements TasksUseCases {
         config.save();
       }
       task.value.delete();
-      Get.find<InitialPageController>().buildInfo();
+      /// TODO Get.find<InitialPageController>().buildInfo();
     }
   }
 }

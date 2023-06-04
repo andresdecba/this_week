@@ -39,7 +39,7 @@ class SideBar extends GetView<InitialPageController> {
                 ),
                 onTap: () {
                   //controller.oldWeeks = 0;
-                  controller.buildInfo();
+                  /// TODO controller.buildInfo();
                   Globals.myScaffoldKey.currentState!.closeEndDrawer();
                 },
               ),
@@ -183,7 +183,7 @@ class SideBar extends GetView<InitialPageController> {
     controller.simulateDeletingData();
     _localNotificationsUseCases.deleteAllNotifications();
     await controller.tasksBox.clear();
-    controller.buildInfo();
+    /// TODO controller.buildInfo();
   }
 
   void shareApp(BuildContext context) {

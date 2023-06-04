@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todoapp/core/globals.dart';
-import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/ui/shared_components/snackbar.dart';
 import 'package:todoapp/use_cases/local_notifications_use_cases.dart';
 import 'package:todoapp/use_cases/tasks_use_cases.dart';
@@ -191,7 +190,7 @@ class CreateTaskPageController extends GetxController {
         isRoutine: isRoutine.value,
         notificationDateTime: notificationDateTime,
       );
-      Get.find<InitialPageController>().buildInfo();
+      /// TODO Get.find<InitialPageController>().buildInfo();
       Get.back();
       showSnackBar(
         titleText: 'new task created'.tr,

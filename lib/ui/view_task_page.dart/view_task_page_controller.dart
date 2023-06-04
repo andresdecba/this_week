@@ -4,7 +4,6 @@ import 'package:todoapp/core/globals.dart';
 import 'package:todoapp/models/subtask_model.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/ui/commons/styles.dart';
-import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/ui/shared_components/my_time_picker.dart';
 import 'package:todoapp/ui/shared_components/snackbar.dart';
 import 'package:todoapp/use_cases/local_notifications_use_cases.dart';
@@ -138,7 +137,7 @@ class ViewTaskController extends GetxController {
   RxBool isChecked = false.obs;
   void deleteTask() {
     tasksUseCases.deleteTaskUseCase(task: task, deleteRoutine: isChecked.value);
-    Get.find<InitialPageController>().buildInfo();
+    /// TODO Get.find<InitialPageController>().buildInfo();
     showSnackBar(titleText: 'task deleted', messageText: task.value.description);
     Get.back();
     Get.back();

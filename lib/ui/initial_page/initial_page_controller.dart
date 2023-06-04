@@ -10,19 +10,18 @@ import 'package:todoapp/models/app_config_model.dart';
 import 'package:todoapp/models/subtask_model.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/core/services/ad_mob_service.dart';
+import 'package:todoapp/ui/initial_page/pruebas_ctrlr.dart';
 import 'package:todoapp/ui/shared_components/my_modal_bottom_sheet.dart';
 import 'package:todoapp/ui/view_task_page.dart/view_task_page.dart';
 import 'package:todoapp/ui/view_task_page.dart/view_task_page_controller.dart';
-import 'package:todoapp/utils/helpers.dart';
 
-class InitialPageController extends GetxController with AdMobService, StateMixin<dynamic>, WidgetsBindingObserver {
+class InitialPageController extends GetxController with AdMobService, StateMixin<dynamic>, WidgetsBindingObserver, PruebasCtrlr {
   //,OpenTaskController
   @override
   void onInit() async {
     super.onInit();
     initSampleTask();
     await initConfig();
-    buildInfo();
     //calculateWeeksDifference();
     WidgetsBinding.instance.addObserver(this);
   }
@@ -128,51 +127,8 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
     }
   }
 
-  /// ejemplo del modelo de datos
-  //Map<DateTime, List<Task>> tasksMap = {
-  //  '2023-05-29 00:00:00.000': ['task_1', 'task_2'],
-  //  '2023-05-30 00:00:00.000': ['task_1', 'task_2'],
-  //  '2023-05-31 00:00:00.000': [],
-  //  '2023-06-03 00:00:00.000': ['task_1'],
-  //  '2023-06-04 00:00:00.000': ['task_1', 'task_2'],
-  //};
-
-  /// asi se guarga en hive
-  //1: { description: Nueva tarea martes, task date: 2023-05-30 00:00:00.000, status: Pending, sub tasks: [], repeat Id: null, notification data: null },
-  //2: { description: Nueva tarea Miercoles, task date: 2023-05-31 00:00:00.000, status: Pending, sub tasks: [], repeat Id: null, notification data: null },
-
-  // related to buil days an weeks
-  // final PageController pageController = PageController(initialPage: 1000);
-  // late int oldWeeks = 0;
-  // late int increaseDecreaseWeeks;
-  // Week week = Week.current();
-  // RxMap<DateTime, List<Rx<TaskModel>>> tasksMap = RxMap<DateTime, List<Rx<TaskModel>>>({});
-
-  // void increaseWeek() {
-  //   week = week.next;
-  //   increaseDecreaseWeeks++;
-  //   buildInfo();
-  // }
-
-  // void decreaseWeek() {
-  //   if (increaseDecreaseWeeks > 0) {
-  //     week = week.previous;
-  //     increaseDecreaseWeeks--;
-  //   }
-  //   buildInfo();
-  // }
-
-  // void calculateWeeksDifference() {
-  //   if (tasksBox.isNotEmpty) {
-  //     var firstTaskWeek = Week.fromDate(tasksBox.values.first.taskDate);
-  //     var currentWeek = Week.current();
-  //     oldWeeks = currentWeek.weekNumber - firstTaskWeek.weekNumber;
-  //     increaseDecreaseWeeks = oldWeeks;
-  //   }
-  // }
-
+  /// change page
   final PageController pageController = PageController(initialPage: 1000);
-  RxMap<DateTime, List<Rx<TaskModel>>> tasksMap = RxMap<DateTime, List<Rx<TaskModel>>>({});
   Week week = Week.current();
 
   int oldIndex = 1000;
@@ -191,60 +147,31 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
     }
   }
 
-  RxMap<DateTime, List<Rx<TaskModel>>> buildInfo() {
-    print('hola current week ${Week.current()}');
-    print('hola this misma week $week');
-
-    RxMap<DateTime, List<Rx<TaskModel>>> tasksMapita = RxMap<DateTime, List<Rx<TaskModel>>>({});
-
-    // limpiar lista para evitar duplicados
-    tasksMapita.clear();
-    // agregar el dia como key al mapa de la semana
-    // ej: tasksMap = {20/03/2023: []}
-    for (var day in week.days) {
-      tasksMapita.addAll({day: []});
-    }
-    // si hay tareas guardadas, agregarlas al dia correspondinete
-    // ej: tasksMap = {20/03/2023: [Task_1{}, task_2{}]}
-    for (var element in tasksMapita.entries) {
-      for (var task in tasksBox.values) {
-        if (task.taskDate == element.key) {
-          Rx<TaskModel> taskObs = task.obs;
-          element.value.add(taskObs);
-        }
-      }
-    }
-    //setInitialAndFinalWeekDays();
-    //createCompletedTasksPercentage();
-    tasksMapita.refresh();
-    return tasksMapita;
-  }
-
   /// create head info
-  void setInitialAndFinalWeekDays() {
-    var days = '${dayAndMonthFormater(week.days.first)} ${'to'.tr} ${dayAndMonthFormater(week.days.last)}';
-    weekDaysFromTo.value = week == Week.current() ? '${'current week'.tr} $days' : '${'week'.tr} ${week.weekNumber}: $days';
-  }
+  // void setInitialAndFinalWeekDays() {
+  //   var days = '${dayAndMonthFormater(week.days.first)} ${'to'.tr} ${dayAndMonthFormater(week.days.last)}';
+  //   weekDaysFromTo.value = week == Week.current() ? '${'current week'.tr} $days' : '${'week'.tr} ${week.weekNumber}: $days';
+  // }
 
-  void createCompletedTasksPercentage() {
-    int totalTasks = 0;
-    int completedTotalTasks = 0;
-    int completedTasksPercent = 0;
+  // void createCompletedTasksPercentage() {
+  //   int totalTasks = 0;
+  //   int completedTotalTasks = 0;
+  //   int completedTasksPercent = 0;
 
-    for (List value in tasksMap.values) {
-      totalTasks += value.length;
-      for (var element in value) {
-        if (element.value.status == TaskStatus.DONE.toStringValue) {
-          completedTotalTasks += 1;
-        }
-      }
-    }
-    if (totalTasks != 0) {
-      completedTasksPercent = ((completedTotalTasks / totalTasks) * 100).toInt();
-    }
-    // set message
-    totalTasks == 0 ? tasksPercentageCompleted.value = 'no tasks for this week'.tr : tasksPercentageCompleted.value = '$completedTasksPercent% ${'of completed tasks'.tr}';
-  }
+  //   for (List value in tasksMap.values) {
+  //     totalTasks += value.length;
+  //     for (var element in value) {
+  //       if (element.value.status == TaskStatus.DONE.toStringValue) {
+  //         completedTotalTasks += 1;
+  //       }
+  //     }
+  //   }
+  //   if (totalTasks != 0) {
+  //     completedTasksPercent = ((completedTotalTasks / totalTasks) * 100).toInt();
+  //   }
+  //   // set message
+  //   totalTasks == 0 ? tasksPercentageCompleted.value = 'no tasks for this week'.tr : tasksPercentageCompleted.value = '$completedTasksPercent% ${'of completed tasks'.tr}';
+  // }
 
   String changeTaskStatus(String value) {
     switch (value) {
