@@ -12,22 +12,27 @@ import 'package:todoapp/ui/view_task_page.dart/view_task_page_controller.dart';
 import 'package:todoapp/utils/helpers.dart';
 
 class TasksList extends GetView<InitialPageController> {
-  const TasksList({Key? key}) : super(key: key);
+  const TasksList({
+    required this.tasksMap,
+    Key? key,
+  }) : super(key: key);
+
+  final RxMap<DateTime, List<Rx<TaskModel>>> tasksMap;
 
   @override
   Widget build(BuildContext context) {
     return Obx(
       () {
         return ListView.builder(
-          physics: const NeverScrollableScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           key: controller.keyScroll,
           shrinkWrap: true,
-          itemCount: controller.tasksMap.length,
+          itemCount: tasksMap.length,
           itemBuilder: (context, index) {
             //
-            DateTime currentDate = controller.tasksMap.keys.toList()[index];
+            DateTime currentDate = tasksMap.keys.toList()[index];
             List<Rx<TaskModel>> tasks = [];
-            tasks.addAll(controller.tasksMap[currentDate]!);
+            tasks.addAll(tasksMap[currentDate]!);
 
             // si es el dia de hoy
             var today = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
@@ -35,7 +40,6 @@ class TasksList extends GetView<InitialPageController> {
 
             // deshabilitar los dias anteriores a hoy
             bool disableAddNewTask = (currentDate.isBefore(today)) ? true : false;
-
 
             // crear en una columna todos los dias con sus respectivas tareas
             return Column(
@@ -60,11 +64,11 @@ class TasksList extends GetView<InitialPageController> {
                         ),
                       ),
                       disableAddNewTask
-                          ? const IconButton(
+                          ? IconButton(
                               onPressed: null,
                               visualDensity: VisualDensity.compact,
-                              disabledColor: disabledGrey,
-                              icon: Icon(Icons.add),
+                              disabledColor: whiteBg.withOpacity(0),
+                              icon: const Icon(Icons.add),
                             )
 
                           /// CREATE TASK
@@ -89,7 +93,7 @@ class TasksList extends GetView<InitialPageController> {
                   children: [
                     /// SHOW NO TASKS
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 4),
+                      padding: const EdgeInsets.only(bottom: 5),
                       child: Container(
                         key: UniqueKey(),
                         //height: 50,
@@ -115,7 +119,7 @@ class TasksList extends GetView<InitialPageController> {
                             children: [
                               ...tasks.map(
                                 (e) => Padding(
-                                  padding: const EdgeInsets.only(bottom: 4),
+                                  padding: const EdgeInsets.only(bottom: 5),
                                   child: TaskCard(
                                     isToday: isToday,
                                     key: UniqueKey(),

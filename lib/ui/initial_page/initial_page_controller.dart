@@ -13,10 +13,6 @@ import 'package:todoapp/core/services/ad_mob_service.dart';
 import 'package:todoapp/ui/shared_components/my_modal_bottom_sheet.dart';
 import 'package:todoapp/ui/view_task_page.dart/view_task_page.dart';
 import 'package:todoapp/ui/view_task_page.dart/view_task_page_controller.dart';
-//import 'package:todoapp/ui/shared_components/my_modal_bottom_sheet.dart';
-//import 'package:todoapp/core/routes/routes.dart';
-// import 'package:todoapp/ui/view_task_page.dart/view_task_page.dart';
-// import 'package:todoapp/ui/view_task_page.dart/view_task_page_controller.dart';
 import 'package:todoapp/utils/helpers.dart';
 
 class InitialPageController extends GetxController with AdMobService, StateMixin<dynamic>, WidgetsBindingObserver {
@@ -27,14 +23,14 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
     initSampleTask();
     await initConfig();
     buildInfo();
-    calculateWeeksDifference();
+    //calculateWeeksDifference();
     WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void onReady() {
-    loadBannerAd(bannerListener: initialPageBannerListener());
-    //loadBannerAd(bannerListener: initialPageBannerListener(), adUnitId: AdMobService.initialPageBanner!);
+    loadBannerAd(bannerListener: initialPageBannerListener()); // de prueba
+    //loadBannerAd(bannerListener: initialPageBannerListener(), adUnitId: AdMobService.initialPageBanner!); //publicidad posta
     openTaskFromNotification();
     super.onReady();
   }
@@ -43,6 +39,7 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
   void dispose() {
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
+    pageController.dispose();
   }
 
   // conocer el estado de la app NO USADO DE MOMENTO //
@@ -145,48 +142,71 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
   //2: { description: Nueva tarea Miercoles, task date: 2023-05-31 00:00:00.000, status: Pending, sub tasks: [], repeat Id: null, notification data: null },
 
   // related to buil days an weeks
-  late int oldWeeks = 0;
-  late int increaseDecreaseWeeks;
+  // final PageController pageController = PageController(initialPage: 1000);
+  // late int oldWeeks = 0;
+  // late int increaseDecreaseWeeks;
+  // Week week = Week.current();
+  // RxMap<DateTime, List<Rx<TaskModel>>> tasksMap = RxMap<DateTime, List<Rx<TaskModel>>>({});
+
+  // void increaseWeek() {
+  //   week = week.next;
+  //   increaseDecreaseWeeks++;
+  //   buildInfo();
+  // }
+
+  // void decreaseWeek() {
+  //   if (increaseDecreaseWeeks > 0) {
+  //     week = week.previous;
+  //     increaseDecreaseWeeks--;
+  //   }
+  //   buildInfo();
+  // }
+
+  // void calculateWeeksDifference() {
+  //   if (tasksBox.isNotEmpty) {
+  //     var firstTaskWeek = Week.fromDate(tasksBox.values.first.taskDate);
+  //     var currentWeek = Week.current();
+  //     oldWeeks = currentWeek.weekNumber - firstTaskWeek.weekNumber;
+  //     increaseDecreaseWeeks = oldWeeks;
+  //   }
+  // }
+
+  final PageController pageController = PageController(initialPage: 1000);
+  RxMap<DateTime, List<Rx<TaskModel>>> tasksMap = RxMap<DateTime, List<Rx<TaskModel>>>({});
   Week week = Week.current();
-  //Rx<Map<DateTime, List<TaskModel>>> tasksMap = Rx<Map<DateTime, List<TaskModel>>>({});
-  RxMap<DateTime, List<Rx<TaskModel>>> tasksMap = RxMap<DateTime, List<Rx<TaskModel>>>({}); // map and task
 
-  void increaseWeek() {
-    week = week.next;
-    increaseDecreaseWeeks++;
-    buildInfo();
-  }
-
-  void decreaseWeek() {
-    if (increaseDecreaseWeeks > 0) {
+  int oldIndex = 1000;
+  void changePage(int index) {
+    if (index > oldIndex) {
+      week = week.next;
+      oldIndex = index;
+      //buildInfo();
+      debugPrint('holis derecha');
+    }
+    if (index < oldIndex) {
       week = week.previous;
-      increaseDecreaseWeeks--;
-    }
-    buildInfo();
-  }
-
-  void calculateWeeksDifference() {
-    if (tasksBox.isNotEmpty) {
-      var firstTaskWeek = Week.fromDate(tasksBox.values.first.taskDate);
-      var currentWeek = Week.current();
-      oldWeeks = currentWeek.weekNumber - firstTaskWeek.weekNumber;
-      increaseDecreaseWeeks = oldWeeks;
+      oldIndex = index;
+      //buildInfo();
+      debugPrint('holis izquierda');
     }
   }
 
-  void buildInfo() {
+  RxMap<DateTime, List<Rx<TaskModel>>> buildInfo() {
+    print('hola current week ${Week.current()}');
+    print('hola this misma week $week');
+
+    RxMap<DateTime, List<Rx<TaskModel>>> tasksMapita = RxMap<DateTime, List<Rx<TaskModel>>>({});
+
     // limpiar lista para evitar duplicados
-    tasksMap.clear();
-
+    tasksMapita.clear();
     // agregar el dia como key al mapa de la semana
     // ej: tasksMap = {20/03/2023: []}
     for (var day in week.days) {
-      tasksMap.addAll({day: []});
+      tasksMapita.addAll({day: []});
     }
-
     // si hay tareas guardadas, agregarlas al dia correspondinete
     // ej: tasksMap = {20/03/2023: [Task_1{}, task_2{}]}
-    for (var element in tasksMap.entries) {
+    for (var element in tasksMapita.entries) {
       for (var task in tasksBox.values) {
         if (task.taskDate == element.key) {
           Rx<TaskModel> taskObs = task.obs;
@@ -194,9 +214,10 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
         }
       }
     }
-    setInitialAndFinalWeekDays();
-    createCompletedTasksPercentage();
-    tasksMap.refresh();
+    //setInitialAndFinalWeekDays();
+    //createCompletedTasksPercentage();
+    tasksMapita.refresh();
+    return tasksMapita;
   }
 
   /// create head info

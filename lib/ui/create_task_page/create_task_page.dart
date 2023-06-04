@@ -8,7 +8,7 @@ import 'package:todoapp/ui/view_task_page.dart/components/small_button.dart';
 import 'package:todoapp/utils/helpers.dart';
 
 class CreateTaskPage extends StatefulWidget {
-  CreateTaskPage({Key? key}) : super(key: key);
+  const CreateTaskPage({Key? key}) : super(key: key);
 
   @override
   State<CreateTaskPage> createState() => _CreateTaskPageState();

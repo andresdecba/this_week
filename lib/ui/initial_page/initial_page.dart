@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:todoapp/core/globals.dart';
 import 'package:todoapp/ui/commons/styles.dart';
-import 'package:todoapp/ui/initial_page/components/header.dart';
 import 'package:todoapp/ui/initial_page/components/tasks_list.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/ui/shared_components/side_bar.dart';
@@ -69,15 +68,39 @@ class InitialPage extends GetView<InitialPageController> {
 
       // sidebar
       endDrawer: SideBar(),
+      endDrawerEnableOpenDragGesture: false,
 
       // content
 
-      body: Obx(
-        () => controller.simulateDeleting.value
-            ? const Center(
-                child: CircularProgressIndicator(),
-              )
-            : CustomScrollView(
+      body: Obx(() => controller.simulateDeleting.value
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : PageView.builder(
+              physics: const BouncingScrollPhysics(),
+              controller: controller.pageController,
+              pageSnapping: true,
+              onPageChanged: (index) {
+                //controller.changePage(index);
+              },
+              itemBuilder: (context, indexBldr) {
+                controller.changePage(indexBldr);
+
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
+                  child: TasksList(
+                    key: UniqueKey(),
+                    tasksMap: controller.buildInfo(),
+                  ),
+                );
+              },
+            )),
+    );
+  }
+}
+
+/*
+CustomScrollView(
                 physics: const BouncingScrollPhysics(),
                 slivers: <Widget>[
                   // header with weeks
@@ -98,49 +121,33 @@ class InitialPage extends GetView<InitialPageController> {
                   ),
                 ],
               ),
-      ),
 
-      // body: Obx(() => controller.simulateDeleting.value
-      //     ? const Center(
-      //         child: CircularProgressIndicator(),
-      //       )
-      //     : const SingleChildScrollView(
-      //         padding: EdgeInsets.all(20),
-      //         physics: BouncingScrollPhysics(),
-      //         child: TasksList(),
-      //       )
-            
-            
-           
-      // ),
-    );
-  }
-}
+*/
 
-class _DelegateWithHeader extends SliverPersistentHeaderDelegate {
-  @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    // tuto: https://www.appsloveworld.com/flutter/200/126/hide-top-header-until-scroll-to-certain-height
+// class _DelegateWithHeader extends SliverPersistentHeaderDelegate {
+//   @override
+//   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+//     // tuto: https://www.appsloveworld.com/flutter/200/126/hide-top-header-until-scroll-to-certain-height
 
-    return AnimatedOpacity(
-      opacity: shrinkOffset == 0 ? 1 : 0.0,
-      duration: const Duration(milliseconds: 400), // no es
-      curve: Curves.easeIn,
-      child: Container(
-        height: 60,
-        color: Colors.white,
-        alignment: Alignment.center,
-        child: const Header(),
-      ),
-    );
-  }
+//     return AnimatedOpacity(
+//       opacity: shrinkOffset == 0 ? 1 : 0.0,
+//       duration: const Duration(milliseconds: 400), // no es
+//       curve: Curves.easeIn,
+//       child: Container(
+//         height: 60,
+//         color: Colors.white,
+//         alignment: Alignment.center,
+//         child: const Header(),
+//       ),
+//     );
+//   }
 
-  @override
-  double get maxExtent => 60; //no es
+//   @override
+//   double get maxExtent => 60; //no es
 
-  @override
-  double get minExtent => 60; // no es
+//   @override
+//   double get minExtent => 60; // no es
 
-  @override
-  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => true;
-}
+//   @override
+//   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => true;
+// }
