@@ -1,10 +1,13 @@
+
 Map<String, String> pt_BR = {
     //header
   'week': 'Semana',
   'current week': 'SEMANA ATUAL:',
   'to': 'a',
   'no tasks for this week': 'Você não tem tarefas para esta semana.',
-  'of completed tasks' : 'de tarefas concluídas.',
+  'of tasks done': 'de tarefas realizadas.',
+  'of tasks in progress': 'de tarefas em andamento.',
+  'of tasks pending': 'de tarefas pendentes.',
 
   // side bar
   'home':'Home',

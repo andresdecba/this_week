@@ -6,6 +6,7 @@ import 'package:todoapp/core/globals.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/ui/initial_page/components/create_week.dart';
+
 import 'package:todoapp/ui/shared_components/side_bar.dart';
 
 class InitialPage extends GetView<InitialPageController> {
@@ -72,28 +73,29 @@ class InitialPage extends GetView<InitialPageController> {
 
       // content
 
-      body: Obx(() => controller.simulateDeleting.value
+      body: Obx(
+        () => controller.simulateDeleting.value
             ? const Center(child: CircularProgressIndicator())
-          : PageView.builder(
-              physics: const BouncingScrollPhysics(),
-              controller: controller.pageController,
-              pageSnapping: true,
+            : PageView.builder(
+                physics: const BouncingScrollPhysics(),
+                controller: controller.pageController,
+                pageSnapping: true,
                 onPageChanged: (index) {},
                 itemBuilder: (context, i) {
                   // cambiar la pagina y generar la lista observable
                   controller.changePage(i);
                   // desplegar la listaylor observable
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 20, right: 20),
                     child: CreateWeek(
-                    week: controller.week,
+                      week: controller.week.value,
                       tasks: controller.getWeekTasks(
                         tasksBox: controller.tasksBox,
-                        week: controller.week,
+                        week: controller.week.value,
                       ),
-                  ),
-                );
-              },
+                    ),
+                  );
+                },
               ),
       ),
     );

@@ -1,59 +1,83 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:isoweek/isoweek.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 
 class Header extends GetView<InitialPageController> {
-  const Header({Key? key}) : super(key: key);
+  const Header({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Obx(
       () => Container(
-        height: 60,
-        alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        decoration: const BoxDecoration(
-          color: grey_background,
-          boxShadow: [
-            BoxShadow(
-              color: disabledGrey,
-              offset: Offset(0.0, 1.0), //(x,y)
-              blurRadius: 6.0,
-            ),
-          ],
-        ),
-            
-        child: Row(
+        width: double.infinity,
+        padding: const EdgeInsets.fromLTRB(3, 20, 3, 10),
+        alignment: Alignment.centerLeft,
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            IconButton(
-              onPressed: () {}, //controller.increaseDecreaseWeeks == 0 ? null : () => controller.decreaseWeek(),
-              icon: const Icon(Icons.arrow_back_ios),
+            // week number
+            Text(
+              '${"week".tr} ${controller.week.value.weekNumber}',
+              style: headlineMedium.copyWith(color: disabledGrey),
             ),
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  controller.weekDaysFromTo.value,
-                  style: controller.week == Week.current() ? kTitleSmall.copyWith(fontWeight: FontWeight.bold) : kTitleSmall.copyWith(fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  controller.tasksPercentageCompleted.value,
-                  style: kBodyMedium.copyWith(height: 1.5),
-                ),
-              ],
+            const SizedBox(height: 5),
+            // completed %
+
+            _Item(
+              text: '${controller.done.value}%  ${'of tasks done'.tr}',
+              iconColor: statusTaskDone,
             ),
-            IconButton(
-              onPressed: () {}, //() => controller.nextWeek(),
-              icon: const Icon(Icons.arrow_forward_ios),
+            const SizedBox(height: 3),
+            // in progress %
+            _Item(
+              text: '${controller.inProgress.value}%  ${'of tasks in progress'.tr}',
+              iconColor: statusTaskInProgress,
+            ),
+            const SizedBox(height: 3),
+            // done %
+            _Item(
+              text: '${controller.pending.value}%  ${'of tasks pending'.tr}',
+              iconColor: disabledGrey,
+              iconData: Icons.circle_outlined,
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _Item extends StatelessWidget {
+  final String text;
+  final Color iconColor;
+  final IconData? iconData;
+
+  const _Item({
+    required this.text,
+    required this.iconColor,
+    this.iconData,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Icon(
+          iconData ?? Icons.circle,
+          color: iconColor,
+          size: 12,
+        ),
+        const SizedBox(width: 5),
+        Text(
+          text,
+          style: kBodySmall.copyWith(color: disabledGrey),
+        ),
+      ],
     );
   }
 }

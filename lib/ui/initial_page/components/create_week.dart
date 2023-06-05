@@ -5,6 +5,7 @@ import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/create_task_page/create_task_page.dart';
 import 'package:todoapp/ui/create_task_page/create_task_page_controller.dart';
+import 'package:todoapp/ui/initial_page/components/header.dart';
 import 'package:todoapp/ui/initial_page/components/task_card.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/ui/shared_components/my_modal_bottom_sheet.dart';
@@ -33,14 +34,26 @@ class _CreateWeekState extends State<CreateWeek> {
   Widget build(BuildContext context) {
     return Obx(() {
       // no borrar //
-      var noBorrar = controller.weekDaysFromTo;
-      debugPrint('no borrar $noBorrar');
+      // var noBorrar = controller.weekDaysFromTo;
+      // debugPrint('no borrar $noBorrar');
 
       return SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+
+            const Header(),
+
+            const Divider(
+              color: disabledGrey,
+              height: 0,
+            ),
+
+            const SizedBox(
+              height: 12,
+            ),
+
             /// iteramos todos los dias de la semana para mostrarlos en una columna ///
             ...widget.week.days.map((e) {
               // si es el dia de hoy
@@ -64,7 +77,7 @@ class _CreateWeekState extends State<CreateWeek> {
                 children: [
                   // MOSTRAR DIA //
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(12, 0, 3, 0),
+                    padding: const EdgeInsets.fromLTRB(3, 0, 3, 0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -76,7 +89,7 @@ class _CreateWeekState extends State<CreateWeek> {
                             children: <TextSpan>[
                               TextSpan(
                                 text: '   ${standardDateFormater(e)}',
-                                style: isToday ? kBodySmall.copyWith(color: bluePrimary) : kBodySmall,
+                                style: isToday ? kBodySmall.copyWith(color: bluePrimary) : kBodySmall.copyWith(color: disabledGrey),
                               ),
                             ],
                           ),
@@ -112,17 +125,26 @@ class _CreateWeekState extends State<CreateWeek> {
                       padding: const EdgeInsets.only(bottom: 5),
                       child: Container(
                         key: UniqueKey(),
-                        //height: 50,
                         width: double.infinity,
                         decoration: BoxDecoration(
-                          color: isToday ? bluePrimary.withOpacity(0.25) : Colors.grey[200],
-                          borderRadius: const BorderRadius.all(Radius.circular(5)),
+                          // color: isToday ? bluePrimary.withOpacity(0.25) : Colors.grey[200]
+                          //borderRadius: const BorderRadius.all(Radius.circular(50)),
+                          borderRadius: const BorderRadius.only(
+                            bottomLeft: Radius.circular(10),
+                            topLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(50),
+                            topRight: Radius.circular(50),
+                          ),
+                          border: Border.all(
+                            width: 1,
+                            color: isToday ? bluePrimary.withOpacity(0.5) : Colors.grey[200]!,
+                          ),
                         ),
                         alignment: Alignment.centerLeft,
                         padding: const EdgeInsets.all(12),
                         child: Text(
                           'no tasks'.tr,
-                          style: kBodyMedium.copyWith(color: isToday ? whiteBg : disabledGrey),
+                          style: kBodyMedium.copyWith(color: isToday ? bluePrimary : Colors.grey[300]),
                         ),
                       ),
                     ),
@@ -146,8 +168,7 @@ class _CreateWeekState extends State<CreateWeek> {
                           onStatusChange: () {
                             task.value.status = controller.changeTaskStatus(task.value.status);
                             task.value.save();
-
-                            /// TODO controller.createCompletedTasksPercentage();
+                            controller.generateStatistics();
                           },
                         ),
                       );
@@ -166,3 +187,5 @@ class _CreateWeekState extends State<CreateWeek> {
     });
   }
 }
+
+

@@ -4,7 +4,9 @@ Map<String, String> en_US = {
   'current week': 'CURRENT WEEK:',
   'to': 'to',
   'no tasks for this week': 'You have no tasks for this week.',
-  'of completed tasks' : 'of completed tasks.',
+  'of tasks done': 'of tasks done.',
+  'of tasks in progress': 'of tasks in progress.',
+  'of tasks pending': 'of tasks pending.',
 
   // side bar
   'home':'Home',

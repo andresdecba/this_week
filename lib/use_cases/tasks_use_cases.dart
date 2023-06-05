@@ -6,6 +6,7 @@ import 'package:todoapp/models/app_config_model.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/data_source/local_notifications_data_source/local_notifications_data_source.dart';
 import 'package:todoapp/ui/initial_page/create_week_controller.dart';
+import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/use_cases/local_notifications_use_cases.dart';
 
 abstract class TasksUseCases {
@@ -53,7 +54,8 @@ class TaskUseCasesImpl implements TasksUseCases {
     // guardar
     tasksBox.add(newTask);
     Rx<TaskModel> newTaskObs = newTask.obs;
-    createWeekObs.add(newTaskObs);
+    createWeekObs.tasks.add(newTaskObs);
+    Get.find<InitialPageController>().generateStatistics();
 
     // crear notificacion
     if (notificationDateTime != null) {
@@ -111,12 +113,6 @@ class TaskUseCasesImpl implements TasksUseCases {
   void updateTaskState({required Rx<TaskModel> task, bool? isDateUpdated}) {
     task.value.save();
     task.refresh();
-
-    /// TODO
-    // Get.find<InitialPageController>().tasksMap.refresh();
-    // if (isDateUpdated != null && isDateUpdated == true) {
-    //   Get.find<InitialPageController>().buildInfo();
-    // }
   }
 
   @override
@@ -130,7 +126,6 @@ class TaskUseCasesImpl implements TasksUseCases {
           e.delete();
         }
       }
-      return;
     }
     // si no es tarea repetida
     else {
@@ -144,6 +139,7 @@ class TaskUseCasesImpl implements TasksUseCases {
       task.value.delete();
     }
     // quitar de la lista observable
-    createWeekObs.remove(task);
+    createWeekObs.tasks.remove(task);
+    Get.find<InitialPageController>().generateStatistics();
   }
 }

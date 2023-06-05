@@ -63,15 +63,8 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
 
   // box de tasks
   Box<TaskModel> tasksBox = Boxes.getTasksBox();
-
-  // create strings for head
-  //Week showCurrenWeekInfo = Week.current();
-  Rx<String> weekDaysFromTo = ''.obs;
-  Rx<String> tasksPercentageCompleted = ''.obs;
-
-  // others
-  PageStorageKey keyScroll = const PageStorageKey<String>('home_page_scroll');
   RxBool simulateDeleting = false.obs;
+  final PageController pageController = PageController(initialPage: 1000);
 
   // INITIALIZE APP CONFIGURATIONS //
   AppConfigModel appConfig = AppConfigModel();
@@ -125,36 +118,6 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
       tasksBox.put(0, task);
     }
   }
-
-  /// change page
-  final PageController pageController = PageController(initialPage: 1000);
-
-
-  /// create head info
-  // void setInitialAndFinalWeekDays() {
-  //   var days = '${dayAndMonthFormater(week.days.first)} ${'to'.tr} ${dayAndMonthFormater(week.days.last)}';
-  //   weekDaysFromTo.value = week == Week.current() ? '${'current week'.tr} $days' : '${'week'.tr} ${week.weekNumber}: $days';
-  // }
-
-  // void createCompletedTasksPercentage() {
-  //   int totalTasks = 0;
-  //   int completedTotalTasks = 0;
-  //   int completedTasksPercent = 0;
-
-  //   for (List value in tasksMap.values) {
-  //     totalTasks += value.length;
-  //     for (var element in value) {
-  //       if (element.value.status == TaskStatus.DONE.toStringValue) {
-  //         completedTotalTasks += 1;
-  //       }
-  //     }
-  //   }
-  //   if (totalTasks != 0) {
-  //     completedTasksPercent = ((completedTotalTasks / totalTasks) * 100).toInt();
-  //   }
-  //   // set message
-  //   totalTasks == 0 ? tasksPercentageCompleted.value = 'no tasks for this week'.tr : tasksPercentageCompleted.value = '$completedTasksPercent% ${'of completed tasks'.tr}';
-  // }
 
   String changeTaskStatus(String value) {
     switch (value) {

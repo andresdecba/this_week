@@ -34,7 +34,10 @@ const myChipText = enabledGrey;
 final kTitleLarge = Theme.of(Get.context!).textTheme.titleLarge!;
 final kTitleMedium = Theme.of(Get.context!).textTheme.titleMedium!;
 final kTitleSmall = Theme.of(Get.context!).textTheme.titleSmall!;
+// heads
 final kHeadlineLarge = Theme.of(Get.context!).textTheme.headlineLarge!.copyWith(fontWeight: FontWeight.bold);
+final headlineMedium = Theme.of(Get.context!).textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.bold);
+
 // bodies
 final kBodySmall = Theme.of(Get.context!).textTheme.bodySmall!;
 final kBodyMedium = Theme.of(Get.context!).textTheme.bodyMedium!;

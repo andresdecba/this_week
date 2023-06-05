@@ -36,32 +36,13 @@ class _TaskCardState extends State<TaskCard> {
             width: double.infinity,
             decoration: BoxDecoration(
               color: widget.isToday ? bluePrimary : Colors.grey[200],
-              borderRadius: const BorderRadius.all(Radius.circular(50)),
-              // boxShadow: [
-              //   BoxShadow(
-              //     color: disabledGrey.withOpacity(0.5),
-              //     offset: Offset(1, 1), //(x,y)
-              //     blurRadius: 4,
-              //   ),
-              // ],
-              // border: Border(
-              //   top: BorderSide(
-              //     color: disabledGrey, //setStatusColor(widget.task),
-              //     width: 1,
-              //   ),
-              //   right: BorderSide(
-              //     color: disabledGrey, //setStatusColor(widget.task),
-              //     width: 1,
-              //   ),
-              //   bottom: BorderSide(
-              //     color: disabledGrey, //setStatusColor(widget.task),
-              //     width: 1,
-              //   ),
-              //   left: BorderSide(
-              //     color: disabledGrey, //setStatusColor(widget.task),
-              //     width: 1,
-              //   ),
-              // ),
+              //borderRadius: const BorderRadius.all(Radius.circular(50)),
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(10),
+                topLeft: Radius.circular(10),
+                bottomRight: Radius.circular(50),
+                topRight: Radius.circular(50),
+              ),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -121,49 +102,10 @@ class _TaskCardState extends State<TaskCard> {
                     )
                   ],
                 ),
-                //const SizedBox(height: 10),
-
-                /// task SUBTASKS
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.start,
-                //   crossAxisAlignment: CrossAxisAlignment.center,
-                //   children: [
-                //     Icon(
-                //       Icons.checklist_rounded,
-                //       size: 20,
-                //       color: widget.isToday ? blackBg : disabledGrey,
-                //     ),
-                //     const SizedBox(width: 8),
-                //     Text(
-                //       calculateSubtasksDone(),
-                //       style: kLabelMedium.copyWith(
-                //         color: widget.isToday ? blackBg : disabledGrey,
-                //       ),
-                //     ),
-                //   ],
-                // )
               ],
             ),
           ),
         ),
-        // Positioned.fill(
-        //   child: Align(
-        //     alignment: Alignment.bottomRight,
-        //     child: Padding(
-        //       padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
-        //       child: GestureDetector(
-        //         onTap: () {
-        //           widget.onStatusChange();
-        //           setState(() {});
-        //         },
-        //         child: Text(
-        //           setStatusLanguage(widget.task),
-        //           style: kLabelMedium.copyWith(color: widget.isToday ? blackBg : disabledGrey, fontStyle: FontStyle.italic), //setStatusColor(widget.task)
-        //         ),
-        //       ),
-        //     ),
-        //   ),
-        // ),
       ],
     );
   }
@@ -178,23 +120,3 @@ class _TaskCardState extends State<TaskCard> {
     return '$value of ${widget.task.subTasks.length}';
   }
 }
-
-
-  // Positioned.fill(
-        //   child: Align(
-        //     alignment: Alignment.bottomRight,
-        //     child: Padding(
-        //       padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
-        //       child: GestureDetector(
-        //         onTap: () {
-        //           widget.onStatusChange();
-        //           setState(() {});
-        //         },
-        //         child: Text(
-        //           setStatusLanguage(widget.task),
-        //           style: kLabelMedium.copyWith(color: widget.isToday ? blackBg : disabledGrey, fontStyle: FontStyle.italic), //setStatusColor(widget.task)
-        //         ),
-        //       ),
-        //     ),
-        //   ),
-        // ),
