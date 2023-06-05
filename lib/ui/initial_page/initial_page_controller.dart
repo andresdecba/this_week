@@ -3,19 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:isoweek/isoweek.dart';
 import 'package:todoapp/data_source/hive_data_sorce/hive_data_source.dart';
 import 'package:todoapp/main.dart';
 import 'package:todoapp/models/app_config_model.dart';
 import 'package:todoapp/models/subtask_model.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/core/services/ad_mob_service.dart';
-import 'package:todoapp/ui/initial_page/pruebas_ctrlr.dart';
+import 'package:todoapp/ui/initial_page/create_week_controller.dart';
 import 'package:todoapp/ui/shared_components/my_modal_bottom_sheet.dart';
 import 'package:todoapp/ui/view_task_page.dart/view_task_page.dart';
 import 'package:todoapp/ui/view_task_page.dart/view_task_page_controller.dart';
 
-class InitialPageController extends GetxController with AdMobService, StateMixin<dynamic>, WidgetsBindingObserver, PruebasCtrlr {
+class InitialPageController extends GetxController with AdMobService, StateMixin<dynamic>, WidgetsBindingObserver, CreateWeekController {
   //,OpenTaskController
   @override
   void onInit() async {
@@ -129,23 +128,7 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
 
   /// change page
   final PageController pageController = PageController(initialPage: 1000);
-  Week week = Week.current();
 
-  int oldIndex = 1000;
-  void changePage(int index) {
-    if (index > oldIndex) {
-      week = week.next;
-      oldIndex = index;
-      //buildInfo();
-      debugPrint('holis derecha');
-    }
-    if (index < oldIndex) {
-      week = week.previous;
-      oldIndex = index;
-      //buildInfo();
-      debugPrint('holis izquierda');
-    }
-  }
 
   /// create head info
   // void setInitialAndFinalWeekDays() {

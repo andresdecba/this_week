@@ -5,6 +5,7 @@ import 'package:todoapp/data_source/hive_data_sorce/hive_data_source.dart';
 import 'package:todoapp/models/app_config_model.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/data_source/local_notifications_data_source/local_notifications_data_source.dart';
+import 'package:todoapp/ui/initial_page/create_week_controller.dart';
 import 'package:todoapp/use_cases/local_notifications_use_cases.dart';
 
 abstract class TasksUseCases {
@@ -31,10 +32,15 @@ class TaskUseCasesImpl implements TasksUseCases {
   //
   final LocalNotificationsUseCases _localNotificationsUseCases = LocalNotificationsUseCases();
   final tasksBox = Boxes.getTasksBox();
-  Box<AppConfigModel> userPrefs = Boxes.getMyAppConfigBox();  
+  Box<AppConfigModel> userPrefs = Boxes.getMyAppConfigBox();
 
   @override
-  Future<TaskModel> createTaskUseCase({required String description, required DateTime date, required bool isRoutine, DateTime? notificationDateTime}) async {
+  Future<TaskModel> createTaskUseCase({
+    required String description,
+    required DateTime date,
+    required bool isRoutine,
+    DateTime? notificationDateTime,
+  }) async {
     // definir
     TaskModel newTask = TaskModel(
       description: description,
@@ -45,7 +51,9 @@ class TaskUseCasesImpl implements TasksUseCases {
     );
 
     // guardar
-    tasksBox.add(newTask); //.then((value) => task = tasksBox.get(value)!);
+    tasksBox.add(newTask);
+    Rx<TaskModel> newTaskObs = newTask.obs;
+    createWeekObs.add(newTaskObs);
 
     // crear notificacion
     if (notificationDateTime != null) {
@@ -103,6 +111,7 @@ class TaskUseCasesImpl implements TasksUseCases {
   void updateTaskState({required Rx<TaskModel> task, bool? isDateUpdated}) {
     task.value.save();
     task.refresh();
+
     /// TODO
     // Get.find<InitialPageController>().tasksMap.refresh();
     // if (isDateUpdated != null && isDateUpdated == true) {
@@ -112,9 +121,6 @@ class TaskUseCasesImpl implements TasksUseCases {
 
   @override
   void deleteTaskUseCase({required Rx<TaskModel> task, required bool deleteRoutine}) {
-
-      
-
     // si es tarea repetida
     if (task.value.repeatId != null && deleteRoutine) {
       for (var e in tasksBox.values) {
@@ -124,7 +130,6 @@ class TaskUseCasesImpl implements TasksUseCases {
           e.delete();
         }
       }
-      /// TODO Get.find<InitialPageController>().buildInfo();
       return;
     }
     // si no es tarea repetida
@@ -137,7 +142,8 @@ class TaskUseCasesImpl implements TasksUseCases {
         config.save();
       }
       task.value.delete();
-      /// TODO Get.find<InitialPageController>().buildInfo();
     }
+    // quitar de la lista observable
+    createWeekObs.remove(task);
   }
 }

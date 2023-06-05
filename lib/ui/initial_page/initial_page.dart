@@ -4,9 +4,8 @@ import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:todoapp/core/globals.dart';
 import 'package:todoapp/ui/commons/styles.dart';
-//import 'package:todoapp/ui/initial_page/components/tasks_list.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
-import 'package:todoapp/ui/initial_page/prueba_new_list.dart';
+import 'package:todoapp/ui/initial_page/components/create_week.dart';
 import 'package:todoapp/ui/shared_components/side_bar.dart';
 
 class InitialPage extends GetView<InitialPageController> {
@@ -14,14 +13,7 @@ class InitialPage extends GetView<InitialPageController> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-
-      // borrar
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => controller.getWeekTasks(tasksBox: controller.tasksBox, week: controller.week),
-      ),
-
       // keyboard
       resizeToAvoidBottomInset: false,
 
@@ -81,31 +73,29 @@ class InitialPage extends GetView<InitialPageController> {
       // content
 
       body: Obx(() => controller.simulateDeleting.value
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
+            ? const Center(child: CircularProgressIndicator())
           : PageView.builder(
               physics: const BouncingScrollPhysics(),
               controller: controller.pageController,
               pageSnapping: true,
-              onPageChanged: (index) {
-                //controller.changePage(index);
-              },
-              itemBuilder: (context, indexBldr) {
-                controller.changePage(indexBldr);
-
+                onPageChanged: (index) {},
+                itemBuilder: (context, i) {
+                  // cambiar la pagina y generar la lista observable
+                  controller.changePage(i);
+                  // desplegar la listaylor observable
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
-                  child: PruebaNewList(
+                    child: CreateWeek(
                     week: controller.week,
-                    tasks: controller.getWeekTasks(
-                      tasksBox: controller.tasksBox,
-                      week: controller.week,
-                    ),
+                      tasks: controller.getWeekTasks(
+                        tasksBox: controller.tasksBox,
+                        week: controller.week,
+                      ),
                   ),
                 );
               },
-            )),
+              ),
+      ),
     );
   }
 }

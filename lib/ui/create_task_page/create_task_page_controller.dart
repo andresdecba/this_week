@@ -190,7 +190,6 @@ class CreateTaskPageController extends GetxController {
         isRoutine: isRoutine.value,
         notificationDateTime: notificationDateTime,
       );
-      /// TODO Get.find<InitialPageController>().buildInfo();
       Get.back();
       showSnackBar(
         titleText: 'new task created'.tr,

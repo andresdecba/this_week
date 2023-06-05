@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:isoweek/isoweek.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/ui/commons/styles.dart';
+import 'package:todoapp/ui/create_task_page/create_task_page.dart';
+import 'package:todoapp/ui/create_task_page/create_task_page_controller.dart';
 import 'package:todoapp/ui/initial_page/components/task_card.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/ui/shared_components/my_modal_bottom_sheet.dart';
@@ -10,27 +12,31 @@ import 'package:todoapp/ui/view_task_page.dart/view_task_page.dart';
 import 'package:todoapp/ui/view_task_page.dart/view_task_page_controller.dart';
 import 'package:todoapp/utils/helpers.dart';
 
-class PruebaNewList extends StatefulWidget {
-  const PruebaNewList({
+class CreateWeek extends StatefulWidget {
+  const CreateWeek({
     required this.week,
     required this.tasks,
     Key? key,
   }) : super(key: key);
 
   final Week week;
-  final List<Rx<TaskModel>> tasks;
+  final RxList<Rx<TaskModel>> tasks;
 
   @override
-  State<PruebaNewList> createState() => _PruebaNewListState();
+  State<CreateWeek> createState() => _CreateWeekState();
 }
 
-class _PruebaNewListState extends State<PruebaNewList> {
-  final InitialPageController controller = InitialPageController();
+class _CreateWeekState extends State<CreateWeek> {
+  final controller = Get.find<InitialPageController>();
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => SingleChildScrollView(
+    return Obx(() {
+      // no borrar //
+      var noBorrar = controller.weekDaysFromTo;
+      debugPrint('no borrar $noBorrar');
+
+      return SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -57,44 +63,47 @@ class _PruebaNewListState extends State<PruebaNewList> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   // MOSTRAR DIA //
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      RichText(
-                        text: TextSpan(
-                          text: weekdayOnlyFormater(e),
-                          style: isToday ? kTitleLarge.copyWith(color: bluePrimary) : kTitleLarge,
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: '   ${standardDateFormater(e)}',
-                              style: isToday ? kBodySmall.copyWith(color: bluePrimary) : kBodySmall,
-                            ),
-                          ],
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(12, 0, 3, 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        RichText(
+                          text: TextSpan(
+                            text: weekdayOnlyFormater(e),
+                            style: isToday ? kTitleLarge.copyWith(color: bluePrimary) : kTitleLarge,
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: '   ${standardDateFormater(e)}',
+                                style: isToday ? kBodySmall.copyWith(color: bluePrimary) : kBodySmall,
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      disableAddNewTask
-                          ? IconButton(
-                              onPressed: null,
-                              visualDensity: VisualDensity.compact,
-                              disabledColor: whiteBg.withOpacity(0),
-                              icon: const Icon(Icons.add),
-                            )
+                        disableAddNewTask
+                            ? IconButton(
+                                icon: const Icon(Icons.add),
+                                visualDensity: VisualDensity.compact,
+                                disabledColor: whiteBg.withOpacity(0),
+                                onPressed: null,
+                              )
 
-                          /// CREATE TASK
-                          : IconButton(
-                              icon: const Icon(Icons.add_circle_rounded),
-                              visualDensity: VisualDensity.compact,
-                              onPressed: () {
-                                // Get.put(CreateTaskPageController(selectedDate: currentDate));
-                                // myModalBottomSheet(
-                                //   context: context,
-                                //   child: CreateTaskPage(),
-                                //   enableDrag: true,
-                                // );
-                              },
-                            ),
-                    ],
+                            /// CREATE TASK
+                            : IconButton(
+                                icon: Icon(Icons.add, color: isToday ? bluePrimary : disabledGrey),
+                                visualDensity: VisualDensity.compact,
+                                onPressed: () {
+                                  Get.put(CreateTaskPageController(selectedDate: e));
+                                  myModalBottomSheet(
+                                    context: context,
+                                    child: const CreateTaskPage(),
+                                    enableDrag: true,
+                                  );
+                                },
+                              ),
+                      ],
+                    ),
                   ),
 
                   /// SHOW NO TASKS
@@ -106,14 +115,14 @@ class _PruebaNewListState extends State<PruebaNewList> {
                         //height: 50,
                         width: double.infinity,
                         decoration: BoxDecoration(
-                          color: Colors.grey[200],
+                          color: isToday ? bluePrimary.withOpacity(0.25) : Colors.grey[200],
                           borderRadius: const BorderRadius.all(Radius.circular(5)),
                         ),
                         alignment: Alignment.centerLeft,
                         padding: const EdgeInsets.all(12),
                         child: Text(
                           'no tasks'.tr,
-                          style: kBodyMedium.copyWith(color: disabledGrey),
+                          style: kBodyMedium.copyWith(color: isToday ? whiteBg : disabledGrey),
                         ),
                       ),
                     ),
@@ -146,12 +155,14 @@ class _PruebaNewListState extends State<PruebaNewList> {
                       return const SizedBox.shrink();
                     }
                   }),
+
+                  const SizedBox(height: 12),
                 ],
               );
             })
           ],
         ),
-      ),
-    );
+      );
+    });
   }
 }
