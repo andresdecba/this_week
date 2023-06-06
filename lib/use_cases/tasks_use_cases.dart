@@ -5,7 +5,7 @@ import 'package:todoapp/data_source/hive_data_sorce/hive_data_source.dart';
 import 'package:todoapp/models/app_config_model.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/data_source/local_notifications_data_source/local_notifications_data_source.dart';
-import 'package:todoapp/ui/initial_page/create_week_controller.dart';
+import 'package:todoapp/ui/initial_page/build_week_controller.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/use_cases/local_notifications_use_cases.dart';
 

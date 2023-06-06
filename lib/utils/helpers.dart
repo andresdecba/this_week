@@ -14,6 +14,12 @@ import 'package:todoapp/ui/commons/styles.dart';
 /// https://pub.dev/documentation/intl/latest/intl/DateFormat-class.html
 /// https://www.flutterbeads.com/format-datetime-in-flutter/
 ///
+
+String rangeDateFormater(DateTime firstDate, DateTime lastDate) {
+  // 12 jun. al 18 jun.
+  return "${DateFormat('MMMd').format(firstDate)} ${'to'.tr} ${DateFormat('MMMd').format(lastDate)}";
+}
+
 String longDateFormaterWithoutYear(DateTime date) {
   // sábado, 26/01
   return "${DateFormat('EEEE').format(date)} ${DateFormat.Md().format(date)}";

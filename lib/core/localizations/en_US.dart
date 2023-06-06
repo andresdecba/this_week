@@ -12,7 +12,7 @@ Map<String, String> en_US = {
   'home':'Home',
   'go to the current week': 'Go to the current week.',
   'new task_sidebar': 'New task',
-  'add a new task for any day': 'Add a new task for any day.',
+  'new task for any day': 'New task for any day.',
   'restore app' : 'Restore app',
   'delete all tasks': 'Delete all tasks.',
   'languages': 'Languages',

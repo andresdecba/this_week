@@ -13,8 +13,8 @@ import 'package:todoapp/ui/view_task_page.dart/view_task_page.dart';
 import 'package:todoapp/ui/view_task_page.dart/view_task_page_controller.dart';
 import 'package:todoapp/utils/helpers.dart';
 
-class CreateWeek extends StatefulWidget {
-  const CreateWeek({
+class BuildWeek extends StatefulWidget {
+  const BuildWeek({
     required this.week,
     required this.tasks,
     Key? key,
@@ -24,10 +24,10 @@ class CreateWeek extends StatefulWidget {
   final RxList<Rx<TaskModel>> tasks;
 
   @override
-  State<CreateWeek> createState() => _CreateWeekState();
+  State<BuildWeek> createState() => _BuildWeekState();
 }
 
-class _CreateWeekState extends State<CreateWeek> {
+class _BuildWeekState extends State<BuildWeek> {
   final controller = Get.find<InitialPageController>();
 
   @override
@@ -47,11 +47,11 @@ class _CreateWeekState extends State<CreateWeek> {
 
             const Divider(
               color: disabledGrey,
-              height: 0,
+              height: 12,
             ),
 
             const SizedBox(
-              height: 12,
+              height: 6,
             ),
 
             /// iteramos todos los dias de la semana para mostrarlos en una columna ///
@@ -130,8 +130,8 @@ class _CreateWeekState extends State<CreateWeek> {
                           // color: isToday ? bluePrimary.withOpacity(0.25) : Colors.grey[200]
                           //borderRadius: const BorderRadius.all(Radius.circular(50)),
                           borderRadius: const BorderRadius.only(
-                            bottomLeft: Radius.circular(10),
-                            topLeft: Radius.circular(10),
+                            bottomLeft: Radius.circular(50),
+                            topLeft: Radius.circular(50),
                             bottomRight: Radius.circular(50),
                             topRight: Radius.circular(50),
                           ),

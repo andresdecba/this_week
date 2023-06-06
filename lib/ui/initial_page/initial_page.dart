@@ -5,8 +5,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:todoapp/core/globals.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
-import 'package:todoapp/ui/initial_page/components/create_week.dart';
-
+import 'package:todoapp/ui/initial_page/components/build_week.dart';
 import 'package:todoapp/ui/shared_components/side_bar.dart';
 
 class InitialPage extends GetView<InitialPageController> {
@@ -72,22 +71,24 @@ class InitialPage extends GetView<InitialPageController> {
       endDrawerEnableOpenDragGesture: false,
 
       // content
-
       body: Obx(
         () => controller.simulateDeleting.value
             ? const Center(child: CircularProgressIndicator())
             : PageView.builder(
                 physics: const BouncingScrollPhysics(),
-                controller: controller.pageController,
+                controller: controller.pageCtlr,
                 pageSnapping: true,
                 onPageChanged: (index) {},
+                
                 itemBuilder: (context, i) {
+
                   // cambiar la pagina y generar la lista observable
                   controller.changePage(i);
+
                   // desplegar la listaylor observable
                   return Padding(
                     padding: const EdgeInsets.only(left: 20, right: 20),
-                    child: CreateWeek(
+                    child: BuildWeek(
                       week: controller.week.value,
                       tasks: controller.getWeekTasks(
                         tasksBox: controller.tasksBox,
@@ -101,56 +102,3 @@ class InitialPage extends GetView<InitialPageController> {
     );
   }
 }
-
-/*
-CustomScrollView(
-                physics: const BouncingScrollPhysics(),
-                slivers: <Widget>[
-                  // header with weeks
-                  SliverPersistentHeader(
-                    delegate: _DelegateWithHeader(),
-                    floating: true,
-                  ),
-                  // tasks list
-                  SliverList(
-                    delegate: SliverChildListDelegate(
-                      [
-                        const Padding(
-                          padding: EdgeInsets.only(bottom: 20, left: 20, right: 20),
-                          child: TasksList(),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-
-*/
-
-// class _DelegateWithHeader extends SliverPersistentHeaderDelegate {
-//   @override
-//   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-//     // tuto: https://www.appsloveworld.com/flutter/200/126/hide-top-header-until-scroll-to-certain-height
-
-//     return AnimatedOpacity(
-//       opacity: shrinkOffset == 0 ? 1 : 0.0,
-//       duration: const Duration(milliseconds: 400), // no es
-//       curve: Curves.easeIn,
-//       child: Container(
-//         height: 60,
-//         color: Colors.white,
-//         alignment: Alignment.center,
-//         child: const Header(),
-//       ),
-//     );
-//   }
-
-//   @override
-//   double get maxExtent => 60; //no es
-
-//   @override
-//   double get minExtent => 60; // no es
-
-//   @override
-//   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => true;
-// }

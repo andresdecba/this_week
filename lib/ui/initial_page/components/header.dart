@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
+import 'package:todoapp/utils/helpers.dart';
 
 class Header extends GetView<InitialPageController> {
   const Header({
@@ -20,29 +21,40 @@ class Header extends GetView<InitialPageController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // week number
-            Text(
-              '${"week".tr} ${controller.week.value.weekNumber}',
-              style: headlineMedium.copyWith(color: disabledGrey),
+
+            RichText(
+              text: TextSpan(
+                text: '${"week".tr} ${controller.week.value.weekNumber}: ',
+                style: headlineSmall.copyWith(color: disabledGrey),
+                children: <TextSpan>[
+                  TextSpan(
+                    text: rangeDateFormater(controller.week.value.days.first, controller.week.value.days.last),
+                    style: kTitleLarge.copyWith(color: disabledGrey, fontStyle: FontStyle.italic),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 5),
-            // completed %
 
+            // completed
             _Item(
-              text: '${controller.done.value}%  ${'of tasks done'.tr}',
-              iconColor: statusTaskDone,
+              text: '${controller.pending.value}%  ${'of tasks pending'.tr}',
+              iconColor: disabledGrey,
+              iconData: Icons.circle_outlined,
             ),
             const SizedBox(height: 3),
-            // in progress %
+
+            // in progress
             _Item(
               text: '${controller.inProgress.value}%  ${'of tasks in progress'.tr}',
               iconColor: statusTaskInProgress,
             ),
             const SizedBox(height: 3),
-            // done %
+
+            // done
             _Item(
-              text: '${controller.pending.value}%  ${'of tasks pending'.tr}',
-              iconColor: disabledGrey,
-              iconData: Icons.circle_outlined,
+              text: '${controller.done.value}%  ${'of tasks done'.tr}',
+              iconColor: statusTaskDone,
             ),
           ],
         ),

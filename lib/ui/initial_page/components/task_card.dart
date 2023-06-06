@@ -38,8 +38,8 @@ class _TaskCardState extends State<TaskCard> {
               color: widget.isToday ? bluePrimary : Colors.grey[200],
               //borderRadius: const BorderRadius.all(Radius.circular(50)),
               borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(10),
-                topLeft: Radius.circular(10),
+                bottomLeft: Radius.circular(50),
+                topLeft: Radius.circular(50),
                 bottomRight: Radius.circular(50),
                 topRight: Radius.circular(50),
               ),

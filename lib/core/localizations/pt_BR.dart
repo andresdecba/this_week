@@ -13,7 +13,7 @@ Map<String, String> pt_BR = {
   'home':'Home',
   'go to the current week': 'Ir para a semana atual.',
   'new task_sidebar': 'Nova tarefa',
-  'add a new task for any day': 'Adicione uma nova tarefa para qualquer dia.',
+  'new task for any day': 'Nova tarefa para qualquer dia.',
   'restore app' : 'Restaurar aplicativo',
   'delete all tasks': 'Exclua todas as tarefas.',
   'languages': 'línguas',

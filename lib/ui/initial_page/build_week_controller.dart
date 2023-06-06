@@ -7,7 +7,7 @@ import 'package:todoapp/models/task_model.dart';
 // global para poder acceder desde los use cases
 late CreateWeekObs createWeekObs;
 
-mixin CreateWeekController {
+mixin BuildWeekController {
   //
   /// GENERATE LIST OF TASKS FOR THIS WEEK
   RxList<Rx<TaskModel>> getWeekTasks({required Week week, required Box<TaskModel> tasksBox}) {
@@ -31,21 +31,35 @@ mixin CreateWeekController {
   }
 
   /// CHANGE THE PAGE
+  final PageController pageCtlr = PageController(initialPage: 1000);
   Rx<Week> week = Week.current().obs;
   int oldIndex = 1000;
+
   void changePage(int index) {
+    if (index == pageCtlr.initialPage) {
+      week.value = Week.current();
+      oldIndex = index;
+      debugPrint('holis initial $index');
+      return;
+    }
     if (index > oldIndex) {
       week.value = week.value.next;
       oldIndex = index;
-      // buildInfo();
-      debugPrint('holis derecha');
+      debugPrint('holis derecha $index');
     }
     if (index < oldIndex) {
       week.value = week.value.previous;
       oldIndex = index;
-      // buildInfo();
-      debugPrint('holis izquierda');
+      debugPrint('holis izquierda $index');
     }
+  }
+
+  void returnToCurrentWeek() {
+    pageCtlr.animateToPage(
+      pageCtlr.initialPage,
+      duration: const Duration(microseconds: 500),
+      curve: Curves.bounceIn,
+    );
   }
 
   /// CALCULATE PERCENTAGES

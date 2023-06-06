@@ -37,6 +37,8 @@ final kTitleSmall = Theme.of(Get.context!).textTheme.titleSmall!;
 // heads
 final kHeadlineLarge = Theme.of(Get.context!).textTheme.headlineLarge!.copyWith(fontWeight: FontWeight.bold);
 final headlineMedium = Theme.of(Get.context!).textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.bold);
+final headlineSmall = Theme.of(Get.context!).textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.bold);
+
 
 // bodies
 final kBodySmall = Theme.of(Get.context!).textTheme.bodySmall!;

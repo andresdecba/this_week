@@ -9,12 +9,12 @@ import 'package:todoapp/models/app_config_model.dart';
 import 'package:todoapp/models/subtask_model.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/core/services/ad_mob_service.dart';
-import 'package:todoapp/ui/initial_page/create_week_controller.dart';
+import 'package:todoapp/ui/initial_page/build_week_controller.dart';
 import 'package:todoapp/ui/shared_components/my_modal_bottom_sheet.dart';
 import 'package:todoapp/ui/view_task_page.dart/view_task_page.dart';
 import 'package:todoapp/ui/view_task_page.dart/view_task_page_controller.dart';
 
-class InitialPageController extends GetxController with AdMobService, StateMixin<dynamic>, WidgetsBindingObserver, CreateWeekController {
+class InitialPageController extends GetxController with AdMobService, StateMixin<dynamic>, WidgetsBindingObserver, BuildWeekController {
   //,OpenTaskController
   @override
   void onInit() async {
@@ -37,7 +37,7 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
   void dispose() {
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
-    pageController.dispose();
+    pageCtlr.dispose();
   }
 
   // conocer el estado de la app NO USADO DE MOMENTO //
@@ -64,7 +64,7 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
   // box de tasks
   Box<TaskModel> tasksBox = Boxes.getTasksBox();
   RxBool simulateDeleting = false.obs;
-  final PageController pageController = PageController(initialPage: 1000);
+  
 
   // INITIALIZE APP CONFIGURATIONS //
   AppConfigModel appConfig = AppConfigModel();

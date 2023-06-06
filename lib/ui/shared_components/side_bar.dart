@@ -5,8 +5,11 @@ import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:todoapp/core/globals.dart';
 import 'package:todoapp/ui/commons/styles.dart';
+import 'package:todoapp/ui/create_task_page/create_task_page.dart';
+import 'package:todoapp/ui/create_task_page/create_task_page_controller.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/ui/shared_components/dialogs.dart';
+import 'package:todoapp/ui/shared_components/my_modal_bottom_sheet.dart';
 import 'package:todoapp/use_cases/local_notifications_use_cases.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -32,14 +35,13 @@ class SideBar extends GetView<InitialPageController> {
               ListTile(
                 visualDensity: VisualDensity.compact,
                 trailing: const Icon(Icons.home_rounded),
-                title: Text('week'.tr),
+                title: Text('home'.tr),
                 subtitle: Text(
                   'go to the current week'.tr,
                   style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: disabledGrey),
                 ),
                 onTap: () {
-                  //controller.oldWeeks = 0;
-                  /// TODO controller.buildInfo();
+                  Get.find<InitialPageController>().returnToCurrentWeek();
                   Globals.myScaffoldKey.currentState!.closeEndDrawer();
                 },
               ),
@@ -48,14 +50,21 @@ class SideBar extends GetView<InitialPageController> {
                 trailing: const Icon(Icons.add_rounded),
                 title: Text('new task_sidebar'.tr),
                 subtitle: Text(
-                  'add a new task for any day'.tr,
+                  'new task for any day'.tr,
                   style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: disabledGrey),
                 ),
                 onTap: () {
-                  //controller.navigate(date: DateTime.now());
+                  Globals.myScaffoldKey.currentState!.closeEndDrawer();
+                  var date = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+                  Get.put(CreateTaskPageController(selectedDate: date));
+                  myModalBottomSheet(
+                    context: context,
+                    child: const CreateTaskPage(),
+                    enableDrag: true,
+                  );
                 },
               ),
-              const Divider(),
+              const Divider(color: disabledGrey),
 
               /// CONFIGURACIÓN
               ListTile(
@@ -125,7 +134,7 @@ class SideBar extends GetView<InitialPageController> {
                   );
                 },
               ),
-              const Divider(),
+              const Divider(color: disabledGrey),
 
               /// SOCIAL
               ListTile(
@@ -183,7 +192,6 @@ class SideBar extends GetView<InitialPageController> {
     controller.simulateDeletingData();
     _localNotificationsUseCases.deleteAllNotifications();
     await controller.tasksBox.clear();
-    /// TODO controller.buildInfo();
   }
 
   void shareApp(BuildContext context) {

@@ -8,12 +8,11 @@ Map<String, String> es_AR = {
   'of tasks in progress': 'de tareas en progreso.',
   'of tasks pending': 'de tareas pendientes.',
 
-
   // side bar
   'home':'Home',
   'go to the current week': 'Ir a la semana actual.',
   'new task_sidebar': 'Nueva tarea',
-  'add a new task for any day': 'Agregar una nueva tarea para cualquier día.',
+  'new task for any day': 'Nueva tarea para cualquier día.',
   'restore app' : 'Restablecer app',
   'delete all tasks': 'Eliminar las tareas.',
   'languages': 'Idiomas',
