@@ -55,7 +55,7 @@ extension SchedulesToTimeOfDay on Schedules {
 }
 
 class CreateTaskPageController extends GetxController {
-  final DateTime selectedDate;
+  DateTime selectedDate;
 
   CreateTaskPageController({
     // required this.tasksUseCases,
@@ -74,8 +74,15 @@ class CreateTaskPageController extends GetxController {
     notificationDateTime = DateTime(selectedDate.year, selectedDate.month, selectedDate.day, 9, 0);
     tasksUseCases = TaskUseCasesImpl();
     localNotificationsUseCases = LocalNotificationsUseCases();
+    selectedDateObs.value = selectedDate;
     createChipsList();
   }
+
+  // @override
+  // void onReady() {
+  //   super.onReady();
+  //   selectedDateObs.value = selectedDate;
+  // }
 
   @override
   void onClose() {
@@ -181,6 +188,26 @@ class CreateTaskPageController extends GetxController {
     }
   }
 
+  // UPDATE DATE //
+
+  Rx<DateTime> selectedDateObs = DateTime.now().obs;
+  Future<void> updateDate(BuildContext context) async {
+    // pick a date
+    await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(), // dia seleccionado del calendario (no puede ser anterior al fisrtDate)
+      firstDate: DateTime.now(), // primer dia habilitado del calendario (igual o anterior al initialDate)
+      lastDate: DateTime(2050),
+    ).then((value) {
+      if (value == null) {
+        return;
+      } else {
+        selectedDate = value;
+        selectedDateObs.value = value;
+      }
+    });
+  }
+
   // SAVE-CREATE TASK //
   void saveTask() async {
     if (Globals.formStateKey.currentState!.validate()) {
@@ -190,7 +217,7 @@ class CreateTaskPageController extends GetxController {
         isRoutine: isRoutine.value,
         notificationDateTime: notificationDateTime,
       );
-      
+
       Get.back();
       showSnackBar(
         titleText: 'new task created'.tr,

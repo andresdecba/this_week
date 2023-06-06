@@ -16,7 +16,18 @@ import 'dart:async';
 enum PostposeEnum { fifteenMinutes, oneHour, threeHours, oneDay, personalized }
 
 class PostPosePageController extends GetxController with AdMobService, StateMixin<dynamic> {
-  
+
+
+  // TODO: LEER ->
+  /*
+  ////////////////////////////////////////////////////////////////////
+  /// ¡ ATENCION ! HAY QUE RAFACTORIZAR ESTE CONTROLLER
+  /// YA QUE SE CAMBIO EL [localNotificationsUseCases]
+  /// PERO NO SE ADAPTÓ ESTE ARCHIVO POR PAJA BASICAMENTE xD...
+  /// SÓLO LA FORMA COMO SE PASAN LOS PARAMETROS A [localNotificationsUseCases]
+  ////////////////////////////////////////////////////////////////////
+  */
+
   PostPosePageController({
     required this.localNotificationsUseCases,
   });
@@ -180,18 +191,18 @@ class PostPosePageController extends GetxController with AdMobService, StateMixi
   }
 
   void saveAndNavigate(BuildContext context) async {
-    // crear la notificacion
-    // notificationsUseCases.createNotificationUseCase( //TODO: activarrr estoo
-    //   context: context,
-    //   task: task,
-    // );
 
-    //Rx<TaskModel> _task = task.obs;
+    Rx<TaskModel> taskObs = task.obs;
+    TimeOfDay newTime = TimeOfDay(
+      hour: _newNotification.time.hour,
+      minute: _newNotification.time.minute,
+    );
 
-    //localNotificationsUseCases.createNotification(task: _task, newTime: newTime)
+    localNotificationsUseCases.createNotification(
+      task: taskObs,
+      newTime: newTime,
+    );
 
-    // otras cosas
-    /// TODO _initialPageController.buildInfo();
     Get.offAllNamed(Routes.INITIAL_PAGE);
     showSnackBar(
       titleText: 'postponed task title'.tr,

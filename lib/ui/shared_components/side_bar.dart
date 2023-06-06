@@ -5,11 +5,8 @@ import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:todoapp/core/globals.dart';
 import 'package:todoapp/ui/commons/styles.dart';
-import 'package:todoapp/ui/create_task_page/create_task_page.dart';
-import 'package:todoapp/ui/create_task_page/create_task_page_controller.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/ui/shared_components/dialogs.dart';
-import 'package:todoapp/ui/shared_components/my_modal_bottom_sheet.dart';
 import 'package:todoapp/use_cases/local_notifications_use_cases.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -31,7 +28,7 @@ class SideBar extends GetView<InitialPageController> {
               //
               const Divider(),
 
-              /// NAVEGACION
+              ///  HOME  ///
               ListTile(
                 visualDensity: VisualDensity.compact,
                 trailing: const Icon(Icons.home_rounded),
@@ -45,28 +42,30 @@ class SideBar extends GetView<InitialPageController> {
                   Globals.myScaffoldKey.currentState!.closeEndDrawer();
                 },
               ),
-              ListTile(
-                visualDensity: VisualDensity.compact,
-                trailing: const Icon(Icons.add_rounded),
-                title: Text('new task_sidebar'.tr),
-                subtitle: Text(
-                  'new task for any day'.tr,
-                  style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: disabledGrey),
-                ),
-                onTap: () {
-                  Globals.myScaffoldKey.currentState!.closeEndDrawer();
-                  var date = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-                  Get.put(CreateTaskPageController(selectedDate: date));
-                  myModalBottomSheet(
-                    context: context,
-                    child: const CreateTaskPage(),
-                    enableDrag: true,
-                  );
-                },
-              ),
+
+              ///  NUEVA TAREA  ///
+              // ListTile(
+              //   visualDensity: VisualDensity.compact,
+              //   trailing: const Icon(Icons.add_rounded),
+              //   title: Text('new task_sidebar'.tr),
+              //   subtitle: Text(
+              //     'new task for any day'.tr,
+              //     style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: disabledGrey),
+              //   ),
+              //   onTap: () {
+              //     Globals.myScaffoldKey.currentState!.closeEndDrawer();
+              //     var date = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+              //     Get.put(CreateTaskPageController(selectedDate: date));
+              //     myModalBottomSheet(
+              //       context: context,
+              //       child: const CreateTaskPage(),
+              //       enableDrag: true,
+              //     );
+              //   },
+              // ),
               const Divider(color: disabledGrey),
 
-              /// CONFIGURACIÓN
+              ///  REESTABLECER APP  ///
               ListTile(
                 visualDensity: VisualDensity.compact,
                 trailing: const Icon(Icons.replay_rounded),

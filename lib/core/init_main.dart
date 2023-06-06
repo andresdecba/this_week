@@ -33,7 +33,7 @@ class InitMain {
     // initializa
     await MobileAds.instance.initialize();
 
-    // antes de publicar: cometar las siguientes lineas (dispositivos de prueba):
+    // antes de publicar: cometar las siguientes 3 lineas (dispositivos de prueba):
     var devices = ["4C456C78BB5CAFE90286C23C5EA6A3CC"];
     RequestConfiguration requestConfiguration = RequestConfiguration(testDeviceIds: devices);
     MobileAds.instance.updateRequestConfiguration(requestConfiguration);
