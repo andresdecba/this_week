@@ -42,8 +42,8 @@ class PostPosePageController extends GetxController with AdMobService, StateMixi
 
   @override
   void onReady() {
-    loadBannerAd(bannerListener: initialPageBannerListener());
-    //loadBannerAd(bannerListener: initialPageBannerListener(), adUnitId: AdMobService.postposePageBanner!);
+    loadBannerAd(bannerListener: initialPageBannerListener()); // depueba
+    //loadBannerAd(bannerListener: initialPageBannerListener(), adUnitId: AdMobService.postposePageBanner!); // posta
     super.onReady();
   }
 
