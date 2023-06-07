@@ -4,7 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:todoapp/core/routes/routes.dart';
 import 'package:todoapp/data_source/hive_data_sorce/hive_data_source.dart';
 import 'package:todoapp/models/task_model.dart';
-import 'package:todoapp/ui/shared_components/my_modal_bottom_sheet.dart';
+import 'package:todoapp/ui/shared_components/create_task_bottomsheet.dart';
 import 'package:todoapp/ui/view_task_page.dart/view_task_page.dart';
 import 'package:todoapp/ui/view_task_page.dart/view_task_page_controller.dart';
 
@@ -38,7 +38,7 @@ void onSelectNotification(NotificationResponse details) async {
       var task = tasksBox.get(int.parse(details.payload!));
       Rx<TaskModel> e = task!.obs;
       Get.put(ViewTaskController(task: e));
-      myModalBottomSheet(
+      createTaskBottomSheet(
         context: Get.context!,
         child: const ViewTask(),
       );

@@ -29,141 +29,132 @@ class _ViewTaskState extends State<ViewTask> {
     debugPrint('ViewTask -> dispose');
   }
 
-  final controller = Get.find<ViewTaskController>();
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      return Column(
+
+    final controller = Get.find<ViewTaskController>();
+
+    return Obx(
+      () => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                /// SI ES ATER, HOY O MAÑANA ///
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 14.0),
+                  child: controller.dateStatus(),
+                ),
 
-                        /// SI ES ATER, HOY O MAÑANA ///
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 14.0),
-                          child: controller.dateStatus(),
-                        ),
-
-                        /// BOTON GUARDAR  ///
-                        Visibility(
-                          visible: controller.hasUpdated.value,
-                          child: TextButton(
-                            onPressed: () => controller.saveUpdatedTask(),
-                            child: const Text('Guargar', style: TextStyle(color: bluePrimary)),
-                          ),
-                        ),
-                      ],
-                    ),
+                /// BOTON GUARDAR  ///
+                Visibility(
+                  visible: controller.hasUpdated.value,
+                  child: TextButton(
+                    onPressed: () => controller.saveUpdatedTask(),
+                    child: const Text('Guargar', style: TextStyle(color: bluePrimary)),
                   ),
-
-                  /// DESCRIPCION DE LA TAREA  ///
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 20),
-                    child: TextField(
-                      focusNode: controller.descriptionFocusNode,
-                      autofocus: false,
-                      canRequestFocus: true,
-                      maxLines: null,
-                      maxLength: 200,
-                      keyboardType: TextInputType.text,
-                      textCapitalization: TextCapitalization.sentences,
-                      textInputAction: TextInputAction.done,
-                      controller: controller.descriptionTxtCtr,
-                      style: !controller.descriptionEditMode.value
-                          ? kViewTaskDescripton
-                          : kViewTaskDescripton.copyWith(
-                              color: disabledGrey,
-                            ),
-                      decoration: const InputDecoration(contentPadding: EdgeInsets.zero, isDense: true, border: InputBorder.none, counterText: ""),
-                      onTap: () => controller.descriptionEditMode.value = true,
-                      onEditingComplete: () {
-                        controller.updateDescription();
-                      },
-                    ),
-                  ),
-
-                  /// CHIPS ///
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        // CAMBIAR LA FECHA //
-                        MyChip(
-                          label: standardDateFormater(controller.updatedDateTime.value),
-                          iconData: controller.task.value.repeatId == null ? Icons.calendar_today_rounded : Icons.push_pin_rounded,
-                          onTap: () => controller.updateDate(context, controller.task),
-                          isEnabled: controller.task.value.repeatId == null ? true : false,
-                        ),
-                        const SizedBox(width: 5),
-
-                        // CAMBIAR LA NOTIFICACION //
-                        MyChip(
-                          label: controller.updatedNotification.value != null ? timeOfDayToString(controller.updatedNotification.value!) : '-- : --',
-                          iconData: controller.task.value.notificationData != null ? Icons.notifications_active_rounded : Icons.notifications_none_rounded,
-                          onTap: () => controller.updateNotification(context),
-                          isEnabled: !controller.isExpired.value,
-                        ),
-                        const SizedBox(width: 5),
-
-                        // ELIMINAR LA TAREA //
-                        MyChip(
-                          label: 'delete'.tr,
-                          iconData: Icons.delete_forever_outlined,
-                          onTap: () {
-                            myCustomDialog(
-                              context: context,
-                              title: 'this action will delete...'.tr,
-                              cancelTextButton: 'cancel'.tr,
-                              okTextButton: 'delete'.tr,
-                              iconPath: 'assets/warning.svg',
-                              iconColor: warning,
-                              content: controller.task.value.repeatId != null ? const _BuildCheckBox() : null,
-                              onPressOk: () => controller.deleteTask(),
-                            );
-                          },
-                          isEnabled: true,
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-                    child: Text('subtasks'.tr),
-                  ),
-
-                  //// CREAR NUEVA SUBTAREA ////
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(10, 0, 10, 15),
-                    child: CreateSubtaskTextForm(),
-                    //child: TextField(),
-                  ),
-
-                  //// LISTA DE SUBTAREAS ////
-                  const Padding(
-                    padding: EdgeInsets.only(bottom: 20),
-                    child: SubtasksAnimatedList(),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
+
+          /// DESCRIPCION DE LA TAREA  ///
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+            child: TextField(
+              focusNode: controller.descriptionFocusNode,
+              autofocus: false,
+              canRequestFocus: true,
+              maxLines: null,
+              maxLength: 200,
+              keyboardType: TextInputType.text,
+              textCapitalization: TextCapitalization.sentences,
+              textInputAction: TextInputAction.done,
+              controller: controller.descriptionTxtCtr,
+              style: !controller.descriptionEditMode.value
+                  ? kViewTaskDescripton
+                  : kViewTaskDescripton.copyWith(
+                      color: disabledGrey,
+                    ),
+              decoration: const InputDecoration(contentPadding: EdgeInsets.zero, isDense: true, border: InputBorder.none, counterText: ""),
+              onTap: () => controller.descriptionEditMode.value = true,
+              onEditingComplete: () {
+                controller.updateDescription();
+              },
+            ),
+          ),
+
+          /// CHIPS ///
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                // CAMBIAR LA FECHA //
+                MyChip(
+                  label: standardDateFormater(controller.updatedDateTime.value),
+                  iconData: controller.task.value.repeatId == null ? Icons.calendar_today_rounded : Icons.push_pin_rounded,
+                  onTap: () => controller.updateDate(context, controller.task),
+                  isEnabled: controller.task.value.repeatId == null ? true : false,
+                ),
+                const SizedBox(width: 5),
+
+                // CAMBIAR LA NOTIFICACION //
+                MyChip(
+                  label: controller.updatedNotification.value != null ? timeOfDayToString(controller.updatedNotification.value!) : '-- : --',
+                  iconData: controller.task.value.notificationData != null ? Icons.notifications_active_rounded : Icons.notifications_none_rounded,
+                  onTap: () => controller.updateNotification(context),
+                  isEnabled: !controller.isExpired.value,
+                ),
+                const SizedBox(width: 5),
+
+                // ELIMINAR LA TAREA //
+                MyChip(
+                  label: 'delete'.tr,
+                  iconData: Icons.delete_forever_outlined,
+                  onTap: () {
+                    myCustomDialog(
+                      context: context,
+                      title: 'this action will delete...'.tr,
+                      cancelTextButton: 'cancel'.tr,
+                      okTextButton: 'delete'.tr,
+                      iconPath: 'assets/warning.svg',
+                      iconColor: warning,
+                      content: controller.task.value.repeatId != null ? const _BuildCheckBox() : null,
+                      onPressOk: () => controller.deleteTask(),
+                    );
+                  },
+                  isEnabled: true,
+                ),
+              ],
+            ),
+          ),
+
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+            child: Text('subtasks'.tr),
+          ),
+
+          //// CREAR NUEVA SUBTAREA ////
+          const Padding(
+            padding: EdgeInsets.fromLTRB(20, 0, 20, 15),
+            child: CreateSubtaskTextForm(),
+            //child: TextField(),
+          ),
+
+          //// LISTA DE SUBTAREAS ////
+          const Padding(
+            padding: EdgeInsets.fromLTRB(10, 0, 10, 20),
+            child: SubtasksAnimatedList(),
+          ),
         ],
-      );
-    });
+      ),
+    );
   }
 }
 

@@ -23,6 +23,8 @@ class OnBoardingPageState extends State<OnBoardingPage> {
   }
 
   void _onSkip() {
+    appConfig.isOnboardingDone = true;
+    appConfig.save();
     Get.toNamed(Routes.INITIAL_PAGE);
     //Get.offAllNamed(Routes.INITIAL_PAGE); //no usar 'Get.off' x que se clava si la saltas rapido
   }

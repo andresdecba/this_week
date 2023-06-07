@@ -10,7 +10,7 @@ import 'package:todoapp/models/subtask_model.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/core/services/ad_mob_service.dart';
 import 'package:todoapp/ui/initial_page/build_week_controller.dart';
-import 'package:todoapp/ui/shared_components/my_modal_bottom_sheet.dart';
+import 'package:todoapp/ui/shared_components/create_task_bottomsheet.dart';
 import 'package:todoapp/ui/view_task_page.dart/view_task_page.dart';
 import 'package:todoapp/ui/view_task_page.dart/view_task_page_controller.dart';
 
@@ -77,7 +77,7 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
     if (notificationPayload != null) {
       Rx<TaskModel> e = tasksBox.get(int.parse(notificationPayload!))!.obs;
       Get.put(ViewTaskController(task: e));
-      myModalBottomSheet(
+      createTaskBottomSheet(
         context: Get.context!,
         child: const ViewTask(),
       );

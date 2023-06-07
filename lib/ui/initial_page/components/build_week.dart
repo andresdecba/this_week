@@ -8,7 +8,8 @@ import 'package:todoapp/ui/create_task_page/create_task_page_controller.dart';
 import 'package:todoapp/ui/initial_page/components/header.dart';
 import 'package:todoapp/ui/initial_page/components/task_card.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
-import 'package:todoapp/ui/shared_components/my_modal_bottom_sheet.dart';
+import 'package:todoapp/ui/shared_components/create_task_bottomsheet.dart';
+import 'package:todoapp/ui/shared_components/view_task_bottomsheet.dart';
 import 'package:todoapp/ui/view_task_page.dart/view_task_page.dart';
 import 'package:todoapp/ui/view_task_page.dart/view_task_page_controller.dart';
 import 'package:todoapp/utils/helpers.dart';
@@ -108,7 +109,7 @@ class _BuildWeekState extends State<BuildWeek> {
                                 visualDensity: VisualDensity.compact,
                                 onPressed: () {
                                   Get.put(CreateTaskPageController(selectedDate: e));
-                                  myModalBottomSheet(
+                                  createTaskBottomSheet(
                                     context: context,
                                     child: const CreateTaskPage(),
                                     enableDrag: true,
@@ -160,7 +161,7 @@ class _BuildWeekState extends State<BuildWeek> {
                           task: task.value,
                           navigate: () {
                             Get.put(ViewTaskController(task: task));
-                            myModalBottomSheet(
+                            viewTaskBottomSheet(
                               context: context,
                               child: const ViewTask(),
                             );

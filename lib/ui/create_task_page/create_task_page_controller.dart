@@ -105,7 +105,7 @@ class CreateTaskPageController extends GetxController {
   RxInt counter = 0.obs;
 
   // SELECT NOTIFICATION //
-  RxInt currentIndex = 1.obs;
+  RxInt currentIndex = 0.obs;
   late DateTime? notificationDateTime;
 
   List<String> listOfChips = [];
