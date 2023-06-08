@@ -11,12 +11,12 @@ if (flutterRoot == null) {
     throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
 }
 
-def flutterVersionCode = 10 //version para la playstore (incrementar de a 1 en 1)
+def flutterVersionCode = 11 //version para la playstore (incrementar de a 1 en 1)
 if (flutterVersionCode == null) {
     flutterVersionCode = '1'
 }
 
-def flutterVersionName = "2.0.0" //version que ve el publico, cambiar tmb en pubspec.yaml
+def flutterVersionName = "2.0.1" //version que ve el publico, cambiar tmb en pubspec.yaml
 if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
