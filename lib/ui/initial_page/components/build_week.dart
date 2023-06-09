@@ -138,14 +138,14 @@ class _BuildWeekState extends State<BuildWeek> {
                           ),
                           border: Border.all(
                             width: 1,
-                            color: isToday ? bluePrimary.withOpacity(0.5) : Colors.grey[200]!,
+                            color: Colors.grey[200]!
                           ),
                         ),
                         alignment: Alignment.centerLeft,
                         padding: const EdgeInsets.all(12),
                         child: Text(
                           'no tasks'.tr,
-                          style: kBodyMedium.copyWith(color: isToday ? bluePrimary : Colors.grey[300]),
+                          style: kBodyMedium.copyWith(color: Colors.grey[300]),
                         ),
                       ),
                     ),

@@ -71,7 +71,7 @@ class CreateTaskPageController extends GetxController {
     textController.addListener(() {
       counter.value = textController.text.length;
     });
-    notificationDateTime = DateTime(selectedDate.year, selectedDate.month, selectedDate.day, 9, 0);
+    //notificationDateTime = DateTime(selectedDate.year, selectedDate.month, selectedDate.day, 9, 0);
     tasksUseCases = TaskUseCasesImpl();
     localNotificationsUseCases = LocalNotificationsUseCases();
     selectedDateObs.value = selectedDate;
@@ -105,8 +105,10 @@ class CreateTaskPageController extends GetxController {
   RxInt counter = 0.obs;
 
   // SELECT NOTIFICATION //
+  /// atencion ! si se quiere iniciar desde un horario preestablecido, hacer el fix para q
+  /// lo asigne al inicio por que si le cambio el currentIndex ahora tira un bug
   RxInt currentIndex = 0.obs;
-  late DateTime? notificationDateTime;
+  DateTime? notificationDateTime;
 
   List<String> listOfChips = [];
   List<Schedules> listOfSchedules = [];
@@ -211,6 +213,7 @@ class CreateTaskPageController extends GetxController {
   // SAVE-CREATE TASK //
   void saveTask() async {
     if (Globals.formStateKey.currentState!.validate()) {
+
       await tasksUseCases.createTaskUseCase(
         description: textController.value.text,
         date: selectedDate,
