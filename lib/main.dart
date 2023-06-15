@@ -6,6 +6,7 @@ import 'package:todoapp/core/bindings/initial_page_binding.dart';
 import 'package:todoapp/core/init_main.dart';
 import 'package:todoapp/core/localizations/translations.dart';
 import 'package:todoapp/core/routes/routes.dart';
+import 'package:todoapp/core/services/ad_mob_service.dart';
 import 'package:todoapp/data_source/hive_data_sorce/hive_data_source.dart';
 import 'package:todoapp/models/app_config_model.dart';
 import 'package:todoapp/ui/commons/styles.dart';
@@ -30,8 +31,26 @@ void main() async {
   await InitMain.initNotifications();
   // prevent portrait orientation and then run app
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
-    (value) => runApp(const MyApp()),
+    (value) => runApp(const AdMob()),
   );
+}
+
+class AdMob extends StatelessWidget {
+  const AdMob({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      home: Scaffold(
+        backgroundColor: Colors.white,
+        bottomNavigationBar: AdMobService(
+            //androidAdUnitKey: androidAdUnitKeyProd,
+            //iOsAdUnitKey: iOsAdUnitKeyProd,
+            ),
+        body: MyApp(),
+      ),
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -60,26 +79,27 @@ class MyApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
       ],
       theme: ThemeData(
-        dividerColor: Colors.transparent,
-        primaryTextTheme: Typography().white,
+          dividerColor: Colors.transparent,
+          primaryTextTheme: Typography().white,
           scaffoldBackgroundColor: Colors.white,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: yellowPrimary,
-          iconTheme: IconThemeData(color: blackBg),
-          toolbarTextStyle: TextStyle(color: blackBg),
-          titleTextStyle: TextStyle(color: blackBg, fontSize: 16),
-          elevation: 0,
-        ),
-        dialogTheme: const DialogTheme(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
-        ),
+          appBarTheme: const AppBarTheme(
+            backgroundColor: yellowPrimary,
+            iconTheme: IconThemeData(color: blackBg),
+            toolbarTextStyle: TextStyle(color: blackBg),
+            titleTextStyle: TextStyle(color: blackBg, fontSize: 16),
+            elevation: 0,
+          ),
+          dialogTheme: const DialogTheme(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20))),
+          ),
           timePickerTheme: const TimePickerThemeData(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(20)),
             ),
-          )
-      ),
-      initialRoute: !config.isOnboardingDone ? Routes.ONBOARDING_PAGE : initialRoute,
+          )),
+      initialRoute:
+          !config.isOnboardingDone ? Routes.ONBOARDING_PAGE : initialRoute,
     );
   }
 }

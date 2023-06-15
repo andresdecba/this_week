@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/postpose_page/postpose_page_controller.dart';
-// import 'package:todoapp/ui/shared_components/my_modal_bottom_sheet.dart';
-// import 'package:todoapp/ui/postpose_page/components/view_task.dart';
 
 class PostPosePage extends GetView<PostPosePageController> {
   const PostPosePage({Key? key}) : super(key: key);
@@ -47,7 +44,8 @@ class PostPosePage extends GetView<PostPosePageController> {
               Expanded(
                 flex: 1,
                 child: ElevatedButton(
-                  onPressed: () => controller.savePostpose(controller.selectedItem.value, context),
+                  onPressed: () => controller.savePostpose(
+                      controller.selectedItem.value, context),
                   child: Text('ok'.tr),
                 ),
               ),
@@ -55,40 +53,6 @@ class PostPosePage extends GetView<PostPosePageController> {
           ),
         ),
       ],
-
-      // adMob
-      bottomNavigationBar: controller.obx(
-        (ad) => Container(
-          height: ad.size.height.toDouble(),
-          width: ad.size.height.toDouble(),
-          color: enabledGrey,
-          child: Align(
-            alignment: Alignment.center,
-            child: AdWidget(ad: ad),
-          ),
-        ),
-        onLoading: Container(
-          height: 60.0,
-          width: double.infinity,
-          color: enabledGrey,
-          child: const Align(
-            alignment: Alignment.center,
-            child: CircularProgressIndicator(),
-          ),
-        ),
-        onError: (error) => Container(
-          height: 60.0,
-          width: double.infinity,
-          color: enabledGrey,
-          child: Align(
-            alignment: Alignment.center,
-            child: Text(
-              error!,
-              style: kTitleMedium.copyWith(color: whiteBg),
-            ),
-          ),
-        ),
-      ),
 
       // body
       body: Obx(
@@ -108,6 +72,7 @@ class PostPosePage extends GetView<PostPosePageController> {
                       'postpone task'.tr,
                       style: kTitleLarge,
                     ),
+
                     /// TODO: mostrar tarea, pero rompe al abrir
                     // IconButton(
                     //   icon: const Icon(Icons.open_in_new),
@@ -128,15 +93,20 @@ class PostPosePage extends GetView<PostPosePageController> {
                   return Column(
                     children: [
                       RadioListTile(
-                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
+                        shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(8))),
                         visualDensity: VisualDensity.compact,
                         activeColor: bluePrimary,
                         contentPadding: EdgeInsets.zero,
                         title: Text(
                           controller.setTitle(e),
-                          style: TextStyle(fontWeight: isSelected ? FontWeight.bold : FontWeight.normal),
+                          style: TextStyle(
+                              fontWeight: isSelected
+                                  ? FontWeight.bold
+                                  : FontWeight.normal),
                         ),
-                        subtitle: Text(controller.subtitle.value), //Text(controller.setSubTitle(e)),
+                        subtitle: Text(controller
+                            .subtitle.value), //Text(controller.setSubTitle(e)),
                         selected: isSelected,
                         value: e,
                         groupValue: controller.selectedItem.value,
@@ -145,7 +115,9 @@ class PostPosePage extends GetView<PostPosePageController> {
                         },
                         secondary: e == PostposeEnum.personalized
                             ? IconButton(
-                                onPressed: isSelected ? () => controller.datePicker() : null,
+                                onPressed: isSelected
+                                    ? () => controller.datePicker()
+                                    : null,
                                 icon: const Icon(Icons.edit_rounded),
                               ) //
                             : null, //

@@ -1,20 +1,19 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:todoapp/data_source/hive_data_sorce/hive_data_source.dart';
 import 'package:todoapp/main.dart';
 import 'package:todoapp/models/app_config_model.dart';
 import 'package:todoapp/models/subtask_model.dart';
 import 'package:todoapp/models/task_model.dart';
-import 'package:todoapp/core/services/ad_mob_service.dart';
 import 'package:todoapp/ui/initial_page/build_week_controller.dart';
 import 'package:todoapp/ui/shared_components/create_task_bottomsheet.dart';
 import 'package:todoapp/ui/view_task_page.dart/view_task_page.dart';
 import 'package:todoapp/ui/view_task_page.dart/view_task_page_controller.dart';
 
-class InitialPageController extends GetxController with AdMobService, StateMixin<dynamic>, WidgetsBindingObserver, BuildWeekController {
+class InitialPageController extends GetxController
+    with WidgetsBindingObserver, BuildWeekController {
   //,OpenTaskController
   @override
   void onInit() async {
@@ -27,8 +26,6 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
 
   @override
   void onReady() {
-    loadBannerAd(bannerListener: initialPageBannerListener()); // de prueba
-    //loadBannerAd(bannerListener: initialPageBannerListener(), adUnitId: AdMobService.initialPageBanner!); //publicidad posta
     openTaskFromNotification();
     super.onReady();
   }
@@ -64,7 +61,6 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
   // box de tasks
   Box<TaskModel> tasksBox = Boxes.getTasksBox();
   RxBool simulateDeleting = false.obs;
-  
 
   // INITIALIZE APP CONFIGURATIONS //
   AppConfigModel appConfig = AppConfigModel();
@@ -110,8 +106,10 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
         taskDate: today,
         status: TaskStatus.PENDING.toStringValue,
         subTasks: [
-          SubTaskModel(title: 'sample task  subtask_1 description'.tr, isDone: false),
-          SubTaskModel(title: 'sample task  subtask_2 description'.tr, isDone: true),
+          SubTaskModel(
+              title: 'sample task  subtask_1 description'.tr, isDone: false),
+          SubTaskModel(
+              title: 'sample task  subtask_2 description'.tr, isDone: true),
         ],
         repeatId: null,
       );
@@ -134,7 +132,11 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
 
   ///// SIDE BAR /////
   // CHANGE LANGUAGE DIALOG on drawer //
-  List<Locale> langsCodes = [const Locale('en', ''), const Locale('es', ''), const Locale('pt', '')];
+  List<Locale> langsCodes = [
+    const Locale('en', ''),
+    const Locale('es', ''),
+    const Locale('pt', '')
+  ];
   List<String> langs = ['English', 'Español', 'Português'];
   Rx<Locale> currentLang = (Get.locale!).obs;
   void saveLocale(String langCode) {
@@ -142,19 +144,5 @@ class InitialPageController extends GetxController with AdMobService, StateMixin
     //Get.updateLocale(data);
     appConfig.language = langCode;
     appConfig.save();
-  }
-
-  ///// LOAD GOOGLE AD /////
-  BannerAdListener initialPageBannerListener() {
-    change(Null, status: RxStatus.loading());
-    return BannerAdListener(
-      onAdLoaded: (Ad ad) {
-        change(ad, status: RxStatus.success());
-      },
-      onAdFailedToLoad: (Ad ad, LoadAdError adError) {
-        change(null, status: RxStatus.error('failed to load AD'.tr));
-        ad.dispose();
-      },
-    );
   }
 }

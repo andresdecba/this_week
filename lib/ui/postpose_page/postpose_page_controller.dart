@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:todoapp/core/routes/routes.dart';
 import 'package:todoapp/data_source/hive_data_sorce/hive_data_source.dart';
 import 'package:todoapp/main.dart';
 import 'package:todoapp/models/notification_model.dart';
 import 'package:todoapp/models/task_model.dart';
-import 'package:todoapp/core/services/ad_mob_service.dart';
 import 'package:todoapp/ui/shared_components/dialogs.dart';
 import 'package:todoapp/ui/shared_components/snackbar.dart';
 import 'package:todoapp/use_cases/local_notifications_use_cases.dart';
@@ -15,9 +13,7 @@ import 'dart:async';
 
 enum PostposeEnum { fifteenMinutes, oneHour, threeHours, oneDay, personalized }
 
-class PostPosePageController extends GetxController with AdMobService, StateMixin<dynamic> {
-
-
+class PostPosePageController extends GetxController {
   // TODO: LEER ->
   /*
   ////////////////////////////////////////////////////////////////////
@@ -42,8 +38,6 @@ class PostPosePageController extends GetxController with AdMobService, StateMixi
 
   @override
   void onReady() {
-    loadBannerAd(bannerListener: initialPageBannerListener()); // depueba
-    //loadBannerAd(bannerListener: initialPageBannerListener(), adUnitId: AdMobService.postposePageBanner!); // posta
     super.onReady();
   }
 
@@ -120,7 +114,8 @@ class PostPosePageController extends GetxController with AdMobService, StateMixi
       case PostposeEnum.oneDay:
         return '${'tomorrow'.tr}, ${'at'.tr} ${timeFormater(tmp4)}';
       case PostposeEnum.personalized:
-        if (personalizedNotificationDateTime.value != null && personalizedTaskDate != null) {
+        if (personalizedNotificationDateTime.value != null &&
+            personalizedTaskDate != null) {
           return '${longDateFormaterWithoutYear(personalizedNotificationDateTime.value!)}, ${'at'.tr} ${timeFormater(personalizedNotificationDateTime.value!)}';
         } else {
           return 'select...'.tr;
@@ -171,10 +166,12 @@ class PostPosePageController extends GetxController with AdMobService, StateMixi
       // si pospone para MAÑANA:, conservar la hora original de la notificación.
       case PostposeEnum.oneDay:
         task.taskDate = task.taskDate.add(const Duration(days: 1));
-        _newNotification.time = _newNotification.time.add(const Duration(days: 1));
+        _newNotification.time =
+            _newNotification.time.add(const Duration(days: 1));
         break;
       case PostposeEnum.personalized:
-        if (personalizedNotificationDateTime.value != null && personalizedTaskDate != null) {
+        if (personalizedNotificationDateTime.value != null &&
+            personalizedTaskDate != null) {
           task.taskDate = personalizedTaskDate!;
           _newNotification.time = personalizedNotificationDateTime.value!;
           break;
@@ -191,7 +188,6 @@ class PostPosePageController extends GetxController with AdMobService, StateMixi
   }
 
   void saveAndNavigate(BuildContext context) async {
-
     Rx<TaskModel> taskObs = task.obs;
     TimeOfDay newTime = TimeOfDay(
       hour: _newNotification.time.hour,
@@ -206,7 +202,8 @@ class PostPosePageController extends GetxController with AdMobService, StateMixi
     Get.offAllNamed(Routes.INITIAL_PAGE);
     showSnackBar(
       titleText: 'postponed task title'.tr,
-      messageText: '${'postponed task description'.tr} ${longDateFormaterWithoutYear(task.taskDate)}, ${'at'.tr} ${timeFormater(_newNotification.time)}',
+      messageText:
+          '${'postponed task description'.tr} ${longDateFormaterWithoutYear(task.taskDate)}, ${'at'.tr} ${timeFormater(_newNotification.time)}',
     );
   }
 
@@ -239,7 +236,9 @@ class PostPosePageController extends GetxController with AdMobService, StateMixi
     //FocusScope.of(context).unfocus(); // hide keyboard if open
     TimeOfDay? picked = await showTimePicker(
       context: Get.context!,
-      initialTime: TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().add(const Duration(minutes: 10)).minute),
+      initialTime: TimeOfDay(
+          hour: DateTime.now().hour,
+          minute: DateTime.now().add(const Duration(minutes: 10)).minute),
     );
     if (picked != null) {
       personalizedNotificationDateTime.value = DateTime(
@@ -253,19 +252,5 @@ class PostPosePageController extends GetxController with AdMobService, StateMixi
       // ignore: avoid_print
       print('picking cancelled');
     }
-  }
-
-  ///// manage LOAD GOOGLE AD /////
-  BannerAdListener initialPageBannerListener() {
-    change(Null, status: RxStatus.loading());
-    return BannerAdListener(
-      onAdLoaded: (Ad ad) {
-        change(ad, status: RxStatus.success());
-      },
-      onAdFailedToLoad: (Ad ad, LoadAdError adError) {
-        change(null, status: RxStatus.error('failed to load AD'.tr));
-        ad.dispose();
-      },
-    );
   }
 }

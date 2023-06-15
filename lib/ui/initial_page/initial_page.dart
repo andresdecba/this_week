@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:todoapp/core/globals.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
@@ -19,39 +18,6 @@ class InitialPage extends GetView<InitialPageController> {
 
       // key
       key: Globals.myScaffoldKey,
-      // ad
-      bottomNavigationBar: controller.obx(
-        (ad) => Container(
-          height: ad.size.height.toDouble(),
-          width: ad.size.height.toDouble(),
-          color: enabledGrey,
-          child: Align(
-            alignment: Alignment.center,
-            child: AdWidget(ad: ad),
-          ),
-        ),
-        onLoading: Container(
-          height: 60.0,
-          width: double.infinity,
-          color: enabledGrey,
-          child: const Align(
-            alignment: Alignment.center,
-            child: CircularProgressIndicator(),
-          ),
-        ),
-        onError: (error) => Container(
-          height: 60.0,
-          width: double.infinity,
-          color: enabledGrey,
-          child: Align(
-            alignment: Alignment.center,
-            child: Text(
-              error!,
-              style: kTitleMedium.copyWith(color: whiteBg),
-            ),
-          ),
-        ),
-      ),
 
       // app bar
       appBar: AppBar(
@@ -79,9 +45,7 @@ class InitialPage extends GetView<InitialPageController> {
                 controller: controller.pageCtlr,
                 pageSnapping: true,
                 onPageChanged: (index) {},
-                
                 itemBuilder: (context, i) {
-
                   // cambiar la pagina y generar la lista observable
                   controller.changePage(i);
 
