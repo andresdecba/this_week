@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
@@ -5,29 +7,42 @@ import 'package:isoweek/isoweek.dart';
 import 'package:todoapp/models/task_model.dart';
 
 // global para poder acceder desde los use cases
-late CreateWeekObs createWeekObs;
+late CreateWeekObs createWeekObsGlobal;
 
 mixin BuildWeekController {
   //
   /// GENERATE LIST OF TASKS FOR THIS WEEK
-  RxList<Rx<TaskModel>> getWeekTasks({required Week week, required Box<TaskModel> tasksBox}) {
+  Future<RxList<Rx<TaskModel>>> getWeekTasks(
+      {required Week week, required Box<TaskModel> tasksBox}) async {
     // vars
-    RxList<Rx<TaskModel>> _createWeekObs = RxList<Rx<TaskModel>>([]);
+    RxList<Rx<TaskModel>> createWeekObs = RxList<Rx<TaskModel>>([]);
     var firstDay = week.days.first.subtract(const Duration(days: 1));
     var lastDay = week.days.last.add(const Duration(days: 1));
+    List<TaskModel> result = [];
 
-    List<TaskModel> result = tasksBox.values.where((task) {
-      return task.taskDate.isAfter(firstDay) && task.taskDate.isBefore(lastDay);
-    }).toList();
+    await Future.microtask(() {
+      result = tasksBox.values.where((task) {
+        return task.taskDate.isAfter(firstDay) &&
+            task.taskDate.isBefore(lastDay);
+      }).toList();
+    });
 
-    for (var element in result) {
-      Rx<TaskModel> taskObs = element.obs;
-      _createWeekObs.add(taskObs);
-    }
+    await Future.microtask(() {
+      for (var element in result) {
+        Rx<TaskModel> taskObs = element.obs;
+        createWeekObs.add(taskObs);
+      }
+    });
 
-    createWeekObs = CreateWeekObs(tasks: _createWeekObs);
-    generateStatistics();
-    return _createWeekObs;
+    // teóricamente los microtasks deberian esperar pero pareceque no anda ó
+    // pasa muy rápido asi que puse un timer.
+    await Future.delayed(const Duration(milliseconds: 400));
+    createWeekObsGlobal = CreateWeekObs(tasks: createWeekObs);
+
+    await Future.microtask(() {
+      generateStatistics();
+    });
+    return createWeekObs;
   }
 
   /// CHANGE THE PAGE
@@ -68,12 +83,12 @@ mixin BuildWeekController {
   Rx<int> pending = 0.obs;
 
   void generateStatistics() {
-    int totalTasks = createWeekObs.tasks.length;
+    int totalTasks = createWeekObsGlobal.tasks.length;
     int totalDone = 0;
     int totalInProgress = 0;
     int totalPending = 0;
 
-    for (var e in createWeekObs.tasks) {
+    for (var e in createWeekObsGlobal.tasks) {
       if (e.value.status == TaskStatus.DONE.toStringValue) {
         totalDone += 1;
       }
