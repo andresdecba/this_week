@@ -14,6 +14,11 @@ import 'package:todoapp/ui/view_task_page.dart/view_task_page.dart';
 import 'package:todoapp/ui/view_task_page.dart/view_task_page_controller.dart';
 import 'package:todoapp/utils/helpers.dart';
 
+/*
+Tutorial como mantener el estado de la pagina:
+https://stackoverflow.com/questions/67662298/flutter-how-to-keep-the-page-alive-when-changing-it-with-pageview-or-bottomnav
+*/
+
 class BuildWeek extends StatefulWidget {
   const BuildWeek({
     required this.week,
@@ -28,11 +33,12 @@ class BuildWeek extends StatefulWidget {
   State<BuildWeek> createState() => _BuildWeekState();
 }
 
-class _BuildWeekState extends State<BuildWeek> {
+class _BuildWeekState extends State<BuildWeek> with AutomaticKeepAliveClientMixin {
   final controller = Get.find<InitialPageController>();
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Obx(() {
       // no borrar //
       // var noBorrar = controller.weekDaysFromTo;
@@ -40,6 +46,7 @@ class _BuildWeekState extends State<BuildWeek> {
 
       return SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
+        key: PageStorageKey(UniqueKey()),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -183,4 +190,7 @@ class _BuildWeekState extends State<BuildWeek> {
       );
     });
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -43,8 +43,32 @@ mixin BuildWeekController {
     return createWeekObs;
   }
 
+  RxList<Rx<TaskModel>> getWeekTasksDos({required Week week, required Box<TaskModel> tasksBox}) {
+    // vars
+    RxList<Rx<TaskModel>> createWeekObs = RxList<Rx<TaskModel>>([]);
+    var firstDay = week.days.first.subtract(const Duration(days: 1));
+    var lastDay = week.days.last.add(const Duration(days: 1));
+    List<TaskModel> result = [];
+
+    result = tasksBox.values.where((task) {
+      return task.date.isAfter(firstDay) && task.date.isBefore(lastDay);
+    }).toList();
+
+    for (var element in result) {
+      Rx<TaskModel> taskObs = element.obs;
+      createWeekObs.add(taskObs);
+    }
+
+    createWeekObsGlobal = CreateWeekObs(tasks: createWeekObs);
+
+    generateStatistics();
+
+    return createWeekObs;
+  }
+
   /// CHANGE THE PAGE
-  final PageController pageCtlr = PageController(initialPage: 1000);
+  final PageController pageCtlr = PageController(initialPage: 1000, keepPage: true, viewportFraction: 1);
+
   Rx<Week> week = Week.current().obs;
   int oldIndex = 1000;
 
