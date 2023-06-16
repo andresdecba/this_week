@@ -25,14 +25,14 @@ class CreateTaskForm extends GetView<CreateTaskPageController> {
           maxLines: null,
           maxLength: 200,
           validator: (value) {
-            if (value != null && value.length < 12) {
-              return 'Between 12 and 200 characters'.tr;
+            if (value != null && value.length < 6) {
+              return 'Between 6 and 200 characters'.tr;
             } else {
               return null;
             }
           },
           onEditingComplete: () {
-            controller.saveTask();
+            controller.saveTask(context);
           },
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.all(8),
@@ -45,8 +45,8 @@ class CreateTaskForm extends GetView<CreateTaskPageController> {
             errorStyle: kBodySmall.copyWith(fontStyle: FontStyle.italic, color: disabledGrey, fontWeight: FontWeight.normal),
             counterStyle: kBodySmall.copyWith(
               fontStyle: FontStyle.italic,
-              fontWeight: controller.counter.value < 12 ? FontWeight.bold : FontWeight.normal,
-              color: controller.counter.value < 12 ? warning : disabledGrey,
+              fontWeight: controller.counter.value < 6 ? FontWeight.bold : FontWeight.normal,
+              color: controller.counter.value < 6 ? warning : disabledGrey,
             ),
             // others
             filled: false,
@@ -71,7 +71,7 @@ class CreateTaskForm extends GetView<CreateTaskPageController> {
             focusedBorder: const OutlineInputBorder(
               borderSide: BorderSide(color: bluePrimary),
             ),
-            helperText: 'between 12 and 200 characters'.tr,
+            helperText: 'between 6 and 200 characters'.tr,
             errorBorder: const OutlineInputBorder(
               borderSide: BorderSide(color: bluePrimary, width: 1.0),
             ),

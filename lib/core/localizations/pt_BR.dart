@@ -1,6 +1,5 @@
-
 Map<String, String> pt_BR = {
-    //header
+  //header
   'week': 'Semana',
   'current week': 'SEMANA ATUAL:',
   'to': 'a',
@@ -10,11 +9,11 @@ Map<String, String> pt_BR = {
   'of tasks pending': 'de tarefas pendentes.',
 
   // side bar
-  'home':'Home',
+  'home': 'Home',
   'go to the current week': 'Ir para a semana atual.',
   'new task_sidebar': 'Nova tarefa',
   'new task for any day': 'Nova tarefa para qualquer dia.',
-  'restore app' : 'Restaurar aplicativo',
+  'restore app': 'Restaurar aplicativo',
   'delete all tasks': 'Exclua todas as tarefas.',
   'languages': 'línguas',
   'change the current language': 'Altere o idioma atual.',
@@ -22,7 +21,7 @@ Map<String, String> pt_BR = {
   'share this app with your friends': 'Compartilhe este aplicativo com seus amigos.',
   'hi! check this app out...': 'Oi! confira este aplicativo...',
   'rate': 'Nos avalie',
-  'rate us in playstore' : 'Avalie-nos na Play Store',
+  'rate us in playstore': 'Avalie-nos na Play Store',
 
   // task card
   'no tasks': 'Sem tarefas.',
@@ -40,15 +39,15 @@ Map<String, String> pt_BR = {
   'notify me at:': 'Notifique-me em:',
   'select time': 'Selecione a hora',
   'task description': 'Descrição',
-  'task description_description': 'Obrigatório: adicione uma descrição da tarefa entre 7 e 200 caracteres.',
-  'Write at least 7 characters' : 'Escreva pelo menos 7 caracteres',
+  'task description_description': 'Obrigatório: adicione uma descrição da tarefa entre 6 e 200 caracteres.',
+  'Write at least 6 characters': 'Escreva pelo menos 6 caracteres',
   'todo list': 'Subtarefas',
   'here you can add a sub task list': 'Opcional: adicione uma lista de subtarefas.',
   'create subtask': 'Criar subtarefa',
   'create subtask_description': 'Adicione uma descrição entre 7 e 100 caracteres.',
   'view task': 'Tarefa',
   'update task': 'Editar tarefa',
-  'update subtask' : 'Editar subtarefa',
+  'update subtask': 'Editar subtarefa',
   'repeat this task every': 'Repetir esta tarefa toda',
 
   // view task page
@@ -60,7 +59,7 @@ Map<String, String> pt_BR = {
   'between 6 and 100 characters': 'Entre 6 e 100 caracteres.',
 
   // create tasl page
-  'between 12 and 200 characters': 'Entre 12 e 200 caracteres.',
+  'between 6 and 200 characters': 'Entre 6 e 200 caracteres.',
   'description': 'Descrição',
   'out of': 'de',
   'create routine ?': 'Criar rotina ?',
@@ -70,6 +69,8 @@ Map<String, String> pt_BR = {
   'noon 12 p.m.': 'Meio-dia 12h',
   'afternoon 5:00 p.m.': 'Tarde 17:00',
   'night 9:00 p.m.': 'Noite 21:00',
+  'check notification settings': 'Verifique as configurações de notificação no seu dispositivo.',
+  'make sure allow show notifications': 'Certifique-se de permitir a exibição de notificações para This Week app.',
 
   // postpose page
   '15 minutes': '15 minutos',
@@ -94,8 +95,8 @@ Map<String, String> pt_BR = {
   'delete tasks': 'Excluir tarefas',
   'this action will delete all...': 'Esta ação excluirá todas as tarefas permanentemente.',
   'choose a language': 'Escolha um idioma',
-  'atention !' : 'Atenção !',
-  'You cant create a...' : "Você não pode criar uma notificação antes de HOJE e AGORA.",
+  'atention !': 'Atenção !',
+  'You cant create a...': "Você não pode criar uma notificação antes de HOJE e AGORA.",
   'this is a periodic task': 'Esta é uma tarefa periódica,\no que você quer fazer?',
   'delete current task': 'Excluir tarefa atual.',
   'delete current task and subsequent...': 'Excluir tarefa atual e subsequentes.',

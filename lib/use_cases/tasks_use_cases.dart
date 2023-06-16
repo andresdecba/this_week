@@ -31,8 +31,7 @@ abstract class TasksUseCases {
 
 class TaskUseCasesImpl implements TasksUseCases {
   //
-  final LocalNotificationsUseCases _localNotificationsUseCases =
-      LocalNotificationsUseCases();
+  final LocalNotificationsUseCases _localNotificationsUseCases = LocalNotificationsUseCases();
   final tasksBox = Boxes.getTasksBox();
   Box<AppConfigModel> userPrefs = Boxes.getMyAppConfigBox();
 
@@ -60,8 +59,7 @@ class TaskUseCasesImpl implements TasksUseCases {
 
     // crear notificacion
     if (notificationDateTime != null) {
-      newTask.notificationData =
-          await LocalNotificationsDataSource.createNotification(
+      newTask.notificationData = await LocalNotificationsDataSource.createNotification(
         datetime: notificationDateTime,
         title: description,
         payload: newTask.key.toString(),
@@ -93,8 +91,7 @@ class TaskUseCasesImpl implements TasksUseCases {
               notificationDateTime.hour,
               notificationDateTime.minute,
             );
-            repeatedTask.notificationData =
-                await LocalNotificationsDataSource.createNotification(
+            repeatedTask.notificationData = await LocalNotificationsDataSource.createNotification(
               datetime: notifDateTime,
               title: description,
               payload: repeatedTask.key,
@@ -119,8 +116,7 @@ class TaskUseCasesImpl implements TasksUseCases {
   }
 
   @override
-  void deleteTaskUseCase(
-      {required Rx<TaskModel> task, required bool deleteRoutine}) {
+  void deleteTaskUseCase({required Rx<TaskModel> task, required bool deleteRoutine}) {
     // si es tarea repetida
     if (task.value.repeatId != null && deleteRoutine) {
       for (var e in tasksBox.values) {

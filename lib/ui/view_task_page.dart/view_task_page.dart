@@ -29,10 +29,8 @@ class _ViewTaskState extends State<ViewTask> {
     debugPrint('ViewTask -> dispose');
   }
 
-
   @override
   Widget build(BuildContext context) {
-
     final controller = Get.find<ViewTaskController>();
 
     return Obx(
@@ -56,7 +54,8 @@ class _ViewTaskState extends State<ViewTask> {
                   visible: controller.hasUpdated.value,
                   child: TextButton(
                     onPressed: () => controller.saveUpdatedTask(),
-                    child: const Text('Guargar', style: TextStyle(color: bluePrimary)),
+                    child: const Text('Guargar',
+                        style: TextStyle(color: bluePrimary)),
                   ),
                 ),
               ],
@@ -81,7 +80,11 @@ class _ViewTaskState extends State<ViewTask> {
                   : kViewTaskDescripton.copyWith(
                       color: disabledGrey,
                     ),
-              decoration: const InputDecoration(contentPadding: EdgeInsets.zero, isDense: true, border: InputBorder.none, counterText: ""),
+              decoration: const InputDecoration(
+                  contentPadding: EdgeInsets.zero,
+                  isDense: true,
+                  border: InputBorder.none,
+                  counterText: ""),
               onTap: () => controller.descriptionEditMode.value = true,
               onEditingComplete: () {
                 controller.updateDescription();
@@ -98,16 +101,23 @@ class _ViewTaskState extends State<ViewTask> {
                 // CAMBIAR LA FECHA //
                 MyChip(
                   label: standardDateFormater(controller.updatedDateTime.value),
-                  iconData: controller.task.value.repeatId == null ? Icons.calendar_today_rounded : Icons.push_pin_rounded,
+                  iconData: controller.task.value.repeatId == null
+                      ? Icons.calendar_today_rounded
+                      : Icons.push_pin_rounded,
                   onTap: () => controller.updateDate(context, controller.task),
-                  isEnabled: controller.task.value.repeatId == null ? true : false,
+                  isEnabled:
+                      controller.task.value.repeatId == null ? true : false,
                 ),
                 const SizedBox(width: 5),
 
                 // CAMBIAR LA NOTIFICACION //
                 MyChip(
-                  label: controller.updatedNotification.value != null ? timeOfDayToString(controller.updatedNotification.value!) : '-- : --',
-                  iconData: controller.task.value.notificationData != null ? Icons.notifications_active_rounded : Icons.notifications_none_rounded,
+                  label: controller.updatedNotification.value != null
+                      ? timeOfDayToString(controller.updatedNotification.value!)
+                      : '-- : --',
+                  iconData: controller.task.value.notificationData != null
+                      ? Icons.notifications_active_rounded
+                      : Icons.notifications_none_rounded,
                   onTap: () => controller.updateNotification(context),
                   isEnabled: !controller.isExpired.value,
                 ),
@@ -125,8 +135,10 @@ class _ViewTaskState extends State<ViewTask> {
                       okTextButton: 'delete'.tr,
                       iconPath: 'assets/warning.svg',
                       iconColor: warning,
-                      content: controller.task.value.repeatId != null ? const _BuildCheckBox() : null,
-                      onPressOk: () => controller.deleteTask(),
+                      content: controller.task.value.repeatId != null
+                          ? const _BuildCheckBox()
+                          : null,
+                      onPressOk: () => controller.deleteTask(context),
                     );
                   },
                   isEnabled: true,
@@ -176,7 +188,8 @@ class _BuildCheckBox extends GetView<ViewTaskController> {
             children: [
               Checkbox(
                 value: controller.isChecked.value,
-                onChanged: (value) => controller.isChecked.value = !controller.isChecked.value,
+                onChanged: (value) =>
+                    controller.isChecked.value = !controller.isChecked.value,
               ),
               Expanded(child: Text('delete current task and subsequent...'.tr)),
             ],
@@ -186,7 +199,8 @@ class _BuildCheckBox extends GetView<ViewTaskController> {
             children: [
               Checkbox(
                 value: !controller.isChecked.value,
-                onChanged: (value) => controller.isChecked.value = !controller.isChecked.value,
+                onChanged: (value) =>
+                    controller.isChecked.value = !controller.isChecked.value,
               ),
               Expanded(child: Text('delete current task'.tr)),
             ],

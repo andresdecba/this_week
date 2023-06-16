@@ -9,11 +9,11 @@ Map<String, String> es_AR = {
   'of tasks pending': 'de tareas pendientes.',
 
   // side bar
-  'home':'Home',
+  'home': 'Home',
   'go to the current week': 'Ir a la semana actual.',
   'new task_sidebar': 'Nueva tarea',
   'new task for any day': 'Nueva tarea para cualquier día.',
-  'restore app' : 'Restablecer app',
+  'restore app': 'Restablecer app',
   'delete all tasks': 'Eliminar las tareas.',
   'languages': 'Idiomas',
   'change the current language': 'Cambiar el idioma actual.',
@@ -21,7 +21,7 @@ Map<String, String> es_AR = {
   'share this app with your friends': 'Comparte esta app con tus amigos.',
   'hi! check this app out...': 'Hola! te recomiendo esta app...',
   'rate': 'Califícanos',
-  'rate us in playstore' : 'Califícanos en Play Strore.',
+  'rate us in playstore': 'Califícanos en Play Strore.',
 
   // task card
   'no tasks': 'Sin tareas',
@@ -39,15 +39,15 @@ Map<String, String> es_AR = {
   'notify me at:': 'Notificarme a las:',
   'select time': 'Elija un horario',
   'task description': 'Descripción',
-  'task description_description': 'Requerído: agrega una descripción de entre 7 y 200 caracteres.',
-  'Write at least 7 characters' : 'Escribe al menos 7 caracters',
+  'task description_description': 'Requerído: agrega una descripción de entre 6 y 200 caracteres.',
+  'Write at least 6 characters': 'Escribe al menos 6 caracters',
   'todo list': 'Subtareas',
   'here you can add a sub task list': 'Opcional: Agrega una lista de subtareas.',
   'create subtask': 'Crear subtarea',
   'create subtask_description': 'Agrega una descripción de entre 7 y 100 caracteres.',
   'view task': 'Ver tarea',
   'update task': 'Editar tarea',
-  'update subtask' : 'Editar subtask',
+  'update subtask': 'Editar subtask',
   'repeat this task every': 'Repetir esta tarea todos los',
 
   // view task page
@@ -59,7 +59,7 @@ Map<String, String> es_AR = {
   'between 6 and 100 characters': 'Entre 6 y 100 caracteres.',
 
   // create task page
-  'between 12 and 200 characters': 'Entre 12 y 200 caracteres.',
+  'between 6 and 200 characters': 'Entre 6 y 200 caracteres.',
   'description': 'Descripción',
   'out of': 'de',
   'create routine ?': 'Crear rutina ?',
@@ -69,6 +69,8 @@ Map<String, String> es_AR = {
   'noon 12 p.m.': 'Mediodia 12 hs.',
   'afternoon 5:00 p.m.': 'Tarde 17 hs.',
   'night 9:00 p.m.': 'Noche 21 hs.',
+  'check notification settings': 'Revise la configuración de notificaciones en su dispositivo.',
+  'make sure allow show notifications': 'Asegúrate permitir mostrar notificaciones para This Week app.',
 
   // postpose page
   '15 minutes': '15 minutos',
@@ -93,8 +95,8 @@ Map<String, String> es_AR = {
   'delete tasks': 'Eliminar todo',
   'this action will delete all...': 'Esta acción Eliminará todas las tareas de forma permanente',
   'choose a language': 'Escoge un idioma',
-  'atention !' : 'Atención !',
-  'You cant create a...' : "No puedes crear una notificación antes de HOY y AHORA.",
+  'atention !': 'Atención !',
+  'You cant create a...': "No puedes crear una notificación antes de HOY y AHORA.",
   'this is a periodic task': 'Esta es una tarea periódica,\n¿ que desea hacer ?',
   'delete current task': 'Eliminar tarea actual.',
   'delete current task and subsequent...': 'Eliminar tarea actual y las posteriores.',

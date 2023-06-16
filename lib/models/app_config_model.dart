@@ -19,14 +19,18 @@ class AppConfigModel extends HiveObject {
   @HiveField(3)
   bool isOnboardingDone;
 
+  @HiveField(4)
+  bool hasNotificationModalShown;
+
   AppConfigModel({
     this.language,
     this.createSampleTask = true,
     this.isOnboardingDone = false,
+    this.hasNotificationModalShown = false,
   });
 
   @override
   String toString() {
-    return '{ description: $language, sample task: $createSampleTask }';
+    return '{ description: $language, sample_task: $createSampleTask, onborarding: $isOnboardingDone, notification: $hasNotificationModalShown }';
   }
 }

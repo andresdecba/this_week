@@ -48,9 +48,10 @@ class ExpandibleOptions extends GetView<ViewTaskController> {
               okTextButton: 'delete'.tr,
               iconPath: 'assets/warning.svg',
               iconColor: warning,
-              content: task.value.repeatId != null ? const _BuildCheckBox() : null,
+              content:
+                  task.value.repeatId != null ? const _BuildCheckBox() : null,
               onPressOk: () {
-                controller.deleteTask();
+                controller.deleteTask(context);
               },
             );
             break;
@@ -65,7 +66,8 @@ class ExpandibleOptions extends GetView<ViewTaskController> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             value: _MenuItem.date,
             child: ExpandibleOptionsItem(
-              title: 'Cambiar fecha'.tr, //longDateFormaterWithoutYear(task.value.taskDate),
+              title: 'Cambiar fecha'
+                  .tr, //longDateFormaterWithoutYear(task.value.taskDate),
               leading: Icons.calendar_today_rounded,
             ),
           ),
@@ -113,7 +115,8 @@ class _BuildCheckBox extends GetView<ViewTaskController> {
             children: [
               Checkbox(
                 value: controller.isChecked.value,
-                onChanged: (value) => controller.isChecked.value = !controller.isChecked.value,
+                onChanged: (value) =>
+                    controller.isChecked.value = !controller.isChecked.value,
               ),
               Expanded(child: Text('delete current task and subsequent...'.tr)),
             ],
@@ -123,7 +126,8 @@ class _BuildCheckBox extends GetView<ViewTaskController> {
             children: [
               Checkbox(
                 value: !controller.isChecked.value,
-                onChanged: (value) => controller.isChecked.value = !controller.isChecked.value,
+                onChanged: (value) =>
+                    controller.isChecked.value = !controller.isChecked.value,
               ),
               Expanded(child: Text('delete current task'.tr)),
             ],

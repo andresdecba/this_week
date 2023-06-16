@@ -8,7 +8,7 @@ void viewTaskBottomSheet({
     constraints: BoxConstraints.loose(
       Size(
         MediaQuery.of(context).size.width,
-        MediaQuery.of(context).size.height * 0.9,
+        MediaQuery.of(context).size.height * 0.75,
       ),
     ),
     isDismissible: true,
@@ -25,7 +25,8 @@ void viewTaskBottomSheet({
     ),
     builder: (context) {
       return Container(
-        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        padding:
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
         height: MediaQuery.of(context).size.height * 0.75,
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),

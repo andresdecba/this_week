@@ -9,11 +9,11 @@ Map<String, String> en_US = {
   'of tasks pending': 'of tasks pending.',
 
   // side bar
-  'home':'Home',
+  'home': 'Home',
   'go to the current week': 'Go to the current week.',
   'new task_sidebar': 'New task',
   'new task for any day': 'New task for any day.',
-  'restore app' : 'Restore app',
+  'restore app': 'Restore app',
   'delete all tasks': 'Delete all tasks.',
   'languages': 'Languages',
   'change the current language': 'Change the current language.',
@@ -21,7 +21,7 @@ Map<String, String> en_US = {
   'share this app with your friends': 'Share this app with your friends.',
   'hi! check this app out...': 'Hi! check this app out...',
   'rate': 'Rate us',
-  'rate us in playstore' : 'Rate us on Play Strore',
+  'rate us in playstore': 'Rate us on Play Strore',
 
   // task card
   'no tasks': 'No tasks.',
@@ -39,15 +39,15 @@ Map<String, String> en_US = {
   'notify me at:': 'Notify me at:',
   'select time': 'Select time',
   'task description': 'Description',
-  'task description_description': 'Required: add a task description between 7 and 200 characters.',
-  'Write at least 7 characters' : 'Write at least 7 characters',
+  'task description_description': 'Required: add a task description between 6 and 200 characters.',
+  'Write at least 6 characters': 'Write at least 6 characters',
   'todo list': 'Todo',
   'here you can add a sub task list': 'Optional: add a subtasks list',
   'create subtask': 'Create a subtask',
   'create subtask_description': 'Add a subtask description betwwen 7 and 100 characters.',
   'view task': 'View task',
   'update task': 'Update task',
-  'update subtask' : 'Update subtask',
+  'update subtask': 'Update subtask',
   'repeat this task every': 'Repeat this task every',
 
   // view task page
@@ -59,7 +59,7 @@ Map<String, String> en_US = {
   'between 6 and 100 characters': 'Between 6 and 100 characters.',
 
   // create task page
-  'between 12 and 200 characters': 'Between 12 and 200 characters.',
+  'between 6 and 200 characters': 'Between 6 and 200 characters.',
   'description': 'Description',
   'out of': 'out of',
   'create routine ?': 'Create routine ?',
@@ -69,6 +69,8 @@ Map<String, String> en_US = {
   'noon 12 p.m.': 'Noon 12 p.m.',
   'afternoon 5:00 p.m.': 'Afternoon 5:00 p.m.',
   'night 9:00 p.m.': 'Night 9:00 p.m.',
+  'check notification settings': 'Check notification settings on your device.',
+  'make sure allow show notifications': 'Make sure to allow showing notifications for This Week app.',
 
   // postpose page
   '15 minutes': '15 minutes',
@@ -93,8 +95,8 @@ Map<String, String> en_US = {
   'delete tasks': 'Delete tasks',
   'this action will delete all...': 'This action will delete all tasks permanently.',
   'choose a language': 'Choose a language',
-  'atention !' : 'Atention !',
-  'You cant create a...' : "You can't create a notification before TODAY and NOW.",
+  'atention !': 'Atention !',
+  'You cant create a...': "You can't create a notification before TODAY and NOW.",
   'this is a periodic task': 'This is a periodic task,\nwhat do you want to do?',
   'delete current task': 'Delete current task.',
   'delete current task and subsequent...': 'Delete current task and subsequent ones.',

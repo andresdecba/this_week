@@ -20,7 +20,8 @@ Future<T?> myCustomDialog<T>({
       return AlertDialog(
         alignment: Alignment.center,
         scrollable: true,
-        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20))),
         //insetPadding: const EdgeInsets.all(5),
         //
         icon: Align(
@@ -79,7 +80,10 @@ Future<T?> myCustomDialog<T>({
           ),
           // ok
           ElevatedButton(
-            onPressed: () => onPressOk(),
+            onPressed: () {
+              Navigator.of(context).pop();
+              onPressOk();
+            },
             style: ButtonStyle(
               padding: MaterialStateProperty.all<EdgeInsets>(
                 const EdgeInsets.symmetric(horizontal: 30),
@@ -101,20 +105,19 @@ Future<T?> changeLangDialog<T>({
   required String title,
   required Widget elements,
 }) {
-
   return showDialog(
     context: context,
     builder: (BuildContext dialogContext) {
       return AlertDialog(
         alignment: Alignment.center,
         scrollable: true,
-        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8))),
         title: Align(
           alignment: Alignment.center,
           child: Text(title),
         ),
         titleTextStyle: kTitleLarge,
-        
         content: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -147,7 +150,8 @@ Future<T?> createSubtaskDialog<T>({
         // general
         alignment: Alignment.center,
         scrollable: true,
-        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8))),
 
         // title
         title: Align(

@@ -20,19 +20,22 @@ class AppConfigModelAdapter extends TypeAdapter<AppConfigModel> {
       language: fields[1] as String?,
       createSampleTask: fields[2] as bool,
       isOnboardingDone: fields[3] as bool,
+      hasNotificationModalShown: fields[4] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, AppConfigModel obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(1)
       ..write(obj.language)
       ..writeByte(2)
       ..write(obj.createSampleTask)
       ..writeByte(3)
-      ..write(obj.isOnboardingDone);
+      ..write(obj.isOnboardingDone)
+      ..writeByte(4)
+      ..write(obj.hasNotificationModalShown);
   }
 
   @override

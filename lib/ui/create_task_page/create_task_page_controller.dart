@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todoapp/core/globals.dart';
+import 'package:todoapp/data_source/hive_data_sorce/hive_data_source.dart';
+import 'package:todoapp/ui/shared_components/dialogs.dart';
 import 'package:todoapp/ui/shared_components/snackbar.dart';
 import 'package:todoapp/use_cases/local_notifications_use_cases.dart';
 import 'package:todoapp/use_cases/tasks_use_cases.dart';
@@ -211,21 +213,37 @@ class CreateTaskPageController extends GetxController {
   }
 
   // SAVE-CREATE TASK //
-  void saveTask() async {
-    if (Globals.formStateKey.currentState!.validate()) {
 
+  var appConfig = Boxes.getMyAppConfigBox().get('appConfig')!;
+
+  void saveTask(BuildContext context) async {
+    if (Globals.formStateKey.currentState!.validate()) {
+      // crear tarea
       await tasksUseCases.createTaskUseCase(
         description: textController.value.text,
         date: selectedDate,
         isRoutine: isRoutine.value,
         notificationDateTime: notificationDateTime,
       );
-
+      // mostrar modal de notificaciones
+      if (notificationDateTime != null && !appConfig.hasNotificationModalShown) {
+        // ignore: use_build_context_synchronously
+        myCustomDialog(
+          context: context,
+          title: 'check notification settings'.tr,
+          subtitle: 'make sure allow show notifications'.tr,
+          onPressOk: () {
+            appConfig.hasNotificationModalShown = true;
+            appConfig.save();
+            showSnackBar(
+              titleText: 'new task created'.tr,
+              messageText: textController.value.text,
+            );
+          },
+        );
+      }
+      // cerrar page de crear tarea
       Get.back();
-      showSnackBar(
-        titleText: 'new task created'.tr,
-        messageText: textController.value.text,
-      );
     }
   }
 }
