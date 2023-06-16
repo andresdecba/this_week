@@ -22,9 +22,9 @@ class LocalNotificationsUseCases {
 
     // crear datetime
     var selectedDateTime = DateTime(
-      task.value.taskDate.year,
-      task.value.taskDate.month,
-      task.value.taskDate.day,
+      task.value.date.year,
+      task.value.date.month,
+      task.value.date.day,
       newTime.hour,
       newTime.minute,
     );

@@ -10,7 +10,6 @@ class ViewTask extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -24,14 +23,13 @@ class ViewTask extends StatelessWidget {
               _CustomTile(
                 leading: const Icon(Icons.date_range_rounded),
                 title: Text(
-                  longDateFormaterWithoutYear(task.taskDate),
+                  longDateFormaterWithoutYear(task.date),
                   style: kBodyMedium,
                 ),
               ),
               // hora notificacion
               task.notificationData != null
-                  ?
-                _CustomTile(
+                  ? _CustomTile(
                       leading: const Icon(Icons.notifications_active_rounded),
                       title: Text(
                         timeFormater(task.notificationData!.time),

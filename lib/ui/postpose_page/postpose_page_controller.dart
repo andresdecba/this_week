@@ -114,8 +114,7 @@ class PostPosePageController extends GetxController {
       case PostposeEnum.oneDay:
         return '${'tomorrow'.tr}, ${'at'.tr} ${timeFormater(tmp4)}';
       case PostposeEnum.personalized:
-        if (personalizedNotificationDateTime.value != null &&
-            personalizedTaskDate != null) {
+        if (personalizedNotificationDateTime.value != null && personalizedTaskDate != null) {
           return '${longDateFormaterWithoutYear(personalizedNotificationDateTime.value!)}, ${'at'.tr} ${timeFormater(personalizedNotificationDateTime.value!)}';
         } else {
           return 'select...'.tr;
@@ -165,14 +164,12 @@ class PostPosePageController extends GetxController {
         break;
       // si pospone para MAÑANA:, conservar la hora original de la notificación.
       case PostposeEnum.oneDay:
-        task.taskDate = task.taskDate.add(const Duration(days: 1));
-        _newNotification.time =
-            _newNotification.time.add(const Duration(days: 1));
+        task.date = task.date.add(const Duration(days: 1));
+        _newNotification.time = _newNotification.time.add(const Duration(days: 1));
         break;
       case PostposeEnum.personalized:
-        if (personalizedNotificationDateTime.value != null &&
-            personalizedTaskDate != null) {
-          task.taskDate = personalizedTaskDate!;
+        if (personalizedNotificationDateTime.value != null && personalizedTaskDate != null) {
+          task.date = personalizedTaskDate!;
           _newNotification.time = personalizedNotificationDateTime.value!;
           break;
         } else {
@@ -202,8 +199,7 @@ class PostPosePageController extends GetxController {
     Get.offAllNamed(Routes.INITIAL_PAGE);
     showSnackBar(
       titleText: 'postponed task title'.tr,
-      messageText:
-          '${'postponed task description'.tr} ${longDateFormaterWithoutYear(task.taskDate)}, ${'at'.tr} ${timeFormater(_newNotification.time)}',
+      messageText: '${'postponed task description'.tr} ${longDateFormaterWithoutYear(task.date)}, ${'at'.tr} ${timeFormater(_newNotification.time)}',
     );
   }
 
@@ -219,8 +215,8 @@ class PostPosePageController extends GetxController {
   Future<void> datePicker() async {
     final DateTime? picked = await showDatePicker(
       context: Get.context!,
-      initialDate: task.taskDate,
-      firstDate: task.taskDate,
+      initialDate: task.date,
+      firstDate: task.date,
       lastDate: DateTime(2101),
     );
     if (picked != null) {
@@ -236,9 +232,7 @@ class PostPosePageController extends GetxController {
     //FocusScope.of(context).unfocus(); // hide keyboard if open
     TimeOfDay? picked = await showTimePicker(
       context: Get.context!,
-      initialTime: TimeOfDay(
-          hour: DateTime.now().hour,
-          minute: DateTime.now().add(const Duration(minutes: 10)).minute),
+      initialTime: TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().add(const Duration(minutes: 10)).minute),
     );
     if (picked != null) {
       personalizedNotificationDateTime.value = DateTime(

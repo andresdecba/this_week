@@ -12,8 +12,7 @@ late CreateWeekObs createWeekObsGlobal;
 mixin BuildWeekController {
   //
   /// GENERATE LIST OF TASKS FOR THIS WEEK
-  Future<RxList<Rx<TaskModel>>> getWeekTasks(
-      {required Week week, required Box<TaskModel> tasksBox}) async {
+  Future<RxList<Rx<TaskModel>>> getWeekTasks({required Week week, required Box<TaskModel> tasksBox}) async {
     // vars
     RxList<Rx<TaskModel>> createWeekObs = RxList<Rx<TaskModel>>([]);
     var firstDay = week.days.first.subtract(const Duration(days: 1));
@@ -22,8 +21,7 @@ mixin BuildWeekController {
 
     await Future.microtask(() {
       result = tasksBox.values.where((task) {
-        return task.taskDate.isAfter(firstDay) &&
-            task.taskDate.isBefore(lastDay);
+        return task.date.isAfter(firstDay) && task.date.isBefore(lastDay);
       }).toList();
     });
 

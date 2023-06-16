@@ -11,9 +11,9 @@ import 'package:todoapp/ui/initial_page/build_week_controller.dart';
 import 'package:todoapp/ui/shared_components/create_task_bottomsheet.dart';
 import 'package:todoapp/ui/view_task_page.dart/view_task_page.dart';
 import 'package:todoapp/ui/view_task_page.dart/view_task_page_controller.dart';
+import 'package:uuid/uuid.dart';
 
-class InitialPageController extends GetxController
-    with WidgetsBindingObserver, BuildWeekController {
+class InitialPageController extends GetxController with WidgetsBindingObserver, BuildWeekController {
   //,OpenTaskController
   @override
   void onInit() async {
@@ -61,6 +61,7 @@ class InitialPageController extends GetxController
   // box de tasks
   Box<TaskModel> tasksBox = Boxes.getTasksBox();
   RxBool simulateDeleting = false.obs;
+  final uuid = const Uuid();
 
   // INITIALIZE APP CONFIGURATIONS //
   AppConfigModel appConfig = AppConfigModel();
@@ -102,14 +103,13 @@ class InitialPageController extends GetxController
         0,
       );
       var task = TaskModel(
+        id: uuid.v4(), // random id
         description: 'sample task description'.tr,
-        taskDate: today,
+        date: today,
         status: TaskStatus.PENDING.toStringValue,
         subTasks: [
-          SubTaskModel(
-              title: 'sample task  subtask_1 description'.tr, isDone: false),
-          SubTaskModel(
-              title: 'sample task  subtask_2 description'.tr, isDone: true),
+          SubTaskModel(title: 'sample task  subtask_1 description'.tr, isDone: false),
+          SubTaskModel(title: 'sample task  subtask_2 description'.tr, isDone: true),
         ],
         repeatId: null,
       );
@@ -132,11 +132,7 @@ class InitialPageController extends GetxController
 
   ///// SIDE BAR /////
   // CHANGE LANGUAGE DIALOG on drawer //
-  List<Locale> langsCodes = [
-    const Locale('en', ''),
-    const Locale('es', ''),
-    const Locale('pt', '')
-  ];
+  List<Locale> langsCodes = [const Locale('en', ''), const Locale('es', ''), const Locale('pt', '')];
   List<String> langs = ['English', 'Español', 'Português'];
   Rx<Locale> currentLang = (Get.locale!).obs;
   void saveLocale(String langCode) {

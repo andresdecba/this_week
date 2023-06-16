@@ -43,7 +43,6 @@ class _BuildWeekState extends State<BuildWeek> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-
             const Header(),
 
             const Divider(
@@ -67,7 +66,7 @@ class _BuildWeekState extends State<BuildWeek> {
               // dias sin tareas
               bool hasTasks = false;
               for (var element in widget.tasks) {
-                if (element.value.taskDate == e) {
+                if (element.value.date == e) {
                   hasTasks = true;
                 }
               }
@@ -136,10 +135,7 @@ class _BuildWeekState extends State<BuildWeek> {
                             bottomRight: Radius.circular(50),
                             topRight: Radius.circular(50),
                           ),
-                          border: Border.all(
-                            width: 1,
-                            color: Colors.grey[200]!
-                          ),
+                          border: Border.all(width: 1, color: Colors.grey[200]!),
                         ),
                         alignment: Alignment.centerLeft,
                         padding: const EdgeInsets.all(12),
@@ -152,7 +148,7 @@ class _BuildWeekState extends State<BuildWeek> {
 
                   // MOSTRAR TAREAS DE ESTE DIA "e" //
                   ...widget.tasks.map((task) {
-                    if (task.value.taskDate == e) {
+                    if (task.value.date == e) {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 5),
                         child: TaskCard(
@@ -188,5 +184,3 @@ class _BuildWeekState extends State<BuildWeek> {
     });
   }
 }
-
-

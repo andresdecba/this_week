@@ -31,7 +31,7 @@ class TaskModel extends HiveObject {
   @HiveField(1)
   String description;
   @HiveField(2)
-  DateTime taskDate;
+  DateTime date;
   @HiveField(3)
   String status;
   @HiveField(4)
@@ -40,11 +40,13 @@ class TaskModel extends HiveObject {
   String? repeatId; // si esta tarea se repite todos los dias o no (rutina)
   @HiveField(6)
   NotificationModel? notificationData;
-
+  @HiveField(7)
+  String id;
 
   TaskModel({
+    required this.id,
     required this.description,
-    required this.taskDate,
+    required this.date,
     required this.status,
     required this.subTasks,
     this.repeatId,
@@ -52,6 +54,7 @@ class TaskModel extends HiveObject {
   });
 
   TaskModel copyWith({
+    required String id,
     required String description,
     required DateTime taskDate,
     required String status,
@@ -60,8 +63,9 @@ class TaskModel extends HiveObject {
     NotificationModel? notificationData,
   }) {
     return TaskModel(
+      id: id,
       description: description,
-      taskDate: taskDate,
+      date: taskDate,
       status: status,
       subTasks: subTasks,
       repeatId: repeatId,
@@ -71,6 +75,6 @@ class TaskModel extends HiveObject {
 
   @override
   String toString() {
-    return '{ description: $description, task date: $taskDate, status: $status, sub tasks: $subTasks, repeat Id: $repeatId, notification data: $notificationData }';
+    return '{ id: $id, description: $description, task date: $date, status: $status, sub tasks: $subTasks, repeat Id: $repeatId, notification data: $notificationData }';
   }
 }

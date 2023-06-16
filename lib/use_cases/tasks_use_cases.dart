@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:todoapp/data_source/hive_data_sorce/hive_data_source.dart';
@@ -8,6 +7,7 @@ import 'package:todoapp/data_source/local_notifications_data_source/local_notifi
 import 'package:todoapp/ui/initial_page/build_week_controller.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/use_cases/local_notifications_use_cases.dart';
+import 'package:uuid/uuid.dart';
 
 abstract class TasksUseCases {
   Future<TaskModel> createTaskUseCase({
@@ -42,11 +42,14 @@ class TaskUseCasesImpl implements TasksUseCases {
     required bool isRoutine,
     DateTime? notificationDateTime,
   }) async {
+    const uuid = Uuid();
+
     // definir
     TaskModel newTask = TaskModel(
+      id: uuid.v4(), // random id
       description: description,
-      taskDate: date,
-      repeatId: isRoutine ? UniqueKey().toString() : null,
+      date: date,
+      repeatId: isRoutine ? uuid.v4() : null,
       status: TaskStatus.PENDING.toStringValue,
       subTasks: [],
     );
@@ -70,10 +73,11 @@ class TaskUseCasesImpl implements TasksUseCases {
     // is routine
     if (isRoutine) {
       for (var i = 1; i < 365; i++) {
-        var nextDate = newTask.taskDate.add(Duration(days: i));
-        if (nextDate.weekday == newTask.taskDate.weekday) {
+        var nextDate = newTask.date.add(Duration(days: i));
+        if (nextDate.weekday == newTask.date.weekday) {
           // crear tarea
           TaskModel repeatedTask = newTask.copyWith(
+            id: uuid.v4(), // random id
             description: newTask.description,
             taskDate: nextDate,
             status: TaskStatus.PENDING.toStringValue,
@@ -85,9 +89,9 @@ class TaskUseCasesImpl implements TasksUseCases {
           // crear notificacion
           if (notificationDateTime != null) {
             var notifDateTime = DateTime(
-              repeatedTask.taskDate.year,
-              repeatedTask.taskDate.month,
-              repeatedTask.taskDate.day,
+              repeatedTask.date.year,
+              repeatedTask.date.month,
+              repeatedTask.date.day,
               notificationDateTime.hour,
               notificationDateTime.minute,
             );

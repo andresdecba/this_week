@@ -49,12 +49,10 @@ class ViewTaskController extends GetxController {
   RxBool isExpired = false.obs;
 
   void setInitialValues() {
-    updatedDateTime.value = task.value.taskDate;
+    updatedDateTime.value = task.value.date;
     updatedDescription.value = task.value.description;
     updatedNotification.value = task.value.notificationData != null //
-        ? TimeOfDay(
-            hour: task.value.notificationData!.time.hour,
-            minute: task.value.notificationData!.time.minute) //
+        ? TimeOfDay(hour: task.value.notificationData!.time.hour, minute: task.value.notificationData!.time.minute) //
         : null; //
     isExpired.value = isTaskExpired(updatedDateTime.value);
   }
@@ -64,26 +62,17 @@ class ViewTaskController extends GetxController {
     if (isExpired.value) {
       return Text(
         'expired_state'.tr,
-        style: kBodyMedium.copyWith(
-            color: Colors.orange[900],
-            fontStyle: FontStyle.italic,
-            fontWeight: FontWeight.bold),
+        style: kBodyMedium.copyWith(color: Colors.orange[900], fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
       );
     } else if (updatedDateTime.value.day == DateTime.now().day) {
       return Text(
         'today_state'.tr,
-        style: kBodyMedium.copyWith(
-            color: Colors.green[900],
-            fontStyle: FontStyle.italic,
-            fontWeight: FontWeight.bold),
+        style: kBodyMedium.copyWith(color: Colors.green[900], fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
       );
     } else {
       return Text(
         'another day_state'.tr,
-        style: kBodyMedium.copyWith(
-            color: Colors.purple[900],
-            fontStyle: FontStyle.italic,
-            fontWeight: FontWeight.bold),
+        style: kBodyMedium.copyWith(color: Colors.purple[900], fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
       );
     }
   }
@@ -107,22 +96,20 @@ class ViewTaskController extends GetxController {
     late DateTime initialDate;
     late DateTime firstDate;
     // si la tarea es vencida
-    if (task.value.taskDate.isBefore(DateTime.now())) {
+    if (task.value.date.isBefore(DateTime.now())) {
       initialDate = DateTime.now();
       firstDate = DateTime.now();
     }
     // si la tarea esta en el futuro
-    if (task.value.taskDate.isAfter(DateTime.now())) {
-      initialDate = task.value.taskDate;
+    if (task.value.date.isAfter(DateTime.now())) {
+      initialDate = task.value.date;
       firstDate = DateTime.now();
     }
     // pick a date
     await showDatePicker(
       context: context,
-      initialDate:
-          initialDate, // dia seleccionado del calendario (no puede ser anterior al fisrtDate)
-      firstDate:
-          firstDate, // primer dia habilitado del calendario (igual o anterior al initialDate)
+      initialDate: initialDate, // dia seleccionado del calendario (no puede ser anterior al fisrtDate)
+      firstDate: firstDate, // primer dia habilitado del calendario (igual o anterior al initialDate)
       lastDate: DateTime(2050),
     ).then((value) {
       if (value == null) {
@@ -136,7 +123,7 @@ class ViewTaskController extends GetxController {
 
   ////// UPDATE NOTIFICATION TIME //////
   void updateNotification(BuildContext context) async {
-    await myTimePicker(context, task.value.taskDate).then((value) {
+    await myTimePicker(context, task.value.date).then((value) {
       if (value != null) {
         updatedNotification.value = value;
         hasUpdated.value = true;
@@ -151,8 +138,7 @@ class ViewTaskController extends GetxController {
   void deleteTask(BuildContext context) {
     tasksUseCases.deleteTaskUseCase(task: task, deleteRoutine: isChecked.value);
     Get.back();
-    showSnackBar(
-        titleText: 'task deleted', messageText: task.value.description);
+    showSnackBar(titleText: 'task deleted', messageText: task.value.description);
   }
 
   ////// SUBTASKS //////
@@ -169,8 +155,7 @@ class ViewTaskController extends GetxController {
         0,
         duration: listDuration,
       );
-      task.value.subTasks
-          .insert(0, SubTaskModel(title: textController.text, isDone: false));
+      task.value.subTasks.insert(0, SubTaskModel(title: textController.text, isDone: false));
       tasksUseCases.updateTaskState(task: task);
       textController.clear();
     }
@@ -186,10 +171,7 @@ class ViewTaskController extends GetxController {
     tasksUseCases.updateTaskState(task: task);
   }
 
-  void removeSubtask(
-      {required int index,
-      required Widget child,
-      required Rx<TaskModel> task}) {
+  void removeSubtask({required int index, required Widget child, required Rx<TaskModel> task}) {
     Globals.animatedListStateKey.currentState!.removeItem(
       index,
       duration: listDuration,
@@ -218,12 +200,11 @@ class ViewTaskController extends GetxController {
     }
 
     // cambió la fecha
-    if (task.value.taskDate != updatedDateTime.value) {
-      task.value.taskDate = updatedDateTime.value;
+    if (task.value.date != updatedDateTime.value) {
+      task.value.date = updatedDateTime.value;
       // -2e: Tareas que se mueven al dia de hoy:
       // si hora de notificacion queda vencida: eliminar, si no queda vencida: mantener.
-      if (isTaskToday(updatedDateTime.value) &&
-          updatedNotification.value != null) {
+      if (isTaskToday(updatedDateTime.value) && updatedNotification.value != null) {
         if (timeOfDayIsBeforeNow(updatedNotification.value!)) {
           localNotificationsUseCases.deleteNotification(task: task);
         } else {
