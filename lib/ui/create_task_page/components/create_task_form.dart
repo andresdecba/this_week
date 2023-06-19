@@ -5,7 +5,12 @@ import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/create_task_page/create_task_page_controller.dart';
 
 class CreateTaskForm extends GetView<CreateTaskPageController> {
-  const CreateTaskForm({Key? key}) : super(key: key);
+  const CreateTaskForm({
+    required this.onEditingComplete,
+    Key? key,
+  }) : super(key: key);
+
+  final VoidCallback onEditingComplete;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +37,7 @@ class CreateTaskForm extends GetView<CreateTaskPageController> {
             }
           },
           onEditingComplete: () {
-            controller.saveTask(context);
+            onEditingComplete();
           },
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.all(8),

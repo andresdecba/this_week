@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:isoweek/isoweek.dart';
 import 'package:todoapp/ui/commons/styles.dart';
-import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
+import 'package:todoapp/ui/initial_page/build_page_controller.dart';
 import 'package:todoapp/utils/helpers.dart';
 
-class Header extends GetView<InitialPageController> {
+class Header extends GetView<BuildPageController> {
   const Header({
+    required this.week,
     super.key,
   });
+
+  final Week week;
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +28,11 @@ class Header extends GetView<InitialPageController> {
 
             RichText(
               text: TextSpan(
-                text: '${"week".tr} ${controller.week.value.weekNumber}: ',
+                text: '${"week".tr} ${week.weekNumber}: ',
                 style: headlineSmall.copyWith(color: disabledGrey),
                 children: <TextSpan>[
                   TextSpan(
-                    text: rangeDateFormater(controller.week.value.days.first, controller.week.value.days.last),
+                    text: rangeDateFormater(week.days.first, week.days.last),
                     style: kTitleLarge.copyWith(color: disabledGrey, fontStyle: FontStyle.italic),
                   ),
                 ],

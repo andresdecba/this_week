@@ -32,7 +32,7 @@ class LocalNotificationsUseCases {
     task.value.notificationData = await LocalNotificationsDataSource.createNotification(
       datetime: selectedDateTime,
       title: task.value.description,
-      payload: task.value.key.toString(),
+      payload: task.value.id,
     );
 
     task.value.save();

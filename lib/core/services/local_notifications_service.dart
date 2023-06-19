@@ -1,6 +1,7 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:todoapp/core/globals.dart';
 import 'package:todoapp/core/routes/routes.dart';
 import 'package:todoapp/data_source/hive_data_sorce/hive_data_source.dart';
 import 'package:todoapp/models/task_model.dart';
@@ -24,26 +25,19 @@ void onSelectNotification(NotificationResponse details) async {
   if (details.payload != null) {
     arguments = {'notificationPAYLOAD': details.payload!}; //en el payload llega el task id de hive
   }
-  // si tocaron del action
+  // si tocaron del action: ir a postpose page
   if (details.notificationResponseType == NotificationResponseType.selectedNotificationAction) {
     if (details.actionId.toString() == 'notificationPostponeACTION') {
       Get.offAllNamed(Routes.POSTPOSE_PAGE, arguments: arguments);
     }
   }
-  // si tocaron el body
+  // si tocaron el body: abrir la tarea
   if (details.notificationResponseType == NotificationResponseType.selectedNotification) {
     if (arguments != null) {
+      //Get.toNamed(Routes.INITIAL_PAGE, arguments: arguments);
+
       // abrir el  bottom sheet //
-      Box<TaskModel> tasksBox = Boxes.getTasksBox();
-      var task = tasksBox.get(int.parse(details.payload!));
-      Rx<TaskModel> e = task!.obs;
-      Get.put(ViewTaskController(task: e));
-      createTaskBottomSheet(
-        context: Get.context!,
-        child: const ViewTask(),
-      );
-      Get.toNamed(Routes.INITIAL_PAGE);
-      // abrir el  bottom sheet //
+      // TODO ejecutar desde el controller
     }
     if (arguments == null) {
       Get.toNamed(Routes.INITIAL_PAGE);

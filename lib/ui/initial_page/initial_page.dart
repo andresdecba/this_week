@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:todoapp/core/globals.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
-import 'package:todoapp/ui/initial_page/components/build_week.dart';
+import 'package:todoapp/ui/initial_page/components/build_page.dart';
 import 'package:todoapp/ui/shared_components/side_bar.dart';
 
 class InitialPage extends GetView<InitialPageController> {
@@ -44,59 +44,44 @@ class InitialPage extends GetView<InitialPageController> {
                 physics: const BouncingScrollPhysics(),
                 controller: controller.pageCtlr,
                 pageSnapping: true,
-                onPageChanged: (index) {},
-                itemBuilder: (context, i) {
-                  // cambiar la pagina y generar la lista observable
-                  controller.changePage(i);
-                  // widget
-                  return Padding(
-                    padding: const EdgeInsets.only(left: 20, right: 20),
-                    child: createTasks(),
+                onPageChanged: (index) {
+                  // onPageChanged
+                },
+                itemBuilder: (context, index) {
+                  return BuildPage(
+                    week: controller.onPageChange(index),
+                    key: UniqueKey(),
                   );
                 },
               ),
       ),
     );
   }
-
-  Widget createTasks() {
-    var tasks = controller.getWeekTasksDos(
-      tasksBox: controller.tasksBox,
-      week: controller.week.value,
-    );
-    var returnWidget = BuildWeek(
-      key: UniqueKey(),
-      week: controller.week.value,
-      tasks: tasks,
-    );
-    return returnWidget;
-  }
 }
 
-
-   // ver! esta bueno -> card_loading 0.3.0
-                        // return const Column(
-                        //   crossAxisAlignment: CrossAxisAlignment.start,
-                        //   children: [
-                        //     CardLoading(
-                        //       height: 30,
-                        //       borderRadius:
-                        //           BorderRadius.all(Radius.circular(15)),
-                        //       width: 100,
-                        //       margin: EdgeInsets.only(bottom: 10),
-                        //     ),
-                        //     CardLoading(
-                        //       height: 100,
-                        //       borderRadius:
-                        //           BorderRadius.all(Radius.circular(15)),
-                        //       margin: EdgeInsets.only(bottom: 10),
-                        //     ),
-                        //     CardLoading(
-                        //       height: 30,
-                        //       width: 200,
-                        //       borderRadius:
-                        //           BorderRadius.all(Radius.circular(15)),
-                        //       margin: EdgeInsets.only(bottom: 10),
-                        //     ),
-                        //   ],
-                        // );
+// // ver! esta bueno -> card_loading 0.3.0
+// // return const Column(
+// //   crossAxisAlignment: CrossAxisAlignment.start,
+// //   children: [
+// //     CardLoading(
+// //       height: 30,
+// //       borderRadius:
+// //           BorderRadius.all(Radius.circular(15)),
+// //       width: 100,
+// //       margin: EdgeInsets.only(bottom: 10),
+// //     ),
+// //     CardLoading(
+// //       height: 100,
+// //       borderRadius:
+// //           BorderRadius.all(Radius.circular(15)),
+// //       margin: EdgeInsets.only(bottom: 10),
+// //     ),
+// //     CardLoading(
+// //       height: 30,
+// //       width: 200,
+// //       borderRadius:
+// //           BorderRadius.all(Radius.circular(15)),
+// //       margin: EdgeInsets.only(bottom: 10),
+// //     ),
+// //   ],
+// // );

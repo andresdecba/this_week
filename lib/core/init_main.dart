@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:todoapp/core/globals.dart';
 import 'package:todoapp/core/routes/routes.dart';
 import 'package:todoapp/main.dart';
 import 'package:todoapp/models/notification_model.dart';
@@ -69,18 +70,18 @@ class InitMain {
     // si la app esta CERRADA y fue lanzada via la notificacion, entra acá:
     if (notificationLaunchDetails?.didNotificationLaunchApp ?? false) {
       final details = notificationLaunchDetails!.notificationResponse!;
-      // llega payload
+      // guardar el payload
       if (details.payload != null) {
-        notificationPayload = details.payload!;
+        //notificationPayload = details.payload!; BORRAR
+        Globals.closedAppPayload = details.payload!;
       }
-      // si tocaron el action de la notificacion
+      // si tocaron del action: navegar a postpose page
       if (details.notificationResponseType == NotificationResponseType.selectedNotificationAction) {
-        // si tocaron el action de posponer
         if (details.actionId.toString() == 'notificationPostponeACTION' && notificationPayload != null) {
           initialRoute = Routes.POSTPOSE_PAGE;
         }
       }
-      // si tocaron el body de la notificacion
+      // si tocaron el body: navegar a initial page
       if (details.notificationResponseType == NotificationResponseType.selectedNotification) {
         if (notificationPayload != null) {
           initialRoute = Routes.INITIAL_PAGE;

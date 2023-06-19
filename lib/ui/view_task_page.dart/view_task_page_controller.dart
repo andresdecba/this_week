@@ -135,8 +135,12 @@ class ViewTaskController extends GetxController {
 
   //// DELETE TASK ////
   RxBool isChecked = false.obs;
-  void deleteTask(BuildContext context) {
-    tasksUseCases.deleteTaskUseCase(task: task, deleteRoutine: isChecked.value);
+  void deleteTask(BuildContext context, RxList<Rx<TaskModel>> tasks) {
+    tasksUseCases.deleteTaskUseCase(
+      task: task,
+      deleteRoutine: isChecked.value,
+      tasks: tasks,
+    );
     Get.back();
     showSnackBar(titleText: 'task deleted', messageText: task.value.description);
   }

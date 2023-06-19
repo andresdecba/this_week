@@ -2,31 +2,26 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:isoweek/isoweek.dart';
 import 'package:todoapp/data_source/hive_data_sorce/hive_data_source.dart';
 import 'package:todoapp/main.dart';
 import 'package:todoapp/models/app_config_model.dart';
 import 'package:todoapp/models/subtask_model.dart';
 import 'package:todoapp/models/task_model.dart';
-import 'package:todoapp/ui/initial_page/build_week_controller.dart';
-import 'package:todoapp/ui/shared_components/create_task_bottomsheet.dart';
-import 'package:todoapp/ui/view_task_page.dart/view_task_page.dart';
-import 'package:todoapp/ui/view_task_page.dart/view_task_page_controller.dart';
 import 'package:uuid/uuid.dart';
 
-class InitialPageController extends GetxController with WidgetsBindingObserver, BuildWeekController {
+class InitialPageController extends GetxController with WidgetsBindingObserver {
   //,OpenTaskController
   @override
   void onInit() async {
     super.onInit();
     initSampleTask();
     await initConfig();
-    //calculateWeeksDifference();
     WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void onReady() {
-    openTaskFromNotification();
     super.onReady();
   }
 
@@ -69,19 +64,6 @@ class InitialPageController extends GetxController with WidgetsBindingObserver, 
     appConfig = Boxes.getMyAppConfigBox().get('appConfig')!;
   }
 
-  void openTaskFromNotification() async {
-    // desde la notificacion con la app cerrada
-    if (notificationPayload != null) {
-      Rx<TaskModel> e = tasksBox.get(int.parse(notificationPayload!))!.obs;
-      Get.put(ViewTaskController(task: e));
-      createTaskBottomSheet(
-        context: Get.context!,
-        child: const ViewTask(),
-      );
-      notificationPayload = null;
-    }
-  }
-
   void simulateDeletingData() {
     simulateDeleting.value = true;
     Timer(const Duration(seconds: 1), () {
@@ -117,17 +99,34 @@ class InitialPageController extends GetxController with WidgetsBindingObserver, 
     }
   }
 
-  String changeTaskStatus(String value) {
-    switch (value) {
-      case 'Pending':
-        return TaskStatus.IN_PROGRESS.toStringValue;
-      case 'In progress':
-        return TaskStatus.DONE.toStringValue;
-      case 'Done':
-        return TaskStatus.PENDING.toStringValue;
-      default:
-        return TaskStatus.IN_PROGRESS.toStringValue;
+  // 1- cambio la pagina y la semana
+  final PageController pageCtlr = PageController(initialPage: 1000, keepPage: true, viewportFraction: 1);
+
+  Week onPageChange(int index) {
+    Week week = Week.current();
+    int initialIndex = pageCtlr.initialPage; //1000
+    int goToWeek = index - initialIndex;
+    // pagina 1000 == current week
+    if (index == pageCtlr.initialPage) {
+      week = Week.current();
     }
+    // pagina 1001 == adelantar 1 semana desde la actual
+    if (index > initialIndex) {
+      week = Week.current().addWeeks(goToWeek);
+    }
+    // pagina 999 == retroceder 1 semana desde la actual
+    if (index < initialIndex) {
+      week = Week.current().subtractWeeks(goToWeek.abs());
+    }
+    return week;
+  }
+
+  void returnToCurrentWeek() {
+    pageCtlr.animateToPage(
+      pageCtlr.initialPage,
+      duration: const Duration(microseconds: 500),
+      curve: Curves.bounceIn,
+    );
   }
 
   ///// SIDE BAR /////

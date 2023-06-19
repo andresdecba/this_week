@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todoapp/core/globals.dart';
 import 'package:todoapp/data_source/hive_data_sorce/hive_data_source.dart';
+import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/ui/shared_components/dialogs.dart';
 import 'package:todoapp/ui/shared_components/snackbar.dart';
 import 'package:todoapp/use_cases/local_notifications_use_cases.dart';
@@ -216,10 +217,11 @@ class CreateTaskPageController extends GetxController {
 
   var appConfig = Boxes.getMyAppConfigBox().get('appConfig')!;
 
-  void saveTask(BuildContext context) async {
+  void saveTask(BuildContext context, RxList<Rx<TaskModel>> tasks) async {
     if (Globals.formStateKey.currentState!.validate()) {
       // crear tarea
       await tasksUseCases.createTaskUseCase(
+        tasks: tasks,
         description: textController.value.text,
         date: selectedDate,
         isRoutine: isRoutine.value,

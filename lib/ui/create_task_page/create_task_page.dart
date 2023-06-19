@@ -1,6 +1,7 @@
 import 'package:chip_list/chip_list.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/create_task_page/components/create_task_form.dart';
 import 'package:todoapp/ui/create_task_page/create_task_page_controller.dart';
@@ -8,7 +9,12 @@ import 'package:todoapp/ui/view_task_page.dart/components/small_button.dart';
 import 'package:todoapp/utils/helpers.dart';
 
 class CreateTaskPage extends StatefulWidget {
-  const CreateTaskPage({Key? key}) : super(key: key);
+  const CreateTaskPage({
+    required this.tasks,
+    Key? key,
+  }) : super(key: key);
+
+  final RxList<Rx<TaskModel>> tasks;
 
   @override
   State<CreateTaskPage> createState() => _CreateTaskPageState();
@@ -30,7 +36,6 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
 
   @override
   Widget build(BuildContext context) {
-
     final controller = Get.find<CreateTaskPageController>();
 
     return Obx(() {
@@ -55,9 +60,11 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
               ),
 
               // FORM
-              const Padding(
-                padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
-                child: CreateTaskForm(),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+                child: CreateTaskForm(
+                  onEditingComplete: () => controller.saveTask(context, widget.tasks),
+                ),
               ),
 
               // es rutina ?

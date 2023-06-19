@@ -4,8 +4,7 @@ import 'package:todoapp/data_source/hive_data_sorce/hive_data_source.dart';
 import 'package:todoapp/models/app_config_model.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/data_source/local_notifications_data_source/local_notifications_data_source.dart';
-import 'package:todoapp/ui/initial_page/build_week_controller.dart';
-import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
+import 'package:todoapp/ui/initial_page/build_page_controller.dart';
 import 'package:todoapp/use_cases/local_notifications_use_cases.dart';
 import 'package:uuid/uuid.dart';
 
@@ -14,6 +13,7 @@ abstract class TasksUseCases {
     required String description,
     required DateTime date,
     required bool isRoutine,
+    required RxList<Rx<TaskModel>> tasks,
     DateTime? notificationDateTime,
   });
   void readTaskUseCase({
@@ -26,6 +26,7 @@ abstract class TasksUseCases {
   void deleteTaskUseCase({
     required Rx<TaskModel> task,
     required bool deleteRoutine,
+    required RxList<Rx<TaskModel>> tasks,
   });
 }
 
@@ -40,6 +41,7 @@ class TaskUseCasesImpl implements TasksUseCases {
     required String description,
     required DateTime date,
     required bool isRoutine,
+    required RxList<Rx<TaskModel>> tasks,
     DateTime? notificationDateTime,
   }) async {
     const uuid = Uuid();
@@ -57,15 +59,15 @@ class TaskUseCasesImpl implements TasksUseCases {
     // guardar
     tasksBox.add(newTask);
     Rx<TaskModel> newTaskObs = newTask.obs;
-    createWeekObsGlobal.tasks.add(newTaskObs);
-    Get.find<InitialPageController>().generateStatistics();
+    tasks.add(newTaskObs);
+    //Get.find<InitialPageController>().generateStatistics();
 
     // crear notificacion
     if (notificationDateTime != null) {
       newTask.notificationData = await LocalNotificationsDataSource.createNotification(
         datetime: notificationDateTime,
         title: description,
-        payload: newTask.key.toString(),
+        payload: newTask.id, //newTask.key.toString(),
       );
       newTask.save();
     }
@@ -98,7 +100,7 @@ class TaskUseCasesImpl implements TasksUseCases {
             repeatedTask.notificationData = await LocalNotificationsDataSource.createNotification(
               datetime: notifDateTime,
               title: description,
-              payload: repeatedTask.key,
+              payload: repeatedTask.id,
             );
             repeatedTask.save();
           }
@@ -120,7 +122,11 @@ class TaskUseCasesImpl implements TasksUseCases {
   }
 
   @override
-  void deleteTaskUseCase({required Rx<TaskModel> task, required bool deleteRoutine}) {
+  void deleteTaskUseCase({
+    required Rx<TaskModel> task,
+    required bool deleteRoutine,
+    required RxList<Rx<TaskModel>> tasks,
+  }) {
     // si es tarea repetida
     if (task.value.repeatId != null && deleteRoutine) {
       for (var e in tasksBox.values) {
@@ -143,7 +149,7 @@ class TaskUseCasesImpl implements TasksUseCases {
       task.value.delete();
     }
     // quitar de la lista observable
-    createWeekObsGlobal.tasks.remove(task);
-    Get.find<InitialPageController>().generateStatistics();
+    tasks.remove(task);
+    Get.find<BuildPageController>().generateStatistics();
   }
 }

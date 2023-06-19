@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:isoweek/isoweek.dart';
+import 'package:todoapp/core/globals.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/create_task_page/create_task_page.dart';
 import 'package:todoapp/ui/create_task_page/create_task_page_controller.dart';
+import 'package:todoapp/ui/initial_page/build_page_controller.dart';
 import 'package:todoapp/ui/initial_page/components/header.dart';
 import 'package:todoapp/ui/initial_page/components/task_card.dart';
-import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
 import 'package:todoapp/ui/shared_components/create_task_bottomsheet.dart';
 import 'package:todoapp/ui/shared_components/view_task_bottomsheet.dart';
 import 'package:todoapp/ui/view_task_page.dart/view_task_page.dart';
@@ -19,47 +20,61 @@ Tutorial como mantener el estado de la pagina:
 https://stackoverflow.com/questions/67662298/flutter-how-to-keep-the-page-alive-when-changing-it-with-pageview-or-bottomnav
 */
 
-class BuildWeek extends StatefulWidget {
-  const BuildWeek({
-    required this.week,
-    required this.tasks,
-    Key? key,
-  }) : super(key: key);
-
+class BuildPage extends StatefulWidget {
+  const BuildPage({required this.week, Key? key}) : super(key: key);
   final Week week;
-  final RxList<Rx<TaskModel>> tasks;
-
   @override
-  State<BuildWeek> createState() => _BuildWeekState();
+  State<BuildPage> createState() => _BuildPageState();
 }
 
-class _BuildWeekState extends State<BuildWeek> with AutomaticKeepAliveClientMixin {
-  final controller = Get.find<InitialPageController>();
+class _BuildPageState extends State<BuildPage> with AutomaticKeepAliveClientMixin {
+  final controller = Get.find<BuildPageController>();
+  RxList<Rx<TaskModel>> _tasks = RxList<Rx<TaskModel>>([]);
+
+  @override
+  void initState() {
+    super.initState();
+    // construyo la lista de tareas segun la semana provista //
+    _tasks = controller.buildTasks(tasksBox: controller.tasksBox, week: widget.week);
+  }
+
+  var averga = '';
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // ABRIR TAREA DESDE LA NOTIFICACION si la app estaba cerrada,
+    // print('aver ${Globals.closedAppPayload}');
+    if (Globals.closedAppPayload != null) {
+      String id = Globals.closedAppPayload!;
+      Rx<TaskModel> task = _tasks.firstWhere((element) => element.value.id == id);
+      averga = task.value.id;
+      Get.put(ViewTaskController(task: task));
+      createTaskBottomSheet(
+        context: Get.context!,
+        child: ViewTask(tasks: _tasks),
+      );
+      // Globals.closedAppPayload = null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return Obx(() {
-      // no borrar //
-      // var noBorrar = controller.weekDaysFromTo;
-      // debugPrint('no borrar $noBorrar');
-
       return SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
+        padding: const EdgeInsets.only(left: 20, right: 20),
         key: PageStorageKey(UniqueKey()),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Header(),
+            // header
+            Header(week: widget.week),
+            const Divider(color: disabledGrey, height: 12),
+            const SizedBox(height: 6),
 
-            const Divider(
-              color: disabledGrey,
-              height: 12,
-            ),
-
-            const SizedBox(
-              height: 6,
-            ),
+            Text('aver::: ${averga}'),
 
             /// iteramos todos los dias de la semana para mostrarlos en una columna ///
             ...widget.week.days.map((e) {
@@ -72,7 +87,7 @@ class _BuildWeekState extends State<BuildWeek> with AutomaticKeepAliveClientMixi
 
               // dias sin tareas
               bool hasTasks = false;
-              for (var element in widget.tasks) {
+              for (var element in _tasks) {
                 if (element.value.date == e) {
                   hasTasks = true;
                 }
@@ -117,7 +132,7 @@ class _BuildWeekState extends State<BuildWeek> with AutomaticKeepAliveClientMixi
                                   Get.put(CreateTaskPageController(selectedDate: e));
                                   createTaskBottomSheet(
                                     context: context,
-                                    child: const CreateTaskPage(),
+                                    child: CreateTaskPage(tasks: _tasks),
                                     enableDrag: true,
                                   );
                                 },
@@ -154,7 +169,7 @@ class _BuildWeekState extends State<BuildWeek> with AutomaticKeepAliveClientMixi
                     ),
 
                   // MOSTRAR TAREAS DE ESTE DIA "e" //
-                  ...widget.tasks.map((task) {
+                  ..._tasks.map((task) {
                     if (task.value.date == e) {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 5),
@@ -166,7 +181,7 @@ class _BuildWeekState extends State<BuildWeek> with AutomaticKeepAliveClientMixi
                             Get.put(ViewTaskController(task: task));
                             viewTaskBottomSheet(
                               context: context,
-                              child: const ViewTask(),
+                              child: ViewTask(tasks: _tasks),
                             );
                           },
                           onStatusChange: () {
