@@ -108,7 +108,6 @@ class TaskUseCasesImpl implements TasksUseCases {
         }
       }
     }
-    Globals.isKeepAlive = false;
     return newTask;
   }
 
@@ -152,6 +151,6 @@ class TaskUseCasesImpl implements TasksUseCases {
     }
     // quitar de la lista observable
     tasks.remove(task);
-    Get.find<BuildPageController>().generateStatistics();
+    //Get.find<BuildPageController>().generateStatistics();
   }
 }

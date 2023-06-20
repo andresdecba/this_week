@@ -77,7 +77,6 @@ class _BuildPageState extends State<BuildPage> with AutomaticKeepAliveClientMixi
       return SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         padding: const EdgeInsets.only(left: 20, right: 20),
-        key: PageStorageKey(UniqueKey()),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
