@@ -4,8 +4,8 @@ import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/utils/helpers.dart';
 
-class ViewTask extends StatelessWidget {
-  const ViewTask({required this.task, Key? key}) : super(key: key);
+class ViewTaskPostposePage extends StatelessWidget {
+  const ViewTaskPostposePage({required this.task, Key? key}) : super(key: key);
   final TaskModel task;
 
   @override
@@ -71,47 +71,45 @@ class ViewTask extends StatelessWidget {
         ),
 
         // description + subtasks
-        Expanded(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(20),
-            physics: const BouncingScrollPhysics(),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                //descripcion y subtareas
-                Text("${'task description'.tr}:"),
-                const SizedBox(
-                  height: 10,
-                  width: double.infinity,
-                ),
+        SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          physics: const BouncingScrollPhysics(),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              //descripcion y subtareas
+              Text("${'task description'.tr}:"),
+              const SizedBox(
+                height: 10,
+                width: double.infinity,
+              ),
+              Text(
+                task.description,
+                style: kBodyMedium.copyWith(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 30),
+              Text("${'todo list'.tr}:"),
+              const SizedBox(height: 10),
+              if (task.subTasks.isNotEmpty)
+                ...task.subTasks.map((e) {
+                  return _CustomTile(
+                    title: Expanded(
+                      child: Text(
+                        e.title,
+                        style: e.isDone ? kBodyMedium.copyWith(fontStyle: FontStyle.italic, decoration: TextDecoration.lineThrough) : kBodyMedium,
+                      ),
+                    ),
+                    leading: e.isDone ? const Icon(Icons.check_circle_outline_rounded) : const Icon(Icons.circle_outlined),
+                  );
+                }),
+              if (task.subTasks.isEmpty)
                 Text(
-                  task.description,
+                  'no subtasks'.tr,
                   style: kBodyMedium.copyWith(fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(height: 30),
-                Text("${'todo list'.tr}:"),
-                const SizedBox(height: 10),
-                if (task.subTasks.isNotEmpty)
-                  ...task.subTasks.map((e) {
-                    return _CustomTile(
-                      title: Expanded(
-                        child: Text(
-                          e.title,
-                          style: e.isDone ? kBodyMedium.copyWith(fontStyle: FontStyle.italic, decoration: TextDecoration.lineThrough) : kBodyMedium,
-                        ),
-                      ),
-                      leading: e.isDone ? const Icon(Icons.check_circle_outline_rounded) : const Icon(Icons.circle_outlined),
-                    );
-                  }),
-                if (task.subTasks.isEmpty)
-                  Text(
-                    'no subtasks'.tr,
-                    style: kBodyMedium.copyWith(fontWeight: FontWeight.bold),
-                  ),
-              ],
-            ),
+            ],
           ),
         ),
       ],

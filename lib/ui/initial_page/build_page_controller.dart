@@ -1,19 +1,31 @@
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:isoweek/isoweek.dart';
+import 'package:todoapp/core/globals.dart';
 import 'package:todoapp/data_source/hive_data_sorce/hive_data_source.dart';
 import 'package:todoapp/models/task_model.dart';
+import 'package:todoapp/utils/helpers.dart';
 
 // global para poder acceder desde los use cases
 ///// BOOOORARRR ESTOO //////
 final RxList<Rx<TaskModel>> createWeekObsGlobal = RxList<Rx<TaskModel>>([]);
 
 class BuildPageController extends GetxController {
+  //
+  @override
+  void onReady() {
+    super.onReady();
+    // mostrar tarea si entró una notificación cuando la app estaba cerrada
+    if (Globals.closedAppPayload != null) {
+      openAnyTask(Globals.closedAppPayload!);
+    }
+  }
+
   // box de tasks
   Box<TaskModel> tasksBox = Boxes.getTasksBox();
 
+  // build //
   RxList<Rx<TaskModel>> buildTasks({required Box<TaskModel> tasksBox, required Week week}) {
-    // vars
     RxList<Rx<TaskModel>> createWeekObs = RxList<Rx<TaskModel>>([]);
     var firstDay = week.days.first.subtract(const Duration(days: 1));
     var lastDay = week.days.last.add(const Duration(days: 1));
@@ -32,17 +44,6 @@ class BuildPageController extends GetxController {
     //generateStatistics();
     return createWeekObs;
   }
-
-  /// NOTIFICACIONES ///
-  // void abrirNotificacion() {
-  //   String id = Globals.closedAppPayload!;
-  //   Rx<TaskModel> task = tasks.firstWhere((element) => element.value.id == id);
-  //   Get.put(ViewTaskController(task: task));
-  //   createTaskBottomSheet(
-  //     context: Get.context!,
-  //     child: ViewTask(tasks: tasks),
-  //   );
-  // }
 
   /// CALCULATE PERCENTAGES
   Rx<int> done = 0.obs;

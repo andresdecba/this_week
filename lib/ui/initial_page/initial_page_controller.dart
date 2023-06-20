@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:isoweek/isoweek.dart';
+import 'package:todoapp/core/globals.dart';
 import 'package:todoapp/data_source/hive_data_sorce/hive_data_source.dart';
-import 'package:todoapp/main.dart';
 import 'package:todoapp/models/app_config_model.dart';
 import 'package:todoapp/models/subtask_model.dart';
 import 'package:todoapp/models/task_model.dart';
@@ -74,7 +74,7 @@ class InitialPageController extends GetxController with WidgetsBindingObserver {
   void initSampleTask() {
     final tasksBox = Boxes.getTasksBox();
 
-    if (config.createSampleTask && tasksBox.get(0) == null) {
+    if (Globals.config.createSampleTask && tasksBox.get(0) == null) {
       final DateTime today = DateTime(
         DateTime.now().year,
         DateTime.now().month,

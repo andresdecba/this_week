@@ -3,8 +3,12 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:todoapp/core/globals.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/ui/commons/styles.dart';
+import 'package:todoapp/ui/shared_components/create_task_bottomsheet.dart';
+import 'package:todoapp/ui/view_task_page.dart/view_task_page.dart';
+import 'package:todoapp/ui/view_task_page.dart/view_task_page_controller.dart';
 
 //////////////////////////////
 /// PARSE DATE & TIME  ///
@@ -61,6 +65,16 @@ String timeOfDayToString(TimeOfDay time) {
 int createNotificationId() {
   int value = Random().nextInt(999999999);
   return value;
+}
+
+void openAnyTask(String id) {
+  Rx<TaskModel> task = Globals.tasksGlobal.firstWhere((element) => element.value.id == id);
+  Get.put(ViewTaskController(task: task));
+  createTaskBottomSheet(
+    context: Get.context!,
+    child: ViewTask(tasks: Globals.tasksGlobal),
+  );
+  Globals.closedAppPayload = null;
 }
 
 //////////////////////////////

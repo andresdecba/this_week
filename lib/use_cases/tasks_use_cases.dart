@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
+import 'package:todoapp/core/globals.dart';
 import 'package:todoapp/data_source/hive_data_sorce/hive_data_source.dart';
 import 'package:todoapp/models/app_config_model.dart';
 import 'package:todoapp/models/task_model.dart';
@@ -107,6 +108,7 @@ class TaskUseCasesImpl implements TasksUseCases {
         }
       }
     }
+    Globals.isKeepAlive = false;
     return newTask;
   }
 

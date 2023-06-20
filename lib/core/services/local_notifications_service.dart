@@ -1,13 +1,8 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:todoapp/core/globals.dart';
 import 'package:todoapp/core/routes/routes.dart';
-import 'package:todoapp/data_source/hive_data_sorce/hive_data_source.dart';
-import 'package:todoapp/models/task_model.dart';
-import 'package:todoapp/ui/shared_components/create_task_bottomsheet.dart';
-import 'package:todoapp/ui/view_task_page.dart/view_task_page.dart';
-import 'package:todoapp/ui/view_task_page.dart/view_task_page_controller.dart';
+import 'package:todoapp/utils/helpers.dart';
 
 // instanciar
 final FlutterLocalNotificationsPlugin localNotifications = FlutterLocalNotificationsPlugin();
@@ -20,28 +15,23 @@ void onSelectNotificationBackground(NotificationResponse notificationResponse) {
 
 // si la notificacion entra estando en primer plano o segundo plano
 void onSelectNotification(NotificationResponse details) async {
-  //set args
-  Map<String, String>? arguments;
   if (details.payload != null) {
-    arguments = {'notificationPAYLOAD': details.payload!}; //en el payload llega el task id de hive
-  }
-  // si tocaron del action: ir a postpose page
-  if (details.notificationResponseType == NotificationResponseType.selectedNotificationAction) {
-    if (details.actionId.toString() == 'notificationPostponeACTION') {
-      Get.offAllNamed(Routes.POSTPOSE_PAGE, arguments: arguments);
-    }
-  }
-  // si tocaron el body: abrir la tarea
-  if (details.notificationResponseType == NotificationResponseType.selectedNotification) {
-    if (arguments != null) {
-      //Get.toNamed(Routes.INITIAL_PAGE, arguments: arguments);
+    // get payload
+    Globals.closedAppPayload = details.payload!;
 
-      // abrir el  bottom sheet //
-      // TODO ejecutar desde el controller
+    // si tocaron el action: navegar a postpose page
+    if (details.notificationResponseType == NotificationResponseType.selectedNotificationAction) {
+      if (details.actionId.toString() == 'notificationPostponeACTION') {
+        Get.offAllNamed(Routes.POSTPOSE_PAGE);
+      }
     }
-    if (arguments == null) {
-      Get.toNamed(Routes.INITIAL_PAGE);
+
+    // si tocaron el body: navegar a initial page
+    if (details.notificationResponseType == NotificationResponseType.selectedNotification) {
+      openAnyTask(details.payload!);
     }
+  } else {
+    return;
   }
 }
 

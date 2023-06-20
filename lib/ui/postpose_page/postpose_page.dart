@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:todoapp/ui/commons/styles.dart';
+import 'package:todoapp/ui/postpose_page/components/view_task_postpose_page.dart';
 import 'package:todoapp/ui/postpose_page/postpose_page_controller.dart';
+import 'package:todoapp/ui/shared_components/view_task_bottomsheet.dart';
 
 class PostPosePage extends GetView<PostPosePageController> {
   const PostPosePage({Key? key}) : super(key: key);
@@ -44,8 +46,7 @@ class PostPosePage extends GetView<PostPosePageController> {
               Expanded(
                 flex: 1,
                 child: ElevatedButton(
-                  onPressed: () => controller.savePostpose(
-                      controller.selectedItem.value, context),
+                  onPressed: () => controller.savePostpose(controller.selectedItem.value, context),
                   child: Text('ok'.tr),
                 ),
               ),
@@ -72,17 +73,15 @@ class PostPosePage extends GetView<PostPosePageController> {
                       'postpone task'.tr,
                       style: kTitleLarge,
                     ),
-
-                    /// TODO: mostrar tarea, pero rompe al abrir
-                    // IconButton(
-                    //   icon: const Icon(Icons.open_in_new),
-                    //   onPressed: () {
-                    //     myModalBottomSheet(
-                    //       context: context,
-                    //       child: ViewTask(task: controller.task),
-                    //     );
-                    //   },
-                    // ),
+                    IconButton(
+                      icon: const Icon(Icons.open_in_new),
+                      onPressed: () {
+                        viewTaskBottomSheet(
+                          context: context,
+                          child: ViewTaskPostposePage(task: controller.task),
+                        );
+                      },
+                    ),
                   ],
                 ),
 
@@ -93,20 +92,15 @@ class PostPosePage extends GetView<PostPosePageController> {
                   return Column(
                     children: [
                       RadioListTile(
-                        shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(8))),
+                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
                         visualDensity: VisualDensity.compact,
                         activeColor: bluePrimary,
                         contentPadding: EdgeInsets.zero,
                         title: Text(
                           controller.setTitle(e),
-                          style: TextStyle(
-                              fontWeight: isSelected
-                                  ? FontWeight.bold
-                                  : FontWeight.normal),
+                          style: TextStyle(fontWeight: isSelected ? FontWeight.bold : FontWeight.normal),
                         ),
-                        subtitle: Text(controller
-                            .subtitle.value), //Text(controller.setSubTitle(e)),
+                        subtitle: Text(controller.subtitle.value), //Text(controller.setSubTitle(e)),
                         selected: isSelected,
                         value: e,
                         groupValue: controller.selectedItem.value,
@@ -115,9 +109,7 @@ class PostPosePage extends GetView<PostPosePageController> {
                         },
                         secondary: e == PostposeEnum.personalized
                             ? IconButton(
-                                onPressed: isSelected
-                                    ? () => controller.datePicker()
-                                    : null,
+                                onPressed: isSelected ? () => controller.datePicker() : null,
                                 icon: const Icon(Icons.edit_rounded),
                               ) //
                             : null, //

@@ -46,6 +46,7 @@ class InitialPage extends GetView<InitialPageController> {
                 pageSnapping: true,
                 onPageChanged: (index) {
                   // onPageChanged
+                  print('hashhh: on page change ${Globals.tasksGlobal.hashCode}');
                 },
                 itemBuilder: (context, index) {
                   return BuildPage(

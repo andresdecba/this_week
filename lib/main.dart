@@ -1,22 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:todoapp/core/bindings/initial_page_binding.dart';
+import 'package:todoapp/core/globals.dart';
 import 'package:todoapp/core/init_main.dart';
 import 'package:todoapp/core/localizations/translations.dart';
 import 'package:todoapp/core/routes/routes.dart';
 import 'package:todoapp/core/services/ad_mob_service.dart';
-import 'package:todoapp/data_source/hive_data_sorce/hive_data_source.dart';
-import 'package:todoapp/models/app_config_model.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 // ignore: depend_on_referenced_packages, NOOO BORRAR aunuqe salga que no se usa x sí se usa
 import 'package:flutter_localizations/flutter_localizations.dart';
-
-String? notificationPayload; //en el payload llega el task id de hive
-String initialRoute = Routes.INITIAL_PAGE;
-Box<AppConfigModel> userPrefs = Boxes.getMyAppConfigBox();
-AppConfigModel config = userPrefs.get('appConfig')!;
 
 void main() async {
   // flutter
@@ -91,16 +84,14 @@ class MyApp extends StatelessWidget {
             elevation: 0,
           ),
           dialogTheme: const DialogTheme(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(20))),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
           ),
           timePickerTheme: const TimePickerThemeData(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(20)),
             ),
           )),
-      initialRoute:
-          !config.isOnboardingDone ? Routes.ONBOARDING_PAGE : initialRoute,
+      initialRoute: !Globals.config.isOnboardingDone ? Routes.ONBOARDING_PAGE : Globals.initialRoute,
     );
   }
 }

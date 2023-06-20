@@ -28,35 +28,47 @@ class BuildPage extends StatefulWidget {
 }
 
 class _BuildPageState extends State<BuildPage> with AutomaticKeepAliveClientMixin {
-  final controller = Get.find<BuildPageController>();
+  final _controller = Get.find<BuildPageController>();
   RxList<Rx<TaskModel>> _tasks = RxList<Rx<TaskModel>>([]);
+
+  //late KeepAliveHandle _keepAliveHandle;
 
   @override
   void initState() {
     super.initState();
     // construyo la lista de tareas segun la semana provista //
-    _tasks = controller.buildTasks(tasksBox: controller.tasksBox, week: widget.week);
-  }
+    _tasks = _controller.buildTasks(tasksBox: _controller.tasksBox, week: widget.week);
+    // exponer globalmente //
+    Globals.tasksGlobal = _tasks;
+    print('hashhh: en widget ${Globals.tasksGlobal.hashCode}');
 
-  var averga = '';
+    // keep alive
+    //_keepAliveHandle = KeepAliveHandle();
+    //updateKeepAlive();
+
+    print('aaaver: initState');
+  }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // ABRIR TAREA DESDE LA NOTIFICACION si la app estaba cerrada,
-    // print('aver ${Globals.closedAppPayload}');
-    if (Globals.closedAppPayload != null) {
-      String id = Globals.closedAppPayload!;
-      Rx<TaskModel> task = _tasks.firstWhere((element) => element.value.id == id);
-      averga = task.value.id;
-      Get.put(ViewTaskController(task: task));
-      createTaskBottomSheet(
-        context: Get.context!,
-        child: ViewTask(tasks: _tasks),
-      );
-      // Globals.closedAppPayload = null;
-    }
+    print('aaaver: didChangeDependencies');
   }
+
+  @override
+  void deactivate() {
+    super.deactivate();
+    print('aaaver: deactivate');
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    print('aaaver: dispose');
+  }
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +86,15 @@ class _BuildPageState extends State<BuildPage> with AutomaticKeepAliveClientMixi
             const Divider(color: disabledGrey, height: 12),
             const SizedBox(height: 6),
 
-            Text('aver::: ${averga}'),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     _tasks = _controller.buildTasks(tasksBox: _controller.tasksBox, week: widget.week);
+            //     _tasks.refresh();
+            //     updateKeepAlive();
+            //     print('jajajja');
+            //   },
+            //   child: Text('update'),
+            // ),
 
             /// iteramos todos los dias de la semana para mostrarlos en una columna ///
             ...widget.week.days.map((e) {
@@ -185,9 +205,9 @@ class _BuildPageState extends State<BuildPage> with AutomaticKeepAliveClientMixi
                             );
                           },
                           onStatusChange: () {
-                            task.value.status = controller.changeTaskStatus(task.value.status);
+                            task.value.status = _controller.changeTaskStatus(task.value.status);
                             task.value.save();
-                            controller.generateStatistics();
+                            _controller.generateStatistics();
                           },
                         ),
                       );
@@ -205,7 +225,4 @@ class _BuildPageState extends State<BuildPage> with AutomaticKeepAliveClientMixi
       );
     });
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

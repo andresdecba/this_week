@@ -6,7 +6,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:todoapp/core/globals.dart';
 import 'package:todoapp/core/routes/routes.dart';
-import 'package:todoapp/main.dart';
 import 'package:todoapp/models/notification_model.dart';
 import 'package:todoapp/models/subtask_model.dart';
 import 'package:todoapp/models/task_model.dart';
@@ -43,13 +42,13 @@ class InitMain {
   ///// USER CONFIG /////
   static Future<void> initAppConfig() async {
     // if config file doenst exists, creat it
-    if (userPrefs.get('appConfig') == null) {
+    if (Globals.userPrefs.get('appConfig') == null) {
       var value = AppConfigModel();
-      userPrefs.put('appConfig', value);
+      Globals.userPrefs.put('appConfig', value);
     }
     // set language whether it is stored or not
 
-    Get.locale = config.language == null ? Get.deviceLocale : Locale(config.language!, '');
+    Get.locale = Globals.config.language == null ? Get.deviceLocale : Locale(Globals.config.language!, '');
     Intl.defaultLocale = Get.locale!.languageCode;
   }
 
@@ -69,27 +68,28 @@ class InitMain {
 
     // si la app esta CERRADA y fue lanzada via la notificacion, entra acá:
     if (notificationLaunchDetails?.didNotificationLaunchApp ?? false) {
+      //
       final details = notificationLaunchDetails!.notificationResponse!;
-      // guardar el payload
+
       if (details.payload != null) {
-        //notificationPayload = details.payload!; BORRAR
+        // get payload
         Globals.closedAppPayload = details.payload!;
-      }
-      // si tocaron del action: navegar a postpose page
-      if (details.notificationResponseType == NotificationResponseType.selectedNotificationAction) {
-        if (details.actionId.toString() == 'notificationPostponeACTION' && notificationPayload != null) {
-          initialRoute = Routes.POSTPOSE_PAGE;
+
+        // si tocaron el action: navegar a postpose page
+        if (details.notificationResponseType == NotificationResponseType.selectedNotificationAction) {
+          if (details.actionId.toString() == 'notificationPostponeACTION') {
+            Globals.initialRoute = Routes.POSTPOSE_PAGE;
+          }
         }
-      }
-      // si tocaron el body: navegar a initial page
-      if (details.notificationResponseType == NotificationResponseType.selectedNotification) {
-        if (notificationPayload != null) {
-          initialRoute = Routes.INITIAL_PAGE;
+
+        // si tocaron el body: navegar a initial page
+        if (details.notificationResponseType == NotificationResponseType.selectedNotification) {
+          Globals.initialRoute = Routes.INITIAL_PAGE;
         }
-        if (notificationPayload == null) {
-          initialRoute = Routes.INITIAL_PAGE;
-        }
+      } else {
+        Globals.initialRoute = Routes.INITIAL_PAGE;
       }
+
       // borrar la notificacion de la barra de notificaciones
       localNotifications.cancel(details.id!);
     }

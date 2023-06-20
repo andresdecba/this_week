@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:todoapp/core/globals.dart';
 import 'package:todoapp/core/routes/routes.dart';
 import 'package:todoapp/data_source/hive_data_sorce/hive_data_source.dart';
-import 'package:todoapp/main.dart';
 import 'package:todoapp/models/notification_model.dart';
 import 'package:todoapp/models/task_model.dart';
 import 'package:todoapp/ui/shared_components/dialogs.dart';
@@ -30,7 +30,7 @@ class PostPosePageController extends GetxController {
 
   @override
   void onInit() {
-    getCurrentTask();
+    getTask();
     fillNotificationValues();
     setTimer();
     super.onInit();
@@ -55,16 +55,17 @@ class PostPosePageController extends GetxController {
   late TaskModel task;
   late NotificationModel _newNotification;
 
-  void getCurrentTask() {
-    // argumentos desde la notificacion cuando la app esta cerrada
-    if (notificationPayload != null) {
-      task = tasksBox.get(int.parse(notificationPayload!))!;
+  void getTask() {
+    // if (Get.arguments != null) {
+    //   task = tasksBox.values.firstWhere((element) => element.id == Get.arguments);
+    //   return;
+    // }
+    if (Globals.closedAppPayload != null) {
+      task = tasksBox.values.firstWhere((element) => element.id == Globals.closedAppPayload);
+      Globals.closedAppPayload = null;
       return;
-    }
-    // argumentos desde notificacion cuando la app esta abierta o en segundo plano
-    if (Get.arguments['notificationPAYLOAD'] != null) {
-      task = tasksBox.get(int.parse(Get.arguments['notificationPAYLOAD']!))!;
-      return;
+    } else {
+      Get.offAllNamed(Routes.INITIAL_PAGE);
     }
   }
 
@@ -148,8 +149,6 @@ class PostPosePageController extends GetxController {
   }
 
   ///// manage SAVE /////
-  /// TODO final InitialPageController _initialPageController = Get.put(InitialPageController());
-
   void savePostpose(PostposeEnum data, BuildContext context) {
     switch (data) {
       // si pospone para HOY: DateTime.now() + el tiempo a posponer.
