@@ -86,6 +86,8 @@ class SideBar extends GetView<InitialPageController> {
                   );
                 },
               ),
+
+              ///  CAMBIAR IDIOMA  ///
               ListTile(
                 visualDensity: VisualDensity.compact,
                 trailing: const Icon(Icons.language_rounded),
@@ -120,7 +122,6 @@ class SideBar extends GetView<InitialPageController> {
                                   iconPath: 'assets/warning.svg',
                                   onPressOk: () {
                                     Globals.myScaffoldKey.currentState!.closeEndDrawer();
-                                    Navigator.of(context, rootNavigator: true).pop();
                                   },
                                 );
                               },
@@ -133,9 +134,8 @@ class SideBar extends GetView<InitialPageController> {
                   );
                 },
               ),
-              //const Divider(color: disabledGrey),
 
-              /// SOCIAL
+              /// COMPARTIR APP ///
               ListTile(
                 visualDensity: VisualDensity.compact,
                 trailing: const Icon(Icons.share_rounded),
@@ -149,6 +149,8 @@ class SideBar extends GetView<InitialPageController> {
                   shareApp(context);
                 },
               ),
+
+              /// CALIFICAR APP ///
               ListTile(
                 visualDensity: VisualDensity.compact,
                 trailing: const Icon(Icons.rate_review),
@@ -163,7 +165,7 @@ class SideBar extends GetView<InitialPageController> {
                 },
               ),
 
-              // LOGO
+              /// LOGO ///
               const Spacer(),
               Align(
                 alignment: Alignment.centerRight,

@@ -5,7 +5,6 @@ import 'package:todoapp/core/globals.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/initial_page/build_page_controller.dart';
 import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
-import 'package:todoapp/ui/shared_components/my_chip.dart';
 import 'package:todoapp/ui/shared_components/my_icon_button.dart';
 import 'package:todoapp/utils/helpers.dart';
 
@@ -21,45 +20,61 @@ class Header extends GetView<BuildPageController> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              weekToHumanRead(week),
-              style: headlineSmall,
+    return IntrinsicHeight(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Wrap(
+                  direction: Axis.vertical,
+                  children: [
+                    Text(
+                      'your tasks for'.tr,
+                      style: kBodyMedium.copyWith(color: blackBg.withOpacity(0.6)),
+                    ),
+                    Text(
+                      weekToHumanRead(week),
+                      style: headlineSmall.copyWith(color: blackBg.withOpacity(0.6)),
+                    ),
+                  ],
+                ),
+                Text(
+                  rangeDateFormater(week.days.first, week.days.last),
+                  style: kTitleMedium.copyWith(color: blackBg.withOpacity(0.6), fontStyle: FontStyle.italic),
+                ),
+              ],
             ),
-            IconButton(
-              visualDensity: VisualDensity.compact,
-              onPressed: () => Globals.myScaffoldKey.currentState!.openEndDrawer(),
-              icon: const Icon(Icons.menu_rounded),
-            ),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              rangeDateFormater(week.days.first, week.days.last),
-              style: kTitleMedium,
-            ),
-            week != Week.current()
-                ? MyIconButton(
-                    label: 'HOME',
-                    onTap: () {
-                      Get.find<InitialPageController>().returnToCurrentWeek();
-                    },
-                    isEnabled: true,
-                    iconData: Icons.home_rounded,
-                    color: Colors.white.withOpacity(0.5),
-                  )
-                : const SizedBox(height: 40),
-          ],
-        ),
-      ],
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              IconButton(
+                visualDensity: VisualDensity.compact,
+                onPressed: () => Globals.myScaffoldKey.currentState!.openEndDrawer(),
+                icon: const Icon(Icons.menu_rounded),
+              ),
+              week != Week.current()
+                  ? MyIconButton(
+                      label: 'HOME',
+                      onTap: () {
+                        Get.find<InitialPageController>().returnToCurrentWeek();
+                      },
+                      isEnabled: true,
+                      iconData: Icons.home_rounded,
+                      color: Colors.white.withOpacity(0.5),
+                    )
+                  : const SizedBox(height: 40),
+            ],
+          ),
+        ],
+      ),
     );
 
     // return Column(

@@ -10,6 +10,7 @@ Map<String, String> en_US = {
   'this week': 'This week',
   'next week': 'Next week',
   'last week': 'Last week',
+  'your tasks for': 'Your tasks for',
 
   // side bar
   'home': 'Home',

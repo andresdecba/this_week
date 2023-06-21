@@ -10,6 +10,7 @@ Map<String, String> pt_BR = {
   'this week': 'Essa semana',
   'next week': 'Semana que vem',
   'last week': 'Semana passada',
+  'your tasks for': 'Suas tarefas para',
 
   // side bar
   'home': 'Home',
@@ -18,7 +19,7 @@ Map<String, String> pt_BR = {
   'new task for any day': 'Nova tarefa para qualquer dia.',
   'restore app': 'Restaurar aplicativo',
   'delete all tasks': 'Exclua todas as tarefas.',
-  'languages': 'línguas',
+  'languages': 'Línguas',
   'change the current language': 'Altere o idioma atual.',
   'share': 'Compartilhe-nos com seus amigos',
   'share this app with your friends': 'Compartilhe este aplicativo com seus amigos.',

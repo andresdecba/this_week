@@ -10,6 +10,7 @@ Map<String, String> es_AR = {
   'this week': 'Esta semana',
   'next week': 'La semana próxima',
   'last week': 'La semana pasada',
+  'your tasks for': 'Tus tareas para',
 
   // side bar
   'home': 'Home',
