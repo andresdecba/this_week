@@ -9,6 +9,7 @@ class TaskCard extends StatefulWidget {
     required this.navigate,
     required this.onStatusChange,
     required this.isToday,
+    required this.highlightedColor,
     this.isDisabled,
     required Key key,
   }) : super(key: key);
@@ -18,6 +19,7 @@ class TaskCard extends StatefulWidget {
   final VoidCallback onStatusChange;
   final bool? isDisabled;
   final bool isToday;
+  final Color highlightedColor;
 
   @override
   State<TaskCard> createState() => _TaskCardState();
@@ -35,7 +37,7 @@ class _TaskCardState extends State<TaskCard> {
             //padding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
             width: double.infinity,
             decoration: BoxDecoration(
-              color: widget.isToday ? bluePrimary : Colors.grey[200],
+              color: widget.isToday ? widget.highlightedColor : Colors.grey[200],
               //borderRadius: const BorderRadius.all(Radius.circular(50)),
               borderRadius: const BorderRadius.only(
                 bottomLeft: Radius.circular(50),
@@ -52,7 +54,6 @@ class _TaskCardState extends State<TaskCard> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-
                     // TEXTO DESCRIPCION
                     Expanded(
                       child: Padding(

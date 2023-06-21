@@ -1,20 +1,101 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:isoweek/isoweek.dart';
+import 'package:todoapp/core/globals.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/initial_page/build_page_controller.dart';
+import 'package:todoapp/ui/initial_page/initial_page_controller.dart';
+import 'package:todoapp/ui/shared_components/my_chip.dart';
+import 'package:todoapp/ui/shared_components/my_icon_button.dart';
 import 'package:todoapp/utils/helpers.dart';
 
 class Header extends GetView<BuildPageController> {
   const Header({
     required this.week,
+    required this.textColor,
     super.key,
   });
 
   final Week week;
+  final Color textColor;
 
   @override
   Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              weekToHumanRead(week),
+              style: headlineSmall,
+            ),
+            IconButton(
+              visualDensity: VisualDensity.compact,
+              onPressed: () => Globals.myScaffoldKey.currentState!.openEndDrawer(),
+              icon: const Icon(Icons.menu_rounded),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              rangeDateFormater(week.days.first, week.days.last),
+              style: kTitleMedium,
+            ),
+            week != Week.current()
+                ? MyIconButton(
+                    label: 'HOME',
+                    onTap: () {
+                      Get.find<InitialPageController>().returnToCurrentWeek();
+                    },
+                    isEnabled: true,
+                    iconData: Icons.home_rounded,
+                    color: Colors.white.withOpacity(0.5),
+                  )
+                : const SizedBox(height: 40),
+          ],
+        ),
+      ],
+    );
+
+    // return Column(
+    //   mainAxisAlignment: MainAxisAlignment.start,
+    //   crossAxisAlignment: CrossAxisAlignment.start,
+    //   children: [
+    //     Text(
+    //       rangeDateFormater(week.days.first, week.days.last),
+    //       style: headlineSmall.copyWith(
+    //         color: textColor,
+    //       ),
+    //     ),
+    //     const SizedBox(height: 10),
+    //     Text(
+    //       '${"week".tr} ${week.weekNumber}',
+    //       style: kTitleLarge.copyWith(
+    //         color: textColor,
+    //         fontStyle: FontStyle.italic,
+    //       ),
+    //     ),
+    //   ],
+    // );
+
+    // return RichText(
+    //   text: TextSpan(
+    //     text: '${"week".tr} ${week.weekNumber}: ',
+    //     style: headlineSmall.copyWith(color: disabledGrey),
+    //     children: <TextSpan>[
+    //       TextSpan(
+    //         text: rangeDateFormater(week.days.first, week.days.last),
+    //         style: kTitleLarge.copyWith(color: disabledGrey, fontStyle: FontStyle.italic),
+    //       ),
+    //     ],
+    //   ),
+    // );
+    /*
     return Obx(
       () => Container(
         width: double.infinity,
@@ -64,36 +145,37 @@ class Header extends GetView<BuildPageController> {
         ),
       ),
     );
+    */
   }
 }
 
-class _Item extends StatelessWidget {
-  final String text;
-  final Color iconColor;
-  final IconData? iconData;
+// class _Item extends StatelessWidget {
+//   final String text;
+//   final Color iconColor;
+//   final IconData? iconData;
 
-  const _Item({
-    required this.text,
-    required this.iconColor,
-    this.iconData,
-    Key? key,
-  }) : super(key: key);
+//   const _Item({
+//     required this.text,
+//     required this.iconColor,
+//     this.iconData,
+//     Key? key,
+//   }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(
-          iconData ?? Icons.circle,
-          color: iconColor,
-          size: 12,
-        ),
-        const SizedBox(width: 5),
-        Text(
-          text,
-          style: kBodySmall.copyWith(color: disabledGrey),
-        ),
-      ],
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Row(
+//       children: [
+//         Icon(
+//           iconData ?? Icons.circle,
+//           color: iconColor,
+//           size: 12,
+//         ),
+//         const SizedBox(width: 5),
+//         Text(
+//           text,
+//           style: kBodySmall.copyWith(color: disabledGrey),
+//         ),
+//       ],
+//     );
+//   }
+// }

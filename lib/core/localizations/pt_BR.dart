@@ -7,6 +7,9 @@ Map<String, String> pt_BR = {
   'of tasks done': 'de tarefas realizadas.',
   'of tasks in progress': 'de tarefas em andamento.',
   'of tasks pending': 'de tarefas pendentes.',
+  'this week': 'Essa semana',
+  'next week': 'Semana que vem',
+  'last week': 'Semana passada',
 
   // side bar
   'home': 'Home',

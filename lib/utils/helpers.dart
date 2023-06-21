@@ -1,5 +1,6 @@
 import 'dart:math';
-
+import 'package:isoweek/isoweek.dart';
+import 'package:quiver/time.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -22,6 +23,11 @@ import 'package:todoapp/ui/view_task_page.dart/view_task_page_controller.dart';
 String rangeDateFormater(DateTime firstDate, DateTime lastDate) {
   // 12 jun. al 18 jun.
   return "${DateFormat('MMMd').format(firstDate)} ${'to'.tr} ${DateFormat('MMMd').format(lastDate)}";
+}
+
+String monthNameFormater(DateTime date) {
+  // junio
+  return DateFormat('MMMM').format(date);
 }
 
 String longDateFormaterWithoutYear(DateTime date) {
@@ -103,6 +109,18 @@ bool timeOfDayIsBeforeNow(TimeOfDay time) {
 }
 
 //////////////////////////////
+///    UI HELPERS     ///
+/////////////////////////////
+
+Color randomPrimaryColorsGeneratorHelper() {
+  return Colors.primaries[Random().nextInt(Colors.primaries.length)];
+}
+
+Color computeLuminanceHelper(Color color) {
+  return color.computeLuminance() > 0.5 ? Colors.black : Colors.white;
+}
+
+//////////////////////////////
 /// TASK THINGS HELPERS ///
 /////////////////////////////
 
@@ -134,24 +152,34 @@ bool isTaskExpired(DateTime taskDate) {
   return taskDate.isBefore(now);
 }
 
-// TODO: CREAR STRING FUNC
-// ver: https://pub.dev/packages/quiver#quivertime
-void taskDateHumanRead() {
-  // si estuvo en otro mes que no es el mes pasado: 'nombre del mes'
-  // si estuvo el mes que pasado: 'el mes pasado'
-  // si estuvo dentro del mes pero no es la pasada: 'este mes'
-  // si estuvo en la semana pasada: 'la semana pasada'
-  // si estuvo para dentro de esta semana que no es ayer: 'dia de la semana'
-  // si estuvo para ayer: 'ayer'
+String weekToHumanRead(Week value) {
+  Week week = Week.current();
 
-  // SI ES PARA HOY: 'HOY'
+  // semanas
+  if (value == week.next) {
+    return 'next week'.tr;
+  }
 
-  // si está para mañana: 'mañana'
-  // si está dentro de esta semana que no es mañana: 'dia de la semana'
-  // si está en la semana que viene: 'la semana que viene'
-  // si esta dentro del mes pero no es la semana que viene: 'este mes'
-  // si esta el mes que viene: 'el mes que viene'
-  // si esta en otro mes que no es el mes que viene: 'nombre del mes'
+  if (value == week) {
+    return 'this week'.tr;
+  }
+
+  if (value == week.previous) {
+    return 'last week'.tr;
+  }
+
+  // meses
+  if (value.days.first.month == value.days.last.month) {
+    return monthNameFormater(value.days.first);
+  }
+
+  if (value.days.first.month != value.days.last.month) {
+    var endMonth = monthNameFormater(value.days.first);
+    var initMonth = monthNameFormater(value.days.last);
+    return '$endMonth - $initMonth';
+  }
+
+  return '';
 }
 
 String setStatusLanguage(TaskModel task) {

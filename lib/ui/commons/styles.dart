@@ -26,7 +26,7 @@ const greenInfo = Color.fromARGB(255, 125, 252, 103);
 final splashColorButtons = yellowPrimary.withOpacity(0.5);
 
 // task description
-final kViewTaskDescripton = Theme.of(Get.context!).textTheme.titleLarge!.copyWith(fontSize: 30);
+final kViewTaskDescripton = Theme.of(Get.context!).textTheme.titleLarge!.copyWith(fontSize: 32);
 final myChipBg = softGrey.withOpacity(0.5);
 const myChipText = enabledGrey;
 
@@ -38,7 +38,6 @@ final kTitleSmall = Theme.of(Get.context!).textTheme.titleSmall!;
 final kHeadlineLarge = Theme.of(Get.context!).textTheme.headlineLarge!.copyWith(fontWeight: FontWeight.bold);
 final headlineMedium = Theme.of(Get.context!).textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.bold);
 final headlineSmall = Theme.of(Get.context!).textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.bold);
-
 
 // bodies
 final kBodySmall = Theme.of(Get.context!).textTheme.bodySmall!;

@@ -7,6 +7,9 @@ Map<String, String> es_AR = {
   'of tasks done': 'de tareas completadas.',
   'of tasks in progress': 'de tareas en progreso.',
   'of tasks pending': 'de tareas pendientes.',
+  'this week': 'Esta semana',
+  'next week': 'La semana próxima',
+  'last week': 'La semana pasada',
 
   // side bar
   'home': 'Home',

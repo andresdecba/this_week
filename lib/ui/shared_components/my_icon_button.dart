@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:todoapp/ui/commons/styles.dart';
 
-class MyChip extends StatelessWidget {
-  const MyChip({
+class MyIconButton extends StatelessWidget {
+  const MyIconButton({
     this.iconData,
     required this.label,
     required this.onTap,
@@ -26,16 +26,14 @@ class MyChip extends StatelessWidget {
       customBorder: const CircleBorder(),
       onTap: isEnabled ? () => onTap() : null,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
         decoration: BoxDecoration(
           color: color ?? softGrey.withOpacity(0.5),
-          borderRadius: const BorderRadius.all(Radius.circular(20)),
+          shape: BoxShape.circle,
         ),
         child: Row(
           children: [
-            Icon(iconData, size: 16, color: iconColor),
-            const SizedBox(width: 8),
-            Text(label, style: kLabelMedium.copyWith(color: iconColor)),
+            Icon(iconData, size: 24, color: iconColor),
           ],
         ),
       ),

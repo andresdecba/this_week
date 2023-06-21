@@ -7,6 +7,9 @@ Map<String, String> en_US = {
   'of tasks done': 'of tasks done.',
   'of tasks in progress': 'of tasks in progress.',
   'of tasks pending': 'of tasks pending.',
+  'this week': 'This week',
+  'next week': 'Next week',
+  'last week': 'Last week',
 
   // side bar
   'home': 'Home',

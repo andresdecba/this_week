@@ -29,19 +29,19 @@ class SideBar extends GetView<InitialPageController> {
               const Divider(),
 
               ///  HOME  ///
-              ListTile(
-                visualDensity: VisualDensity.compact,
-                trailing: const Icon(Icons.home_rounded),
-                title: Text('home'.tr),
-                subtitle: Text(
-                  'go to the current week'.tr,
-                  style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: disabledGrey),
-                ),
-                onTap: () {
-                  Get.find<InitialPageController>().returnToCurrentWeek();
-                  Globals.myScaffoldKey.currentState!.closeEndDrawer();
-                },
-              ),
+              // ListTile(
+              //   visualDensity: VisualDensity.compact,
+              //   trailing: const Icon(Icons.home_rounded),
+              //   title: Text('home'.tr),
+              //   subtitle: Text(
+              //     'go to the current week'.tr,
+              //     style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: disabledGrey),
+              //   ),
+              //   onTap: () {
+              //     Get.find<InitialPageController>().returnToCurrentWeek();
+              //     Globals.myScaffoldKey.currentState!.closeEndDrawer();
+              //   },
+              // ),
 
               ///  NUEVA TAREA  ///
               // ListTile(
@@ -63,7 +63,7 @@ class SideBar extends GetView<InitialPageController> {
               //     );
               //   },
               // ),
-              const Divider(color: disabledGrey),
+              // const Divider(color: disabledGrey),
 
               ///  REESTABLECER APP  ///
               ListTile(
@@ -133,7 +133,7 @@ class SideBar extends GetView<InitialPageController> {
                   );
                 },
               ),
-              const Divider(color: disabledGrey),
+              //const Divider(color: disabledGrey),
 
               /// SOCIAL
               ListTile(
@@ -164,17 +164,16 @@ class SideBar extends GetView<InitialPageController> {
               ),
 
               // LOGO
-              const Divider(),
               const Spacer(),
               Align(
-                alignment: Alignment.centerLeft,
+                alignment: Alignment.centerRight,
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: SvgPicture.asset(
                     'assets/appbar_logo.svg',
                     alignment: Alignment.center,
                     color: disabledGrey,
-                    width: 124,
+                    width: 100,
                   ),
                 ),
               ),
