@@ -12,8 +12,8 @@ const _androidAdUnitKeyTest = 'ca-app-pub-3940256099942544/6300978111';
 const _iOsAdUnitKeyTest = 'ca-app-pub-3940256099942544/6300978111';
 
 // KEYS FOR PRODUCTION
-const androidAdUnitKeyProd = 'ca-app-pub-9058342620461440/8299319891';
-const iOsAdUnitKeyProd = 'ca-app-pub-9058342620461440/8686316796';
+const _androidAdUnitKeyProd = 'ca-app-pub-9058342620461440/8299319891';
+const _iOsAdUnitKeyProd = 'ca-app-pub-9058342620461440/8686316796';
 
 // OTHERS
 const _padding = 5.0;
@@ -21,13 +21,11 @@ const _radius = 5.0;
 
 class AdMobService extends StatefulWidget {
   const AdMobService({
-    this.androidAdUnitKey,
-    this.iOsAdUnitKey,
+    required this.isProductionVersion,
     super.key,
   });
 
-  final String? androidAdUnitKey;
-  final String? iOsAdUnitKey;
+  final bool isProductionVersion;
 
   @override
   State<AdMobService> createState() => _AdMobServiceState();
@@ -47,9 +45,7 @@ class _AdMobServiceState extends State<AdMobService> {
   Future<void> _loadAd() async {
     // Get an AnchoredAdaptiveBannerAdSize before loading the ad.
     final AnchoredAdaptiveBannerAdSize? size =
-        await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
-            MediaQuery.of(context).size.width.truncate() -
-                (_padding.toInt() * 2));
+        await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(MediaQuery.of(context).size.width.truncate() - (_padding.toInt() * 2));
 
     if (size == null) {
       print('Unable to get height of anchored banner.');
@@ -57,13 +53,22 @@ class _AdMobServiceState extends State<AdMobService> {
     }
 
     _anchoredAdaptiveAd = BannerAd(
+      //  adUnitId: Platform.isAndroid
+      //     ? widget.androidAdUnitKey != null
+      //         ? widget.androidAdUnitKey!
+      //         : _androidAdUnitKeyTest
+      //     : widget.iOsAdUnitKey != null
+      //         ? widget.iOsAdUnitKey!
+      //         : _iOsAdUnitKeyTest,
+
       adUnitId: Platform.isAndroid
-          ? widget.androidAdUnitKey != null
-              ? widget.androidAdUnitKey!
+          ? widget.isProductionVersion
+              ? _androidAdUnitKeyProd
               : _androidAdUnitKeyTest
-          : widget.iOsAdUnitKey != null
-              ? widget.iOsAdUnitKey!
+          : widget.isProductionVersion
+              ? _iOsAdUnitKeyProd
               : _iOsAdUnitKeyTest,
+
       size: size,
       request: const AdRequest(),
       listener: BannerAdListener(

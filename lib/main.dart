@@ -38,9 +38,8 @@ class AdMob extends StatelessWidget {
       home: Scaffold(
         backgroundColor: Colors.white,
         bottomNavigationBar: AdMobService(
-            //androidAdUnitKey: androidAdUnitKeyProd,
-            //iOsAdUnitKey: iOsAdUnitKeyProd,
-            ),
+          isProductionVersion: false,
+        ),
         body: MyApp(),
       ),
     );

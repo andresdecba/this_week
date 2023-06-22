@@ -52,7 +52,7 @@ class _ViewTaskState extends State<ViewTask> {
                 /// SI ES ATER, HOY O MAÑANA ///
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 14.0),
-                  child: controller.dateStatus(),
+                  child: _TaskStatus(task: controller.task.value),
                 ),
 
                 /// BOTON GUARDAR  ///
@@ -162,6 +162,86 @@ class _ViewTaskState extends State<ViewTask> {
         ],
       ),
     );
+  }
+}
+
+class _TaskStatus extends StatelessWidget {
+  const _TaskStatus({
+    required this.task,
+    super.key,
+  });
+
+  final TaskModel task;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        _icon(),
+        const SizedBox(width: 8),
+        Text(
+          _status(),
+          style: kBodyMedium.copyWith(
+            color: _color(),
+            fontStyle: FontStyle.italic,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Icon _icon() {
+    switch (task.status) {
+      case pendingConst:
+        return Icon(
+          Icons.circle_outlined,
+          color: _color(),
+          size: 18,
+        );
+
+      case inProgressConst:
+        return Icon(
+          Icons.circle_rounded,
+          color: _color(),
+          size: 18,
+        );
+      case doneConst:
+        return Icon(
+          Icons.circle_rounded,
+          color: _color(),
+          size: 18,
+        );
+
+      default:
+        return const Icon(Icons.circle_rounded);
+    }
+  }
+
+  Color _color() {
+    switch (task.status) {
+      case pendingConst:
+        return disabledGrey;
+      case inProgressConst:
+        return statusTaskInProgress;
+      case doneConst:
+        return statusTaskDone;
+      default:
+        return disabledGrey;
+    }
+  }
+
+  String _status() {
+    switch (task.status) {
+      case pendingConst:
+        return 'pending'.tr;
+      case inProgressConst:
+        return 'in progress'.tr;
+      case doneConst:
+        return 'done'.tr;
+      default:
+        return '';
+    }
   }
 }
 

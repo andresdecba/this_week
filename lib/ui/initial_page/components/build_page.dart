@@ -20,11 +20,9 @@ class BuildPage extends StatefulWidget {
   State<BuildPage> createState() => _BuildPageState();
 }
 
-class _BuildPageState extends State<BuildPage> with AutomaticKeepAliveClientMixin {
+class _BuildPageState extends State<BuildPage> {
   final _controller = Get.find<BuildPageController>();
   RxList<Rx<TaskModel>> _tasks = RxList<Rx<TaskModel>>([]);
-
-  //late KeepAliveHandle _keepAliveHandle;
 
   @override
   void initState() {
@@ -33,48 +31,10 @@ class _BuildPageState extends State<BuildPage> with AutomaticKeepAliveClientMixi
     _tasks = _controller.buildTasks(tasksBox: _controller.tasksBox, week: widget.week);
     // exponer globalmente //
     Globals.tasksGlobal = _tasks;
-    print('hashhh: en widget ${Globals.tasksGlobal.hashCode}');
-
-    // keep alive
-    //_keepAliveHandle = KeepAliveHandle();
-    //updateKeepAlive();
-
-    print('aaaver: initState');
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    print('aaaver: didChangeDependencies');
-  }
-
-  @override
-  void deactivate() {
-    super.deactivate();
-    print('aaaver: deactivate');
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    print('aaaver: dispose');
-  }
-
-  @override
-  bool get wantKeepAlive => true;
-
-  Color _setBgColors() {
-    if (widget.week != Week.current()) {
-      return bluePrimary.withOpacity(0.4);
-    } else {
-      return yellowPrimary.withOpacity(0.6);
-    }
   }
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-
     return Column(
       children: [
         // HEADER //
@@ -152,5 +112,20 @@ class _BuildPageState extends State<BuildPage> with AutomaticKeepAliveClientMixi
         ),
       ],
     );
+  }
+
+  Color _setBgColors() {
+    var value1 = widget.week.weekNumber;
+    var value2 = Week.current().weekNumber;
+    // pasado
+    if (value1 < value2) {
+      return Colors.brown.withOpacity(0.6);
+    }
+    // futuro
+    if (value1 > value2) {
+      return Colors.teal.withOpacity(0.6);
+    }
+    // presente
+    return yellowPrimary.withOpacity(0.75);
   }
 }

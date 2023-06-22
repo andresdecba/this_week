@@ -100,7 +100,11 @@ class InitialPageController extends GetxController with WidgetsBindingObserver {
   }
 
   // 1- cambio la pagina y la semana
-  final PageController pageCtlr = PageController(initialPage: 1000, keepPage: true, viewportFraction: 1);
+  final PageController pageCtlr = PageController(
+    initialPage: 1000,
+    keepPage: true,
+    viewportFraction: 1,
+  );
 
   Week onPageChange(int index) {
     Week week = Week.current();

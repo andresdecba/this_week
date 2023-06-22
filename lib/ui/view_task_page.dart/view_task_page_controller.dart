@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:todoapp/core/globals.dart';
 import 'package:todoapp/models/subtask_model.dart';
 import 'package:todoapp/models/task_model.dart';
-import 'package:todoapp/ui/commons/styles.dart';
 import 'package:todoapp/ui/shared_components/my_time_picker.dart';
 import 'package:todoapp/ui/shared_components/snackbar.dart';
 import 'package:todoapp/use_cases/local_notifications_use_cases.dart';
@@ -55,26 +54,6 @@ class ViewTaskController extends GetxController {
         ? TimeOfDay(hour: task.value.notificationData!.time.hour, minute: task.value.notificationData!.time.minute) //
         : null; //
     isExpired.value = isTaskExpired(updatedDateTime.value);
-  }
-
-  //// DATE STATUS ////
-  Widget dateStatus() {
-    if (isExpired.value) {
-      return Text(
-        'expired_state'.tr,
-        style: kBodyMedium.copyWith(color: Colors.orange[900], fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
-      );
-    } else if (updatedDateTime.value.day == DateTime.now().day) {
-      return Text(
-        'today_state'.tr,
-        style: kBodyMedium.copyWith(color: Colors.green[900], fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
-      );
-    } else {
-      return Text(
-        'another day_state'.tr,
-        style: kBodyMedium.copyWith(color: Colors.purple[900], fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
-      );
-    }
   }
 
   //// UPDATE DESCRIPTION ////

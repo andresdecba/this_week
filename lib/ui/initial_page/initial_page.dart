@@ -29,6 +29,12 @@ class InitialPage extends GetView<InitialPageController> {
       //   ],
       // ),
 
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     //
+      //   },
+      // ),
+
       // content
       body: Obx(
         () => controller.simulateDeleting.value
@@ -37,6 +43,7 @@ class InitialPage extends GetView<InitialPageController> {
                 physics: const BouncingScrollPhysics(),
                 controller: controller.pageCtlr,
                 pageSnapping: true,
+                //allowImplicitScrolling: true, ¡NO activar! matiene el estado de la pagina pero no la actualiza.
                 onPageChanged: (index) {
                   print('hash: on page change ${Globals.tasksGlobal.hashCode}');
                 },
